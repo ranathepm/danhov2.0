@@ -34,7 +34,7 @@ export default async function SelectDiamondPage({
   return (
     <main className="builder-page">
       <BuilderStepper
-        current={3}
+        current={2}
         hasSetting={!!searchParams.setting}
         hasDiamond={!!searchParams.diamond}
         settingSlug={searchParams.setting}

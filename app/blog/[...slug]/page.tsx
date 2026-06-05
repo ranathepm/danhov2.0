@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { BLOG_POSTS, getPostBySlug } from '@/lib/blog-posts';
+import { getCachedBlogContent, setCachedBlogContent, isCacheStale } from '@/lib/blog-cache';
 
 interface Props {
   params: { slug: string[] };
@@ -29,6 +30,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 async function fetchArticleContent(danhovPath: string): Promise<string | null> {
+  // 1. Try Supabase cache first — always available even if danhov.com is down
+  const cached = await getCachedBlogContent(danhovPath);
+  const stale = cached ? await isCacheStale(danhovPath) : true;
+
+  if (cached && !stale) return cached;
+
+  // 2. Fetch fresh from danhov.com
   try {
     const url = `https://www.danhov.com/blog/${danhovPath}/`;
     const res = await fetch(url, {
@@ -38,7 +46,7 @@ async function fetchArticleContent(danhovPath: string): Promise<string | null> {
       },
       next: { revalidate: 86400 },
     });
-    if (!res.ok) return null;
+    if (!res.ok) return cached; // fall back to stale cache if live fetch fails
     const html = await res.text();
 
     // Extract the main article body from WordPress single post
@@ -58,7 +66,7 @@ async function fetchArticleContent(danhovPath: string): Promise<string | null> {
       }
     }
 
-    if (!content) return null;
+    if (!content) return cached; // fall back to stale cache
 
     // Clean up the extracted HTML
     content = content
@@ -77,9 +85,13 @@ async function fetchArticleContent(danhovPath: string): Promise<string | null> {
       .replace(/href="\/blog\//g, 'href="/blog/')
       .trim();
 
+    // 3. Save to Supabase cache (best-effort, non-blocking)
+    void setCachedBlogContent(danhovPath, content).catch(() => {});
+
     return content;
   } catch {
-    return null;
+    // If live fetch fails, serve whatever is in the cache (even stale)
+    return cached;
   }
 }
 

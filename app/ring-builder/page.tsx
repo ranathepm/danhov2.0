@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default function RingBuilderLandingPage() {
   return (
     <main className="builder-page">
-      <BuilderStepper current={1} />
+      <BuilderStepper current={1} hasSetting={false} hasDiamond={false} />
 
       <section className="builder-hero">
         <span className="section-eyebrow">Create Your Ring</span>

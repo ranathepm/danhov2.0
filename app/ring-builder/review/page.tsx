@@ -80,7 +80,7 @@ export default async function CompleteRingPage({
   return (
     <main className="builder-page">
       <BuilderStepper
-        current={4}
+        current={3}
         hasSetting={true}
         hasDiamond={true}
         settingSlug={settingSlug}
