@@ -201,12 +201,12 @@ export async function POST(req: NextRequest) {
       const candidate = result.response.candidates?.[0];
       if (!candidate) break;
 
-      const fnCalls = candidate.content?.parts?.filter((p: { functionCall?: unknown }) => p.functionCall) ?? [];
+      const fnCalls = (candidate.content?.parts ?? []).filter((p) => p.functionCall);
       if (fnCalls.length === 0) break; // no more tool calls — text response ready
 
       const fnResponses = await Promise.all(
-        fnCalls.map(async (part: { functionCall: { name: string; args: Record<string, unknown> } }) => {
-          const { name, args } = part.functionCall;
+        fnCalls.map(async (part) => {
+          const { name, args } = part.functionCall as { name: string; args: Record<string, unknown> };
           const output = await executeTool(name, args ?? {});
           toolCallsLog.push({ tool: name, args, result: output });
           return {
