@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/products';
@@ -143,7 +144,10 @@ export default function ListingPage({
   aiPrompt,
   products,
 }: Props) {
-  const [collectionFilter, setCollectionFilter] = useState<string>('all');
+  const searchParams = useSearchParams();
+  const [collectionFilter, setCollectionFilter] = useState<string>(
+    () => searchParams.get('collection') ?? 'all'
+  );
   const [metalFilter, setMetalFilter] = useState<MetalFilter['value']>('all');
   const [sortKey, setSortKey] = useState<SortKey>('featured');
 

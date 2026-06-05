@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
@@ -38,19 +39,21 @@ export default async function EngagementRingsPage() {
   return (
     <>
       <ListingSchema category="engagement" title="Engagement Rings" />
-      <ListingPage
-      category="engagement"
-      title="Engagement Rings"
-      subtitle="Sacred geometry. Eternal love."
-      collections={COLLECTIONS}
-      showMetalFilter
-      aiPrompt="I'm browsing engagement rings and could use help finding the right style for me."
-      philosophyStripe={{
-        quote:
-          '“Every ring is a <span>living geometry</span> — an eternal circle holding the infinite story of two souls becoming one.”',
-      }}
-      products={products}
-    />
+      <Suspense fallback={null}>
+        <ListingPage
+          category=”engagement”
+          title=”Engagement Rings”
+          subtitle=”Sacred geometry. Eternal love.”
+          collections={COLLECTIONS}
+          showMetalFilter
+          aiPrompt=”I'm browsing engagement rings and could use help finding the right style for me.”
+          philosophyStripe={{
+            quote:
+              '”Every ring is a <span>living geometry</span> — an eternal circle holding the infinite story of two souls becoming one.”',
+          }}
+          products={products}
+        />
+      </Suspense>
     <PageBlocks pageSlug="engagement-rings" />
     </>
   );

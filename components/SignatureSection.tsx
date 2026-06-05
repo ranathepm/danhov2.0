@@ -34,7 +34,7 @@ export default async function SignatureSection() {
               alt="The Swirl Love Ring — DANHOV Signature"
               fill
               sizes="(max-width: 880px) 100vw, 50vw"
-              style={{ objectFit: 'contain', padding: '32px' }}
+              style={{ objectFit: 'contain', padding: '32px', mixBlendMode: 'multiply' }}
             />
           ) : (
             <svg width="240" height="240" viewBox="0 0 240 240" fill="none" className="sig-ring-svg">

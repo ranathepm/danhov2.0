@@ -2,72 +2,105 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { supabaseAnon } from '@/lib/supabase/anon';
 
+const LIFE_PATH_SVG = (
+  <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+    <circle cx="60" cy="60" r="40" stroke="#b8923a" strokeWidth="0.5" opacity="0.3" fill="none" />
+    <line x1="60" y1="24" x2="60" y2="96" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
+    <line x1="28" y1="42" x2="92" y2="78" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
+    <line x1="92" y1="42" x2="28" y2="78" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
+    <line x1="24" y1="60" x2="96" y2="60" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
+    <circle cx="60" cy="60" r="14" fill="rgba(184,146,58,0.08)" stroke="#b8923a" strokeWidth="1" />
+    <circle cx="60" cy="24" r="2.5" fill="#b8923a" />
+    <circle cx="92" cy="78" r="2.5" fill="#b8923a" />
+    <circle cx="28" cy="78" r="2.5" fill="#b8923a" />
+  </svg>
+);
+
 const COLLECTIONS = [
   {
     label: 'Abbraccio',
     value: 'abbraccio',
     meaning: 'The Embrace',
     body: 'DANHOV\'s most iconic swirl settings — the stone held in a spiral embrace of gold.',
+    href: '/engagement-rings?collection=abbraccio',
   },
   {
     label: 'Voltaggio',
     value: 'voltaggio',
     meaning: 'The Voltage',
     body: 'Tension-set designs where the diamond is suspended by the energy of the ring itself.',
+    href: '/engagement-rings?collection=voltaggio',
   },
   {
     label: 'Classico',
     value: 'classico',
     meaning: 'The Classic',
     body: 'Timeless solitaire profiles refined over four decades of master craftsmanship in Los Angeles.',
+    href: '/engagement-rings?collection=classico',
   },
   {
     label: 'Norme de Danhov',
     value: 'norme',
     meaning: 'The Standard',
     body: 'Foundational forms that define DANHOV\'s benchmark for excellence in gold work.',
+    href: '/engagement-rings?collection=norme',
   },
   {
     label: 'Carezza',
     value: 'carezza',
     meaning: 'The Caress',
     body: 'Delicate pavé and micro-setting work — softness woven into gold, touch made permanent.',
+    href: '/engagement-rings?collection=carezza',
   },
   {
     label: 'Per Lei',
     value: 'per-lei',
     meaning: 'For Her',
     body: 'Floral forms and feminine geometries, each piece created in devotion for singular women.',
+    href: '/engagement-rings?collection=per-lei',
   },
   {
     label: 'Petalo',
     value: 'petalo',
     meaning: 'The Petal',
     body: 'Nature\'s most perfect architecture — organic petal forms blooming in 14k and 18k gold.',
+    href: '/engagement-rings?collection=petalo',
   },
   {
     label: 'Solo Filo',
     value: 'solo',
     meaning: 'Single Thread',
     body: 'A single continuous thread of gold — minimal, essential, unbroken as a promise.',
+    href: '/engagement-rings?collection=solo',
   },
   {
     label: 'Eleganza',
     value: 'eleganza',
     meaning: 'The Elegance',
     body: 'Refined simplicity. Designs that speak through restraint and perfection of proportion.',
+    href: '/engagement-rings?collection=eleganza',
   },
   {
     label: 'Couture',
     value: 'couture',
     meaning: 'The Sovereign',
     body: 'Statement pieces with presence. Worn not to become — but to declare what already is.',
+    href: '/engagement-rings?collection=couture',
   },
   {
     label: 'Unito',
     value: 'unito',
     meaning: 'United',
     body: 'Two forms joined as one. For love that is both distinct and inseparable.',
+    href: '/engagement-rings?collection=unito',
+  },
+  {
+    label: 'The Life Path',
+    value: 'life-path',
+    meaning: 'Your Number, Your Sign',
+    body: 'Enter the day you arrived. We calculate your life path number and your sign, then create an original design from both — a form no other birth date makes. Not your fate. A mirror.',
+    href: '/ring-builder',
+    customSvg: LIFE_PATH_SVG,
   },
 ];
 
@@ -113,37 +146,43 @@ export default async function CategoryCardsSection() {
         <div className="categories-grid">
           {COLLECTIONS.map((col) => {
             const imgSrc =
-              imageMap[col.value] ||
-              imageMap[col.label.toLowerCase()] ||
-              null;
+              'customSvg' in col
+                ? null
+                : imageMap[col.value] || imageMap[col.label.toLowerCase()] || null;
 
             return (
               <Link
                 key={col.value}
-                href={`/engagement-rings?collection=${col.value}`}
+                href={col.href}
                 className="cat-card"
               >
                 <div className="cat-photo">
-                  {imgSrc ? (
+                  {'customSvg' in col ? (
+                    <div className="cat-photo-placeholder">{col.customSvg}</div>
+                  ) : imgSrc ? (
                     <Image
                       src={imgSrc}
                       alt={`${col.label} engagement ring by DANHOV`}
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      style={{ objectFit: 'contain', padding: '16px' }}
+                      style={{ objectFit: 'contain', padding: '12px', mixBlendMode: 'multiply' }}
                     />
                   ) : (
-                    <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                      <circle cx="40" cy="40" r="30" stroke="#b8923a" strokeWidth="5" fill="none" />
-                      <circle cx="40" cy="26" r="5" fill="rgba(184,146,58,0.2)" stroke="#b8923a" strokeWidth="0.5" />
-                    </svg>
+                    <div className="cat-photo-placeholder">
+                      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+                        <circle cx="40" cy="40" r="30" stroke="#b8923a" strokeWidth="5" fill="none" />
+                        <circle cx="40" cy="26" r="5" fill="rgba(184,146,58,0.2)" stroke="#b8923a" strokeWidth="0.5" />
+                      </svg>
+                    </div>
                   )}
                 </div>
                 <div className="cat-info">
                   <span className="cat-eyebrow">{col.label}</span>
                   <p className="cat-meaning">{col.meaning}</p>
                   <p className="cat-body">{col.body}</p>
-                  <span className="cat-link">Explore {col.label} &rarr;</span>
+                  <span className="cat-link">
+                    {'customSvg' in col ? 'Find Your Path' : `Explore ${col.label}`} &rarr;
+                  </span>
                 </div>
               </Link>
             );
