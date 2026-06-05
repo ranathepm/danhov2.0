@@ -321,7 +321,7 @@ export default function BlogPage() {
       <section className="blog-newsletter">
         <h2>Letters from the Atelier</h2>
         <p>New stories, collection launches, and quiet reflections — delivered monthly.</p>
-        <form className="blog-newsletter-form" onSubmit={(e) => e.preventDefault()}>
+        <form className="blog-newsletter-form" action="#">
           <input
             className="blog-newsletter-input"
             type="email"
