@@ -1,0 +1,40 @@
+{
+  "name": "danhov-atelier",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "seed": "tsx scripts/seed-products.ts",
+    "seed:admin": "node scripts/seed-admin.mjs",
+    "seed:blocks": "node scripts/seed-page-blocks.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.52.0",
+    "@google/generative-ai": "^0.24.1",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.45.4",
+    "next": "^14.2.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^22.1.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "@types/react": "^18.3.11",
+    "@types/react-dom": "^18.3.0",
+    "@types/ws": "^8.18.1",
+    "dotenv": "^17.4.2",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2",
+    "ws": "^8.20.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

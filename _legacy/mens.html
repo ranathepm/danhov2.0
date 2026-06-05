@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Men's Jewelry &mdash; DANHOV Oneness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Cinzel:wght@400;600&family=Jost:wght@300;400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #fff8f6;
+    --deep: #fdf0ed;
+    --gold: #9b6b4a;
+    --gold-light: #c4916e;
+    --gold-dim: #c9a898;
+    --crimson: #b5606a;
+    --crimson-bright: #b5606a;
+    --logo-red: #AC3438;
+    --logo-red-dark: #8B2A2D;
+    --blush: #e8b4bc;
+    --cream: #3d2520;
+    --grey: #7a5c58;
+    --white: #fff8f6;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--logo-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--logo-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: #fff8f6;
+    border-bottom: 1px solid rgba(172,52,56,0.08);
+    box-shadow: 0 2px 12px rgba(172,52,56,0.04);
+  }
+  .nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  .nav-logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 1;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--logo-red); }
+  .nav-links a.active { color: var(--logo-red); }
+  .nav-cta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff8f6;
+    background: var(--logo-red);
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: background 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-cta:hover { background: var(--logo-red-dark); }
+
+  /* MEGA MENU */
+  .nav-links > li { position: static; }
+  .mega-menu {
+    position: fixed;
+    top: 81px; left: 0; right: 0;
+    background: #fff8f6;
+    border-top: 2px solid var(--logo-red);
+    box-shadow: 0 20px 60px rgba(61,37,32,0.14);
+    padding: 44px 80px 52px;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.22s ease, visibility 0.22s, transform 0.22s ease;
+    display: flex;
+    gap: 0;
+  }
+  .nav-links > li:hover > .mega-menu {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+  .mega-overlay {
+    position: fixed;
+    top: 81px; left: 0; right: 0; bottom: 0;
+    background: rgba(61,37,32,0.22);
+    z-index: 98;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s;
+    pointer-events: none;
+  }
+  nav:has(li:hover > .mega-menu) + .mega-overlay {
+    opacity: 1; visibility: visible;
+  }
+  .mm-col { flex: 1; padding: 0 32px; border-right: 1px solid rgba(172,52,56,0.08); }
+  .mm-col:first-child { padding-left: 0; }
+  .mm-col:last-child { border-right: none; padding-right: 0; }
+  .mm-col-wide { flex: 2; }
+  .mm-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--logo-red); margin-bottom: 22px; display: block;
+  }
+  .mm-grid { display: grid; gap: 12px; }
+  .mm-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .mm-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .mm-grid-5 { grid-template-columns: repeat(5, 1fr); }
+  .mm-card { text-decoration: none; display: flex; flex-direction: column; gap: 8px; }
+  .mm-card-img {
+    background: #f0e4e0;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mm-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .mm-card:hover .mm-card-img img { transform: scale(1.06); }
+  .mm-card-img-lg { height: 140px; }
+  .mm-card-img-sm { height: 96px; }
+  .mm-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.08em; color: var(--cream);
+    transition: color 0.2s; text-transform: uppercase;
+  }
+  .mm-card:hover .mm-card-name { color: var(--logo-red); }
+  .mm-metals { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .mm-metal {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    color: var(--cream); text-decoration: none;
+    padding: 7px 14px;
+    border: 1px solid rgba(172,52,56,0.2);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .mm-metal:hover { border-color: var(--logo-red); color: var(--logo-red); }
+  .mm-metal-swatch { width: 14px; height: 14px; border-radius: 50%; }
+  .mm-explore {
+    display: inline-block; margin-top: 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--logo-red); text-decoration: none;
+    border-bottom: 1px solid var(--logo-red);
+    padding-bottom: 2px; transition: opacity 0.2s;
+  }
+  .mm-explore:hover { opacity: 0.7; }
+
+  /* PAGE HERO */
+  .page-hero {
+    padding-top: 81px;
+    min-height: 340px;
+    background: linear-gradient(150deg, #fff8f6 0%, #f7ebe8 40%, #f0e0dc 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 25% 60%, rgba(229,160,170,0.22) 0%, transparent 55%),
+      radial-gradient(ellipse at 75% 40%, rgba(197,155,130,0.14) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .page-hero-inner {
+    position: relative;
+    z-index: 1;
+    padding: 60px 48px 56px;
+  }
+  .page-hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: block;
+  }
+  .page-hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 7vw, 88px);
+    font-weight: 600;
+    line-height: 1.0;
+    color: var(--logo-red);
+    margin-bottom: 16px;
+  }
+  .page-hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-style: italic;
+    color: var(--grey);
+    margin-bottom: 24px;
+  }
+  .page-hero-count {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+  /* Decorative spiral */
+  .hero-spiral {
+    position: absolute;
+    right: -80px; top: -80px;
+    width: 420px; height: 420px;
+    opacity: 0.07;
+    animation: heroSpin 60s linear infinite;
+    pointer-events: none;
+  }
+  @keyframes heroSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* BREADCRUMB */
+  .breadcrumb {
+    padding: 14px 48px;
+    background: #fff8f6;
+    border-bottom: 1px solid rgba(172,52,56,0.06);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .breadcrumb a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb a:hover { color: var(--logo-red); }
+  .breadcrumb-sep {
+    font-size: 10px;
+    color: var(--gold-dim);
+    letter-spacing: 0;
+  }
+  .breadcrumb-current {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--logo-red);
+  }
+  .breadcrumb-sub-sep,
+  .breadcrumb-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .breadcrumb-sub-sep { color: var(--gold-dim); }
+  .breadcrumb-sub { font-weight: 600; color: var(--logo-red); }
+
+  /* FILTER BAR */
+  .filter-section {
+    background: #fff8f6;
+    border-bottom: 1px solid rgba(172,52,56,0.08);
+    padding: 20px 48px;
+    position: sticky;
+    top: 81px;
+    z-index: 50;
+    box-shadow: 0 4px 16px rgba(172,52,56,0.04);
+  }
+  .filter-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .filter-row::-webkit-scrollbar { display: none; }
+  .filter-label {
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+  .filter-btn {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid rgba(172,52,56,0.18);
+    color: var(--grey);
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .filter-btn:hover { border-color: var(--logo-red); color: var(--logo-red); }
+  .filter-btn.active { background: var(--logo-red); color: #fff8f6; border-color: var(--logo-red); }
+  .filter-divider {
+    width: 1px; height: 20px;
+    background: rgba(172,52,56,0.12);
+    flex-shrink: 0;
+    margin: 0 4px;
+  }
+
+  /* PRODUCT GRID SECTION */
+  .products-section {
+    padding: 48px 48px 80px;
+    background: #fff8f6;
+  }
+  .products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+  .products-showing {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .products-showing span {
+    color: var(--logo-red);
+    font-weight: 600;
+  }
+  .products-sort {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sort-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .sort-select {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--cream);
+    background: transparent;
+    border: 1px solid rgba(172,52,56,0.18);
+    padding: 6px 12px;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a5c58' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* PRODUCT CARD */
+  .prod-card {
+    cursor: pointer;
+    background: #fdf0ed;
+    border: 1px solid rgba(181,96,106,0.10);
+    overflow: hidden;
+    transition: box-shadow 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .prod-card:hover { box-shadow: 0 8px 36px rgba(172,52,56,0.13); transform: translateY(-3px); }
+  .prod-card.hidden { display: none; }
+
+  .prod-img {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 50%, #e8cece 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .prod-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .prod-img-placeholder svg { width: 60px; height: 60px; opacity: 0.22; }
+  .prod-collection-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-family: 'Cinzel', serif;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    background: var(--logo-red);
+    color: #fff8f6;
+    padding: 4px 9px;
+  }
+  .prod-info {
+    padding: 18px 20px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .prod-style {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+  .prod-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.25;
+  }
+  .prod-metals {
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    color: var(--grey);
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+  }
+  .prod-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--logo-red);
+    margin-top: auto;
+    padding-top: 10px;
+    padding-bottom: 16px;
+  }
+  .prod-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--logo-red);
+    text-decoration: none;
+    padding: 12px 16px;
+    border-top: 1px solid rgba(181,96,106,0.12);
+    transition: background 0.3s, color 0.3s;
+    background: transparent;
+  }
+  .prod-cta:hover { background: var(--logo-red); color: #fff8f6; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    display: none;
+    text-align: center;
+    padding: 80px 20px;
+    grid-column: 1 / -1;
+  }
+  .empty-state.visible { display: block; }
+  .empty-state-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-style: italic;
+    color: var(--grey);
+    margin-bottom: 12px;
+  }
+  .empty-state-body {
+    font-size: 13px;
+    color: var(--gold-dim);
+    letter-spacing: 0.05em;
+  }
+
+  /* PHILOSOPHY STRIPE */
+  .philosophy-stripe {
+    padding: 60px 48px;
+    background: #f7ebe8;
+    text-align: center;
+    border-top: 1px solid rgba(181,96,106,0.12);
+    border-bottom: 1px solid rgba(181,96,106,0.12);
+  }
+  .philosophy-stripe p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 3vw, 32px);
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .philosophy-stripe p span {
+    color: var(--logo-red);
+  }
+
+  /* FOOTER */
+  footer {
+    background: #f0e0dc;
+    border-top: 1px solid rgba(181,96,106,0.15);
+    padding: 80px 48px 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand-name {
+    margin-bottom: 16px;
+    display: block;
+  }
+  .footer-logo-img { height: 28px; width: auto; }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.7;
+    margin-bottom: 24px;
+    max-width: 300px;
+  }
+  .footer-contact {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 2.1;
+    letter-spacing: 0.03em;
+  }
+  .footer-contact a {
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-contact a:hover { color: var(--logo-red); }
+  .footer-col-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: var(--grey);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(181,96,106,0.1);
+  }
+  .footer-copy {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    color: var(--grey);
+    letter-spacing: 0.05em;
+  }
+  .footer-made {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 13px;
+    color: var(--gold-dim);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1100px) {
+    .products-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .filter-section { padding: 16px 24px; top: 73px; }
+    .products-section { padding: 36px 24px 60px; }
+    .products-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .breadcrumb { padding: 12px 24px; }
+    .page-hero-inner { padding: 48px 24px 44px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    footer { padding: 60px 24px 32px; }
+  }
+  @media (max-width: 600px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .products-section { padding: 24px 16px 48px; }
+    .filter-section { padding: 14px 16px; }
+    .breadcrumb { padding: 10px 16px; }
+    .page-hero-inner { padding: 36px 20px 32px; }
+    .footer-top { grid-template-columns: 1fr; gap: 36px; }
+    footer { padding: 48px 20px 28px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .products-header { flex-direction: column; gap: 14px; align-items: flex-start; }
+  }
+
+  .prod-img img.prod-real-img {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .prod-card:hover .prod-img img.prod-real-img { transform: scale(1.04); }
+  .prod-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 1.65;
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo"><img src="danhov-logo-transparent.png" alt="DANHOV"></a>
+  <ul class="nav-links">
+
+    <!-- Engagement Rings -->
+    <li>
+      <a href="engagement-rings.html">Engagement Rings</a>
+      <div class="mega-menu">
+        <div class="mm-col mm-col-wide">
+          <span class="mm-label">Collections</span>
+          <div class="mm-grid mm-grid-5">
+            <a href="engagement-rings.html?col=abbraccio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae520uq_r1_1_wg.jpg" alt="Abbraccio"></div><span class="mm-card-name">Abbraccio</span></a>
+            <a href="engagement-rings.html?col=carezza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_carezza.jpg" alt="Carezza"></div><span class="mm-card-name">Carezza</span></a>
+            <a href="engagement-rings.html?col=classico" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_classico.jpg" alt="Classico"></div><span class="mm-card-name">Classico</span></a>
+            <a href="engagement-rings.html?col=couture" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_couture.jpg" alt="Couture"></div><span class="mm-card-name">Couture</span></a>
+            <a href="engagement-rings.html?col=eleganza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae141-4_48oy8iu3ljtkgsxf.jpg" alt="Eleganza"></div><span class="mm-card-name">Eleganza</span></a>
+            <a href="engagement-rings.html?col=per-lei" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_per-lei.jpg" alt="Per Lei"></div><span class="mm-card-name">Per Lei</span></a>
+            <a href="engagement-rings.html?col=petalo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_petalo.jpg" alt="Petalo"></div><span class="mm-card-name">Petalo</span></a>
+            <a href="engagement-rings.html?col=solo-filo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_solo-filo.jpg" alt="Solo Filo"></div><span class="mm-card-name">Solo Filo</span></a>
+            <a href="engagement-rings.html?col=unito" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_unito.jpg" alt="Unito"></div><span class="mm-card-name">Unito</span></a>
+            <a href="engagement-rings.html?col=voltaggio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/w/e/we520p_r1_wg_1__2.jpg" alt="Voltaggio"></div><span class="mm-card-name">Voltaggio</span></a>
+          </div>
+          <a href="engagement-rings.html" class="mm-explore">Explore All Engagement Rings &rarr;</a>
+        </div>
+        <div class="mm-col" style="flex:0 0 220px;">
+          <span class="mm-label">Shop by Metal</span>
+          <div class="mm-metals" style="flex-direction:column;">
+            <a href="engagement-rings.html?metal=white-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8e0d8; border:1px solid #ccc;"></span>White Gold</a>
+            <a href="engagement-rings.html?metal=yellow-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#d4a853;"></span>Yellow Gold</a>
+            <a href="engagement-rings.html?metal=rose-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8a090;"></span>Rose Gold</a>
+          </div>
+          <div style="margin-top:32px;">
+            <span class="mm-label">Award Winners</span>
+            <a href="engagement-rings.html"><div class="mm-card-img mm-card-img-lg" style="border-radius:2px;"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_award-winners-1.jpg" alt="Award Winners" style="width:100%;height:100%;object-fit:cover;"></div></a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- Wedding Bands -->
+    <li>
+      <a href="wedding-bands.html">Wedding Bands</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="wedding-bands.html?sub=award-winners" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_award-winners-1.jpg" alt="Award Winners"></div><span class="mm-card-name">Award Winners</span></a>
+            <a href="wedding-bands.html?sub=her-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/h/white_top_2.jpg" alt="Her Bands"></div><span class="mm-card-name">Her Bands</span></a>
+            <a href="wedding-bands.html?sub=his-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_his-bands-1.jpg" alt="His Bands"></div><span class="mm-card-name">His Bands</span></a>
+          </div>
+          <a href="wedding-bands.html" class="mm-explore">View All Wedding Bands &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Fine Jewelry -->
+    <li>
+      <a href="fine-jewelry.html">Fine Jewelry</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="fine-jewelry.html?sub=bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/y/e/yellow_top_4.jpg" alt="Bands"></div><span class="mm-card-name">Bands</span></a>
+            <a href="fine-jewelry.html?sub=earrings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_rg_15.jpg" alt="Earrings"></div><span class="mm-card-name">Earrings</span></a>
+            <a href="fine-jewelry.html?sub=pendants" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Pendants"></div><span class="mm-card-name">Pendants</span></a>
+            <a href="fine-jewelry.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring-c_round_dai_wg_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+            <a href="fine-jewelry.html?sub=pop-of-color" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/b/r/brown_pink_2_1__1_1.png" alt="Pop of Color"></div><span class="mm-card-name">Pop of Color</span></a>
+          </div>
+          <a href="fine-jewelry.html" class="mm-explore">Explore All Fine Jewelry &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Men's -->
+    <li>
+      <a href="mens.html" class="active">Men's</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop Men's</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="mens.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_9_5_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+            <a href="mens.html?sub=bracelets" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs147_br_1_yg.jpg" alt="Bracelets"></div><span class="mm-card-name">Bracelets</span></a>
+            <a href="mens.html?sub=necklaces" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Necklaces &amp; Pendants"></div><span class="mm-card-name">Necklaces &amp; Pendants</span></a>
+          </div>
+          <a href="mens.html" class="mm-explore">Explore All Men's &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <li><a href="engagement-rings.html">Ring Builder</a></li>
+
+  </ul>
+  <a href="engagement-rings.html" class="nav-cta">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="currentColor"/><path d="M19 16L19.75 18.25L22 19L19.75 19.75L19 22L18.25 19.75L16 19L18.25 18.25L19 16Z" fill="currentColor" opacity="0.7"/></svg>Build Your Ring
+  </a>
+</nav>
+<div class="mega-overlay"></div>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <svg class="hero-spiral" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="300" cy="300" r="280" stroke="#AC3438" stroke-width="0.6"/>
+    <circle cx="300" cy="300" r="220" stroke="#9b6b4a" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="165" stroke="#AC3438" stroke-width="0.5"/>
+    <circle cx="300" cy="300" r="115" stroke="#9b6b4a" stroke-width="0.4"/>
+    <circle cx="300" cy="300" r="72" stroke="#AC3438" stroke-width="0.4"/>
+    <circle cx="300" cy="300" r="38" stroke="#9b6b4a" stroke-width="0.3"/>
+    <line x1="300" y1="20" x2="300" y2="580" stroke="#AC3438" stroke-width="0.3"/>
+    <line x1="20" y1="300" x2="580" y2="300" stroke="#AC3438" stroke-width="0.3"/>
+    <line x1="98" y1="98" x2="502" y2="502" stroke="#9b6b4a" stroke-width="0.3"/>
+    <line x1="502" y1="98" x2="98" y2="502" stroke="#9b6b4a" stroke-width="0.3"/>
+  </svg>
+  <div class="page-hero-inner">
+    <span class="page-hero-eyebrow">Danhov &mdash; Oneness</span>
+    <h1 class="page-hero-title">Men's Jewelry</h1>
+    <p class="page-hero-subtitle">Strength. Refined.</p>
+    <p class="page-hero-count" id="heroCount">17 Pieces</p>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="breadcrumb-sep">&rsaquo;</span>
+  <span class="breadcrumb-current" id="breadcrumbCurrent">Men's Jewelry</span>
+  <span class="breadcrumb-sub-sep" id="breadcrumbSubSep" style="display:none;">&rsaquo;</span>
+  <span class="breadcrumb-sub" id="breadcrumbSub"></span>
+</nav>
+
+<!-- AI ADVISOR PANEL -->
+<div style="max-width:1480px; margin:0 auto; padding:0 40px 8px;">
+  <div class="dnh-panel">
+    <div class="dnh-panel-copy">
+      <strong>Not sure where to start?</strong>
+      <span>Our AI advisor can help you find the perfect style, metal, and fit — in seconds.</span>
+    </div>
+    <button class="dnh-trigger" data-dnh="I'm looking at men's jewelry from DANHOV. Can you help me find something that suits me?">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z" fill="currentColor"/></svg>
+      Ask the AI Advisor
+    </button>
+  </div>
+</div>
+<!-- FILTER BAR -->
+<div class="filter-section">
+  <div class="filter-row">
+    <span class="filter-label">Category</span>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <div class="filter-divider"></div>
+    <button class="filter-btn" data-filter="rings">Rings</button>
+    <button class="filter-btn" data-filter="bracelets">Bracelets</button>
+    <button class="filter-btn" data-filter="necklaces">Necklaces &amp; Pendants</button>
+  </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<section class="products-section">
+  <div class="products-header">
+    <p class="products-showing" id="productsShowing">Showing <span id="showingCount">17</span> pieces</p>
+    <div class="products-sort">
+      <span class="sort-label">Sort by</span>
+      <select class="sort-select" id="sortSelect" aria-label="Sort products">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+
+    <!-- RINGS -->
+
+    <!-- RM600S -->
+    <article class="prod-card" data-sub="rings" data-price="1660">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/v/m/vm532s-wg2.jpg" alt="RM600S" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RM600S</span>
+        <h3 class="prod-name">Norme de Danhov Engagement Ring for Men</h3>
+        <p class="prod-desc">The Sovereign men's ring in white gold delivers bold presence through sleek, architectural refinement.</p>
+        <p class="prod-metals">14k White &middot; Yellow &middot; Rose Gold</p>
+        <p class="prod-price">From $1,660</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: RM600S – Norme de Danhov Engagement Ring for Men" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TM503P -->
+    <article class="prod-card" data-sub="rings" data-price="3710">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/m/tm104-6_cqwaa0kx9cgwbvot.jpg" alt="TM503P" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM503P</span>
+        <h3 class="prod-name">Tubetto Award Winning Wedding Band for Men</h3>
+        <p class="prod-desc">Hand-applied milgrain edging graces the Torchon men's band with vintage-inspired sophistication.</p>
+        <p class="prod-metals">18k White Gold</p>
+        <p class="prod-price">From $3,710</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TM503P – Tubetto Award Winning Wedding Band for Men" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB502VA -->
+    <article class="prod-card" data-sub="rings" data-price="7150">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb502va_-_inside_flat_wg_2_2.jpg" alt="TB502VA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB502VA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">A flat-profile Torchon band that wears close and comfortable—love worn every day, all day.</p>
+        <p class="prod-metals">Platinum &middot; 14k White Gold</p>
+        <p class="prod-price">From $7,150</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB502VA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB523VA -->
+    <article class="prod-card" data-sub="rings" data-price="7310">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb523va_wg_2.jpg" alt="TB523VA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB523VA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">Fine pavé diamonds are set along the Torchon twist, adding irresistible sparkle to the iconic design.</p>
+        <p class="prod-metals">14k White &middot; Yellow &middot; Rose Gold</p>
+        <p class="prod-price">From $7,310</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB523VA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB504VA -->
+    <article class="prod-card" data-sub="rings" data-price="8200">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb504va_yg_2.jpg" alt="TB504VA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB504VA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">Yellow gold strands spiral in the beloved Torchon pattern for a timeless, heirloom-worthy wedding band.</p>
+        <p class="prod-metals">14k Yellow &middot; White &middot; Rose Gold</p>
+        <p class="prod-price">From $8,200</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB504VA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TM501ZA -->
+    <article class="prod-card" data-sub="rings" data-price="8970">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/m/tm501za_m5aonsrpaidxctzg.jpg" alt="TM501ZA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM501ZA</span>
+        <h3 class="prod-name">Tubetto Men's Black Diamond Wedding Ring</h3>
+        <p class="prod-desc">A bold polished men's ring with brushed geometric architecture and an elegant matte-finish interior.</p>
+        <p class="prod-metals">14k White &middot; 18k White Gold</p>
+        <p class="prod-price">From $8,970</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TM501ZA – Tubetto Men's Black Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB528LR -->
+    <article class="prod-card" data-sub="rings" data-price="8340">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb528va_rg_2.jpg" alt="TB528LR" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB528LR</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">Rose gold warmth suffuses the Torchon twist, creating a wedding band as tender as the moment itself.</p>
+        <p class="prod-metals">14k Rose &middot; White &middot; Yellow Gold</p>
+        <p class="prod-price">From $8,340</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB528LR – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB506VA -->
+    <article class="prod-card" data-sub="rings" data-price="12040">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb506va_-_inside_flat_wg_2_1.jpg" alt="TB506VA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB506VA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">A comfort-fit Torchon wedding band in white gold for those who wear their love all day, every day.</p>
+        <p class="prod-metals">14k White &middot; Yellow &middot; Rose Gold</p>
+        <p class="prod-price">From $12,040</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB506VA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB544CA -->
+    <article class="prod-card" data-sub="rings" data-price="11530">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb544va_wg_2.jpg" alt="TB544CA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB544CA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">Yellow gold and pavé diamonds unite in the Torchon band—a dazzling symbol of lasting commitment.</p>
+        <p class="prod-metals">14k White &middot; Yellow &middot; Rose Gold</p>
+        <p class="prod-price">From $11,530</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB544CA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TB545CA -->
+    <article class="prod-card" data-sub="rings" data-price="10600">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb545va_rg_2_1.jpg" alt="TB545CA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB545CA</span>
+        <h3 class="prod-name">Tubetto Diamond Wedding Ring</h3>
+        <p class="prod-desc">Pavé diamonds trace the rose gold Torchon spiral for a wedding band of breathtaking dual radiance.</p>
+        <p class="prod-metals">14k Rose &middot; White &middot; Yellow Gold</p>
+        <p class="prod-price">From $10,600</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TB545CA – Tubetto Diamond Wedding Ring" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- TM500UA -->
+    <article class="prod-card" data-sub="rings" data-price="14280">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/2/_/2_12_2_1.jpg" alt="TM500UA" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+            <circle cx="40" cy="40" r="8" fill="#AC3438" opacity="0.18"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Rings</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM500UA</span>
+        <h3 class="prod-name">Tubetto Award Winning Wedding Band for Men</h3>
+        <p class="prod-desc">A bold, clean Torchon design scaled for the groom—geometric, refined, and built for a lifetime.</p>
+        <p class="prod-metals">18k Black &amp; White Gold</p>
+        <p class="prod-price">From $14,280</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: TM500UA – Tubetto Award Winning Wedding Band for Men" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- BRACELETS -->
+
+    <!-- RK500P -->
+    <article class="prod-card" data-sub="bracelets" data-price="5475">
+      <div class="prod-img" style="background: linear-gradient(135deg, #f7ece4 0%, #f0dcd0 50%, #e8cec0 100%);">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/c/s/cs147_br_3_yg.jpg" alt="RK500P" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 40 Q20 20 40 18 Q60 16 64 40 Q68 60 48 62 Q28 64 16 40Z" stroke="#AC3438" stroke-width="1.5" fill="none"/>
+            <path d="M22 40 Q25 26 40 24 Q55 22 58 40 Q61 55 46 57 Q31 59 22 40Z" stroke="#9b6b4a" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Bracelets</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RK500P</span>
+        <h3 class="prod-name">Norme de Danhov Twisted Chain Bracelet</h3>
+        <p class="prod-desc">A sleek gold bracelet with a brilliant diamond accent—a refined statement of masculine elegance.</p>
+        <p class="prod-metals">14k Yellow Gold</p>
+        <p class="prod-price">From $5,475</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: RK500P – Norme de Danhov Twisted Chain Bracelet" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- RK500P-PLAT -->
+    <article class="prod-card" data-sub="bracelets" data-price="11025">
+      <div class="prod-img" style="background: linear-gradient(135deg, #f0eef0 0%, #e4e0e8 50%, #d8d4dc 100%);">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/c/s/cs147_br_3_wg_1.jpg" alt="RK500P-PLAT" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 40 Q20 20 40 18 Q60 16 64 40 Q68 60 48 62 Q28 64 16 40Z" stroke="#AC3438" stroke-width="1.5" fill="none"/>
+            <path d="M22 40 Q25 26 40 24 Q55 22 58 40 Q61 55 46 57 Q31 59 22 40Z" stroke="#9b6b4a" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Bracelets</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RK500P-PLAT</span>
+        <h3 class="prod-name">Norme de Danhov Twisted Chain Bracelet</h3>
+        <p class="prod-desc">The platinum RK500P bracelet delivers cool, contemporary luxury with a diamond-set clasp detail.</p>
+        <p class="prod-metals">Platinum</p>
+        <p class="prod-price">From $11,025</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: RK500P-PLAT – Norme de Danhov Twisted Chain Bracelet in Platinum" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- NECKLACES -->
+
+    <!-- RQ500P -->
+    <article class="prod-card" data-sub="necklaces" data-price="13645">
+      <div class="prod-img" style="background: linear-gradient(135deg, #f7ece4 0%, #f0dcd0 50%, #e8cec0 100%);">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/c/s/cs147_ch_2_yg.jpg" alt="RQ500P" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 14 Q40 10 60 14 Q68 30 64 48 Q56 66 40 68 Q24 66 16 48 Q12 30 20 14Z" stroke="#AC3438" stroke-width="1.5" fill="none"/>
+            <circle cx="40" cy="62" r="5" stroke="#9b6b4a" stroke-width="1" fill="none"/>
+            <line x1="40" y1="67" x2="40" y2="72" stroke="#9b6b4a" stroke-width="1"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Necklaces</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RQ500P</span>
+        <h3 class="prod-name">Norme de Danhov Twisted Chain Necklace</h3>
+        <p class="prod-desc">A gold chain pendant with diamond accents for a man who values quiet, intentional fine jewelry.</p>
+        <p class="prod-metals">14k Yellow Gold</p>
+        <p class="prod-price">From $13,645</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: RQ500P – Norme de Danhov Twisted Chain Necklace" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- RQ500P-PLAT -->
+    <article class="prod-card" data-sub="necklaces" data-price="27515">
+      <div class="prod-img" style="background: linear-gradient(135deg, #f0eef0 0%, #e4e0e8 50%, #d8d4dc 100%);">
+        <img src="https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/c/s/cs147_ch_2_wg_1.jpg" alt="RQ500P-PLAT" loading="lazy" class="prod-real-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none">
+          <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 14 Q40 10 60 14 Q68 30 64 48 Q56 66 40 68 Q24 66 16 48 Q12 30 20 14Z" stroke="#AC3438" stroke-width="1.5" fill="none"/>
+            <circle cx="40" cy="62" r="5" stroke="#9b6b4a" stroke-width="1" fill="none"/>
+            <line x1="40" y1="67" x2="40" y2="72" stroke="#9b6b4a" stroke-width="1"/>
+          </svg>
+        </div>
+        <span class="prod-collection-badge">Necklaces</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RQ500P-PLAT</span>
+        <h3 class="prod-name">Norme de Danhov Twisted Chain Necklace</h3>
+        <p class="prod-desc">The platinum RQ500P necklace—cool-toned luxury in a refined chain pendant for the discerning man.</p>
+        <p class="prod-metals">Platinum</p>
+        <p class="prod-price">From $27,515</p>
+      </div>
+      <a href="mailto:care@danhov.com?subject=Inquiry: RQ500P-PLAT – Norme de Danhov Twisted Chain Necklace in Platinum" class="prod-cta">Inquire &rarr;</a>
+    </article>
+
+    <!-- Empty State -->
+    <div class="empty-state" id="emptyState">
+      <p class="empty-state-title">No pieces found</p>
+      <p class="empty-state-body">Try a different filter or <a href="mens.html" style="color:var(--logo-red);">view all men's jewelry</a>.</p>
+    </div>
+
+  </div><!-- /products-grid -->
+</section>
+
+<!-- PHILOSOPHY STRIPE -->
+<div class="philosophy-stripe">
+  <p>Every piece is <span>handcrafted in Los Angeles</span> — designed for the man who understands that true strength is quiet, and true luxury endures.</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-brand-name">
+        <img src="danhov-logo-transparent.png" alt="DANHOV" class="footer-logo-img">
+      </span>
+      <p class="footer-tagline">"Waves are the ocean." Sacred geometry. Eternal love. Handcrafted in Los Angeles since 1984.</p>
+      <div class="footer-contact">
+        <a href="mailto:care@danhov.com">care@danhov.com</a><br>
+        <a href="tel:18883264688">1 (888) DANHOV-7</a><br>
+        Los Angeles, California
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-links">
+        <li><a href="engagement-rings.html">Engagement Rings</a></li>
+        <li><a href="wedding-bands.html">Wedding Bands</a></li>
+        <li><a href="fine-jewelry.html">Fine Jewelry</a></li>
+        <li><a href="mens.html">Men's</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Learn</p>
+      <ul class="footer-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Craftsmanship</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Connect</p>
+      <ul class="footer-links">
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Pinterest</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Appointments</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2025 DANHOV. All rights reserved.</p>
+    <p class="footer-made">Made with love in Los Angeles.</p>
+  </div>
+</footer>
+
+<script>
+  // ─── CUSTOM CURSOR ───────────────────────────────────────────────
+  (function() {
+    var dot = document.getElementById('cursor');
+    var ring = document.getElementById('cursorRing');
+    var mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    var rx = mx, ry = my;
+
+    document.addEventListener('mousemove', function(e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = (mx - 4) + 'px';
+      dot.style.top  = (my - 4) + 'px';
+    });
+
+    function animateRing() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      ring.style.left = (rx - 18) + 'px';
+      ring.style.top  = (ry - 18) + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.addEventListener('mousedown', function() {
+      dot.style.transform  = 'scale(1.8)';
+      ring.style.transform = 'scale(0.7)';
+    });
+    document.addEventListener('mouseup', function() {
+      dot.style.transform  = 'scale(1)';
+      ring.style.transform = 'scale(1)';
+    });
+
+    var hoverEls = document.querySelectorAll('a, button, [role="button"]');
+    hoverEls.forEach(function(el) {
+      el.addEventListener('mouseenter', function() {
+        ring.style.transform = 'scale(1.5)';
+        ring.style.opacity   = '0.8';
+      });
+      el.addEventListener('mouseleave', function() {
+        ring.style.transform = 'scale(1)';
+        ring.style.opacity   = '0.5';
+      });
+    });
+  })();
+
+  // ─── FILTER + URL PARAMS ─────────────────────────────────────────
+  (function() {
+    var cards   = Array.from(document.querySelectorAll('.prod-card'));
+    var btns    = Array.from(document.querySelectorAll('.filter-btn'));
+    var countEl = document.getElementById('showingCount');
+    var emptyEl = document.getElementById('emptyState');
+    var heroCountEl  = document.getElementById('heroCount');
+    var bcSubSep = document.getElementById('breadcrumbSubSep');
+    var bcSub    = document.getElementById('breadcrumbSub');
+
+    var subLabels = {
+      'all':       'Men\'s Jewelry',
+      'rings':     'Rings',
+      'bracelets': 'Bracelets',
+      'necklaces': 'Necklaces & Pendants'
+    };
+
+    function applyFilter(sub) {
+      var visible = 0;
+      cards.forEach(function(card) {
+        var match = (sub === 'all') || (card.dataset.sub === sub);
+        card.classList.toggle('hidden', !match);
+        if (match) visible++;
+      });
+
+      // update count
+      countEl.textContent = visible;
+      heroCountEl.textContent = visible + (visible === 1 ? ' Piece' : ' Pieces');
+
+      // empty state
+      emptyEl.classList.toggle('visible', visible === 0);
+
+      // active button
+      btns.forEach(function(btn) {
+        btn.classList.toggle('active', btn.dataset.filter === sub);
+      });
+
+      // breadcrumb
+      if (sub === 'all') {
+        bcSubSep.style.display = 'none';
+        bcSub.textContent = '';
+      } else {
+        bcSubSep.style.display = '';
+        bcSub.textContent = subLabels[sub] || sub;
+      }
+    }
+
+    // Read ?sub= from URL on load
+    var urlParams = new URLSearchParams(window.location.search);
+    var initialSub = urlParams.get('sub') || 'all';
+    // Normalise
+    if (!['rings','bracelets','necklaces'].includes(initialSub)) initialSub = 'all';
+    applyFilter(initialSub);
+
+    // Button clicks
+    btns.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var sub = btn.dataset.filter;
+        applyFilter(sub);
+        // Update URL without reload
+        var url = new URL(window.location.href);
+        if (sub === 'all') {
+          url.searchParams.delete('sub');
+        } else {
+          url.searchParams.set('sub', sub);
+        }
+        history.replaceState(null, '', url.toString());
+      });
+    });
+
+    // ─── SORT ─────────────────────────────────────────────────────
+    var grid = document.getElementById('productsGrid');
+    var sortSel = document.getElementById('sortSelect');
+
+    // Store original order
+    cards.forEach(function(card, i) { card.dataset.origOrder = i; });
+
+    sortSel.addEventListener('change', function() {
+      var val = sortSel.value;
+      var sorted = cards.slice().sort(function(a, b) {
+        if (val === 'price-asc')  return Number(a.dataset.price) - Number(b.dataset.price);
+        if (val === 'price-desc') return Number(b.dataset.price) - Number(a.dataset.price);
+        return Number(a.dataset.origOrder) - Number(b.dataset.origOrder);
+      });
+      sorted.forEach(function(card) { grid.insertBefore(card, emptyEl); });
+    });
+  })();
+</script>
+
+</body>
+</html>

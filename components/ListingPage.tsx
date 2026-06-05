@@ -1,0 +1,669 @@
+'use client';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import type { Product } from '@/lib/products';
+import { collectionToSlug } from '@/lib/products';
+import WishlistHeart from '@/components/WishlistHeart';
+import { stripMetalSuffix } from '@/lib/product-display';
+
+
+type Collection = {
+  label: string;
+  value: string; // slug used for filter matching
+};
+
+type MetalFilter = {
+  label: string;
+  value: 'all' | 'white' | 'yellow' | 'rose';
+  swatch?: { background: string; border?: string };
+};
+
+type Props = {
+  category: string;
+  title: string;
+  subtitle: string;
+  eyebrow?: string;
+  collections?: Collection[];
+  showMetalFilter?: boolean;
+  philosophyStripe?: { eyebrow?: string; quote: string; attribution?: string };
+  aiPrompt: string;
+  products: Product[];
+};
+
+const METAL_FILTERS: MetalFilter[] = [
+  { label: 'All Metals', value: 'all' },
+  { label: 'White Gold', value: 'white', swatch: { background: '#e8e0d8', border: '1px solid #bbb' } },
+  { label: 'Yellow Gold', value: 'yellow', swatch: { background: '#d4a853' } },
+  { label: 'Rose Gold', value: 'rose', swatch: { background: '#e8a090' } },
+];
+
+const PLACEHOLDER_SVG = (
+  <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="28" cy="28" r="20" stroke="#AC3438" strokeWidth="1.5" />
+    <circle cx="28" cy="28" r="12" stroke="#AC3438" strokeWidth="0.75" opacity="0.5" />
+    <circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3" />
+  </svg>
+);
+
+const HERO_SPIRAL = (
+  <svg
+    className="hero-spiral"
+    viewBox="0 0 600 600"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="300" cy="300" r="280" stroke="#AC3438" strokeWidth="0.6" />
+    <circle cx="300" cy="300" r="220" stroke="#9b6b4a" strokeWidth="0.5" />
+    <circle cx="300" cy="300" r="165" stroke="#AC3438" strokeWidth="0.5" />
+    <circle cx="300" cy="300" r="115" stroke="#9b6b4a" strokeWidth="0.4" />
+    <circle cx="300" cy="300" r="72" stroke="#AC3438" strokeWidth="0.4" />
+    <circle cx="300" cy="300" r="38" stroke="#9b6b4a" strokeWidth="0.3" />
+    <line x1="300" y1="20" x2="300" y2="580" stroke="#AC3438" strokeWidth="0.3" />
+    <line x1="20" y1="300" x2="580" y2="300" stroke="#AC3438" strokeWidth="0.3" />
+    <line x1="100" y1="100" x2="500" y2="500" stroke="#9b6b4a" strokeWidth="0.25" />
+    <line x1="500" y1="100" x2="100" y2="500" stroke="#9b6b4a" strokeWidth="0.25" />
+    <polygon
+      points="300,28 548,164 548,436 300,572 52,436 52,164"
+      stroke="#AC3438"
+      strokeWidth="0.4"
+      fill="none"
+    />
+  </svg>
+);
+
+/**
+ * Match a product to the active metal chip.
+ *
+ * IMPORTANT — we match against the product's `default_metal` (the metal
+ * shown in the displayed photo) rather than its `metals` array (all
+ * available options). Otherwise picking "Yellow Gold" returns rings
+ * photographed in rose or white because *yellow is one of the available
+ * options* — confusing to a customer who picked a colour expecting to
+ * see only that colour.
+ *
+ * Falls back to the `metals` array if the product has no default_metal.
+ */
+function metalMatches(product: { default_metal: string | null; metals: string[] }, filter: MetalFilter['value']): boolean {
+  if (filter === 'all') return true;
+
+  const def = (product.default_metal ?? '').toLowerCase();
+  if (def) {
+    if (filter === 'white') return def.includes('white');
+    if (filter === 'yellow') return def.includes('yellow');
+    if (filter === 'rose') return def.includes('rose');
+    return true;
+  }
+
+  // Backward-compat: products without a default_metal fall through to
+  // the legacy "any-of-metals-matches" behaviour.
+  const joined = (product.metals ?? []).join(' ').toLowerCase();
+  if (filter === 'white') return joined.includes('white gold') || joined.includes('platinum');
+  if (filter === 'yellow') return joined.includes('yellow gold');
+  if (filter === 'rose') return joined.includes('rose gold');
+  return true;
+}
+
+/**
+ * Base-design key for a SKU — strips the trailing metal token so every
+ * metal variant of one design collapses to a single key. danhov sells each
+ * metal as its own product page (…-14w, …-14y, …-18k-rose, …-pt), but the
+ * listing should show each *design* once (client request). Mirrors the
+ * token grammar in scripts/crawl/07-link-metal-variants.mjs.
+ */
+function baseDesignKey(sku: string): string {
+  const s = String(sku).toLowerCase();
+  return s
+    .replace(/-(14|18)k-(white|yellow|rose)$/, '')
+    .replace(/-(14|18)k[wyr]$/, '')
+    .replace(/-(14|18)[wyr]$/, '')
+    .replace(/-(platinum|plat|pt|pl)$/, '')
+    .replace(/-(white|yellow|rose)-gold$/, '');
+}
+
+type SortKey = 'featured' | 'price_asc' | 'price_desc' | 'newest';
+
+function parsePrice(p: { price_display: string | null }): number {
+  if (!p.price_display) return 0;
+  const m = p.price_display.match(/[\d,]+/);
+  if (!m) return 0;
+  return Number(m[0].replace(/,/g, ''));
+}
+
+export default function ListingPage({
+  category,
+  title,
+  subtitle,
+  eyebrow = 'DANHOV — Est. 1984, Los Angeles',
+  collections,
+  showMetalFilter = true,
+  philosophyStripe,
+  aiPrompt,
+  products,
+}: Props) {
+  const [collectionFilter, setCollectionFilter] = useState<string>('all');
+  const [metalFilter, setMetalFilter] = useState<MetalFilter['value']>('all');
+  const [sortKey, setSortKey] = useState<SortKey>('featured');
+
+  const filtered = useMemo(() => {
+    const result = products.filter((p) => {
+      // Collection / sub-category filter
+      if (collectionFilter !== 'all' && collections && collections.length > 0) {
+        if (category === 'engagement') {
+          const slug = collectionToSlug(p.collection, collections);
+          if (slug !== collectionFilter) return false;
+        } else {
+          if (!p.sub_categories.includes(collectionFilter)) return false;
+        }
+      }
+      // Metal filter
+      if (showMetalFilter && metalFilter !== 'all') {
+        if (!metalMatches(p, metalFilter)) return false;
+      }
+      return true;
+    });
+
+    // ── Collapse metal variants → one card per design (client request) ──
+    // Group by base-design key and keep a single representative per group.
+    // Preference order for the representative:
+    //   1. when a metal filter is active, a variant in that metal
+    //   2. a platinum variant (the new default metal)
+    //   3. the variant that actually has photos
+    //   4. first seen
+    const groups = new Map<string, Product>();
+    for (const p of result) {
+      const key = baseDesignKey(p.sku);
+      const existing = groups.get(key);
+      if (!existing) {
+        groups.set(key, p);
+        continue;
+      }
+      const score = (x: Product): number => {
+        let s = 0;
+        const dm = (x.default_metal ?? '').toLowerCase();
+        if (metalFilter !== 'all' && dm.includes(metalFilter)) s += 8;
+        if (dm.includes('platinum')) s += 4;
+        if ((x.images?.length ?? 0) > 0) s += 2;
+        return s;
+      };
+      if (score(p) > score(existing)) groups.set(key, p);
+    }
+    const deduped = Array.from(groups.values());
+
+    // Sort
+    if (sortKey === 'price_asc') {
+      deduped.sort((a, b) => parsePrice(a) - parsePrice(b));
+    } else if (sortKey === 'price_desc') {
+      deduped.sort((a, b) => parsePrice(b) - parsePrice(a));
+    } else if (sortKey === 'newest') {
+      // SKU is roughly chronological — newer SKUs sort lower
+      deduped.sort((a, b) => b.sku.localeCompare(a.sku));
+    }
+    return deduped;
+  }, [products, collectionFilter, metalFilter, sortKey, collections, category, showMetalFilter]);
+
+  // Total distinct designs (collapsed across metal variants), independent
+  // of the active filters — drives the "X handcrafted styles" hero count.
+  const totalCount = useMemo(
+    () => new Set(products.map((p) => baseDesignKey(p.sku))).size,
+    [products],
+  );
+  const visibleCount = filtered.length;
+
+  return (
+    <main className="listing-page">
+      {/* PAGE HERO */}
+      <section className="page-hero">
+        {HERO_SPIRAL}
+        <div className="page-hero-inner">
+          <span className="page-hero-eyebrow">{eyebrow}</span>
+          <h1 className="page-hero-title">{title}</h1>
+          <p className="page-hero-subtitle">{subtitle}</p>
+          <span className="page-hero-count">{totalCount} handcrafted styles</span>
+        </div>
+      </section>
+
+      {/* BREADCRUMB */}
+      <div className="breadcrumb">
+        <Link href="/">Home</Link>
+        <span className="breadcrumb-sep">›</span>
+        <span className="breadcrumb-current">{title}</span>
+      </div>
+
+      {/* AI ADVISOR PANEL */}
+      <div className="ai-advisor-wrap">
+        <div className="dnh-panel">
+          <div className="dnh-panel-copy">
+            <strong>Not sure where to start?</strong>
+            <span>
+              Our advisor can help you find the perfect style, metal, and fit — in seconds.
+            </span>
+          </div>
+          <button className="dnh-trigger dnh-trigger--listing" data-dnh={aiPrompt} type="button">
+            <svg width="22" height="22" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path
+                d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z"
+                fill="currentColor"
+              />
+            </svg>
+            ASK THE ADVISOR
+          </button>
+        </div>
+      </div>
+
+      {/* INLINE TAG FILTER BAR */}
+      {((collections && collections.length > 0) || showMetalFilter) && (
+        <div className="tag-filter-bar">
+          {collections && collections.length > 0 && (
+            <div className="tag-filter-group">
+              <button
+                type="button"
+                className={`tag-chip${collectionFilter === 'all' ? ' is-active' : ''}`}
+                onClick={() => setCollectionFilter('all')}
+              >
+                All
+              </button>
+              {collections.map((c) => (
+                <button
+                  key={c.value}
+                  type="button"
+                  className={`tag-chip${collectionFilter === c.value ? ' is-active' : ''}`}
+                  onClick={() => setCollectionFilter(c.value)}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {showMetalFilter && (
+            <div className="tag-filter-group tag-filter-group--metals">
+              {METAL_FILTERS.map((m) => (
+                <button
+                  key={m.value}
+                  type="button"
+                  className={`tag-chip${metalFilter === m.value ? ' is-active' : ''}`}
+                  onClick={() => setMetalFilter(m.value)}
+                >
+                  {m.swatch && (
+                    <span
+                      className="tag-chip-swatch"
+                      style={{ background: m.swatch.background, border: m.swatch.border }}
+                    />
+                  )}
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          )}
+
+          <div className="vc-toolbar-sort">
+            <label htmlFor="vc-sort" className="vc-sort-label">Sort by</label>
+            <select
+              id="vc-sort"
+              className="vc-sort-select"
+              value={sortKey}
+              onChange={(e) => setSortKey(e.target.value as SortKey)}
+            >
+              <option value="featured">Featured</option>
+              <option value="price_asc">Price · Low to High</option>
+              <option value="price_desc">Price · High to Low</option>
+              <option value="newest">Newest</option>
+            </select>
+            <svg className="vc-sort-chevron" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M2 4l4 4 4-4" stroke="currentColor" strokeWidth="1.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      {/* Per Lei = the U Collection per the client. When the Per Lei
+          chip is active we render the U narrative FIRST, then the
+          actual Per Lei product grid right below it. Editorial stays
+          a story; products stay shoppable. */}
+      {collectionFilter === 'per-lei' && (
+        <>
+          <section className="ucoll-hero">
+            <span className="ucoll-eyebrow">DANHOV — THE U COLLECTION</span>
+            <div className="ucoll-big-u" aria-hidden="true">U</div>
+            <p className="ucoll-hero-line">
+              For years we have made rings shaped like the letter <em>U.</em>
+            </p>
+            <p className="ucoll-hero-sub">We never told anyone why. Now we will.</p>
+          </section>
+
+          <section className="ucoll-meaning">
+            <span className="ucoll-eyebrow">THE MEANING, REVEALED</span>
+            <h2 className="ucoll-meaning-title">U is for you.</h2>
+            <p className="ucoll-meaning-body">
+              U is the held space. U is what receives. U is the shape of a vessel,
+              <br />open at the top, waiting to be filled with light.
+            </p>
+            <p className="ucoll-meaning-body ucoll-meaning-body--gap">
+              And when two people exchange these rings, the silent truth between them
+              <br />is the oldest one there is —
+            </p>
+            <div className="ucoll-meaning-reveal">I am you.</div>
+            <div className="ucoll-meaning-divider" />
+          </section>
+
+          <section className="ucoll-pillars">
+            <div className="ucoll-pillar">
+              <div className="ucoll-pillar-u" aria-hidden="true">U</div>
+              <div className="ucoll-pillar-label">Held Space</div>
+              <div className="ucoll-pillar-quote">&ldquo;The vessel is what receives.&rdquo;</div>
+              <p className="ucoll-pillar-body">
+                The U is not closed. It is open. Ready. Listening. A held space waiting
+                for what comes — love, light, the moment.
+              </p>
+            </div>
+            <div className="ucoll-pillar">
+              <div className="ucoll-pillar-u" aria-hidden="true">U</div>
+              <div className="ucoll-pillar-label">You</div>
+              <div className="ucoll-pillar-quote">
+                &ldquo;The ring is shaped like the one who wears it.&rdquo;
+              </div>
+              <p className="ucoll-pillar-body">
+                Every U ring is custom in this way — whoever wears it, it is shaped for
+                them. You are the meaning. Without you, the U is just a letter.
+              </p>
+            </div>
+            <div className="ucoll-pillar">
+              <div className="ucoll-pillar-u" aria-hidden="true">U</div>
+              <div className="ucoll-pillar-label">Union</div>
+              <div className="ucoll-pillar-quote">&ldquo;I am you.&rdquo;</div>
+              <p className="ucoll-pillar-body">
+                Two rings exchanged. Two Us, mirroring each other. The deepest vow
+                underneath every wedding ring ever given — now spoken aloud.
+              </p>
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* PRODUCT GRID — Van Cleef carbon-copy:
+          centred white-background tile, image dots below the photo to
+          swap between product images on click, serif name, material
+          summary, price, optional "+N variations" hint. Editorial
+          spread inserted after every six product cards. */}
+      <section className="vc-products">
+        <div className="vc-products-count">
+          {visibleCount} {visibleCount === 1 ? 'piece' : 'pieces'}
+        </div>
+
+        {visibleCount === 0 ? (
+          <div className="vc-empty">
+            <p className="vc-empty-title">No matching pieces</p>
+            <p className="vc-empty-body">Try a different filter combination.</p>
+          </div>
+        ) : (
+          <div className="vc-grid">
+            {(() => {
+              // We track which editorial slot we're on so each inserted
+              // tile picks the *next* message from EDITORIAL_COPY rather
+              // than repeating the same headline down the page.
+              let editorialSlot = 0;
+              return filtered.flatMap((p, idx) => {
+                const nodes: React.ReactNode[] = [
+                  <VanCleefCard key={p.sku} product={p} placeholder={PLACEHOLDER_SVG} />,
+                ];
+                // Van Cleef rhythm: after the 6th card insert a wide
+                // editorial spread (spans 2 of 3 columns); the next card
+                // fills the row's last column. Subsequent editorials land
+                // every 10th card so the grid tiles cleanly.
+                const isInsertSlot = idx === 5 || (idx > 5 && (idx - 5) % 10 === 0);
+                if (isInsertSlot && idx !== filtered.length - 1) {
+                  const slotIndex = editorialSlot++;
+                  nodes.push(
+                    <EditorialTile
+                      key={`editorial-${idx}`}
+                      category={category}
+                      slotIndex={slotIndex}
+                    />
+                  );
+                }
+                return nodes;
+              });
+            })()}
+          </div>
+        )}
+      </section>
+
+      {/* PHILOSOPHY STRIPE */}
+      {philosophyStripe && (
+        <div className="philosophy-stripe">
+          <p
+            dangerouslySetInnerHTML={{
+              __html: philosophyStripe.quote,
+            }}
+          />
+          {philosophyStripe.attribution && (
+            <span className="philosophy-stripe-attr">{philosophyStripe.attribution}</span>
+          )}
+        </div>
+      )}
+    </main>
+  );
+}
+
+const METAL_LABEL: Record<string, string> = {
+  '14k_white':  '14K White Gold',
+  '18k_white':  '18K White Gold',
+  '14k_yellow': '14K Yellow Gold',
+  '18k_yellow': '18K Yellow Gold',
+  '14k_rose':   '14K Rose Gold',
+  'platinum':   'Platinum',
+};
+
+const ALL_METALS = ['14k_white', '18k_white', '14k_yellow', '18k_yellow', '14k_rose', 'platinum'];
+
+// Fallback chain: if no image for selected metal, try these alternatives (closest color family first)
+const METAL_FALLBACK: Record<string, string[]> = {
+  '14k_white':  ['18k_white', 'platinum'],
+  '18k_white':  ['14k_white', 'platinum'],
+  'platinum':   ['18k_white', '14k_white'],
+  '14k_yellow': ['18k_yellow'],
+  '18k_yellow': ['14k_yellow'],
+  '14k_rose':   ['18k_rose'],
+  '18k_rose':   ['14k_rose'],
+};
+
+const METAL_TONES: Record<string, { bg: string; border?: string }> = { // eslint-disable-line
+  '14k_white':  { bg: 'linear-gradient(135deg,#f4efe9 0%,#c9c7c2 100%)', border: '1px solid rgba(60,30,20,0.18)' },
+  '18k_white':  { bg: 'linear-gradient(135deg,#f0ebe4 0%,#bfbdb8 100%)', border: '1px solid rgba(60,30,20,0.18)' },
+  '14k_yellow': { bg: 'linear-gradient(135deg,#e9c463 0%,#c69a3a 100%)' },
+  '18k_yellow': { bg: 'linear-gradient(135deg,#e4bc50 0%,#bd9030 100%)' },
+  '14k_rose':   { bg: 'linear-gradient(135deg,#f1b7a3 0%,#cf8a72 100%)' },
+  'platinum':   { bg: 'linear-gradient(135deg,#ecebe7 0%,#babab5 100%)', border: '1px solid rgba(60,30,20,0.18)' },
+};
+
+// ── Van Cleef-style card ────────────────────────────────────────────
+function VanCleefCard({
+  product,
+  placeholder,
+}: {
+  product: Product;
+  placeholder: React.ReactNode;
+}) {
+  const metals = product.metals ?? [];
+  const metalImages = product.metal_images ?? {};
+
+  const defaultMetal =
+    product.default_metal && metals.includes(product.default_metal)
+      ? product.default_metal
+      : metals[0] ?? '';
+
+  const [selectedMetal, setSelectedMetal] = useState(defaultMetal);
+  const [cyclingIdx, setCyclingIdx] = useState(0);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Images for selected metal — try the exact metal, then closest family, then default
+  const getImagesForMetal = (m: string) => {
+    if (m && metalImages[m]?.length) return metalImages[m];
+    for (const fallback of (METAL_FALLBACK[m] ?? [])) {
+      if (metalImages[fallback]?.length) return metalImages[fallback];
+    }
+    return product.images ?? [];
+  };
+
+  const displayImages = getImagesForMetal(selectedMetal);
+  const currentImg = displayImages[cyclingIdx] ?? displayImages[0] ?? null;
+  const isAwardWinner = product.collection?.toLowerCase().includes('award');
+
+  function startCycling() {
+    setCyclingIdx(0);
+    if (displayImages.length > 1) {
+      intervalRef.current = setInterval(() => {
+        setCyclingIdx((i) => (i + 1) % displayImages.length);
+      }, 600);
+    }
+  }
+
+  function stopCycling() {
+    if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
+    setCyclingIdx(0);
+  }
+
+  function selectMetal(e: React.MouseEvent, m: string) {
+    e.preventDefault();
+    setSelectedMetal(m);
+    setCyclingIdx(0);
+  }
+
+  useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
+
+  return (
+    <div className="vc-card">
+      {isAwardWinner && (
+        <div className="vc-card-most-loved">MOST LOVED</div>
+      )}
+      <WishlistHeart slug={product.slug} />
+
+      <Link
+        href={`/product/${product.slug}`}
+        className="vc-card-media"
+        aria-label={product.name}
+        onMouseEnter={startCycling}
+        onMouseLeave={stopCycling}
+      >
+        {currentImg ? (
+          <Image
+            src={currentImg}
+            alt={product.name}
+            width={600}
+            height={600}
+            className="vc-card-img"
+            loading="lazy"
+          />
+        ) : (
+          <div className="vc-card-placeholder">{placeholder}</div>
+        )}
+      </Link>
+
+      <div className="vc-card-meta">
+        <Link href={`/product/${product.slug}`} className="vc-card-name-link" prefetch={false}>
+          <h3 className="vc-card-name">{stripMetalSuffix(product.name)}</h3>
+        </Link>
+        {product.price_display && (
+          <p className="vc-card-price">{product.price_display}</p>
+        )}
+
+        <div className="vc-card-metals">
+          {ALL_METALS.map((m) => {
+            const tone = METAL_TONES[m];
+            return (
+              <button
+                key={m}
+                type="button"
+                className={`vc-card-swatch${selectedMetal === m ? ' is-active' : ''}`}
+                onClick={(e) => selectMetal(e, m)}
+                title={METAL_LABEL[m]}
+                style={{ background: tone.bg, border: tone.border ?? 'none' }}
+              />
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Editorial tile — a centred quote card woven between the product
+// rows. Not a link, not a CTA — just a moment of breath. The customer
+// scrolls past a row of pieces, then reads a single line that captures
+// the spirit of the collection, then scrolls into the next row.
+//
+// `slotIndex` is the running count of editorial tiles in this listing;
+// we cycle through EDITORIAL_QUOTES so the customer never sees the
+// same line twice as they scroll down.
+function EditorialTile({
+  category,
+  slotIndex,
+}: {
+  category: string;
+  slotIndex: number;
+}) {
+  const quotes = EDITORIAL_QUOTES[category] ?? EDITORIAL_QUOTES.default;
+  const quote = quotes[slotIndex % quotes.length];
+  return (
+    <figure
+      className="vc-editorial"
+      aria-label={`DANHOV reflection: ${quote.text}`}
+    >
+      <div className="vc-editorial-media" aria-hidden="true">
+        <div className="vc-editorial-illustration" />
+      </div>
+      <blockquote className="vc-editorial-quote">
+        <p className="vc-editorial-quote-text">
+          <span className="vc-editorial-quote-mark vc-editorial-quote-mark--open" aria-hidden="true">&ldquo;</span>
+          {quote.text}
+          <span className="vc-editorial-quote-mark vc-editorial-quote-mark--close" aria-hidden="true">&rdquo;</span>
+        </p>
+        {quote.attribution && (
+          <footer className="vc-editorial-quote-attr">— {quote.attribution}</footer>
+        )}
+      </blockquote>
+    </figure>
+  );
+}
+
+type EditorialQuote = { text: string; attribution?: string };
+
+// One ordered list per category. Quote-style brand messages — short,
+// meditative, untraceable to any one product. The picker cycles through
+// them so each editorial slot reads as a different reflection.
+const EDITORIAL_QUOTES: Record<string, EditorialQuote[]> = {
+  engagement: [
+    { text: 'Sacred geometry, set in gold.' },
+    { text: 'The spiral does not end. It returns.' },
+    { text: 'In silence, the ring was formed.' },
+    { text: 'Two souls, one circle, infinite.' },
+    { text: 'Every ring is a held space.' },
+  ],
+  wedding: [
+    { text: 'I am you.' },
+    { text: 'Two whole people choosing each other.' },
+    { text: 'The circle that begins exactly where it ends.' },
+    { text: 'A vow is a quiet thing. So is gold.' },
+    { text: 'Worn together, written together.' },
+  ],
+  fine: [
+    { text: 'Quiet pieces, for loud lives.' },
+    { text: 'Wear it every day. It was made for this.' },
+    { text: 'Light, gathered.' },
+    { text: 'Small enough to forget. Beautiful enough to remember.' },
+  ],
+  mens: [
+    { text: 'Strength is a soft thing.' },
+    { text: 'In silence, the band was forged.' },
+    { text: 'A ring that carries a name.' },
+    { text: 'Weight, worn well.' },
+  ],
+  default: [
+    { text: 'Handcrafted in Los Angeles since 1984.' },
+    { text: 'Sacred geometry, set in gold.' },
+    { text: 'Presence is a present.' },
+  ],
+};

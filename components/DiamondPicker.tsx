@@ -1,0 +1,902 @@
+'use client';
+
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useCart, formatUsd, parsePriceDisplay } from '@/components/CartProvider';
+
+// ── Diamond media: still image + loupe360 360° viewer on hover ───────────
+// Brilliant Earth carbon-copy. Nivoda's `video` field is a loupe360 viewer
+// URL (an HTML page that renders the diamond's 360° turntable spin and
+// handles its own hover/drag rotation), NOT a raw video file — so we embed
+// it in an <iframe>. The still `image` shows by default; on hover we lazily
+// mount the loupe360 iframe over it so the stone spins exactly like BE.
+// Iframes are mounted only on first hover (never 24 at once) for performance.
+//
+// Nivoda image URLs can be slow / 4xx / CDN-blocked; on any error we
+// degrade gracefully so the customer never sees a broken-image icon.
+function DiamondCardMedia({
+  image,
+  video,
+  shape,
+  carat,
+}: {
+  image: string | null;
+  video: string | null;
+  shape: ShapeT;
+  carat: number;
+}) {
+  const [imgStatus, setImgStatus] = useState<'loading' | 'ok' | 'error'>(
+    image ? 'loading' : 'error'
+  );
+  const [hovering, setHovering] = useState(false);
+  const [spinMounted, setSpinMounted] = useState(false);
+  const [spinReady, setSpinReady] = useState(false);
+
+  useEffect(() => {
+    setImgStatus(image ? 'loading' : 'error');
+  }, [image]);
+  useEffect(() => {
+    setSpinMounted(false);
+    setSpinReady(false);
+  }, [video]);
+
+  const hasSpin = !!video;
+  const hasImage = !!image && imgStatus !== 'error';
+
+  const onEnter = () => {
+    setHovering(true);
+    if (hasSpin) setSpinMounted(true); // lazy-mount the viewer on first hover
+  };
+  const onLeave = () => setHovering(false);
+
+  // Neither image nor spin usable → synthetic glyph.
+  if (!hasImage && !hasSpin) {
+    return <DiamondGlyph shape={shape} carat={carat} />;
+  }
+
+  return (
+    <div
+      className="dpicker-media"
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      {imgStatus === 'loading' && <div className="dpicker-skel" aria-hidden="true" />}
+
+      {hasImage && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={image!}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onLoad={() => setImgStatus('ok')}
+          onError={() => setImgStatus('error')}
+          className="dpicker-media-img"
+          style={{
+            opacity: imgStatus === 'ok' && !(hovering && hasSpin && spinReady) ? 1 : 0,
+          }}
+        />
+      )}
+
+      {/* loupe360 360° spin viewer — mounted on first hover, revealed once
+          loaded. The viewer is scaled to fit the card (its native canvas is
+          ~500px, which otherwise overflows/zooms) and scrollbars are
+          suppressed. It only shows while hovering, so the card is a calm
+          still image until the customer interacts. */}
+      {hasSpin && spinMounted && (
+        <div className="dpicker-spin-frame" style={{ opacity: hovering && spinReady ? 1 : 0 }}>
+          <iframe
+            src={video!}
+            title="360° diamond view"
+            loading="lazy"
+            scrolling="no"
+            className="dpicker-media-spin"
+            onLoad={() => setSpinReady(true)}
+          />
+        </div>
+      )}
+
+      {/* loading spinner — while the viewer is fetching on hover */}
+      {hasSpin && hovering && spinMounted && !spinReady && (
+        <span className="dpicker-loading" aria-label="Loading 360° view">
+          <span className="dpicker-loading-ring" />
+        </span>
+      )}
+
+      {/* idle 360° hint badge — invites the hover-to-spin interaction */}
+      {hasSpin && !hovering && (
+        <span className="dpicker-spin" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
+            <path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+            <path d="M21 4v4h-4" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          360°
+        </span>
+      )}
+    </div>
+  );
+}
+type ShapeT =
+  | 'ROUND' | 'OVAL' | 'PRINCESS' | 'CUSHION' | 'EMERALD'
+  | 'PEAR' | 'HEART' | 'MARQUISE' | 'RADIANT' | 'ASSCHER';
+
+// ── Filter shape ──────────────────────────────────────────────────────────
+
+type Shape = 'ROUND' | 'OVAL' | 'PRINCESS' | 'CUSHION' | 'EMERALD' | 'PEAR' | 'HEART' | 'MARQUISE' | 'RADIANT' | 'ASSCHER';
+type Color = 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K';
+type Clarity = 'FL' | 'IF' | 'VVS1' | 'VVS2' | 'VS1' | 'VS2' | 'SI1' | 'SI2';
+type Cut = 'EX' | 'ID' | 'VG' | 'G';
+
+type SortField = 'price' | 'size' | 'discount';
+
+const SHAPES: { value: Shape; label: string }[] = [
+  { value: 'ROUND', label: 'Round' },
+  { value: 'OVAL', label: 'Oval' },
+  { value: 'CUSHION', label: 'Cushion' },
+  { value: 'PRINCESS', label: 'Princess' },
+  { value: 'EMERALD', label: 'Emerald' },
+  { value: 'PEAR', label: 'Pear' },
+  { value: 'RADIANT', label: 'Radiant' },
+  { value: 'HEART', label: 'Heart' },
+  { value: 'MARQUISE', label: 'Marquise' },
+  { value: 'ASSCHER', label: 'Asscher' },
+];
+const COLORS: Color[] = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
+const CLARITIES: Clarity[] = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2'];
+const CUTS: { value: Cut; label: string }[] = [
+  { value: 'EX', label: 'Excellent' },
+  { value: 'ID', label: 'Ideal' },
+  { value: 'VG', label: 'Very Good' },
+  { value: 'G', label: 'Good' },
+];
+
+type Diamond = {
+  id: string;                 // offer id
+  price: number | null;
+  markup_price: number | null;
+  diamond: {
+    NivodaStockId: string | null;
+    image: string | null;
+    video: string | null;
+    availability: string | null;
+    certificate: {
+      lab: string | null;
+      certNumber: string | null;
+      shape: string | null;
+      carats: number | null;
+      clarity: string | null;
+      color: string | null;
+      cut: string | null;
+      polish: string | null;
+      symmetry: string | null;
+      pdfUrl: string | null;
+    } | null;
+  };
+};
+
+function ShapeIcon({ shape }: { shape: Shape }) {
+  const common = { stroke: '#AC3438', strokeWidth: 1.5, fill: 'none' } as const;
+  switch (shape) {
+    case 'ROUND':    return <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14" {...common} /></svg>;
+    case 'OVAL':     return <svg viewBox="0 0 40 40" aria-hidden="true"><ellipse cx="20" cy="20" rx="11" ry="16" {...common} /></svg>;
+    case 'CUSHION':  return <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="5" y="5" width="30" height="30" rx="7" {...common} /></svg>;
+    case 'PRINCESS': return <svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="6" width="28" height="28" {...common} /></svg>;
+    case 'EMERALD':  return <svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="12,4 28,4 36,12 36,28 28,36 12,36 4,28 4,12" {...common} /></svg>;
+    case 'PEAR':     return <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C24 7 29 14 29 22 C29 30 25 36 20 36 C15 36 11 30 11 22 C11 14 16 7 20 4 Z" {...common} /></svg>;
+    case 'RADIANT':  return <svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="13,4 27,4 36,13 36,27 27,36 13,36 4,27 4,13" {...common} /></svg>;
+    case 'HEART':    return <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 36 C8 28 4 18 9 11 C13 6 18 8 20 12 C22 8 27 6 31 11 C36 18 32 28 20 36 Z" {...common} /></svg>;
+    case 'MARQUISE': return <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 C28 12 28 28 20 36 C12 28 12 12 20 4 Z" {...common} /></svg>;
+    case 'ASSCHER':  return <svg viewBox="0 0 40 40" aria-hidden="true"><polygon points="12,4 28,4 36,12 36,28 28,36 12,36 4,28 4,12" {...common} /><polygon points="16,11 24,11 29,16 29,24 24,29 16,29 11,24 11,16" stroke="#AC3438" strokeWidth="0.8" fill="none" /></svg>;
+    default: return null;
+  }
+}
+
+/**
+ * Multi-faceted diamond illustration used when a stone has no real image
+ * (e.g. fallback inventory). Renders a top-view brilliant cut with facet
+ * lines, sparkle highlights and a soft drop-shadow so the card reads as
+ * a polished catalogue entry rather than a placeholder.
+ */
+function DiamondGlyph({ shape, carat }: { shape: Shape; carat: number }) {
+  // Scale the glyph slightly by carat — bigger stones read as bigger
+  // illustrations. Clamps to [0.85, 1.15].
+  const scale = Math.min(1.15, Math.max(0.85, 0.85 + (carat / 5)));
+
+  // For shapes we don't have a custom diamond rendering of, fall back to
+  // the silhouette icon centred in the media area.
+  if (shape !== 'ROUND' && shape !== 'OVAL' && shape !== 'CUSHION' && shape !== 'PRINCESS') {
+    return (
+      <svg viewBox="0 0 100 100" aria-hidden="true" width="60%" height="60%">
+        <defs>
+          <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stopColor="#ffe1d6" />
+            <stop offset="100%" stopColor="#f6dcd1" stopOpacity="0" />
+          </radialGradient>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="url(#bg)" />
+        <g transform={`translate(50 50) scale(${scale}) translate(-20 -20)`}>
+          <ShapeIcon shape={shape} />
+        </g>
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 100 100" aria-hidden="true" width="78%" height="78%">
+      <defs>
+        {/* Soft pink sparkle wash behind the stone */}
+        <radialGradient id="dg-bg" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stopColor="#fff0e8" />
+          <stop offset="100%" stopColor="#f6dcd1" stopOpacity="0" />
+        </radialGradient>
+        {/* Stone gradient — silver/white with warm tints */}
+        <radialGradient id="dg-stone" cx="40%" cy="35%" r="70%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+          <stop offset="55%" stopColor="#f8e9e1" stopOpacity="0.85" />
+          <stop offset="100%" stopColor="#e8c8bb" stopOpacity="0.75" />
+        </radialGradient>
+      </defs>
+
+      {/* Backdrop wash */}
+      <circle cx="50" cy="50" r="48" fill="url(#dg-bg)" />
+
+      <g transform={`translate(50 50) scale(${scale}) translate(-50 -50)`}>
+        {/* Stone outline + fill */}
+        {shape === 'ROUND' && (
+          <>
+            <circle cx="50" cy="50" r="32" fill="url(#dg-stone)" stroke="#AC3438" strokeWidth="1.2" />
+            {/* Star facets */}
+            <g stroke="#AC3438" strokeWidth="0.5" opacity="0.55" fill="none">
+              <circle cx="50" cy="50" r="22" />
+              <circle cx="50" cy="50" r="12" />
+              <line x1="50" y1="18" x2="50" y2="82" />
+              <line x1="18" y1="50" x2="82" y2="50" />
+              <line x1="27" y1="27" x2="73" y2="73" />
+              <line x1="73" y1="27" x2="27" y2="73" />
+            </g>
+            {/* Sparkle highlights */}
+            <circle cx="40" cy="36" r="3" fill="#ffffff" opacity="0.95" />
+            <circle cx="62" cy="44" r="1.4" fill="#ffffff" opacity="0.85" />
+          </>
+        )}
+
+        {shape === 'OVAL' && (
+          <>
+            <ellipse cx="50" cy="50" rx="24" ry="34" fill="url(#dg-stone)" stroke="#AC3438" strokeWidth="1.2" />
+            <g stroke="#AC3438" strokeWidth="0.5" opacity="0.55" fill="none">
+              <ellipse cx="50" cy="50" rx="16" ry="24" />
+              <ellipse cx="50" cy="50" rx="8" ry="12" />
+              <line x1="50" y1="16" x2="50" y2="84" />
+              <line x1="26" y1="50" x2="74" y2="50" />
+            </g>
+            <ellipse cx="42" cy="34" rx="3.5" ry="5" fill="#ffffff" opacity="0.9" />
+          </>
+        )}
+
+        {shape === 'CUSHION' && (
+          <>
+            <rect x="18" y="18" width="64" height="64" rx="14" fill="url(#dg-stone)" stroke="#AC3438" strokeWidth="1.2" />
+            <g stroke="#AC3438" strokeWidth="0.5" opacity="0.55" fill="none">
+              <rect x="26" y="26" width="48" height="48" rx="10" />
+              <rect x="36" y="36" width="28" height="28" rx="5" />
+              <line x1="50" y1="18" x2="50" y2="82" />
+              <line x1="18" y1="50" x2="82" y2="50" />
+            </g>
+            <circle cx="38" cy="36" r="3" fill="#ffffff" opacity="0.9" />
+          </>
+        )}
+
+        {shape === 'PRINCESS' && (
+          <>
+            <rect x="20" y="20" width="60" height="60" fill="url(#dg-stone)" stroke="#AC3438" strokeWidth="1.2" />
+            <g stroke="#AC3438" strokeWidth="0.5" opacity="0.55" fill="none">
+              <line x1="20" y1="20" x2="80" y2="80" />
+              <line x1="80" y1="20" x2="20" y2="80" />
+              <line x1="50" y1="20" x2="50" y2="80" />
+              <line x1="20" y1="50" x2="80" y2="50" />
+            </g>
+            <circle cx="36" cy="34" r="2.6" fill="#ffffff" opacity="0.9" />
+          </>
+        )}
+      </g>
+    </svg>
+  );
+}
+
+function ensureSessionId(): string {
+  if (typeof window === 'undefined') return 'srv';
+  const KEY = 'danhov_session_id';
+  let sid = window.localStorage.getItem(KEY);
+  if (!sid) {
+    sid = 'sess_' + Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
+    window.localStorage.setItem(KEY, sid);
+  }
+  return sid;
+}
+
+type SettingSummary = {
+  sku: string;
+  slug: string;
+  name: string;
+  collection: string | null;
+  image: string | null;
+  price_display: string | null;
+  metal: string | null;
+};
+
+type Props = {
+  settingSlug?: string;
+  /** Pre-fetched setting details so the bundle bar can render setting
+   *  name + price without an extra client roundtrip. */
+  setting?: SettingSummary | null;
+  /** Called when the customer picks a stone — after the hold succeeds. */
+  onSelected?: (offerId: string, holdId: string) => void;
+  /** If a stone is already selected (e.g. coming back to /diamond from /review). */
+  initialOfferId?: string;
+};
+
+const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
+
+// Brilliant Earth-style ring size catalogue: half + quarter sizes from 3
+// through 13.5, plus "Less than 3" for the smallest hands. Stored as
+// display strings since fractional sizes like "6 1/4" don't parse cleanly
+// as numbers.
+const RING_SIZES: string[] = (() => {
+  const out: string[] = ['Less than 3'];
+  for (let whole = 3; whole <= 13; whole++) {
+    out.push(`${whole}`);
+    out.push(`${whole} 1/4`);
+    out.push(`${whole} 1/2`);
+    out.push(`${whole} 3/4`);
+  }
+  out.push('13 1/2');
+  return Array.from(new Set(out));
+})();
+
+export default function DiamondPicker({ settingSlug, setting, onSelected, initialOfferId }: Props) {
+  const cart = useCart();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  // Honour a ?shape= deep link from the homepage shape tiles so the
+  // grid pre-filters to whatever the customer clicked.
+  const initialShape: Shape = (() => {
+    const q = searchParams?.get('shape')?.toUpperCase();
+    if (q && (VALID_SHAPES as string[]).includes(q)) return q as Shape;
+    return 'ROUND';
+  })();
+  const [shape, setShape] = useState<Shape>(initialShape);
+  const [labgrown, setLabgrown] = useState<boolean>(false);
+  const [caratMin, setCaratMin] = useState<number>(0.5);
+  const [caratMax, setCaratMax] = useState<number>(2.5);
+  const [colors, setColors] = useState<Color[]>(['D', 'E', 'F', 'G', 'H']);
+  const [clarities, setClarities] = useState<Clarity[]>(['VS1', 'VS2', 'SI1']);
+  const [cuts, setCuts] = useState<Cut[]>(['EX', 'ID']);
+  const [sortField, setSortField] = useState<SortField>('price');
+  const [sortDir, setSortDir] = useState<'ASC' | 'DESC'>('ASC');
+
+  const [items, setItems] = useState<Diamond[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(initialOfferId ?? null);
+  const [holding, setHolding] = useState<string | null>(null);
+  // Ring size + add-to-cart state for the sticky bundle bar.
+  const [ringSize, setRingSize] = useState<string>('');
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartError, setCartError] = useState<string | null>(null);
+
+  const sessionId = useMemo(() => ensureSessionId(), []);
+  const PAGE_SIZE = 24;
+
+  function toggle<T>(arr: T[], v: T): T[] {
+    return arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v];
+  }
+
+  // Reset offset when filters change
+  const filterSignature = useMemo(
+    () => JSON.stringify({ shape, labgrown, caratMin, caratMax, colors, clarities, cuts, sortField, sortDir }),
+    [shape, labgrown, caratMin, caratMax, colors, clarities, cuts, sortField, sortDir]
+  );
+  useEffect(() => {
+    setOffset(0);
+  }, [filterSignature]);
+
+  // Fetch results when filters or offset change
+  const lastReq = useRef(0);
+  useEffect(() => {
+    const reqId = ++lastReq.current;
+    setLoading(true);
+    setErr(null);
+
+    const body = {
+      filters: {
+        shapes: [shape],
+        labgrown,
+        sizes: { from: caratMin, to: caratMax },
+        color: colors,
+        clarity: clarities,
+        cut: cuts,
+        availability: 'AVAILABLE' as const,
+        // Only surface stones that actually have media — Nivoda returns
+        // many diamonds with image:null/video:null which would render as
+        // blank cards. has_image mirrors Brilliant Earth (every tile has
+        // a photo + a 360° spin video).
+        has_image: true,
+      },
+      limit: PAGE_SIZE,
+      offset,
+      order: { type: sortField, direction: sortDir },
+    };
+
+    fetch('/api/nivoda/search', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    })
+      .then(async (r) => {
+        if (reqId !== lastReq.current) return;
+        if (!r.ok) {
+          const e = await r.json().catch(() => ({}));
+          const base = e.error || `Search failed (${r.status})`;
+          const msg = e.detail ? `${base} ${e.detail}` : base;
+          throw new Error(msg);
+        }
+        const data = await r.json();
+        setItems((data.items as Diamond[]) ?? []);
+        setTotalCount(Number(data.total_count) || 0);
+      })
+      .catch((e) => {
+        if (reqId !== lastReq.current) return;
+        setErr(e instanceof Error ? e.message : 'Search failed');
+        setItems([]);
+        setTotalCount(0);
+      })
+      .finally(() => {
+        if (reqId === lastReq.current) setLoading(false);
+      });
+  }, [filterSignature, offset, shape, labgrown, caratMin, caratMax, colors, clarities, cuts, sortField, sortDir]);
+
+  // Picking a stone now just records it locally — the actual Nivoda hold
+  // and the cart add fire only when the customer clicks the bottom-bar
+  // "Add to Cart" button after also choosing a ring size. That mirrors
+  // Brilliant Earth's pattern and means the customer can swap stones
+  // freely without burning Nivoda hold quota.
+  function selectStone(d: Diamond) {
+    setSelected(d.id);
+    setErr(null);
+    setCartError(null);
+    // Scroll the bottom bar into view if it's been pushed below the fold.
+    if (typeof window !== 'undefined') {
+      window.requestAnimationFrame(() => {
+        const bar = document.querySelector<HTMLElement>('.be-bundle-bar');
+        bar?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      });
+    }
+    void onSelected;
+  }
+
+  async function handleAddBundleToCart() {
+    if (!selected) {
+      setCartError('Please pick a diamond first.');
+      return;
+    }
+    if (!ringSize) {
+      setCartError('Please choose a ring size.');
+      return;
+    }
+    if (!setting) {
+      setCartError('Setting not found. Please re-open this page from the product detail.');
+      return;
+    }
+    const diamondItem = items.find((d) => d.id === selected);
+    if (!diamondItem) {
+      setCartError('Selected diamond is no longer in the list. Please pick another.');
+      return;
+    }
+
+    setAddingToCart(true);
+    setCartError(null);
+
+    try {
+      // Place a Nivoda hold so the stone is reserved while the customer
+      // completes the cart flow. If the hold fails, surface a clean error.
+      const holdRes = await fetch('/api/nivoda/hold', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          offer_id: diamondItem.id,
+          session_id: sessionId,
+          setting_slug: settingSlug,
+        }),
+      });
+      let holdId: string | null = null;
+      if (holdRes.ok) {
+        const holdJson = await holdRes.json().catch(() => ({}));
+        holdId = holdJson.hold_id ?? null;
+      } else {
+        // Hold failure is non-fatal — we still add the bundle to the
+        // cart, and the studio re-confirms availability at checkout.
+        const e = await holdRes.json().catch(() => ({}));
+        console.warn('[diamond] hold failed, continuing without hold:', e);
+      }
+
+      const cert = diamondItem.diamond.certificate;
+      const diamondPrice = Number(diamondItem.markup_price ?? diamondItem.price ?? 0);
+      const settingPrice = parsePriceDisplay(setting.price_display);
+      const bundleTotal = settingPrice + diamondPrice;
+
+      const bundleId = `bundle:${setting.sku}:${diamondItem.id}:${ringSize}`;
+      cart.addItem({
+        id: bundleId,
+        sku: setting.sku,
+        slug: setting.slug,
+        name: setting.name,
+        collection: setting.collection,
+        metal: setting.metal,
+        image: setting.image,
+        price_display: setting.price_display,
+        price_num: bundleTotal,
+        ring_size: ringSize,
+        bundle: {
+          setting_price_usd: settingPrice,
+          diamond: {
+            offer_id: diamondItem.id,
+            hold_id: holdId,
+            shape: (cert?.shape ?? shape).toString(),
+            carat: cert?.carats ?? 0,
+            color: cert?.color ?? '—',
+            clarity: cert?.clarity ?? '—',
+            cut: cert?.cut ?? '—',
+            lab: cert?.lab ?? null,
+            cert_number: cert?.certNumber ?? null,
+            price_usd: diamondPrice,
+            image: diamondItem.diamond.image,
+          },
+        },
+      });
+      router.push('/cart');
+    } catch (e) {
+      setCartError(e instanceof Error ? e.message : 'Could not add to cart. Please try again.');
+    } finally {
+      setAddingToCart(false);
+    }
+  }
+  // keep the unused holding state path for backwards compat
+  void holding;
+  void setHolding;
+
+  const page = Math.floor(offset / PAGE_SIZE);
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+
+  return (
+    <div className="be-picker">
+      {/* ── Top toolbar: total count + sort ─────────────────────── */}
+      <div className="be-toolbar">
+        <div className="be-toolbar-count">
+          {loading ? (
+            <span>Loading inventory…</span>
+          ) : (
+            <>
+              <span className="be-toolbar-count-num">{totalCount.toLocaleString('en-US')}</span>{' '}
+              <span>{totalCount === 1 ? 'Diamond' : 'Diamonds'}</span>
+            </>
+          )}
+          {err && <span className="be-toolbar-err"> · {err}</span>}
+        </div>
+
+        <div className="be-toolbar-sort">
+          <label htmlFor="be-sort">Sort By:</label>
+          <select
+            id="be-sort"
+            value={`${sortField}-${sortDir}`}
+            onChange={(e) => {
+              const [f, d] = e.target.value.split('-');
+              setSortField(f as SortField);
+              setSortDir(d as 'ASC' | 'DESC');
+            }}
+          >
+            <option value="price-ASC">Price: Low to High</option>
+            <option value="price-DESC">Price: High to Low</option>
+            <option value="size-DESC">Carat: High to Low</option>
+            <option value="size-ASC">Carat: Low to High</option>
+            <option value="discount-DESC">Best Value</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="be-layout">
+        {/* ── LEFT SIDEBAR — facets ────────────────────────────── */}
+        <aside className="be-sidebar">
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Diamond Origin</summary>
+            <div className="be-facet-body">
+              <div className="be-toggle-pair">
+                <button
+                  type="button"
+                  className={`be-toggle${!labgrown ? ' is-on' : ''}`}
+                  onClick={() => setLabgrown(false)}
+                >
+                  Natural
+                </button>
+                <button
+                  type="button"
+                  className={`be-toggle${labgrown ? ' is-on' : ''}`}
+                  onClick={() => setLabgrown(true)}
+                >
+                  Lab Grown
+                </button>
+              </div>
+            </div>
+          </details>
+
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Diamond Shape</summary>
+            <div className="be-facet-body">
+              <div className="be-shape-grid">
+                {SHAPES.map((s) => (
+                  <button
+                    key={s.value}
+                    type="button"
+                    className={`be-shape${shape === s.value ? ' is-active' : ''}`}
+                    onClick={() => setShape(s.value)}
+                    aria-label={s.label}
+                  >
+                    <span className="be-shape-icon"><ShapeIcon shape={s.value} /></span>
+                    <span className="be-shape-label">{s.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </details>
+
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Carat</summary>
+            <div className="be-facet-body">
+              <div className="be-range">
+                <label>
+                  <span>From</span>
+                  <input
+                    type="number" step="0.1" min="0.1" max="30"
+                    value={caratMin}
+                    onChange={(e) => setCaratMin(Math.max(0.1, Number(e.target.value)))}
+                  />
+                </label>
+                <label>
+                  <span>To</span>
+                  <input
+                    type="number" step="0.1" min="0.1" max="30"
+                    value={caratMax}
+                    onChange={(e) => setCaratMax(Math.max(caratMin, Number(e.target.value)))}
+                  />
+                </label>
+              </div>
+            </div>
+          </details>
+
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Color</summary>
+            <div className="be-facet-body">
+              <div className="be-chip-row">
+                {COLORS.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    className={`be-chip${colors.includes(c) ? ' is-active' : ''}`}
+                    onClick={() => setColors(toggle(colors, c))}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </details>
+
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Clarity</summary>
+            <div className="be-facet-body">
+              <div className="be-chip-row">
+                {CLARITIES.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    className={`be-chip${clarities.includes(c) ? ' is-active' : ''}`}
+                    onClick={() => setClarities(toggle(clarities, c))}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </details>
+
+          <details className="be-facet" open>
+            <summary className="be-facet-head">Cut</summary>
+            <div className="be-facet-body">
+              <div className="be-chip-row be-chip-row--wide">
+                {CUTS.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    className={`be-chip${cuts.includes(c.value) ? ' is-active' : ''}`}
+                    onClick={() => setCuts(toggle(cuts, c.value))}
+                  >
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </details>
+        </aside>
+
+        {/* ── RIGHT — results grid ─────────────────────────────── */}
+        <section className="be-results">
+          <div className="be-grid">
+            {items.map((d) => {
+              const cert = d.diamond.certificate;
+              const price = d.markup_price ?? d.price ?? 0;
+              const isSelected = selected === d.id;
+              const isHolding = holding === d.id;
+              return (
+                <div
+                  key={d.id}
+                  className={`be-card${isSelected ? ' is-selected' : ''}`}
+                >
+                  <div className="be-card-media">
+                    <div className="be-card-media-inner">
+                      <DiamondCardMedia
+                        image={d.diamond.image}
+                        video={d.diamond.video}
+                        shape={(cert?.shape?.toUpperCase() as Shape) ?? shape}
+                        carat={cert?.carats ?? 1}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="be-card-body">
+                    <div className="be-card-headline">
+                      {cert?.carats ? cert.carats.toFixed(2) : '—'} ct {(cert?.shape || shape).toString().toLowerCase()} Diamond
+                    </div>
+                    <div className="be-card-grade">
+                      {cert?.cut === 'EX' || cert?.cut === 'ID' ? 'Super Ideal' : (cert?.cut ?? 'Very Good')}
+                      {' · '}
+                      {cert?.color ?? '—'}
+                      {' · '}
+                      {cert?.clarity ?? '—'}
+                    </div>
+                    {cert?.lab && (
+                      <div className="be-card-cert">{cert.lab}{cert.certNumber ? ` ${cert.certNumber}` : ''}</div>
+                    )}
+                    <div className="be-card-price">${Number(price).toLocaleString('en-US')}</div>
+                    <button
+                      type="button"
+                      className={`be-card-cta${isSelected ? ' is-selected' : ''}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        selectStone(d);
+                      }}
+                    >
+                      {isSelected ? '✓ Selected' : 'Select this diamond'}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+
+            {!loading && items.length === 0 && (
+              <div className="be-empty">
+                <p>No diamonds match this combination right now.</p>
+                <p className="be-empty-hint">
+                  Try widening the carat range or relaxing colour / clarity.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {totalCount > PAGE_SIZE && (
+            <div className="be-pager">
+              <button
+                type="button"
+                className="be-pager-btn"
+                disabled={offset === 0 || loading}
+                onClick={() => setOffset(Math.max(0, offset - PAGE_SIZE))}
+              >
+                ← Previous
+              </button>
+              <span className="be-pager-status">
+                Page {page + 1} of {totalPages}
+              </span>
+              <button
+                type="button"
+                className="be-pager-btn"
+                disabled={offset + PAGE_SIZE >= totalCount || loading}
+                onClick={() => setOffset(offset + PAGE_SIZE)}
+              >
+                Next →
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+
+      {/* ── Sticky bundle bar — appears once a diamond is selected.
+            Mirrors Brilliant Earth's pattern: setting summary + diamond
+            summary + ring size dropdown + Add to Cart CTA. */}
+      {selected && setting && (() => {
+        const d = items.find((it) => it.id === selected);
+        if (!d) return null;
+        const cert = d.diamond.certificate;
+        const diamondPrice = Number(d.markup_price ?? d.price ?? 0);
+        const settingPrice = parsePriceDisplay(setting.price_display);
+        const bundleTotal = settingPrice + diamondPrice;
+        return (
+          <div className="be-bundle-bar" role="region" aria-label="Your ring bundle">
+            <div className="be-bundle-bar-inner">
+              <div className="be-bundle-line be-bundle-line--setting">
+                <div className="be-bundle-eyebrow">Setting</div>
+                <div className="be-bundle-name">{setting.name}</div>
+                <div className="be-bundle-meta">
+                  {setting.metal ? setting.metal.replace(/_/g, ' ') : '—'}
+                </div>
+                <div className="be-bundle-price">{formatUsd(settingPrice)}</div>
+              </div>
+              <div className="be-bundle-plus" aria-hidden="true">+</div>
+              <div className="be-bundle-line be-bundle-line--diamond">
+                <div className="be-bundle-eyebrow">Diamond</div>
+                <div className="be-bundle-name">
+                  {cert?.carats ? cert.carats.toFixed(2) : '—'} ct {(cert?.shape || shape).toString().toLowerCase()}
+                </div>
+                <div className="be-bundle-meta">
+                  {cert?.cut === 'EX' || cert?.cut === 'ID' ? 'Super Ideal' : (cert?.cut ?? '—')}
+                  {' · '}{cert?.color ?? '—'}{' · '}{cert?.clarity ?? '—'}
+                </div>
+                <div className="be-bundle-price">{formatUsd(diamondPrice)}</div>
+              </div>
+              <div className="be-bundle-size">
+                <label htmlFor="be-ring-size" className="be-bundle-eyebrow">Ring size</label>
+                <select
+                  id="be-ring-size"
+                  className="be-bundle-size-select"
+                  value={ringSize}
+                  onChange={(e) => {
+                    setRingSize(e.target.value);
+                    setCartError(null);
+                  }}
+                >
+                  <option value="">Select size</option>
+                  {RING_SIZES.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+                <a
+                  href="https://www.danhov.com/ring-size-guide"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="be-bundle-size-help"
+                >
+                  Size Guide
+                </a>
+              </div>
+              <div className="be-bundle-total">
+                <div className="be-bundle-eyebrow">Bundle total</div>
+                <div className="be-bundle-total-amount">{formatUsd(bundleTotal)}</div>
+                <button
+                  type="button"
+                  className="be-bundle-add"
+                  onClick={handleAddBundleToCart}
+                  disabled={addingToCart || !ringSize}
+                >
+                  {addingToCart ? 'Adding…' : 'Add to Cart'}
+                </button>
+              </div>
+            </div>
+            {cartError && (
+              <div className="be-bundle-err" role="alert">{cartError}</div>
+            )}
+          </div>
+        );
+      })()}
+    </div>
+  );
+}

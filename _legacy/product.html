@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product &mdash; DANHOV Oneness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Cinzel:wght@400;600&family=Jost:wght@300;400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #fff8f6;
+    --deep: #fdf0ed;
+    --gold: #9b6b4a;
+    --gold-light: #c4916e;
+    --gold-dim: #c9a898;
+    --crimson: #b5606a;
+    --logo-red: #AC3438;
+    --logo-red-dark: #8B2A2D;
+    --blush: #e8b4bc;
+    --cream: #3d2520;
+    --grey: #7a5c58;
+    --white: #fff8f6;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CURSOR */
+  .cursor { width:8px;height:8px;background:var(--logo-red);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.15s ease; }
+  .cursor-ring { width:36px;height:36px;border:1px solid var(--logo-red);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.3s ease;opacity:0.5; }
+
+  /* NAV */
+  nav { position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:24px 48px;background:#fff8f6;border-bottom:1px solid rgba(172,52,56,0.08);box-shadow:0 2px 12px rgba(172,52,56,0.04); }
+  .nav-logo { text-decoration:none;display:flex;align-items:center; }
+  .nav-logo img { height:32px;width:auto;display:block; }
+  .nav-links { display:flex;gap:36px;list-style:none; }
+  .nav-links a { font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--cream);text-decoration:none;transition:color 0.3s; }
+  .nav-links a:hover { color:var(--logo-red); }
+  .nav-links a.active { color:var(--logo-red); }
+  .nav-cta { font-family:'Montserrat',sans-serif;font-size:13px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:#fff8f6;background:var(--logo-red);padding:12px 28px;text-decoration:none;transition:background 0.3s;display:flex;align-items:center;gap:8px; }
+  .nav-cta:hover { background:var(--logo-red-dark); }
+
+  /* MEGA MENU */
+  .nav-links > li { position:static; }
+  .mega-menu { position:fixed;top:81px;left:0;right:0;background:#fff8f6;border-top:2px solid var(--logo-red);box-shadow:0 20px 60px rgba(61,37,32,0.14);padding:44px 80px 52px;z-index:99;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity 0.22s ease,visibility 0.22s,transform 0.22s ease;display:flex;gap:0; }
+  .nav-links > li:hover > .mega-menu { opacity:1;visibility:visible;transform:translateY(0); }
+  .mega-overlay { position:fixed;top:81px;left:0;right:0;bottom:0;background:rgba(61,37,32,0.22);z-index:98;opacity:0;visibility:hidden;transition:opacity 0.22s ease,visibility 0.22s;pointer-events:none; }
+  nav:has(li:hover > .mega-menu) + .mega-overlay { opacity:1;visibility:visible; }
+  .mm-col { flex:1;padding:0 32px;border-right:1px solid rgba(172,52,56,0.08); }
+  .mm-col:first-child { padding-left:0; }
+  .mm-col:last-child { border-right:none;padding-right:0; }
+  .mm-col-wide { flex:2; }
+  .mm-label { font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.35em;text-transform:uppercase;color:var(--logo-red);margin-bottom:22px;display:block; }
+  .mm-grid { display:grid;gap:12px; }
+  .mm-grid-2 { grid-template-columns:repeat(2,1fr); }
+  .mm-grid-3 { grid-template-columns:repeat(3,1fr); }
+  .mm-grid-5 { grid-template-columns:repeat(5,1fr); }
+  .mm-card { text-decoration:none;display:flex;flex-direction:column;gap:8px; }
+  .mm-card-img { background:#f0e4e0;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center; }
+  .mm-card-img img { width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.35s ease; }
+  .mm-card:hover .mm-card-img img { transform:scale(1.06); }
+  .mm-card-img-lg { height:140px; }
+  .mm-card-img-sm { height:96px; }
+  .mm-card-name { font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.08em;color:var(--cream);transition:color 0.2s;text-transform:uppercase; }
+  .mm-card:hover .mm-card-name { color:var(--logo-red); }
+  .mm-metals { display:flex;gap:10px;flex-wrap:wrap;margin-top:4px; }
+  .mm-metal { display:flex;align-items:center;gap:7px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:500;letter-spacing:0.06em;color:var(--cream);text-decoration:none;padding:7px 14px;border:1px solid rgba(172,52,56,0.2);transition:border-color 0.2s,color 0.2s; }
+  .mm-metal:hover { border-color:var(--logo-red);color:var(--logo-red); }
+  .mm-metal-swatch { width:14px;height:14px;border-radius:50%; }
+  .mm-explore { display:inline-block;margin-top:28px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--logo-red);text-decoration:none;border-bottom:1px solid var(--logo-red);padding-bottom:2px;transition:opacity 0.2s; }
+  .mm-explore:hover { opacity:0.7; }
+
+  /* BREADCRUMB / BACK */
+  .product-breadcrumb {
+    margin-top: 81px;
+    padding: 20px 64px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--grey);
+    border-bottom: 1px solid rgba(172,52,56,0.06);
+    background: #fff8f6;
+  }
+  .product-breadcrumb a { color: var(--grey); text-decoration: none; transition: color 0.2s; }
+  .product-breadcrumb a:hover { color: var(--logo-red); }
+  .bc-sep { opacity: 0.4; }
+
+  /* PRODUCT LAYOUT */
+  .product-detail {
+    min-height: calc(100vh - 81px);
+    display: grid;
+    grid-template-columns: 58% 42%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 0 80px;
+  }
+
+  /* IMAGE COLUMN */
+  .product-image-col {
+    padding: 40px 40px 40px 64px;
+    position: sticky;
+    top: 81px;
+    height: calc(100vh - 81px);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .product-img-frame {
+    flex: 1;
+    background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 50%, #e8cece 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-img-frame img.product-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .product-img-frame:hover img.product-main-img { transform: scale(1.04); }
+  .product-img-placeholder {
+    width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-img-placeholder svg { width: 80px; height: 80px; opacity: 0.18; }
+  .product-img-badge {
+    position: absolute;
+    top: 18px; left: 18px;
+    font-family: 'Cinzel', serif;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--logo-red); color: #fff8f6;
+    padding: 5px 11px;
+  }
+
+  /* INFO COLUMN */
+  .product-info-col {
+    padding: 52px 64px 52px 52px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-left: 1px solid rgba(172,52,56,0.07);
+  }
+  .product-category-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--logo-red);
+    margin-bottom: 22px;
+    display: block;
+  }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 56px; font-weight: 600;
+    line-height: 1.12;
+    color: var(--cream);
+    margin-bottom: 18px;
+  }
+  .product-style-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--gold-dim);
+    margin-bottom: 38px;
+    display: block;
+  }
+  .product-divider {
+    width: 36px; height: 1px;
+    background: var(--logo-red);
+    margin-bottom: 38px;
+    opacity: 0.5;
+  }
+  .product-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 40px; font-weight: 600;
+    color: var(--logo-red);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .product-metals {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 15px; font-weight: 500;
+    letter-spacing: 0.1em;
+    color: var(--grey);
+    margin-bottom: 44px;
+  }
+  .product-desc {
+    font-family: 'Jost', sans-serif;
+    font-size: 19px;
+    line-height: 2.0;
+    color: var(--cream);
+    margin-bottom: 56px;
+    max-width: 540px;
+  }
+  .product-inquire-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--logo-red);
+    color: #fff8f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none;
+    padding: 22px 48px;
+    transition: background 0.3s;
+    align-self: flex-start;
+    margin-bottom: 26px;
+  }
+  .product-inquire-btn:hover { background: var(--logo-red-dark); }
+  .product-handcraft-note {
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    color: var(--grey);
+    line-height: 1.9;
+    margin-bottom: 56px;
+  }
+  .product-attributes {
+    border-top: 1px solid rgba(172,52,56,0.08);
+    padding-top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .product-attr-row {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+  }
+  .product-attr-icon {
+    width: 22px; height: 22px;
+    flex-shrink: 0;
+    opacity: 0.5;
+    margin-top: 2px;
+  }
+  .product-attr-text {
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    color: var(--grey);
+    line-height: 1.8;
+  }
+  .product-attr-text strong {
+    font-weight: 600;
+    color: var(--cream);
+    display: block;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+  }
+
+  /* NOT FOUND */
+  .product-not-found {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 80px 48px;
+    text-align: center;
+  }
+  .product-not-found h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; }
+  .product-not-found a { color: var(--logo-red); text-decoration: none; font-family: 'Montserrat', sans-serif; font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; border-bottom: 1px solid var(--logo-red); padding-bottom: 2px; }
+
+  /* FOOTER */
+  footer { background: var(--cream); color: rgba(255,248,246,0.7); padding: 64px 80px 32px; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 48px; }
+  .footer-brand-name { text-decoration: none; display: block; margin-bottom: 16px; }
+  .footer-logo-img { height: 28px; width: auto; filter: brightness(0) invert(1); opacity: 0.9; }
+  .footer-tagline { font-size: 13px; line-height: 1.7; color: rgba(255,248,246,0.55); margin-bottom: 24px; max-width: 280px; }
+  .footer-contact p { font-size: 12px; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .footer-contact a { color: rgba(255,248,246,0.7); text-decoration: none; transition: color 0.2s; }
+  .footer-contact a:hover { color: var(--blush); }
+  .footer-col-title { font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(255,248,246,0.9); margin-bottom: 20px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a { font-size: 13px; color: rgba(255,248,246,0.55); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--blush); }
+  .footer-bottom { border-top: 1px solid rgba(255,248,246,0.08); padding-top: 28px; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy, .footer-made { font-size: 11px; color: rgba(255,248,246,0.35); letter-spacing: 0.06em; }
+
+  @media (max-width: 900px) {
+    .product-detail { grid-template-columns: 1fr; }
+    .product-image-col { position: static; height: auto; min-height: 50vw; padding: 24px 24px 0; }
+    .product-info-col { padding: 24px; border-left: none; border-top: 1px solid rgba(172,52,56,0.07); }
+    .product-name { font-size: 38px; }
+    .product-price { font-size: 32px; }
+    .product-breadcrumb { padding: 16px 24px; }
+    nav { padding: 16px 24px; }
+    footer { padding: 48px 24px 24px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="danhov-logo-transparent.png" alt="DANHOV"></a>
+  <ul class="nav-links">
+    <li>
+      <a href="engagement-rings.html">Engagement Rings</a>
+      <div class="mega-menu">
+        <div class="mm-col mm-col-wide">
+          <span class="mm-label">Collections</span>
+          <div class="mm-grid mm-grid-5">
+            <a href="engagement-rings.html?col=abbraccio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae520uq_r1_1_wg.jpg" alt="Abbraccio"></div><span class="mm-card-name">Abbraccio</span></a>
+            <a href="engagement-rings.html?col=carezza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_carezza.jpg" alt="Carezza"></div><span class="mm-card-name">Carezza</span></a>
+            <a href="engagement-rings.html?col=classico" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_classico.jpg" alt="Classico"></div><span class="mm-card-name">Classico</span></a>
+            <a href="engagement-rings.html?col=couture" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_couture.jpg" alt="Couture"></div><span class="mm-card-name">Couture</span></a>
+            <a href="engagement-rings.html?col=eleganza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae141-4_48oy8iu3ljtkgsxf.jpg" alt="Eleganza"></div><span class="mm-card-name">Eleganza</span></a>
+            <a href="engagement-rings.html?col=per-lei" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_per-lei.jpg" alt="Per Lei"></div><span class="mm-card-name">Per Lei</span></a>
+            <a href="engagement-rings.html?col=petalo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_petalo.jpg" alt="Petalo"></div><span class="mm-card-name">Petalo</span></a>
+            <a href="engagement-rings.html?col=solo-filo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_solo-filo.jpg" alt="Solo Filo"></div><span class="mm-card-name">Solo Filo</span></a>
+            <a href="engagement-rings.html?col=unito" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_unito.jpg" alt="Unito"></div><span class="mm-card-name">Unito</span></a>
+            <a href="engagement-rings.html?col=voltaggio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/w/e/we520p_r1_wg_1__2.jpg" alt="Voltaggio"></div><span class="mm-card-name">Voltaggio</span></a>
+          </div>
+          <a href="engagement-rings.html" class="mm-explore">Explore All Engagement Rings &rarr;</a>
+        </div>
+        <div class="mm-col" style="flex:0 0 220px;">
+          <span class="mm-label">Shop by Metal</span>
+          <div class="mm-metals" style="flex-direction:column;">
+            <a href="engagement-rings.html?metal=white-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8e0d8;border:1px solid #ccc;"></span>White Gold</a>
+            <a href="engagement-rings.html?metal=yellow-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#d4a853;"></span>Yellow Gold</a>
+            <a href="engagement-rings.html?metal=rose-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8a090;"></span>Rose Gold</a>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a href="wedding-bands.html">Wedding Bands</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0;border-right:none;width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="wedding-bands.html?sub=award-winners" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_award-winners-1.jpg" alt="Award Winners"></div><span class="mm-card-name">Award Winners</span></a>
+            <a href="wedding-bands.html?sub=her-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/h/white_top_2.jpg" alt="Her Bands"></div><span class="mm-card-name">Her Bands</span></a>
+            <a href="wedding-bands.html?sub=his-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_his-bands-1.jpg" alt="His Bands"></div><span class="mm-card-name">His Bands</span></a>
+          </div>
+          <a href="wedding-bands.html" class="mm-explore">View All Wedding Bands &rarr;</a>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a href="fine-jewelry.html">Fine Jewelry</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0;border-right:none;width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="fine-jewelry.html?sub=bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/y/e/yellow_top_4.jpg" alt="Bands"></div><span class="mm-card-name">Bands</span></a>
+            <a href="fine-jewelry.html?sub=earrings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_rg_15.jpg" alt="Earrings"></div><span class="mm-card-name">Earrings</span></a>
+            <a href="fine-jewelry.html?sub=pendants" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Pendants"></div><span class="mm-card-name">Pendants</span></a>
+            <a href="fine-jewelry.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring-c_round_dai_wg_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+          </div>
+          <a href="fine-jewelry.html" class="mm-explore">Explore All Fine Jewelry &rarr;</a>
+        </div>
+      </div>
+    </li>
+    <li>
+      <a href="mens.html">Men's</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0;border-right:none;width:100%;">
+          <span class="mm-label">Shop Men's</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="mens.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_9_5_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+            <a href="mens.html?sub=bracelets" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs147_br_1_yg.jpg" alt="Bracelets"></div><span class="mm-card-name">Bracelets</span></a>
+            <a href="mens.html?sub=necklaces" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Necklaces &amp; Pendants"></div><span class="mm-card-name">Necklaces &amp; Pendants</span></a>
+          </div>
+          <a href="mens.html" class="mm-explore">Explore All Men's &rarr;</a>
+        </div>
+      </div>
+    </li>
+    <li><a href="engagement-rings.html">Ring Builder</a></li>
+  </ul>
+  <a href="engagement-rings.html" class="nav-cta">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;"><path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="currentColor"/><path d="M19 16L19.75 18.25L22 19L19.75 19.75L19 22L18.25 19.75L16 19L18.25 18.25L19 16Z" fill="currentColor" opacity="0.7"/></svg>Build Your Ring
+  </a>
+</nav>
+<div class="mega-overlay"></div>
+
+<!-- BREADCRUMB -->
+<div class="product-breadcrumb">
+  <a href="index.html">Home</a>
+  <span class="bc-sep">/</span>
+  <a href="#" id="bcCategory">Collection</a>
+  <span class="bc-sep">/</span>
+  <span id="bcName">Product</span>
+</div>
+
+<!-- PRODUCT DETAIL -->
+<div class="product-detail" id="productDetail">
+
+  <!-- IMAGE -->
+  <div class="product-image-col">
+    <div class="product-img-frame" id="imgFrame">
+      <img id="productImg" src="" alt="" class="product-main-img" style="display:none;">
+      <div class="product-img-placeholder" id="imgPlaceholder">
+        <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="40" cy="40" r="28" stroke="#AC3438" stroke-width="1.5"/>
+          <circle cx="40" cy="40" r="18" stroke="#9b6b4a" stroke-width="1"/>
+          <circle cx="40" cy="40" r="8" stroke="#AC3438" stroke-width="0.8"/>
+          <ellipse cx="40" cy="40" rx="36" ry="14" stroke="#9b6b4a" stroke-width="0.6" opacity="0.5"/>
+        </svg>
+      </div>
+      <span class="product-img-badge" id="collectionBadge"></span>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="product-info-col">
+    <span class="product-category-label" id="collectionLabel"></span>
+    <h1 class="product-name" id="productName">Loading&hellip;</h1>
+    <span class="product-style-num" id="styleNum"></span>
+    <div class="product-divider"></div>
+    <p class="product-price" id="productPrice"></p>
+    <p class="product-metals" id="productMetals"></p>
+    <p class="product-desc" id="productDesc"></p>
+    <a href="#" class="product-inquire-btn" id="inquireBtn">
+      Inquire About This Piece &rarr;
+    </a>
+    <button class="dnh-trigger" style="margin-top:12px; width:100%; justify-content:center;" id="askAiBtn">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z" fill="currentColor"/></svg>
+      Ask our AI about this ring
+    </button>
+    <p class="product-handcraft-note">Each DANHOV piece is handcrafted to order in Los Angeles. Contact us to begin your journey or ask about custom sizing.</p>
+    <div class="product-attributes">
+      <div class="product-attr-row">
+        <svg class="product-attr-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L14 8H20L15.5 11.5L17.5 17.5L12 14L6.5 17.5L8.5 11.5L4 8H10L12 2Z" stroke="#AC3438" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <div class="product-attr-text"><strong>Handcrafted in Los Angeles</strong>Each ring is individually cast, set, and finished by master jewelers since 1984.</div>
+      </div>
+      <div class="product-attr-row">
+        <svg class="product-attr-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke="#AC3438" stroke-width="1.2"/><path d="M12 6v6l4 2" stroke="#AC3438" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <div class="product-attr-text"><strong>Custom Sizing Available</strong>All styles can be crafted in your exact size, metal preference, and stone selection.</div>
+      </div>
+      <div class="product-attr-row">
+        <svg class="product-attr-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" stroke="#AC3438" stroke-width="1.2"/></svg>
+        <div class="product-attr-text"><strong>Lifetime Craftsmanship Warranty</strong>DANHOV stands behind every piece with our commitment to enduring quality.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-brand-name"><img src="danhov-logo-transparent.png" alt="DANHOV" class="footer-logo-img"></a>
+      <p class="footer-tagline">"Waves are the ocean." Sacred geometry. Eternal love. Handcrafted in Los Angeles since 1984.</p>
+      <div class="footer-contact">
+        <p>Founded by Jack Hovsepian &middot; Est. 1984</p>
+        <p>Los Angeles, California</p>
+        <p><a href="mailto:care@danhov.com">care@danhov.com</a></p>
+        <p><a href="tel:18883264687">1 (888) DANHOV-7</a></p>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Shop</p>
+      <ul class="footer-links">
+        <li><a href="engagement-rings.html">Engagement Rings</a></li>
+        <li><a href="wedding-bands.html">Wedding Bands</a></li>
+        <li><a href="fine-jewelry.html">Fine Jewelry</a></li>
+        <li><a href="mens.html">Men's Jewelry</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Learn</p>
+      <ul class="footer-links">
+        <li><a href="#">Diamond Guide</a></li>
+        <li><a href="#">Ring Size Guide</a></li>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">The Philosophy</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Connect</p>
+      <ul class="footer-links">
+        <li><a href="#">Book Appointment</a></li>
+        <li><a href="#">Store Locations</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Pinterest</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2025 DANHOV. All rights reserved.</p>
+    <p class="footer-made">Made with love in Los Angeles.</p>
+  </div>
+</footer>
+
+<script>
+  // ─── PRODUCT DATA ──────────────────────────────────────────────────────────
+  const PRODUCTS = {
+  "AE520UQ": {
+    "name": "Abbraccio Swirl Diamond Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "18k Yellow · White · Rose Gold",
+    "price": "$5,390",
+    "desc": "Intertwining diamond-set tendrils spiral upward to cradle a breathtaking center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/a/e/ae520uq_r1_1_wg.jpg"
+  },
+  "AE507UQ": {
+    "name": "Abbraccio Engagement Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "18k Rose · White · Yellow Gold",
+    "price": "$6,490",
+    "desc": "A cascading pavé halo envelops the center diamond in a luminous, multi-tiered embrace.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_2_1.jpg"
+  },
+  "AE511UQ": {
+    "name": "Abbraccio Three Stone Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$9,400",
+    "desc": "Ribbon-like prongs flow seamlessly into a shimmering pavé band in a single sculptural gesture.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/1/r1_18_2.jpg"
+  },
+  "AE506UQ": {
+    "name": "Abbraccio Unique Swirl Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "18k Rose · White · Yellow Gold",
+    "price": "$6,530",
+    "desc": "Two arching diamond-set rows cross beneath the center stone in a graceful embrace of light.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_1_.jpg"
+  },
+  "AE530UQ": {
+    "name": "Abbraccio Ladies Engagement Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "18k Yellow · White · Rose Gold",
+    "price": "$6,730",
+    "desc": "White gold strands weave a romantic braid of brilliance around a resplendent center diamond.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/h/white_3__1.png"
+  },
+  "AE505UQ-PR": {
+    "name": "Abbraccio Princess Diamond Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$5,230",
+    "desc": "The beloved Abbraccio silhouette reimagined with a pear-shaped center stone in rose gold warmth.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/a/e/ae136_pr_1_rg.jpg"
+  },
+  "AE538VQ": {
+    "name": "Abbraccio Swirl Diamond Ring",
+    "collection": "Abbraccio",
+    "collectionKey": "abbraccio",
+    "collectionLink": "engagement-rings.html?col=abbraccio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "18k Rose · White Gold",
+    "price": "$11,800",
+    "desc": "Delicate wire-form prongs suspend the center diamond in a floating, architectural frame of light.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_42_1.jpg"
+  },
+  "VE515P": {
+    "name": "Voltaggio Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$3,700",
+    "desc": "Signature tension prongs harness electricity to suspend a vivid emerald-cut diamond in mid-air.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve515p-emerald_wg_1.jpg"
+  },
+  "V1E510VH": {
+    "name": "Voltaggio Tension Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,480",
+    "desc": "Bold Voltaggio arms grip a round brilliant diamond, allowing light to pass through every facet.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve510vh-50_1_yg.jpg"
+  },
+  "VE508VH": {
+    "name": "Voltaggio Unique Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow Gold",
+    "price": "$9,170",
+    "desc": "The iconic Tension Rush design channels raw energy into a breathtaking suspended diamond silhouette.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/t/e/tension_rush_2_v122_v2_wg_1.jpg"
+  },
+  "VE506VZ": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$6,120",
+    "desc": "A refined white gold tension setting presents the center diamond in breathtaking open-air suspension.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve506_wg_1.jpg"
+  },
+  "VE535VH": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$6,350",
+    "desc": "Cushion-cluster diamonds surround the center gem, elevated by Voltaggio's signature tension artistry.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve535p-diamond_rg_1.jpg"
+  },
+  "VE536P": {
+    "name": "Voltaggio Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,500",
+    "desc": "Concentric diamond-set prongs orbit the center stone in a celestial expression of Voltaggio brilliance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/3/_/3_round_wg_1.jpg"
+  },
+  "VE536VH": {
+    "name": "Voltaggio Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White Gold",
+    "price": "$7,050",
+    "desc": "Yellow gold tension arms extend with architectural precision to embrace a brilliant-cut center diamond.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/2/_/2_round_yg_1.jpg"
+  },
+  "VE510P": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$5,480",
+    "desc": "A Voltaggio pavé half-halo of brilliant diamonds accentuates the center stone's natural radiance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve510vh-50_1_yg.jpg"
+  },
+  "VE508LR": {
+    "name": "Voltaggio Engagement Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White Gold",
+    "price": "$7,790",
+    "desc": "The legendary Tension Rush holds a Lab-created diamond in suspended luminous perfection.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/t/e/tension_rush_2_v122_v1_wg_1.jpg"
+  },
+  "VE534P": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$5,960",
+    "desc": "Channel-set side diamonds flow toward a center stone held in signature Voltaggio tension.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve534p1_ch_1_wg.jpg"
+  },
+  "VE535LR": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow Gold",
+    "price": "$4,430",
+    "desc": "Yellow gold tension prongs elevate a Lab-created diamond above a delicate pavé-set band.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve535p-final_yg_1.jpg"
+  },
+  "VE509P": {
+    "name": "Voltaggio Tension Set Ring",
+    "collection": "Voltaggio",
+    "collectionKey": "voltaggio",
+    "collectionLink": "engagement-rings.html?col=voltaggio",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$5,960",
+    "desc": "Rose gold tension arms reach up to suspend a round brilliant diamond in a sculptural rosy arc.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/v/e/ve509p_1_rg.jpg"
+  },
+  "WE520P": {
+    "name": "Classico Handcrafted Diamond Ring",
+    "collection": "Classico",
+    "collectionKey": "classico",
+    "collectionLink": "engagement-rings.html?col=classico",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,820",
+    "desc": "A timeless cathedral solitaire holds a radiant center stone in six-prong white gold perfection.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/e/we520p_r1_wg_1__2.jpg"
+  },
+  "WE531VQ-R": {
+    "name": "Classico Round Cut Engagement Ring",
+    "collection": "Classico",
+    "collectionKey": "classico",
+    "collectionLink": "engagement-rings.html?col=classico",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$4,000",
+    "desc": "Graceful tapered white gold prongs elevate a round brilliant diamond in clean, classic splendor.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring_1_.jpg"
+  },
+  "WE532UH": {
+    "name": "Classico Engagement Ring",
+    "collection": "Classico",
+    "collectionKey": "classico",
+    "collectionLink": "engagement-rings.html?col=classico",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$5,740",
+    "desc": "A refined cathedral setting frames the center diamond with understated white gold elegance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/1/r1_4_3.jpg"
+  },
+  "RE601P": {
+    "name": "Norme de Danhov Ring for Women",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,320",
+    "desc": "The Norme signature crescent band cradles a brilliant center stone in a serene architectural frame.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le541p-wg1.jpg"
+  },
+  "RE573P": {
+    "name": "Norme de Danhov Classico Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,320",
+    "desc": "Sleek converging gold bands meet beneath the center diamond in geometric Norme precision.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/e/re573p_1_r1_wg.jpg"
+  },
+  "RE570P": {
+    "name": "Norme de Danhov Classic Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,420",
+    "desc": "A refined bypass design allows two elegant bands to cross beneath a luminous center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_2_1_1_1.jpg"
+  },
+  "RE578UQ": {
+    "name": "Norme de Danhov Diamond Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Rose Gold (Two Tone)",
+    "price": "$3,030",
+    "desc": "A dazzling opulent cluster frames the center stone in a radiant pavé crown of diamonds.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_37_4.jpg"
+  },
+  "RE578UQ-DT": {
+    "name": "Norme de Danhov Two Tone Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose Gold · Two Tone",
+    "price": "$3,030",
+    "desc": "A double-pavé halo towers above the band, lifting the center gem to breathtaking sculptural heights.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_37_2.jpg"
+  },
+  "RE573UH": {
+    "name": "Norme de Danhov Ring for Women",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,140",
+    "desc": "The clean architectural Norme silhouette channels modern luxury with flawless white gold lines.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/e/re573p_r1_wg.jpg"
+  },
+  "RE589UQ": {
+    "name": "Norme de Danhov Halo Ladies Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,520",
+    "desc": "Micro-pavé diamonds encircle the center stone in a delicate halo of exceptional brilliance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs604_r_wg_1.jpg"
+  },
+  "RE570UQ": {
+    "name": "Norme de Danhov Diamond Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,680",
+    "desc": "An elegant yellow gold bypass design wraps the finger in warm geometric sophistication.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_1_1_1.jpg"
+  },
+  "RE591UH": {
+    "name": "Norme de Danhov Ladies Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$5,820",
+    "desc": "Asymmetric gold prongs frame the center diamond in a bold, architecturally modern statement.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_39_2.jpg"
+  },
+  "RE572P": {
+    "name": "Norme de Danhov Classic Ring",
+    "collection": "Norme de Danhov",
+    "collectionKey": "norme",
+    "collectionLink": "engagement-rings.html?col=norme",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,440",
+    "desc": "French pavé-set diamonds sweep gracefully beneath the center stone in signature Norme elegance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/e/re572p_r1_wg.jpg"
+  },
+  "XE112": {
+    "name": "Carezza Handmade Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$1,560",
+    "desc": "A crown of delicate gold filaments rises in ornate architectural glory around the center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe112-4_zxri7bauldnqdlfb.jpg"
+  },
+  "XE110": {
+    "name": "Carezza Handcrafted Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,090",
+    "desc": "Inspired by botanical artistry, petal-form prongs unfurl to hold a radiant brilliant gem.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe110-4_zah1xnqpx7mure19.jpg"
+  },
+  "XE109": {
+    "name": "Carezza Double Halo Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,220",
+    "desc": "Organic curves of polished gold interlock in a sculptural jeweled embrace beneath the center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe109-4_28whiiz3qjdgegh6.jpg"
+  },
+  "XE105": {
+    "name": "Carezza Unique Halo Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,570",
+    "desc": "Fine gold wire-work creates an airy lattice beneath a stunning center stone in Carezza tradition.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe105-4_zxla2t0boxk1rk9i.jpg"
+  },
+  "XE101": {
+    "name": "Carezza Award Winning Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$5,280",
+    "desc": "Intricate geometric openwork creates a breathtaking negative-space crown for the center diamond.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe101-4_upmui7nrymzlglqx.jpg"
+  },
+  "XE106": {
+    "name": "Carezza Three Stone Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,300",
+    "desc": "A twisting gold ribbon design draws the eye upward to the luminous center diamond.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe106-4_orqpsduxtx8nlh17.jpg"
+  },
+  "XE501UH": {
+    "name": "Carezza Unique Halo Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,100",
+    "desc": "Carezza's open-work lattice cradles the diamond in an airy, lace-like embrace of white gold.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe501uh_w1.jpg"
+  },
+  "XE109-PS": {
+    "name": "Carezza Pear Shaped Halo Ring",
+    "collection": "Carezza",
+    "collectionKey": "carezza",
+    "collectionLink": "engagement-rings.html?col=carezza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,220",
+    "desc": "The signature Carezza cradle reimagined for a pear-shaped center stone in romantic silhouette.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/x/e/xe109-ps-4_6qnpfojbvwjshrgi.jpg"
+  },
+  "LE530P": {
+    "name": "Per Lei Engagement Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,250",
+    "desc": "A softly curved micro-pavé band leads gracefully to an elevated center stone in gentle splendor.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le530p_2_.png"
+  },
+  "LE536P": {
+    "name": "Per Lei Engagement Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,200",
+    "desc": "Mirrored pavé bands converge beneath the center stone in a perfectly balanced Per Lei presentation.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le133_1_wg.jpg"
+  },
+  "LE531UQ": {
+    "name": "Per Lei Engagement Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,860",
+    "desc": "Channel-set diamonds frame the shank on both sides, merging into a sparkling center stone setting.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/1/r1_2.jpg"
+  },
+  "LE533VH": {
+    "name": "Per Lei Engagement Ring Set",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,350",
+    "desc": "A Voltaggio-inspired half-halo suspends the center stone above a delicate Per Lei pavé band.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_wgq_1.png"
+  },
+  "LE500UH": {
+    "name": "Per Lei Classic Halo Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,780",
+    "desc": "Classic Per Lei solitaire elegance: four pavé prongs lift the center diamond above a sleek gold band.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le500uh-4_2.jpg"
+  },
+  "LE540UH": {
+    "name": "Per Lei Eagle Claw Prong Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$5,510",
+    "desc": "A floating diamond halo appears to hover around the center stone in luminous Per Lei fashion.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_28_2.jpg"
+  },
+  "LE106": {
+    "name": "Per Lei Double Shank Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,420",
+    "desc": "The Per Lei Lab collection presents Lab-created center stones in signature diamond-flanked prongs.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le106-4_n93zykh3iivvtoac.jpg"
+  },
+  "LE515YQ": {
+    "name": "Per Lei Diamond Halo Ring",
+    "collection": "Per Lei",
+    "collectionKey": "per-lei",
+    "collectionLink": "engagement-rings.html?col=per-lei",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$10,500",
+    "desc": "Yellow gold warmth cradles a Lab-created center stone in the beloved Per Lei solitaire style.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le515yq-4-w_3.jpg"
+  },
+  "FE100": {
+    "name": "Petalo Floral Designer Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,670",
+    "desc": "Petal-shaped prongs unfurl organically to cradle the center diamond in a bloom of polished gold.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe100-4_wyoutkuwllx9luo1.jpg"
+  },
+  "FE104": {
+    "name": "Petalo Single Shank Floral Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,220",
+    "desc": "A sculptural flower-form crown rises from the band to present a radiant brilliant-cut center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe104-4_fxrlyz3ml9pdr388.jpg"
+  },
+  "FE105": {
+    "name": "Petalo Unique Designer Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,270",
+    "desc": "Five rounded gold petals curve inward to secure the diamond in a breathtaking floral embrace.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe105-4_cu8o9lshd0emogmx.jpg"
+  },
+  "FE108": {
+    "name": "Petalo Floral Diamond Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,940",
+    "desc": "Rose gold petals create a warm, romantic setting reminiscent of a delicately blossoming flower.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe108-4_pmttjjxlszfuz2ak.jpg"
+  },
+  "FE106": {
+    "name": "Petalo Twisted Shank Diamond Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,630",
+    "desc": "Architectural petals in polished gold surround the center stone with modern botanical elegance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe106-4_uwoyksuv8teui2vx.jpg"
+  },
+  "FE109": {
+    "name": "Petalo Single Shank Floral Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,730",
+    "desc": "A delicate Petalo bloom cradles the center diamond above a channel-set pavé-detailed shank.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe109-4_z68gl6h9v3qjar6g_1.jpg"
+  },
+  "FE107": {
+    "name": "Petalo Floral Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,250",
+    "desc": "Tapered gold petals rise from a diamond-set base, forming a tiered floral crown for the center stone.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe107-4_oypnx3thm0sco60w.jpg"
+  },
+  "FE110": {
+    "name": "Petalo Round Diamond Ring",
+    "collection": "Petalo",
+    "collectionKey": "petalo",
+    "collectionLink": "engagement-rings.html?col=petalo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,930",
+    "desc": "Slim gold petals align in a tulip form, elevating the center diamond in refined botanical splendor.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/f/e/fe110-4_yzebeebliw5xpb4x.jpg"
+  },
+  "SE108": {
+    "name": "Solo Filo Designer Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$1,970",
+    "desc": "A single continuous gold thread spirals around a brilliant diamond in masterful Solo Filo artistry.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/z/e/ze130-4_rwymkktez7au0360.jpg"
+  },
+  "SE125": {
+    "name": "Solo Filo Diamond Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,010",
+    "desc": "Danhov's signature single-thread design cradles the center stone in an impossibly delicate setting.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/s/e/se125-4_jhnzy4e0nawbhptw.jpg"
+  },
+  "SE107": {
+    "name": "Solo Filo Double Shank Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,510",
+    "desc": "One unbroken strand of polished gold loops elegantly to secure the center diamond in ethereal grace.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/z/e/ze127-3_1h1kluaxm1kclyfu.jpg"
+  },
+  "SE513UQ": {
+    "name": "Solo Filo Engagement Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$5,270",
+    "desc": "A single pavé-set wire wraps the center diamond in the minimalist Solo Filo tradition.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring_new.png"
+  },
+  "SE517UH": {
+    "name": "Solo Filo Engagement Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$4,790",
+    "desc": "Delicate gold wire traces an organic path around the center diamond in handcrafted artistry.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring_2__31.png"
+  },
+  "SE500UQ": {
+    "name": "Solo Filo Diamond Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,250",
+    "desc": "The original Solo Filo solitaire: a single gold filament sets the center diamond free in airy suspension.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring_7_2.png"
+  },
+  "SE516UQ": {
+    "name": "Solo Filo Exclusive Diamond Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,610",
+    "desc": "Refined white gold wire prongs hold the center diamond aloft in the most understated of settings.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/1/r1_wg_1_9.jpg"
+  },
+  "SE510UQ": {
+    "name": "Solo Filo Elegant Diamond Ring",
+    "collection": "Solo Filo",
+    "collectionKey": "solo",
+    "collectionLink": "engagement-rings.html?col=solo",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$6,840",
+    "desc": "A Solo Filo setting in white gold surrounds the center stone with a barely-there whisper of light.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/_/r_1_8_5.jpg"
+  },
+  "ZE501UQ": {
+    "name": "Eleganza Swirl Diamond Ring",
+    "collection": "Eleganza",
+    "collectionKey": "eleganza",
+    "collectionLink": "engagement-rings.html?col=eleganza",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$4,060",
+    "desc": "",
+    "image": ""
+  },
+  "CE502UH": {
+    "name": "Couture Engagement Ring",
+    "collection": "Couture",
+    "collectionKey": "couture",
+    "collectionLink": "engagement-rings.html?col=couture",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,730",
+    "desc": "",
+    "image": ""
+  },
+  "UE500UH": {
+    "name": "Unito Triple Shank Engagement Ring",
+    "collection": "Unito",
+    "collectionKey": "unito",
+    "collectionLink": "engagement-rings.html?col=unito",
+    "category": "Engagement Rings",
+    "categoryLink": "engagement-rings.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$3,740",
+    "desc": "",
+    "image": ""
+  },
+  "TM500UA": {
+    "name": "Tubetto Award Winning Band for Men",
+    "collection": "Award Winners",
+    "collectionKey": "award-winners",
+    "collectionLink": "wedding-bands.html?sub=award-winners",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "18k Black & White Gold",
+    "price": "$14,280",
+    "desc": "A bold, clean Torchon design scaled for the groom—geometric, refined, and built for a lifetime.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/2/_/2_12_2_1.jpg"
+  },
+  "TB500UA": {
+    "name": "Tubetto Award Winning Wedding Band",
+    "collection": "Award Winners",
+    "collectionKey": "award-winners",
+    "collectionLink": "wedding-bands.html?sub=award-winners",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "18k Black & White Gold",
+    "price": "$10,990",
+    "desc": "The classic Torchon her band: two delicate gold strands entwined in perpetuity.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb500ua_2_1.jpg"
+  },
+  "TM503P": {
+    "name": "Tubetto Award Winning Band for Men",
+    "collection": "Award Winners",
+    "collectionKey": "award-winners",
+    "collectionLink": "wedding-bands.html?sub=award-winners",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "18k White Gold",
+    "price": "$3,710",
+    "desc": "Hand-applied milgrain edging graces the Torchon men's band with vintage-inspired sophistication.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/m/tm104-6_cqwaa0kx9cgwbvot.jpg"
+  },
+  "AE536UQ": {
+    "name": "Abbraccio Braided Diamond Wedding Band",
+    "collection": "Award Winners",
+    "collectionKey": "award-winners",
+    "collectionLink": "wedding-bands.html?sub=award-winners",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "18k White · Yellow · Rose Gold",
+    "price": "$2,620",
+    "desc": "The Abbraccio wedding band mirrors the engagement collection's signature interlocked diamond arcs.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/b/_/b_1_11_2_1.jpg"
+  },
+  "TB521VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "Her Bands",
+    "collectionKey": "her-bands",
+    "collectionLink": "wedding-bands.html?sub=her-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$3,910",
+    "desc": "Ribbons of rose gold twist elegantly in the Torchon design—a band as expressive as a first dance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/t/b/tb521va_rg_1.jpg"
+  },
+  "TB520VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "Her Bands",
+    "collectionKey": "her-bands",
+    "collectionLink": "wedding-bands.html?sub=her-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$5,590",
+    "desc": "White gold strands intertwine in the Torchon wedding band, a wearable sculpture of enduring love.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/t/b/tb520va_wg_1.jpg"
+  },
+  "TB515VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "Her Bands",
+    "collectionKey": "her-bands",
+    "collectionLink": "wedding-bands.html?sub=her-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "Platinum · 18k · 14k White / Yellow / Rose Gold",
+    "price": "From $3,580",
+    "desc": "Warm yellow gold ribbons twist in the signature Torchon pattern for a timeless, romantic wedding band.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/t/b/tb515va_wg_1.jpg"
+  },
+  "TB528LR": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "Her Bands",
+    "collectionKey": "her-bands",
+    "collectionLink": "wedding-bands.html?sub=her-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$8,340",
+    "desc": "Rose gold warmth suffuses the Torchon twist, creating a wedding band as tender as the moment itself.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb528va_rg_2.jpg"
+  },
+  "TM501ZA": {
+    "name": "Tubetto Men's Black Diamond Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k White · 18k White Gold",
+    "price": "$8,970",
+    "desc": "A bold polished men's ring with brushed geometric architecture and an elegant matte-finish interior.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/m/tm501za_m5aonsrpaidxctzg.jpg"
+  },
+  "TB504VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$8,200",
+    "desc": "Yellow gold strands spiral in the beloved Torchon pattern for a timeless, heirloom-worthy wedding band.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb504va_yg_2.jpg"
+  },
+  "TB523VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$7,310",
+    "desc": "Fine pavé diamonds are set along the Torchon twist, adding irresistible sparkle to the iconic design.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb523va_wg_2.jpg"
+  },
+  "TB545CA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$10,600",
+    "desc": "Pavé diamonds trace the rose gold Torchon spiral for a wedding band of breathtaking dual radiance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb545va_rg_2_1.jpg"
+  },
+  "TB502VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "Platinum · 14k White Gold",
+    "price": "$7,150",
+    "desc": "A flat-profile Torchon band that wears close and comfortable—love worn every day, all day.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb502va_-_inside_flat_wg_2_2.jpg"
+  },
+  "TB506VA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$12,040",
+    "desc": "A comfort-fit Torchon wedding band in white gold for those who wear their love all day, every day.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb506va_-_inside_flat_wg_2_1.jpg"
+  },
+  "TB544CA": {
+    "name": "Tubetto Diamond Wedding Ring",
+    "collection": "His Bands",
+    "collectionKey": "his-bands",
+    "collectionLink": "wedding-bands.html?sub=his-bands",
+    "category": "Wedding Bands",
+    "categoryLink": "wedding-bands.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$11,530",
+    "desc": "Yellow gold and pavé diamonds unite in the Torchon band—a dazzling symbol of lasting commitment.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/ea0d58647b4a9824b79cc3dff64d52dc/t/b/tb544va_wg_2.jpg"
+  },
+  "RH500P": {
+    "name": "Norme de Danhov Double Heart Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$795",
+    "desc": "A brilliant center gemstone rests in a refined yellow gold setting for timeless everyday luxury.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/p/rp500p-er_without_diamond_1_yg.jpg"
+  },
+  "RH504P": {
+    "name": "Bezel-Set Round Stud Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Rose · 18k Yellow Gold · Platinum",
+    "price": "$1,360",
+    "desc": "Organic rose gold curves embrace a center gem in a nature-inspired earring of elegant grace.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/g/r/grp01656_rg_1.jpg"
+  },
+  "RH508G": {
+    "name": "Norme de Danhov Flower Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$1,580",
+    "desc": "Sculptural rose gold drop earrings frame the face with architectural precision and a diamond flourish.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/g/r/grp11460_rg_1.jpg"
+  },
+  "RH502P": {
+    "name": "Trio Diamond Cluster Stud Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Yellow Gold · Platinum",
+    "price": "$1,900",
+    "desc": "Bold yellow gold disc earrings with fine diamond accents for a luminous, statement-making look.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/6/0/60761442_yg_1_1.jpg"
+  },
+  "RH513V": {
+    "name": "Norme de Danhov Halo Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$1,990",
+    "desc": "Cascading yellow gold drops catch the light with every turn in this vibrant fine jewelry statement.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/6/1/61691790_yg_1_1_.jpg"
+  },
+  "RH518U": {
+    "name": "Norme de Danhov Heart Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,640",
+    "desc": "A contemporary white gold design balances architectural structure with a brilliant diamond detail.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/g/r/grp08568_1_wg.jpg"
+  },
+  "RH506U": {
+    "name": "Norme de Danhov Smile Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Rose · White · Yellow Gold",
+    "price": "$2,680",
+    "desc": "Delicate rose gold hoops set with a dazzling diamond for an effortless touch of everyday luxury.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/3/6/36667168_1_rg_1.jpg"
+  },
+  "RH512U": {
+    "name": "Norme de Danhov Heart Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,460",
+    "desc": "Brilliant white gold studs crowned with a diamond are the ultimate in understated refinement.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/2/6/26544947_wg_1.jpg"
+  },
+  "RH510U": {
+    "name": "Norme de Danhov Double Halo Natural Diamonds Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k White · Yellow Gold",
+    "price": "$3,960",
+    "desc": "Sleek white gold earrings balance minimalism and sparkle in an elevated everyday fine jewelry piece.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/2/8/28646453_wg_1_1_1.jpg"
+  },
+  "RH503G": {
+    "name": "Norme de Danhov Heart Shape Diamond Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Rose Gold · 14k White Gold",
+    "price": "$4,680",
+    "desc": "Rose gold geometric drop earrings with a brilliant diamond detail—clean lines, pure elegance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs644_rg_1_1.jpg"
+  },
+  "AH501U": {
+    "name": "Abbraccio Swirl Cushion Diamond Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$4,840",
+    "desc": "A cushion-cut gemstone set in a yellow gold pavé halo for an earring of vintage glamour.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/a/h/ah501u_cusion_yg_1.jpg"
+  },
+  "RH505U": {
+    "name": "Norme de Danhov CrossOver Medium Hoop Diamond Earrings",
+    "collection": "Earrings",
+    "collectionKey": "earrings",
+    "collectionLink": "fine-jewelry.html?sub=earrings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k White · Yellow Gold",
+    "price": "$6,000",
+    "desc": "White gold pavé studs scatter light in every direction for a quietly brilliant daytime look.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/3/7/37608556_1_wg_1.png"
+  },
+  "RP503U": {
+    "name": "Norme de Danhov Shamrock Pendant with Rolo Chain",
+    "collection": "Pendants",
+    "collectionKey": "pendants",
+    "collectionLink": "fine-jewelry.html?sub=pendants",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Yellow Gold",
+    "price": "$1,925",
+    "desc": "The Danhov Shamrock pendant in white gold—a delicate symbol of fortune and enduring elegance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/h/chamrock_pendant_wg_1.jpg"
+  },
+  "LP531U": {
+    "name": "Per Lei Diamond Oval Pendant",
+    "collection": "Pendants",
+    "collectionKey": "pendants",
+    "collectionLink": "fine-jewelry.html?sub=pendants",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$2,980",
+    "desc": "A pavé diamond pendant suspends from a fine chain with luminous, understated grace.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg"
+  },
+  "ZP507U": {
+    "name": "Eleganza Braided Round Pendant",
+    "collection": "Pendants",
+    "collectionKey": "pendants",
+    "collectionLink": "fine-jewelry.html?sub=pendants",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Yellow · Rose Gold",
+    "price": "$3,800",
+    "desc": "A geometric gold pendant captures light from every facet in a sculptural fine jewelry statement.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_3_2.jpg"
+  },
+  "HE500P": {
+    "name": "Diamante Round Fine Ring",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White · Rose · Yellow Gold",
+    "price": "$1,535",
+    "desc": "A diamond-accented fine ring in white gold frames the finger with a timeless halo of brilliance.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring-c_round_dai_wg_1.jpg"
+  },
+  "KB600P": {
+    "name": "Yin-Yang Fashion Band",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k White Gold",
+    "price": "$1,765",
+    "desc": "The Yin-Yang fashion band in white gold—a refined symbol of balance in fine jewelry form.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/h/white_top_1.jpg"
+  },
+  "HE504P": {
+    "name": "Diamante Cluster Emerald Shape Ring",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$4,725",
+    "desc": "",
+    "image": ""
+  },
+  "HE505P": {
+    "name": "Diamante Cluster Pear Shape Ring",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Yellow · White · Rose Gold",
+    "price": "$5,095",
+    "desc": "A pear-shaped diamond cluster in a yellow gold halo glows with warmth from every angle.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs621_pear_yg_1_2.jpg"
+  },
+  "KB600MA": {
+    "name": "Yin-Yang Fashion Band",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Rose Gold · Platinum",
+    "price": "$6,380",
+    "desc": "The Yin-Yang band in rose gold and platinum—a harmonious symbol of duality in fine jewelry.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/o/rose_top_1.jpg"
+  },
+  "HE501P": {
+    "name": "Diamante Round Fine Ring",
+    "collection": "Rings",
+    "collectionKey": "rings",
+    "collectionLink": "fine-jewelry.html?sub=rings",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Rose · White · Yellow Gold",
+    "price": "$8,245",
+    "desc": "A rose gold ring with a round brilliant diamond halo that glows with depth and warmth.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring-c_round_dai-diamond_rg_1.jpg"
+  },
+  "KB560MA": {
+    "name": "Four Colors in One Band",
+    "collection": "Bands",
+    "collectionKey": "bands",
+    "collectionLink": "fine-jewelry.html?sub=bands",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Gold (Four Colors)",
+    "price": "$4,465",
+    "desc": "A sleek stacking band in polished gold—the foundational piece of any curated ring stack.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/6/1/61_1_1.jpg"
+  },
+  "KB557MA": {
+    "name": "Four Colors in One Band",
+    "collection": "Bands",
+    "collectionKey": "bands",
+    "collectionLink": "fine-jewelry.html?sub=bands",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Gold",
+    "price": "$4,790",
+    "desc": "A textured stacking band in polished gold that creates beautiful contrast when layered.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/5/8/58_1_1.jpg"
+  },
+  "KB561MA": {
+    "name": "Four Colors in One Band",
+    "collection": "Bands",
+    "collectionKey": "bands",
+    "collectionLink": "fine-jewelry.html?sub=bands",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "18k Gold",
+    "price": "$5,765",
+    "desc": "Four colors of gold unite in a single band—a chromatic jewel of remarkable craftsmanship.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/6/2/62_1.jpg"
+  },
+  "KB569MA": {
+    "name": "Four Colors in One Band",
+    "collection": "Bands",
+    "collectionKey": "bands",
+    "collectionLink": "fine-jewelry.html?sub=bands",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k Gold",
+    "price": "$6,020",
+    "desc": "",
+    "image": ""
+  },
+  "TRR100": {
+    "name": "Trenta Limited Edition Rose Gold and Pearl Diamond Ring",
+    "collection": "Limited Edition",
+    "collectionKey": "limited",
+    "collectionLink": "fine-jewelry.html?sub=limited",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "Rose Gold · Pearl",
+    "price": "$13,510",
+    "desc": "A limited-edition rose gold and pearl diamond ring—a rare collector's jewel for a singular occasion.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/0/100-4pr_dcdrsi3jx2ulscxc.jpg"
+  },
+  "TRH101": {
+    "name": "Trenta Limited Edition Pearl Diamond Earrings",
+    "collection": "Limited Edition",
+    "collectionKey": "limited",
+    "collectionLink": "fine-jewelry.html?sub=limited",
+    "category": "Fine Jewelry",
+    "categoryLink": "fine-jewelry.html",
+    "metals": "14k White Gold · Pearl",
+    "price": "$17,180",
+    "desc": "Limited-edition white gold earrings with a luminous pearl—a heritage-inspired jewel of singular beauty.",
+    "image": "https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/e/a/ear_pearl_w_-_w_qn5tp5zrnibfnf02.jpg"
+  }
+};
+
+  // ─── RENDER ────────────────────────────────────────────────────────────────
+  (function render() {
+    const params = new URLSearchParams(window.location.search);
+    const style  = params.get('style') || '';
+    const p      = PRODUCTS[style];
+
+    if (!p) {
+      document.getElementById('productDetail').innerHTML =
+        '<div class="product-not-found"><h2>Product not found</h2>' +
+        '<a href="engagement-rings.html">&larr; Back to Engagement Rings</a></div>';
+      return;
+    }
+
+    document.title = p.name + ' \u2014 DANHOV Oneness';
+
+    document.getElementById('collectionLabel').textContent = p.collection;
+    document.getElementById('collectionBadge').textContent = p.collection;
+    document.getElementById('productName').textContent    = p.name;
+    document.getElementById('styleNum').textContent       = style;
+    document.getElementById('productPrice').textContent   = p.price;
+    document.getElementById('productMetals').textContent  = p.metals;
+    document.getElementById('productDesc').textContent    = p.desc;
+    document.getElementById('bcCategory').textContent     = p.category;
+    document.getElementById('bcCategory').href            = p.categoryLink;
+    document.getElementById('bcName').textContent         = p.name;
+    document.getElementById('inquireBtn').href =
+      'mailto:care@danhov.com?subject=Inquiry: ' + style + ' \u2014 ' + p.name;
+
+    if (p.image) {
+      const img = document.getElementById('productImg');
+      const ph  = document.getElementById('imgPlaceholder');
+      img.alt = p.name;
+      img.src = p.image;
+      img.style.display = 'block';
+      img.addEventListener('error', function() {
+        this.style.display = 'none';
+        ph.style.display = 'flex';
+      });
+      img.addEventListener('load', function() { ph.style.display = 'none'; });
+    }
+  })();
+
+  // ─── CUSTOM CURSOR ─────────────────────────────────────────────────────────
+  const cursor    = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX - 4 + 'px';
+    cursor.style.top  = mouseY - 4 + 'px';
+  });
+
+  (function animRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX - 18 + 'px';
+    cursorRing.style.top  = ringY - 18 + 'px';
+    requestAnimationFrame(animRing);
+  })();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; cursorRing.style.transform = 'scale(1.4)'; cursorRing.style.opacity = '0.8'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; cursorRing.style.transform = 'scale(1)'; cursorRing.style.opacity = '0.5'; });
+  });
+
+  // Wire "Ask AI" button with product context once product data loads
+  document.getElementById('askAiBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    var nameEl = document.getElementById('productName');
+    var name = nameEl ? nameEl.textContent.trim() : 'this ring';
+    var styleParam = new URLSearchParams(window.location.search).get('style') || '';
+    var msg = 'I\'m looking at the ' + name + (styleParam ? ' (style ' + styleParam + ')' : '') + '. Can you tell me more about this ring and help me decide?';
+    if (window.DanhovAI) DanhovAI.open(msg);
+  });
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>

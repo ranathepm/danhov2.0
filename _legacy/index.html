@@ -1,0 +1,3749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DANHOV &mdash; Oneness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Cinzel:wght@400;600&family=Jost:wght@300;400&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  * { user-select: text; -webkit-user-select: text; }
+  *::before, *::after { pointer-events: none; }
+
+  :root {
+    --black: #fff8f6;
+    --deep: #fdf0ed;
+    --gold: #9b6b4a;
+    --gold-light: #c4916e;
+    --gold-dim: #c9a898;
+    --crimson: #b5606a;
+    --crimson-bright: #b5606a;
+    --logo-red: #AC3438;
+    --logo-red-dark: #8B2A2D;
+    --blush: #e8b4bc;
+    --cream: #3d2520;
+    --grey: #7a5c58;
+    --white: #fff8f6;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    cursor: none;
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
+  /* TEXT SELECTION — allow copy on all content text */
+  p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, td, th {
+    user-select: text;
+    -webkit-user-select: text;
+    cursor: text;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--logo-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease;
+    user-select: none; -webkit-user-select: none;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--logo-red);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: all 0.3s ease;
+    opacity: 0.5;
+    user-select: none; -webkit-user-select: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: #fff8f6;
+    border-bottom: 1px solid rgba(172,52,56,0.08);
+    box-shadow: 0 2px 12px rgba(172,52,56,0.04);
+  }
+  .nav-logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+  }
+  .nav-logo img {
+    height: 32px;
+    width: auto;
+    display: block;
+  }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 1;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--logo-red); }
+  .nav-cta {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff8f6;
+    background: var(--logo-red);
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+  .nav-cta:hover { background: var(--logo-red-dark); }
+
+  /* ── MEGA MENU ── */
+  .nav-links > li { position: static; }
+  .mega-menu {
+    position: fixed;
+    top: 81px; left: 0; right: 0;
+    background: #fff8f6;
+    border-top: 2px solid var(--logo-red);
+    box-shadow: 0 20px 60px rgba(61,37,32,0.14);
+    padding: 44px 80px 52px;
+    z-index: 99;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition: opacity 0.22s ease, visibility 0.22s, transform 0.22s ease;
+    display: flex;
+    gap: 0;
+  }
+  .nav-links > li:hover > .mega-menu {
+    opacity: 1; visibility: visible; transform: translateY(0);
+  }
+  .mega-overlay {
+    position: fixed;
+    top: 81px; left: 0; right: 0; bottom: 0;
+    background: rgba(61,37,32,0.22);
+    z-index: 98;
+    opacity: 0; visibility: hidden;
+    transition: opacity 0.22s ease, visibility 0.22s;
+    pointer-events: none;
+  }
+  nav:has(li:hover > .mega-menu) + .mega-overlay {
+    opacity: 1; visibility: visible;
+  }
+  /* mega menu sections */
+  .mm-col { flex: 1; padding: 0 32px; border-right: 1px solid rgba(172,52,56,0.08); }
+  .mm-col:first-child { padding-left: 0; }
+  .mm-col:last-child { border-right: none; padding-right: 0; }
+  .mm-col-wide { flex: 2; }
+  .mm-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--logo-red); margin-bottom: 22px; display: block;
+  }
+  .mm-grid { display: grid; gap: 12px; }
+  .mm-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .mm-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .mm-grid-5 { grid-template-columns: repeat(5, 1fr); }
+  .mm-card { text-decoration: none; display: flex; flex-direction: column; gap: 8px; }
+  .mm-card-img {
+    background: #f0e4e0;
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mm-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+  }
+  .mm-card:hover .mm-card-img img { transform: scale(1.06); }
+  .mm-card-img-lg { height: 140px; }
+  .mm-card-img-sm { height: 96px; }
+  .mm-card-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500;
+    letter-spacing: 0.08em; color: var(--cream);
+    transition: color 0.2s; text-transform: uppercase;
+  }
+  .mm-card:hover .mm-card-name { color: var(--logo-red); }
+  .mm-metals { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+  .mm-metal {
+    display: flex; align-items: center; gap: 7px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    color: var(--cream); text-decoration: none;
+    padding: 7px 14px;
+    border: 1px solid rgba(172,52,56,0.2);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .mm-metal:hover { border-color: var(--logo-red); color: var(--logo-red); }
+  .mm-metal-swatch { width: 14px; height: 14px; border-radius: 50%; }
+  .mm-explore {
+    display: inline-block; margin-top: 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--logo-red); text-decoration: none;
+    border-bottom: 1px solid var(--logo-red);
+    padding-bottom: 2px; transition: opacity 0.2s;
+  }
+  .mm-explore:hover { opacity: 0.7; }
+  /* ring placeholder svg */
+  .mm-ring-svg { width: 36px; height: 36px; }
+
+  /* CINEMATIC HERO */
+  .cinematic-hero { text-align: center; margin: 40px 0 48px; }
+  .ch-line { display: block; opacity: 0; transform: translateY(16px); transition: opacity 1.4s ease, transform 1.4s ease; }
+  .ch-line.visible { opacity: 1; transform: translateY(0); }
+  .ch-silence { font-family: 'Montserrat', sans-serif; font-size: clamp(14px, 1.8vw, 22px); font-weight: 600; letter-spacing: 0.5em; text-transform: uppercase; color: var(--logo-red); margin-bottom: 0.6em; }
+  .ch-realized { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 6vw, 86px); font-weight: 600; color: var(--logo-red); font-style: italic; line-height: 1.1; }
+  .ch-oneness { font-family: 'Cormorant Garamond', serif; font-size: clamp(48px, 8.5vw, 120px); font-weight: 600; color: var(--logo-red); line-height: 1; margin-bottom: 0.3em; }
+  .ch-divider { width: 0; height: 2px; background: var(--logo-red); margin: 32px auto; transition: width 1.2s ease; }
+  .ch-divider.visible { width: 60px; }
+  .ch-ring { font-family: 'Cinzel', serif; font-size: clamp(20px, 3vw, 44px); font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--logo-red); margin-bottom: 0.3em; }
+  .ch-messaged { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 72px); font-weight: 600; font-style: italic; color: var(--logo-red); line-height: 1.1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* Animated cosmos background */
+  .cosmos {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 50%, rgba(229,160,170,0.25) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(197,155,130,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(229,160,170,0.12) 0%, transparent 40%),
+                var(--black);
+  }
+
+  /* Stars */
+  .stars {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 1px; height: 1px;
+    background: #c9a0ac;
+    border-radius: 50%;
+    animation: twinkle var(--dur) ease-in-out infinite alternate;
+  }
+
+  @keyframes twinkle {
+    from { opacity: var(--min-op); transform: scale(1); }
+    to { opacity: 1; transform: scale(2); }
+  }
+
+  /* Sacred geometry spiral */
+  .spiral-container {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.12;
+  }
+  .spiral-svg {
+    width: 90vmin;
+    height: 90vmin;
+    animation: cosmicSpin 80s linear infinite;
+  }
+  @keyframes cosmicSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(15px, 2vw, 22px);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--logo-red);
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 88px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--cream);
+    margin: 16px 0 0;
+    opacity: 0;
+    animation: fadeUp 1.4s ease 0.6s forwards;
+  }
+  .hero-title .saw { font-style: italic; color: var(--gold); }
+  .hero-title .silence {
+    display: block;
+    font-size: clamp(18px, 2.5vw, 38px);
+    letter-spacing: 0.35em;
+    color: var(--grey);
+    font-style: normal;
+    text-transform: uppercase;
+    margin-bottom: 0.3em;
+  }
+  .hero-title .formed {
+    display: block;
+    font-style: italic;
+    font-size: clamp(28px, 4.5vw, 68px);
+    color: var(--gold);
+    margin: 0.2em 0;
+  }
+  .hero-title .woke {
+    display: block;
+    font-size: clamp(22px, 3.5vw, 52px);
+    color: var(--grey);
+    font-style: normal;
+    letter-spacing: 0.2em;
+    margin: 0.4em 0;
+  }
+  .hero-title .form {
+    display: block;
+    font-style: italic;
+    color: var(--crimson-bright);
+    font-size: clamp(40px, 7vw, 100px);
+  }
+
+  .hero-divider {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 40px auto;
+    opacity: 0;
+    animation: fadeUp 1s ease 1s forwards;
+  }
+
+  .hero-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--grey);
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s ease 2s forwards;
+  }
+  .hero-scroll span {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: var(--gold);
+    animation: scrollPulse 2s ease-in-out infinite;
+    transform-origin: top;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 0.5; }
+    50% { transform: scaleY(0.3); opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 0.7; }
+  }
+
+  /* VIDEO PLACEHOLDER */
+  .video-section {
+    position: relative;
+    height: 70vh;
+    background: var(--deep);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .video-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(181,96,106,0.18) 0%, transparent 70%),
+      repeating-conic-gradient(rgba(197,155,130,0.06) 0deg, transparent 1deg, transparent 5deg);
+    animation: cosmicSpin 30s linear infinite;
+  }
+  .video-placeholder {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .video-icon {
+    width: 80px; height: 80px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .video-icon:hover { background: rgba(201,168,76,0.1); transform: scale(1.1); }
+  .video-icon svg { fill: var(--gold); margin-left: 4px; }
+  .video-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .video-caption {
+    margin-top: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-style: italic;
+    color: var(--cream);
+    opacity: 0.7;
+  }
+  .video-note {
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--grey);
+    letter-spacing: 0.1em;
+  }
+
+  /* SPIRAL PHILOSOPHY */
+  .spiral-section {
+    padding: 140px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .spiral-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(229,160,170,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .section-eyebrow {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: block;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 84px);
+    font-weight: 600;
+    line-height: 1.05;
+    color: var(--logo-red);
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .section-title em { font-style: italic; font-weight: 600; color: var(--logo-red-dark); }
+  .section-body {
+    max-width: 560px;
+    margin: 32px auto 0;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--grey);
+    letter-spacing: 0.03em;
+  }
+
+  .spiral-triad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin: 80px auto 0;
+    max-width: 900px;
+  }
+  .triad-item {
+    background: #f7ebe8;
+    padding: 56px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s;
+    text-align: center;
+  }
+  .triad-item:hover { transform: translateY(-4px); }
+  .triad-item::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+  .triad-item:hover::before { transform: scaleX(1); }
+  .triad-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(172,52,56,0.06);
+    border-radius: 50%;
+    padding: 8px;
+  }
+  .triad-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 12px;
+  }
+  .triad-body {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--grey);
+  }
+
+  /* FEATURED IN */
+  .featured-section {
+    border-top: 1px solid rgba(181,96,106,0.15);
+    border-bottom: 1px solid rgba(181,96,106,0.15);
+    padding: 48px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    overflow: hidden;
+    background: #f7ebe8;
+  }
+  .featured-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .featured-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--gold-dim);
+    flex-shrink: 0;
+  }
+  .featured-logos {
+    display: flex;
+    gap: 56px;
+    align-items: center;
+    animation: marquee 20s linear infinite;
+  }
+  .featured-logo {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    opacity: 1;
+  }
+  .featured-logo svg { display: block; }
+  .featured-logo:hover { color: var(--cream); }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SPIRITUAL MESSAGES */
+  .messages-section {
+    padding: 120px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .messages-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent,
+      transparent 60px,
+      rgba(181,96,106,0.04) 60px,
+      rgba(181,96,106,0.04) 61px
+    );
+  }
+  .messages-header {
+    text-align: center;
+    padding: 0 48px 80px;
+  }
+  .message-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(181,96,106,0.08);
+  }
+  .message-card {
+    background: var(--black);
+    padding: 64px 72px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+    border: 1px solid rgba(181,96,106,0.08);
+  }
+  .message-card:hover { background: var(--deep); }
+  .message-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    font-weight: 600;
+    color: var(--crimson);
+    opacity: 0.12;
+    position: absolute;
+    top: 20px; right: 40px;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .message-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 2.5vw, 32px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.3;
+    color: var(--logo-red);
+    margin-bottom: 20px;
+  }
+  .message-bar {
+    width: 32px;
+    height: 1px;
+    background: var(--gold);
+    margin-bottom: 16px;
+  }
+  .message-note {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--grey);
+    line-height: 1.7;
+  }
+
+  /* MARQUEE QUOTE */
+  .marquee-quote {
+    padding: 64px 0;
+    background: var(--logo-red);
+    overflow: hidden;
+    position: relative;
+  }
+  .marquee-inner {
+    display: flex;
+    animation: marqueeQ 25s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-style: italic;
+    color: rgba(255,255,255,0.9);
+    padding-right: 80px;
+    letter-spacing: 0.05em;
+  }
+  .marquee-text span { color: rgba(255,255,255,0.4); padding: 0 20px; }
+  @keyframes marqueeQ {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* RING SHOWCASE */
+  .ring-section {
+    padding: 140px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .ring-visual {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Animated concentric rings */
+  .ring-orbit {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: orbit linear infinite;
+  }
+  .ring-orbit:nth-child(1) { width: 92%; height: 92%; border-color: rgba(201,168,76,0.12); animation-duration: 40s; }
+  .ring-orbit:nth-child(2) { width: 76%; height: 76%; border-color: rgba(139,26,26,0.2); animation-duration: 28s; animation-direction: reverse; }
+  .ring-orbit:nth-child(3) { width: 58%; height: 58%; border-color: rgba(201,168,76,0.18); animation-duration: 18s; }
+  .ring-orbit:nth-child(4) { width: 40%; height: 40%; border-color: rgba(201,168,76,0.25); animation-duration: 10s; animation-direction: reverse; }
+
+  @keyframes orbit { to { transform: rotate(360deg); } }
+
+  .ring-placeholder {
+    width: 55%;
+    aspect-ratio: 1;
+    background: #f7ebe8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    text-align: center;
+    padding: 20px;
+    border: 1px dashed rgba(201,168,76,0.2);
+  }
+
+  .ring-content { }
+  .ring-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 24px;
+  }
+  .ring-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 4vw, 56px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: var(--cream);
+    margin-bottom: 24px;
+  }
+  .ring-title em { font-style: italic; color: var(--gold); }
+  .ring-body {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--grey);
+    margin-bottom: 40px;
+  }
+  .ring-stats {
+    display: flex;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+  .ring-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 400;
+    color: var(--crimson-bright);
+    display: block;
+  }
+  .ring-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+  .btn-primary {
+    display: inline-block;
+    padding: 16px 40px;
+    background: transparent;
+    border: 1px solid var(--logo-red);
+    color: var(--logo-red);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-primary:hover {
+    background: var(--logo-red);
+    color: #fff8f6;
+  }
+  .btn-solid {
+    display: inline-block;
+    padding: 16px 40px;
+    background: var(--logo-red);
+    color: #fff8f6;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.3s;
+    margin-left: 16px;
+  }
+  .btn-solid:hover { background: var(--logo-red-dark); }
+
+  /* COLLECTIONS GRID */
+  .collections-section {
+    padding: 120px 48px;
+    background: #f7ebe8;
+  }
+  .collections-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .collections-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .collection-card {
+    position: relative;
+    aspect-ratio: 0.7;
+    background: #f0e0dc;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+  }
+  .collection-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,8,6,0.9) 0%, transparent 50%);
+    z-index: 1;
+  }
+  .collection-bg {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    opacity: 0.15;
+    transition: transform 0.6s, opacity 0.4s;
+  }
+  .collection-card:hover .collection-bg { transform: scale(1.1); opacity: 0.22; }
+  .collection-card:hover::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gold);
+    animation: slideIn 0.3s ease forwards;
+  }
+  @keyframes slideIn {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+  .collection-info {
+    position: relative;
+    z-index: 2;
+  }
+  .collection-name {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .collection-count {
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+
+  /* DIAMOND SHAPES */
+  .shapes-section {
+    padding: 120px 48px;
+  }
+  .shapes-header {
+    text-align: center;
+    margin-bottom: 64px;
+  }
+  .shapes-scroll {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 8px;
+  }
+  .shapes-scroll::-webkit-scrollbar { display: none; }
+  .shape-item {
+    flex-shrink: 0;
+    width: 140px;
+    padding: 32px 16px;
+    background: #f7ebe8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+  }
+  .shape-item:hover { background: rgba(201,168,76,0.05); border-bottom-color: var(--gold); }
+  .shape-svg { width: 48px; height: 48px; }
+  .shape-name {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--grey);
+    text-align: center;
+  }
+
+  /* BIG QUOTE */
+  .big-quote {
+    padding: 160px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .big-quote::before {
+    content: '"';
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 300px;
+    color: var(--crimson);
+    opacity: 0.07;
+    line-height: 1;
+    pointer-events: none;
+  }
+  .big-quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 72px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.25;
+    color: var(--cream);
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .big-quote-text em { color: var(--gold); font-style: normal; }
+  .big-quote-author {
+    margin-top: 32px;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* APPOINTMENT */
+  .appointment-section {
+    padding: 100px 48px;
+    background: var(--deep);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .appt-left .section-eyebrow { text-align: left; }
+  .appt-left .section-title { font-size: 40px; text-align: left; max-width: none; }
+  .appt-left .section-body { text-align: left; margin: 24px 0; max-width: none; }
+  .appt-features { list-style: none; margin-bottom: 40px; display: flex; flex-direction: column; gap: 12px; }
+  .appt-features li {
+    font-size: 13px;
+    color: var(--grey);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .appt-features li::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--gold);
+    flex-shrink: 0;
+  }
+  .appt-right {
+    background: #fff8f6;
+    padding: 48px;
+    border: 1px solid rgba(181,96,106,0.15);
+  }
+  .appt-form-title {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .appt-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 12px 0;
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .appt-input:focus { border-bottom-color: var(--gold); }
+  .appt-input::placeholder { color: var(--grey); font-size: 12px; letter-spacing: 0.1em; }
+  .appt-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--gold);
+    color: #fff8f6;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .appt-btn:hover { background: var(--gold-light); }
+
+  /* GALLERY */
+  .gallery-section {
+    padding: 80px 0;
+    overflow: hidden;
+  }
+  .gallery-header {
+    text-align: center;
+    padding: 0 48px 64px;
+  }
+  .gallery-strip {
+    display: flex;
+    gap: 2px;
+    animation: galleryScroll 30s linear infinite;
+    width: max-content;
+  }
+  .gallery-item {
+    width: 280px;
+    height: 360px;
+    background: #f0e0dc;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .gallery-item::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 16px;
+    background: linear-gradient(to top, rgba(10,8,6,0.9) 0%, transparent 100%);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  @keyframes galleryScroll {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* SUSTAINABILITY */
+  .sustain-section {
+    padding: 140px 48px;
+    background: #f7ebe8;
+    text-align: center;
+  }
+  .sustain-badge {
+    display: inline-block;
+    border: 1px solid var(--gold);
+    padding: 12px 32px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+  .sustain-pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1000px;
+    margin: 64px auto 0;
+  }
+  .pillar {
+    background: #fff8f6;
+    padding: 48px 32px;
+    text-align: center;
+  }
+  .pillar-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+  .pillar-title {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .pillar-body { font-size: 12px; color: var(--grey); line-height: 1.8; }
+
+  /* NEWSLETTER */
+  .newsletter-section {
+    padding: 120px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .newsletter-section::before {
+    content: 'ONE';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 300px;
+    font-weight: 600;
+    color: var(--crimson);
+    opacity: 0.06;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .newsletter-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .newsletter-title em { font-style: italic; color: var(--gold); }
+  .newsletter-sub {
+    font-size: 13px;
+    color: var(--grey);
+    letter-spacing: 0.1em;
+    margin-bottom: 48px;
+  }
+  .newsletter-form {
+    display: flex;
+    max-width: 480px;
+    margin: 0 auto;
+    gap: 0;
+  }
+  .newsletter-input {
+    flex: 1;
+    background: #f7ebe8;
+    border: 1px solid rgba(181,96,106,0.2);
+    border-right: none;
+    padding: 16px 24px;
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    outline: none;
+  }
+  .newsletter-input::placeholder { color: var(--grey); }
+  .newsletter-btn {
+    padding: 16px 32px;
+    background: var(--gold);
+    color: #fff8f6;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .newsletter-btn:hover { background: var(--gold-light); }
+
+  /* FOOTER */
+  footer {
+    background: #f0e0dc;
+    border-top: 1px solid rgba(181,96,106,0.15);
+    padding: 80px 48px 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand-name {
+    margin-bottom: 16px;
+    display: block;
+  }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .footer-contact {
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 2;
+  }
+  .footer-col-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 10px; }
+  .footer-links a {
+    font-size: 12px;
+    color: var(--grey);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    border-top: 1px solid rgba(181,96,106,0.1);
+  }
+  .footer-copy { font-size: 11px; color: var(--grey); letter-spacing: 0.05em; }
+  /* DAILY TRUTH */
+  .daily-truth {
+    padding: 80px 48px;
+    background: #f7ebe8;
+    text-align: center;
+    border-top: 1px solid rgba(181,96,106,0.15);
+    border-bottom: 1px solid rgba(181,96,106,0.15);
+    position: relative;
+    overflow: hidden;
+  }
+  .daily-truth::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(181,96,106,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .daily-truth-inner {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .daily-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--logo-red);
+    display: block;
+    margin-bottom: 32px;
+  }
+  .daily-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 64px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.2;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .daily-message.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .daily-date {
+    margin-top: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+
+  /* GIFT MOMENT */
+  .gift-moment {
+    padding: 140px 48px;
+    background: #f0e0dc;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .gift-moment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(181,96,106,0.08) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .gift-inner { position: relative; max-width: 600px; margin: 0 auto; }
+  .gift-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 56px;
+  }
+  .gift-card {
+    border: 1px solid rgba(181,96,106,0.2);
+    padding: 2px;
+    margin-bottom: 48px;
+    background: #fff8f6;
+    box-shadow: 0 0 80px rgba(181,96,106,0.06);
+  }
+  .gift-card-inner { border: 1px solid rgba(181,96,106,0.08); padding: 64px 48px; }
+  .gift-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .gift-message {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .gift-sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 13px;
+    color: var(--grey);
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+  .gift-rule { width: 32px; height: 1px; background: var(--gold); margin: 0 auto 24px; }
+  .gift-from {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--grey);
+  }
+  .gift-note { font-size: 13px; line-height: 1.9; color: var(--grey); margin-bottom: 40px; letter-spacing: 0.04em; }
+
+  /* 12 INCHES CINEMATIC MOMENT */
+  .inches-moment {
+    padding: 160px 48px;
+    background: #f0e0dc;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .inches-moment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(229,160,170,0.2) 0%, transparent 55%),
+      radial-gradient(ellipse at 70% 50%, rgba(197,155,130,0.12) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .inches-bg-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(160px, 30vw, 380px);
+    font-weight: 600;
+    line-height: 0.85;
+    color: var(--crimson);
+    opacity: 0.07;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .inches-unit {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 10vw, 140px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--crimson-bright);
+    line-height: 1;
+    position: relative;
+  }
+  .inches-divider {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 40px auto;
+  }
+  .inches-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3.5vw, 48px);
+    font-weight: 400;
+    color: var(--cream);
+    letter-spacing: 0.05em;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .inches-truth {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(11px, 1.5vw, 16px);
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    position: relative;
+  }
+
+  /* NEVER ALONE PAIRED MOMENT */
+  .neveralone-moment {
+    padding: 140px 48px;
+    background: #f7ebe8;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .neveralone-moment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(229,160,170,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .neveralone-inner { position: relative; max-width: 760px; margin: 0 auto; }
+  .neveralone-line-1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--logo-red);
+    line-height: 1.1;
+    margin-bottom: 32px;
+  }
+  .neveralone-divider {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 auto 32px;
+  }
+  .neveralone-line-2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 3vw, 36px);
+    font-weight: 400;
+    color: var(--grey);
+    line-height: 1.4;
+    margin-bottom: 40px;
+  }
+  .neveralone-line-3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4.5vw, 60px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--gold);
+    line-height: 1.1;
+    margin-bottom: 56px;
+  }
+  .neveralone-cta { }
+
+  /* SELF LOVE STANDALONE MOMENT */
+  .selflove-moment {
+    padding: 160px 48px;
+    text-align: center;
+    background: #fff8f6;
+    position: relative;
+    overflow: hidden;
+  }
+  .selflove-moment::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(229,160,170,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .selflove-words {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(80px, 18vw, 220px);
+    font-weight: 600;
+    line-height: 0.9;
+    color: var(--logo-red);
+    position: relative;
+  }
+  .selflove-words em { font-style: italic; color: var(--logo-red); }
+  .selflove-sub {
+    margin-top: 48px;
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold);
+    position: relative;
+  }
+
+  /* SELF LOVE RINGS SECTION */
+  .selflove-section { padding: 120px 48px; background: #f7ebe8; }
+  .selflove-header { text-align: center; margin-bottom: 72px; }
+  .selflove-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1fr;
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: end;
+  }
+  .selflove-card { background: #fff8f6; overflow: hidden; transition: transform 0.4s; }
+  .selflove-card:hover { transform: translateY(-6px); }
+  .selflove-card-featured { transform: translateY(-24px); }
+  .selflove-card-featured:hover { transform: translateY(-30px); }
+  .selflove-card-img {
+    height: 320px;
+    background: rgba(181,96,106,0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(181,96,106,0.08);
+  }
+  .selflove-card-body { padding: 28px 32px 32px; }
+  .selflove-card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .selflove-card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold);
+    line-height: 1.5;
+  }
+
+  .footer-final-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+
+  /* ORIGIN STORY */
+  .origin-section {
+    padding: 160px 48px;
+    background: #f0e0dc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  .origin-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(229,160,170,0.25) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 50%, rgba(197,155,130,0.15) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .origin-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%; bottom: 0;
+    border-left: 1px solid rgba(181,96,106,0.1);
+    border-right: 1px solid rgba(181,96,106,0.1);
+    pointer-events: none;
+  }
+  .origin-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+  }
+  .origin-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.6em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 64px;
+  }
+  .origin-lines {
+    margin-bottom: 64px;
+  }
+  .origin-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(44px, 7vw, 96px);
+    font-weight: 400;
+    line-height: 1.05;
+    color: var(--cream);
+    display: block;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: originReveal 1s ease forwards;
+  }
+  .origin-line-2 {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .origin-line-gap {
+    margin-top: 0.5em;
+    font-size: clamp(28px, 4vw, 56px);
+    color: var(--grey);
+    letter-spacing: 0.15em;
+  }
+  .origin-line-3 {
+    margin-top: 0.4em;
+  }
+  .origin-line-4 {
+    font-style: italic;
+    color: var(--crimson-bright);
+  }
+  @keyframes originReveal {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .origin-rule {
+    width: 48px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 40px;
+  }
+  .origin-note {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    line-height: 2;
+    color: var(--grey);
+    letter-spacing: 0.06em;
+    max-width: 520px;
+    margin: 0 auto 48px;
+  }
+  .origin-founder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+  .origin-founder-line {
+    width: 40px;
+    height: 1px;
+    background: rgba(181,96,106,0.35);
+  }
+  .origin-founder span {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+  }
+
+  /* PRODUCTS SECTION */
+  .products-section {
+    padding: 120px 48px;
+    background: #fff8f6;
+  }
+  .products-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .products-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .prod-tab {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid rgba(172,52,56,0.2);
+    color: var(--grey);
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .prod-tab:hover { border-color: var(--logo-red); color: var(--logo-red); }
+  .prod-tab.active { background: var(--logo-red); color: #fff8f6; border-color: var(--logo-red); }
+  .products-filter {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 48px;
+    flex-wrap: wrap;
+  }
+  .prod-filter {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid rgba(181,96,106,0.15);
+    color: var(--grey);
+    padding: 6px 16px;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .prod-filter:hover { border-color: var(--crimson); color: var(--crimson); }
+  .prod-filter.active { background: var(--crimson); color: #fff8f6; border-color: var(--crimson); }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .prod-card {
+    background: #fdf0ed;
+    border: 1px solid rgba(181,96,106,0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s, transform 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+  .prod-card:hover { box-shadow: 0 8px 32px rgba(172,52,56,0.12); transform: translateY(-2px); }
+  .prod-img {
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, #f7e8e8 0%, #f0d8d8 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .prod-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .prod-img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .prod-img-placeholder svg { width: 56px; height: 56px; opacity: 0.25; }
+  .prod-collection-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--logo-red);
+    color: #fff8f6;
+    padding: 3px 8px;
+  }
+  .prod-info {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .prod-style {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+  }
+  .prod-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.3;
+  }
+  .prod-metals {
+    font-size: 10px;
+    color: var(--grey);
+    letter-spacing: 0.05em;
+  }
+  .prod-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--logo-red);
+    margin-top: auto;
+    padding-top: 8px;
+  }
+  .prod-cta {
+    display: block;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--logo-red);
+    text-decoration: none;
+    padding: 12px;
+    border-top: 1px solid rgba(181,96,106,0.12);
+    transition: background 0.3s, color 0.3s;
+    background: transparent;
+  }
+  .prod-cta:hover { background: var(--logo-red); color: #fff8f6; }
+  .products-load-more {
+    text-align: center;
+    margin-top: 48px;
+  }
+  .btn-load-more {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    background: transparent;
+    border: 1px solid var(--logo-red);
+    color: var(--logo-red);
+    padding: 14px 48px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-load-more:hover { background: var(--logo-red); color: #fff8f6; }
+  @media (max-width: 900px) {
+    .products-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 480px) {
+    .products-grid { grid-template-columns: 1fr; }
+    .products-section { padding: 80px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="danhov-logo-transparent.png" alt="DANHOV"></a>
+  <ul class="nav-links">
+
+    <!-- Engagement Rings -->
+    <li>
+      <a href="engagement-rings.html">Engagement Rings</a>
+      <div class="mega-menu">
+        <div class="mm-col mm-col-wide">
+          <span class="mm-label">Collections</span>
+          <div class="mm-grid mm-grid-5">
+            <a href="engagement-rings.html?col=abbraccio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae520uq_r1_1_wg.jpg" alt="Abbraccio"></div><span class="mm-card-name">Abbraccio</span></a>
+            <a href="engagement-rings.html?col=carezza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_carezza.jpg" alt="Carezza"></div><span class="mm-card-name">Carezza</span></a>
+            <a href="engagement-rings.html?col=classico" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_classico.jpg" alt="Classico"></div><span class="mm-card-name">Classico</span></a>
+            <a href="engagement-rings.html?col=couture" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_couture.jpg" alt="Couture"></div><span class="mm-card-name">Couture</span></a>
+            <a href="engagement-rings.html?col=eleganza" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae141-4_48oy8iu3ljtkgsxf.jpg" alt="Eleganza"></div><span class="mm-card-name">Eleganza</span></a>
+            <a href="engagement-rings.html?col=per-lei" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_per-lei.jpg" alt="Per Lei"></div><span class="mm-card-name">Per Lei</span></a>
+            <a href="engagement-rings.html?col=petalo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_petalo.jpg" alt="Petalo"></div><span class="mm-card-name">Petalo</span></a>
+            <a href="engagement-rings.html?col=solo-filo" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_solo-filo.jpg" alt="Solo Filo"></div><span class="mm-card-name">Solo Filo</span></a>
+            <a href="engagement-rings.html?col=unito" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_collection_unito.jpg" alt="Unito"></div><span class="mm-card-name">Unito</span></a>
+            <a href="engagement-rings.html?col=voltaggio" class="mm-card"><div class="mm-card-img mm-card-img-sm"><img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/w/e/we520p_r1_wg_1__2.jpg" alt="Voltaggio"></div><span class="mm-card-name">Voltaggio</span></a>
+          </div>
+          <a href="engagement-rings.html" class="mm-explore">Explore All Engagement Rings &rarr;</a>
+        </div>
+        <div class="mm-col" style="flex:0 0 220px;">
+          <span class="mm-label">Shop by Metal</span>
+          <div class="mm-metals" style="flex-direction:column;">
+            <a href="engagement-rings.html?metal=white-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8e0d8; border:1px solid #ccc;"></span>White Gold</a>
+            <a href="engagement-rings.html?metal=yellow-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#d4a853;"></span>Yellow Gold</a>
+            <a href="engagement-rings.html?metal=rose-gold" class="mm-metal"><span class="mm-metal-swatch" style="background:#e8a090;"></span>Rose Gold</a>
+          </div>
+          <div style="margin-top:32px;">
+            <span class="mm-label">Award Winners</span>
+            <a href="engagement-rings.html"><div class="mm-card-img mm-card-img-lg" style="border-radius:2px;"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_award-winners-1.jpg" alt="Award Winners" style="width:100%;height:100%;object-fit:cover;"></div></a>
+          </div>
+        </div>
+      </div>
+    </li>
+
+    <!-- Wedding Bands -->
+    <li>
+      <a href="wedding-bands.html">Wedding Bands</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="wedding-bands.html?sub=award-winners" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_award-winners-1.jpg" alt="Award Winners"></div><span class="mm-card-name">Award Winners</span></a>
+            <a href="wedding-bands.html?sub=her-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/w/h/white_top_2.jpg" alt="Her Bands"></div><span class="mm-card-name">Her Bands</span></a>
+            <a href="wedding-bands.html?sub=his-bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/wysiwyg/new-home/img_his-bands-1.jpg" alt="His Bands"></div><span class="mm-card-name">His Bands</span></a>
+          </div>
+          <a href="wedding-bands.html" class="mm-explore">View All Wedding Bands &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Fine Jewelry -->
+    <li>
+      <a href="fine-jewelry.html">Fine Jewelry</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop by Category</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="fine-jewelry.html?sub=bands" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/y/e/yellow_top_4.jpg" alt="Bands"></div><span class="mm-card-name">Bands</span></a>
+            <a href="fine-jewelry.html?sub=earrings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_rg_15.jpg" alt="Earrings"></div><span class="mm-card-name">Earrings</span></a>
+            <a href="fine-jewelry.html?sub=pendants" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Pendants"></div><span class="mm-card-name">Pendants</span></a>
+            <a href="fine-jewelry.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/r/i/ring-c_round_dai_wg_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+            <a href="fine-jewelry.html?sub=pop-of-color" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/b/r/brown_pink_2_1__1_1.png" alt="Pop of Color"></div><span class="mm-card-name">Pop of Color</span></a>
+          </div>
+          <a href="fine-jewelry.html" class="mm-explore">Explore All Fine Jewelry &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <!-- Men's -->
+    <li>
+      <a href="mens.html">Men's</a>
+      <div class="mega-menu">
+        <div class="mm-col" style="padding-left:0; border-right:none; width:100%;">
+          <span class="mm-label">Shop Men's</span>
+          <div class="mm-grid mm-grid-3" style="max-width:700px;">
+            <a href="mens.html?sub=rings" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/1/_/1_9_5_1.jpg" alt="Rings"></div><span class="mm-card-name">Rings</span></a>
+            <a href="mens.html?sub=bracelets" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/c/s/cs147_br_1_yg.jpg" alt="Bracelets"></div><span class="mm-card-name">Bracelets</span></a>
+            <a href="mens.html?sub=necklaces" class="mm-card"><div class="mm-card-img mm-card-img-lg"><img src="https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62/l/e/le_517_125_sz_6_1.jpg" alt="Necklaces &amp; Pendants"></div><span class="mm-card-name">Necklaces &amp; Pendants</span></a>
+          </div>
+          <a href="mens.html" class="mm-explore">Explore All Men's &rarr;</a>
+        </div>
+      </div>
+    </li>
+
+    <li><a href="engagement-rings.html">Ring Builder</a></li>
+    <li><a href="#" class="nav-philosophy">Philosophy</a></li>
+  </ul>
+  <a href="engagement-rings.html" class="nav-cta">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:9px;margin-top:-2px;"><path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z" fill="currentColor"/><path d="M19 16L19.75 18.25L22 19L19.75 19.75L19 22L18.25 19.75L16 19L18.25 18.25L19 16Z" fill="currentColor" opacity="0.7"/><path d="M5 3L5.5 4.5L7 5L5.5 5.5L5 7L4.5 5.5L3 5L4.5 4.5L5 3Z" fill="currentColor" opacity="0.5"/></svg>Build Your Ring
+  </a>
+</nav>
+<div class="mega-overlay"></div>
+
+<!-- HERO &mdash; CINEMATIC ORIGIN -->
+<section class="hero">
+  <div class="cosmos"></div>
+  <div class="stars" id="stars"></div>
+  <div class="spiral-container">
+    <svg class="spiral-svg" viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="300" cy="300" r="280" stroke="#c9a0ac" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="300" cy="300" r="230" stroke="#e8b4bc" stroke-width="0.5" opacity="0.5"/>
+      <circle cx="300" cy="300" r="180" stroke="#c9a0ac" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="300" cy="300" r="130" stroke="#e8b4bc" stroke-width="0.5" opacity="0.5"/>
+      <circle cx="300" cy="300" r="90" stroke="#c9a0ac" stroke-width="0.5" opacity="0.6"/>
+      <circle cx="300" cy="300" r="55" stroke="#e8b4bc" stroke-width="0.5" opacity="0.5"/>
+      <circle cx="300" cy="300" r="28" stroke="#c9a0ac" stroke-width="0.5" opacity="0.6"/>
+      <line x1="300" y1="20" x2="300" y2="580" stroke="#c9a0ac" stroke-width="0.3" opacity="0.3"/>
+      <line x1="20" y1="300" x2="580" y2="300" stroke="#c9a0ac" stroke-width="0.3" opacity="0.3"/>
+      <line x1="102" y1="102" x2="498" y2="498" stroke="#c9a0ac" stroke-width="0.3" opacity="0.2"/>
+      <line x1="498" y1="102" x2="102" y2="498" stroke="#c9a0ac" stroke-width="0.3" opacity="0.2"/>
+      <polygon points="300,30 545,165 545,435 300,570 55,435 55,165" stroke="#e8b4bc" stroke-width="0.4" fill="none" opacity="0.3"/>
+      <polygon points="300,90 490,200 490,400 300,510 110,400 110,200" stroke="#c9a0ac" stroke-width="0.3" fill="none" opacity="0.2"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow" style="opacity:0; animation: fadeIn 1s ease 0.2s forwards;">DANHOV &mdash; Est. 1984 &mdash; The Oneness Collection</span>
+
+    <div class="cinematic-hero">
+      <div class="ch-line ch-silence" id="chLine1">In silence</div>
+      <div class="ch-line ch-realized" id="chLine2">I realized</div>
+      <div class="ch-line ch-oneness" id="chLine3">the oneness of the universe.</div>
+      <div class="ch-divider" id="chDiv"></div>
+      <div class="ch-line ch-ring" id="chLine4">The Swirl Love Ring</div>
+      <div class="ch-line ch-messaged" id="chLine5">was messaged.</div>
+    </div>
+
+    <div class="origin-founder" id="heroFounder" style="opacity:0;">
+      <div class="origin-founder-line"></div>
+      <span style="font-family:'Cinzel',serif; font-size:clamp(13px,1.6vw,18px); letter-spacing:0.25em; text-transform:uppercase; color:var(--logo-red);">Jack Hovsepian &mdash; Founder, DANHOV &mdash; Est. 1984</span>
+      <div class="origin-founder-line"></div>
+    </div>
+  </div>
+
+  <div class="hero-scroll" id="heroScroll" style="opacity:0;">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- DAILY TRUTH -->
+<div class="daily-truth" id="dailyTruth">
+  <div class="daily-truth-inner">
+    <span class="daily-label">Today's Truth</span>
+    <div class="daily-message" id="dailyMessage"></div>
+    <div class="daily-date" id="dailyDate"></div>
+  </div>
+</div>
+
+<!-- AI ADVISOR STRIP -->
+<div style="max-width:1080px; margin:0 auto; padding:0 40px;">
+  <div class="dnh-panel">
+    <div class="dnh-panel-copy">
+      <strong>Find your perfect piece</strong>
+      <span>Our AI jewelry advisor will guide you through every collection — metals, styles, and the stories behind each ring.</span>
+    </div>
+    <button class="dnh-trigger" data-dnh="I'm looking for a DANHOV ring. Can you help me find the right one?">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z" fill="currentColor"/></svg>
+      Ask the AI Advisor
+    </button>
+  </div>
+</div>
+
+<!-- VIDEO SECTION -->
+<section class="video-section">
+  <div class="video-bg"></div>
+  <div class="video-placeholder">
+    <div class="video-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    </div>
+    <div class="video-label">The Oneness Film</div>
+    <div class="video-caption">Galaxy &rarr; Water Vortex &rarr; Your Ring</div>
+    <div class="video-note">[ Place your cinematic video here &mdash; the same spiral, at every scale ]</div>
+  </div>
+</section>
+
+<!-- SPIRAL PHILOSOPHY -->
+<section class="spiral-section">
+  <span class="section-eyebrow">The Philosophy of Oneness</span>
+  <h2 class="section-title">The same force that shapes <em>galaxies</em>, shapes love.</h2>
+  <p class="section-body">From the arms of the Milky Way to the vortex of water in a cup &mdash; the spiral is the universe's oldest signature. DANHOV rings carry this truth in every curve, every setting, every stone.</p>
+
+  <div class="spiral-triad">
+    <div class="triad-item">
+      <span class="triad-icon">
+        <!-- Galaxy: bright core + two sweeping spiral arms + star dots -->
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="24" cy="24" rx="3" ry="2" fill="#AC3438"/>
+          <path d="M24 24 C29 19 37 17 39 12 C41 8 37 4 31 7 C25 10 21 15 19 21 C17 27 19 33 23 35 C27 37 33 35 36 30" stroke="#AC3438" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M24 24 C19 29 11 31 9 36 C7 40 11 44 17 41 C23 38 27 33 29 27 C31 21 29 15 25 13" stroke="#AC3438" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <circle cx="39" cy="11" r="1.2" fill="#AC3438"/>
+          <circle cx="9" cy="37" r="1.2" fill="#AC3438"/>
+          <circle cx="43" cy="22" r="0.8" fill="#AC3438" opacity="0.55"/>
+          <circle cx="5" cy="26" r="0.8" fill="#AC3438" opacity="0.55"/>
+          <circle cx="18" cy="7" r="0.7" fill="#AC3438" opacity="0.45"/>
+          <circle cx="34" cy="41" r="0.7" fill="#AC3438" opacity="0.45"/>
+        </svg>
+      </span>
+      <div class="triad-title">The Galaxy</div>
+      <p class="triad-body">Billions of stars spiral outward from a single point &mdash; the same pattern nature repeats at every scale.</p>
+    </div>
+    <div class="triad-item">
+      <span class="triad-icon">
+        <!-- Vortex: concentric ellipses narrowing to a centre dot, like a whirlpool -->
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="24" cy="27" rx="19" ry="9" stroke="#AC3438" stroke-width="1.4"/>
+          <ellipse cx="24" cy="26" rx="13" ry="6" stroke="#AC3438" stroke-width="1.4"/>
+          <ellipse cx="24" cy="25" rx="8"  ry="4" stroke="#AC3438" stroke-width="1.4"/>
+          <ellipse cx="24" cy="24" rx="4"  ry="2" stroke="#AC3438" stroke-width="1.4"/>
+          <circle  cx="24" cy="24" r="1.5" fill="#AC3438"/>
+          <path d="M6 24 Q10 27 13 27" stroke="#AC3438" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+          <path d="M42 24 Q38 21 35 21" stroke="#AC3438" stroke-width="1" stroke-linecap="round" opacity="0.45"/>
+        </svg>
+      </span>
+      <div class="triad-title">The Vortex</div>
+      <p class="triad-body">Stir water in a cup. Watch the galaxy appear. The universe expressing itself in your kitchen.</p>
+    </div>
+    <div class="triad-item">
+      <span class="triad-icon">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="24" cy="30" rx="14" ry="6" stroke="#AC3438" stroke-width="1.8"/>
+          <path d="M16 22 L20 14 L24 17 L28 14 L32 22" stroke="#AC3438" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <path d="M16 22 L24 26 L32 22" stroke="#AC3438" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+          <line x1="20" y1="14" x2="24" y2="26" stroke="#AC3438" stroke-width="0.8" opacity="0.5"/>
+          <line x1="28" y1="14" x2="24" y2="26" stroke="#AC3438" stroke-width="0.8" opacity="0.5"/>
+          <line x1="24" y1="17" x2="24" y2="26" stroke="#AC3438" stroke-width="0.8" opacity="0.5"/>
+        </svg>
+      </span>
+      <div class="triad-title">The Ring</div>
+      <p class="triad-body">A spiral band. Diamonds like stars. The same sacred geometry &mdash; now worn on the hand of love.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED IN -->
+<div class="featured-section">
+  <span class="featured-label">As Seen In</span>
+  <div class="featured-divider"></div>
+  <div class="featured-logos">
+    <!-- VOGUE — black -->
+    <span class="featured-logo"><svg height="28" viewBox="0 0 136 28" xmlns="http://www.w3.org/2000/svg"><text y="24" font-family="'Playfair Display',serif" font-size="25" font-weight="800" fill="#111111" letter-spacing="6">VOGUE</text></svg></span>
+    <!-- Harper's BAZAAR — black + signature red -->
+    <span class="featured-logo"><svg height="42" viewBox="0 0 138 42" xmlns="http://www.w3.org/2000/svg"><text y="14" font-family="'Montserrat',sans-serif" font-size="9" font-weight="500" fill="#111111" letter-spacing="3.5">HARPER'S</text><text y="38" font-family="'Playfair Display',serif" font-size="22" font-weight="700" fill="#C8102E" letter-spacing="1">BAZAAR</text></svg></span>
+    <!-- WWD — black -->
+    <span class="featured-logo"><svg height="28" viewBox="0 0 76 28" xmlns="http://www.w3.org/2000/svg"><text y="24" font-family="'Playfair Display',serif" font-size="26" font-weight="800" fill="#111111" letter-spacing="2">WWD</text></svg></span>
+    <!-- BRIDES — black -->
+    <span class="featured-logo"><svg height="32" viewBox="0 0 118 32" xmlns="http://www.w3.org/2000/svg"><text y="26" font-family="'Cormorant Garamond',serif" font-size="28" font-weight="600" font-style="italic" fill="#111111" letter-spacing="3">Brides</text></svg></span>
+    <!-- Who What Wear — black -->
+    <span class="featured-logo"><svg height="34" viewBox="0 0 148 34" xmlns="http://www.w3.org/2000/svg"><text y="14" font-family="'Montserrat',sans-serif" font-size="10" font-weight="600" fill="#111111" letter-spacing="2">WHO WHAT</text><text y="30" font-family="'Montserrat',sans-serif" font-size="10" font-weight="600" fill="#111111" letter-spacing="9.5">WEAR</text></svg></span>
+    <!-- Town & Country — navy -->
+    <span class="featured-logo"><svg height="36" viewBox="0 0 130 36" xmlns="http://www.w3.org/2000/svg"><text y="15" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="600" fill="#0B2C4A" letter-spacing="3">TOWN &amp;</text><text y="34" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="600" fill="#0B2C4A" letter-spacing="1">COUNTRY</text></svg></span>
+    <!-- repeat for seamless loop -->
+    <span class="featured-logo"><svg height="28" viewBox="0 0 136 28" xmlns="http://www.w3.org/2000/svg"><text y="24" font-family="'Playfair Display',serif" font-size="25" font-weight="800" fill="#111111" letter-spacing="6">VOGUE</text></svg></span>
+    <span class="featured-logo"><svg height="42" viewBox="0 0 138 42" xmlns="http://www.w3.org/2000/svg"><text y="14" font-family="'Montserrat',sans-serif" font-size="9" font-weight="500" fill="#111111" letter-spacing="3.5">HARPER'S</text><text y="38" font-family="'Playfair Display',serif" font-size="22" font-weight="700" fill="#C8102E" letter-spacing="1">BAZAAR</text></svg></span>
+    <span class="featured-logo"><svg height="28" viewBox="0 0 76 28" xmlns="http://www.w3.org/2000/svg"><text y="24" font-family="'Playfair Display',serif" font-size="26" font-weight="800" fill="#111111" letter-spacing="2">WWD</text></svg></span>
+    <span class="featured-logo"><svg height="32" viewBox="0 0 118 32" xmlns="http://www.w3.org/2000/svg"><text y="26" font-family="'Cormorant Garamond',serif" font-size="28" font-weight="600" font-style="italic" fill="#111111" letter-spacing="3">Brides</text></svg></span>
+    <span class="featured-logo"><svg height="34" viewBox="0 0 148 34" xmlns="http://www.w3.org/2000/svg"><text y="14" font-family="'Montserrat',sans-serif" font-size="10" font-weight="600" fill="#111111" letter-spacing="2">WHO WHAT</text><text y="30" font-family="'Montserrat',sans-serif" font-size="10" font-weight="600" fill="#111111" letter-spacing="9.5">WEAR</text></svg></span>
+    <span class="featured-logo"><svg height="36" viewBox="0 0 130 36" xmlns="http://www.w3.org/2000/svg"><text y="15" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="600" fill="#0B2C4A" letter-spacing="3">TOWN &amp;</text><text y="34" font-family="'Cormorant Garamond',serif" font-size="13" font-weight="600" fill="#0B2C4A" letter-spacing="1">COUNTRY</text></svg></span>
+  </div>
+</div>
+
+<!-- SPIRITUAL MESSAGES -->
+<section class="messages-section">
+  <div class="messages-header">
+    <span class="section-eyebrow">Truths We Live By</span>
+    <h2 class="section-title">The <em>philosophy</em> behind every ring</h2>
+  </div>
+
+  <div class="message-grid">
+    <div class="message-card">
+      <span class="message-number">01</span>
+      <div class="message-quote">"We are already whole."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">You are not looking for your other half. You are already complete. Love is two whole people choosing each other &mdash; fully.</p>
+    </div>
+    <div class="message-card">
+      <span class="message-number">02</span>
+      <div class="message-quote">"Waves are the ocean."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">You are not separate from life &mdash; you are life expressing itself. The wave does not end. It returns. As do we.</p>
+    </div>
+    <div class="message-card">
+      <span class="message-number">03</span>
+      <div class="message-quote">"The way out is to go in."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">Every answer lives inside. Every exit from pain, confusion, lostness &mdash; is inward. In silence, the ring was formed. The whole brand is proof: go in, and the universe is waiting.</p>
+    </div>
+    <div class="message-card">
+      <span class="message-number">04</span>
+      <div class="message-quote">"The longest journey of a human is only 12 inches &mdash; from the mind to the heart."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">12 inches. That is the whole distance. The mind asks questions the heart already answered. The ring lives closer to the heart than to the mind. That is not an accident.</p>
+    </div>
+    <div class="message-card" style="background: rgba(181,96,106,0.07);">
+      <span class="message-number">05</span>
+      <div class="message-quote" style="font-size:clamp(40px,5vw,72px); line-height:1;">"Self love."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">The most complete sentence. The most radical act. The ring you give yourself is as sacred as any given to you. Start here.</p>
+    </div>
+    <div class="message-card">
+      <span class="message-number">06</span>
+      <div class="message-quote" style="font-size:clamp(32px,4vw,52px); line-height:1.1; font-style:italic; color:var(--logo-red);">"You are the universe."</div>
+      <div class="message-bar"></div>
+      <p class="message-note">Not part of it. Not inside it. Not connected to it. You are it. The same force that shaped galaxies, shaped you. The Swirl Love Ring did not come from somewhere else. It came from you &mdash; through you &mdash; back to you.</p>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:40px;">
+    <button class="dnh-inline-link" data-dnh="These philosophies really resonate with me. Which DANHOV ring captures this spirit best?">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0.5L7 4.5L11 6L7 7.5L6 11.5L5 7.5L1 6L5 4.5L6 0.5Z" fill="currentColor"/></svg>
+      Which ring carries this philosophy? Ask our advisor
+    </button>
+  </div>
+</section>
+
+<!-- GIFT MOMENT -->
+<div class="gift-moment">
+  <div class="gift-inner">
+    <span class="gift-eyebrow">The DANHOV Gift</span>
+    <div class="gift-card">
+      <div class="gift-card-inner">
+        <div class="gift-logo"><img src="danhov-logo-transparent.png" alt="DANHOV" style="height:28px; width:auto; display:block; margin:0 auto;"></div>
+        <div class="gift-message">"Presence is a present."</div>
+        <div class="gift-sub">Which can only be used by being present.</div>
+        <div class="gift-rule"></div>
+        <div class="gift-from">With love</div>
+      </div>
+    </div>
+    <p class="gift-note">Every DANHOV ring arrives with this card. Not a receipt. Not a brochure. A teaching. Because the greatest gift is not the ring &mdash; it is the reminder to be here, fully, now.</p>
+    <a href="#" class="btn-primary">Give a DANHOV Ring</a>
+  </div>
+</div>
+<div class="inches-moment">
+  <div class="inches-bg-num">12</div>
+  <div class="inches-unit">12 inches.</div>
+  <div class="inches-divider"></div>
+  <div class="inches-subtitle">The longest journey a human will ever take.</div>
+  <div class="inches-truth">From the mind &mdash; to the heart.</div>
+</div>
+
+<!-- NEVER ALONE + THE WAY OUT PAIRED MOMENT -->
+<div class="neveralone-moment">
+  <div class="neveralone-inner">
+    <div class="neveralone-line-1">"You're never alone."</div>
+    <div class="neveralone-divider"></div>
+    <div class="neveralone-line-2">"If you feel alone &mdash; it means you're not in good company with yourself."</div>
+    <div class="neveralone-line-3">"The way out is to go in."</div>
+    <div class="neveralone-cta">
+      <a href="#" class="btn-primary">Discover the Self Love Ring</a>
+    </div>
+  </div>
+</div>
+
+<!-- SELF LOVE STANDALONE -->
+<div class="selflove-moment">
+  <div class="selflove-words">Self<br><em>love.</em></div>
+  <p class="selflove-sub">The foundation of everything.</p>
+</div>
+
+<!-- SELF LOVE RINGS -->
+<section class="selflove-section">
+  <div class="selflove-header">
+    <span class="section-eyebrow">A New Collection</span>
+    <h2 class="section-title">The <em>Self Love</em> Ring</h2>
+    <p class="section-body" style="max-width:560px;margin:24px auto 0;">You do not need to wait. You do not need permission. The most powerful ring you will ever wear is the one you give yourself &mdash; a promise, a declaration, a homecoming.</p>
+  </div>
+  <div class="selflove-grid">
+    <div class="selflove-card">
+      <div class="selflove-card-img">[ Ring photo ]</div>
+      <div class="selflove-card-body">
+        <div class="selflove-card-title">The Swirl Love Ring &mdash; Wholeness</div>
+        <div class="selflove-card-quote">"We are already whole."</div>
+      </div>
+    </div>
+    <div class="selflove-card selflove-card-featured">
+      <div class="selflove-card-img" style="height:420px;">[ Featured ring ]</div>
+      <div class="selflove-card-body">
+        <div class="selflove-card-title">The Swirl Love Ring</div>
+        <div class="selflove-card-quote">"It came through my form."</div>
+      </div>
+    </div>
+    <div class="selflove-card">
+      <div class="selflove-card-img">[ Ring photo ]</div>
+      <div class="selflove-card-body">
+        <div class="selflove-card-title">The Swirl Love Ring &mdash; Silence</div>
+        <div class="selflove-card-quote">"In silence, the ring was formed."</div>
+      </div>
+    </div>
+  </div>
+  <div style="text-align:center; margin-top:64px;">
+    <a href="#" class="btn-primary">Explore Self Love Rings</a>
+  </div>
+</section>
+<div class="marquee-quote">
+  <div class="marquee-inner">
+    <span class="marquee-text">Be like water, my friend. <span>&#10022;</span></span>
+    <span class="marquee-text">Empty your mind &mdash; be formless, shapeless, like water. <span>&#10022;</span></span>
+    <span class="marquee-text">Water can flow, or it can crash. <span>&#10022;</span></span>
+    <span class="marquee-text">Be like water, my friend. <span>&#10022;</span></span>
+    <span class="marquee-text">Empty your mind &mdash; be formless, shapeless, like water. <span>&#10022;</span></span>
+    <span class="marquee-text">Water can flow, or it can crash. <span>&#10022;</span></span>
+  </div>
+</div>
+
+<!-- RING SHOWCASE -->
+<section class="ring-section">
+  <div class="ring-visual">
+    <div class="ring-orbit"></div>
+    <div class="ring-orbit"></div>
+    <div class="ring-orbit"></div>
+    <div class="ring-orbit"></div>
+    <div class="ring-placeholder">[ Your ring<br>photo here ]</div>
+  </div>
+  <div class="ring-content">
+    <span class="ring-eyebrow">The Signature Ring</span>
+    <h2 class="ring-title">Sacred geometry,<br><em>set in gold.</em></h2>
+    <p class="ring-body">Every DANHOV ring is handcrafted in Los Angeles using a spiral technique that mirrors the geometry of galaxies, seashells, and vortexes. When you wear this ring, you wear the signature of the universe itself.</p>
+    <div class="ring-stats">
+      <div>
+        <span class="ring-stat-num">40+</span>
+        <span class="ring-stat-label">Years of craft</span>
+      </div>
+      <div>
+        <span class="ring-stat-num">#1</span>
+        <span class="ring-stat-label">Sustainable brand</span>
+      </div>
+      <div>
+        <span class="ring-stat-num">&infin;</span>
+        <span class="ring-stat-label">The circle</span>
+      </div>
+    </div>
+    <a href="#" class="btn-primary">Explore the Ring</a>
+    <a href="#" class="btn-solid">Build Yours</a>
+  </div>
+</section>
+
+<!-- COLLECTIONS -->
+<section class="collections-section">
+  <div class="collections-header">
+    <span class="section-eyebrow">Collections</span>
+    <h2 class="section-title">Every form of <em>love</em></h2>
+  </div>
+  <div class="collections-grid">
+    <div class="collection-card">
+      <div class="collection-bg"><span style="font-size:1em">&#128141;</span></div>
+      <div class="collection-info">
+        <span class="collection-name">Engagement Rings</span>
+        <span class="collection-count">View Collection &rarr;</span>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="collection-bg">&#10024;</div>
+      <div class="collection-info">
+        <span class="collection-name">Wedding Bands</span>
+        <span class="collection-count">View Collection &rarr;</span>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="collection-bg">&#11088;</div>
+      <div class="collection-info">
+        <span class="collection-name">Fine Jewelry</span>
+        <span class="collection-count">View Collection &rarr;</span>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="collection-bg">&#9889;</div>
+      <div class="collection-info">
+        <span class="collection-name">Men's Jewelry</span>
+        <span class="collection-count">View Collection &rarr;</span>
+      </div>
+    </div>
+    <div class="collection-card">
+      <div class="collection-bg"><span style="font-size:1em">&#127744;</span></div>
+      <div class="collection-info">
+        <span class="collection-name">Build Your Ring</span>
+        <span class="collection-count">Start Here &rarr;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI STYLE FINDER -->
+<div style="max-width:1080px; margin:0 auto; padding:0 40px; text-align:center;">
+  <p style="font-family:'Cormorant Garamond',serif; font-size:clamp(18px,2vw,24px); font-style:italic; color:var(--cream); margin-bottom:14px;">Not sure which collection speaks to you?</p>
+  <button class="dnh-trigger" data-dnh="I'm not sure which DANHOV collection is right for me. Can you help me find my style?">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z" fill="currentColor"/></svg>
+    Let AI guide you
+  </button>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section" id="shop">
+  <div class="products-header">
+    <span class="section-eyebrow">Shop</span>
+    <h2 class="section-title">Crafted for <em>eternity</em></h2>
+  </div>
+
+  <div class="products-tabs">
+    <button class="prod-tab active" onclick="switchTab('engagement',this)">Engagement Rings</button>
+    <button class="prod-tab" onclick="switchTab('bands',this)">Wedding Bands</button>
+    <button class="prod-tab" onclick="switchTab('fine',this)">Fine Jewelry</button>
+    <button class="prod-tab" onclick="switchTab('mens',this)">Men's Jewelry</button>
+  </div>
+
+  <!-- Engagement filter -->
+  <div class="products-filter" id="filter-engagement">
+    <button class="prod-filter active" onclick="filterCol('all',this)">All</button>
+    <button class="prod-filter" onclick="filterCol('abbraccio',this)">Abbraccio</button>
+    <button class="prod-filter" onclick="filterCol('voltaggio',this)">Voltaggio</button>
+    <button class="prod-filter" onclick="filterCol('classico',this)">Classico</button>
+    <button class="prod-filter" onclick="filterCol('norme',this)">Norme de Danhov</button>
+    <button class="prod-filter" onclick="filterCol('eleganza',this)">Eleganza</button>
+    <button class="prod-filter" onclick="filterCol('couture',this)">Couture</button>
+    <button class="prod-filter" onclick="filterCol('unito',this)">Unito</button>
+    <button class="prod-filter" onclick="filterCol('tubetto',this)">Tubetto</button>
+    <button class="prod-filter" onclick="filterCol('solo',this)">Solo Filo</button>
+    <button class="prod-filter" onclick="filterCol('perlei',this)">Per Lei</button>
+    <button class="prod-filter" onclick="filterCol('petalo',this)">Petalo</button>
+    <button class="prod-filter" onclick="filterCol('carezza',this)">Carezza</button>
+  </div>
+
+  <div class="products-grid" id="products-grid">
+
+    <!-- ===== ENGAGEMENT RINGS ===== -->
+    <!-- Abbraccio -->
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae520uq_r1_1_wg.jpg" alt="Abbraccio Swirl Diamond Ring" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE520UQ</span>
+        <span class="prod-name">Abbraccio Swirl Diamond Ring</span>
+        <span class="prod-metals">18k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $5,390</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE507UQ</span>
+        <span class="prod-name">Abbraccio Engagement Ring</span>
+        <span class="prod-metals">18k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $6,490</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE511UQ</span>
+        <span class="prod-name">Abbraccio Three Stone Engagement Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $9,400</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE506UQ</span>
+        <span class="prod-name">Abbraccio Unique Swirl Ring</span>
+        <span class="prod-metals">18k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $6,530</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE530UQ</span>
+        <span class="prod-name">Abbraccio Ladies Engagement Ring</span>
+        <span class="prod-metals">18k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $6,730</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE505UQ-PR</span>
+        <span class="prod-name">Abbraccio Princess Diamond Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $5,230</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE538VQ</span>
+        <span class="prod-name">Abbraccio Swirl Diamond Ring</span>
+        <span class="prod-metals">18k Rose Gold · White Gold</span>
+        <span class="prod-price">From $11,800</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Voltaggio -->
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE515P</span>
+        <span class="prod-name">Voltaggio Engagement Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $3,700</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">V1E510VH</span>
+        <span class="prod-name">Voltaggio Tension Engagement Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $6,480</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE508VH</span>
+        <span class="prod-name">Voltaggio Unique Engagement Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold</span>
+        <span class="prod-price">From $9,170</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE506VZ</span>
+        <span class="prod-name">Voltaggio Tension Set Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $6,120</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE535VH</span>
+        <span class="prod-name">Voltaggio Tension Set Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $6,350</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE536P</span>
+        <span class="prod-name">Voltaggio Engagement Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $4,500</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE536VH</span>
+        <span class="prod-name">Voltaggio Engagement Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold</span>
+        <span class="prod-price">From $7,050</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE534P</span>
+        <span class="prod-name">Voltaggio Tension Set Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $5,960</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE510P</span>
+        <span class="prod-name">Voltaggio Tension Set Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $5,480</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="voltaggio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><polygon points="28,6 50,28 28,50 6,28" stroke="#AC3438" stroke-width="1.5"/><polygon points="28,14 42,28 28,42 14,28" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Voltaggio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">VE508LR</span>
+        <span class="prod-name">Voltaggio Engagement Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold</span>
+        <span class="prod-price">From $7,790</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Classico -->
+    <div class="prod-card" data-cat="engagement" data-col="classico">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><ellipse cx="28" cy="28" rx="22" ry="14" stroke="#AC3438" stroke-width="1.5"/><ellipse cx="28" cy="28" rx="14" ry="8" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Classico</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">WE520P</span>
+        <span class="prod-name">Classico Handcrafted Diamond Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,820</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="classico">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><ellipse cx="28" cy="28" rx="22" ry="14" stroke="#AC3438" stroke-width="1.5"/><ellipse cx="28" cy="28" rx="14" ry="8" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Classico</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">WE531VQ-R</span>
+        <span class="prod-name">Classico Round Cut Ladies Engagement Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $4,000</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="classico">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><ellipse cx="28" cy="28" rx="22" ry="14" stroke="#AC3438" stroke-width="1.5"/><ellipse cx="28" cy="28" rx="14" ry="8" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Classico</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">WE532UH</span>
+        <span class="prod-name">Classico Engagement Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $5,740</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Norme de Danhov -->
+    <div class="prod-card" data-cat="engagement" data-col="norme">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><rect x="10" y="10" width="36" height="36" stroke="#AC3438" stroke-width="1.5"/><rect x="18" y="18" width="20" height="20" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RE601P</span>
+        <span class="prod-name">Norme de Danhov Ring for Women</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,320</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="norme">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><rect x="10" y="10" width="36" height="36" stroke="#AC3438" stroke-width="1.5"/><rect x="18" y="18" width="20" height="20" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RE573P</span>
+        <span class="prod-name">Norme de Danhov Classico Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,320</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="norme">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><rect x="10" y="10" width="36" height="36" stroke="#AC3438" stroke-width="1.5"/><rect x="18" y="18" width="20" height="20" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RE578UQ</span>
+        <span class="prod-name">Norme de Danhov Diamond Ring</span>
+        <span class="prod-metals">14k White Gold · Rose Gold (Two Tone)</span>
+        <span class="prod-price">From $3,030</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="norme">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><rect x="10" y="10" width="36" height="36" stroke="#AC3438" stroke-width="1.5"/><rect x="18" y="18" width="20" height="20" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RE573UH</span>
+        <span class="prod-name">Norme de Danhov Ring for Women</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $3,140</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="engagement" data-col="norme">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><rect x="10" y="10" width="36" height="36" stroke="#AC3438" stroke-width="1.5"/><rect x="18" y="18" width="20" height="20" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RE591UH</span>
+        <span class="prod-name">Norme de Danhov Ladies Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $5,820</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Eleganza -->
+    <div class="prod-card" data-cat="engagement" data-col="eleganza">
+      <div class="prod-img">
+        <img src="https://www.danhov.com/media/catalog/product/cache/2b1edc83ec865263004db07a00170440/a/e/ae141-4_48oy8iu3ljtkgsxf.jpg" alt="Eleganza Swirl Diamond Ring" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="prod-img-placeholder" style="display:none"><svg viewBox="0 0 56 56" fill="none"><path d="M28 8 C16 8 8 16 8 28 C8 40 16 48 28 48 C40 48 48 40 48 28 C48 16 40 8 28 8 Z M28 16 C36 16 40 22 40 28 C40 34 36 40 28 40 C20 40 16 34 16 28 C16 22 20 16 28 16 Z" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Eleganza</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">ZE501UQ</span>
+        <span class="prod-name">Eleganza Swirl Diamond Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $4,060</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Couture -->
+    <div class="prod-card" data-cat="engagement" data-col="couture">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M28 8 L48 28 L28 48 L8 28 Z" stroke="#AC3438" stroke-width="1.5" fill="none"/><path d="M28 16 L40 28 L28 40 L16 28 Z" stroke="#AC3438" stroke-width="0.75" opacity="0.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Couture</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">CE502UH</span>
+        <span class="prod-name">Couture Engagement Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $3,730</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Unito -->
+    <div class="prod-card" data-cat="engagement" data-col="unito">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><line x1="8" y1="28" x2="48" y2="28" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="16" stroke="#AC3438" stroke-width="1.5"/></svg></div>
+        <span class="prod-collection-badge">Unito</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">UE500UH</span>
+        <span class="prod-name">Unito Triple Shank Engagement Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $3,740</span>
+      </div>
+      <a class="prod-cta" href="engagement-rings.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- ===== WEDDING BANDS ===== -->
+    <!-- Abbraccio Bands -->
+    <div class="prod-card" data-cat="bands" data-col="abbraccio">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="14" stroke="#AC3438" stroke-width="0.75" opacity="0.4"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AE536UQ</span>
+        <span class="prod-name">Abbraccio Braided Diamond Wedding Band</span>
+        <span class="prod-metals">18k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,620</span>
+      </div>
+      <a class="prod-cta" href="wedding-bands.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Tubetto Bands (Her) -->
+    <div class="prod-card" data-cat="bands" data-col="tubetto">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="14" stroke="#AC3438" stroke-width="0.75" opacity="0.4"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB521VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $3,910</span>
+      </div>
+      <a class="prod-cta" href="wedding-bands.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="bands" data-col="tubetto">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="14" stroke="#AC3438" stroke-width="0.75" opacity="0.4"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB520VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $5,590</span>
+      </div>
+      <a class="prod-cta" href="wedding-bands.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="bands" data-col="tubetto">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="14" stroke="#AC3438" stroke-width="0.75" opacity="0.4"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB515VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">Platinum · 18k White/Yellow/Rose Gold · 14k Gold</span>
+        <span class="prod-price">From $3,580</span>
+      </div>
+      <a class="prod-cta" href="wedding-bands.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="bands" data-col="tubetto">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="14" stroke="#AC3438" stroke-width="0.75" opacity="0.4"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB500UA</span>
+        <span class="prod-name">Tubetto Award Winning Wedding Band</span>
+        <span class="prod-metals">18k Black &amp; White Gold</span>
+        <span class="prod-price">From $10,990</span>
+      </div>
+      <a class="prod-cta" href="wedding-bands.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- ===== FINE JEWELRY ===== -->
+    <!-- Earrings -->
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH513V</span>
+        <span class="prod-name">Norme de Danhov Halo Diamonds Earrings</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $1,990</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH506U</span>
+        <span class="prod-name">Norme de Danhov Smile Diamonds Earrings</span>
+        <span class="prod-metals">18k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $2,680</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH508G</span>
+        <span class="prod-name">Norme de Danhov Flower Diamonds Earrings</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $1,580</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH500P</span>
+        <span class="prod-name">Norme de Danhov Double Heart Earrings</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $795</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH512U</span>
+        <span class="prod-name">Norme de Danhov Heart Diamonds Earrings</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $3,460</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH503G</span>
+        <span class="prod-name">Norme de Danhov Heart Shape Diamond Earrings</span>
+        <span class="prod-metals">18k Rose Gold · 14k White Gold</span>
+        <span class="prod-price">From $4,680</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH510U</span>
+        <span class="prod-name">Norme de Danhov Double Halo Natural Diamonds Earrings</span>
+        <span class="prod-metals">18k White Gold · Yellow Gold</span>
+        <span class="prod-price">From $3,960</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH518U</span>
+        <span class="prod-name">Norme de Danhov Heart Diamonds Earrings</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,640</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Abbraccio</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">AH501U</span>
+        <span class="prod-name">Abbraccio Swirl Cushion Diamond Earrings</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $4,840</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH505U</span>
+        <span class="prod-name">Norme de Danhov CrossOver Medium Hoop Diamond Earrings</span>
+        <span class="prod-metals">18k White Gold · Yellow Gold</span>
+        <span class="prod-price">From $6,000</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="16" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Fine Jewelry</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH504P</span>
+        <span class="prod-name">Bezel-Set Round Stud Earrings</span>
+        <span class="prod-metals">14k Rose Gold · 18k Yellow Gold · Platinum</span>
+        <span class="prod-price">From $1,360</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="16" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="4" fill="#AC3438" opacity="0.3"/></svg></div>
+        <span class="prod-collection-badge">Fine Jewelry</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RH502P</span>
+        <span class="prod-name">Trio Diamond Cluster Stud Earrings</span>
+        <span class="prod-metals">18k Yellow Gold · Platinum</span>
+        <span class="prod-price">From $1,900</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Pendants -->
+    <div class="prod-card" data-cat="fine" data-col="pendants">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="36" r="14" stroke="#AC3438" stroke-width="1.5"/><line x1="28" y1="8" x2="28" y2="22" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="8" r="3" stroke="#AC3438" stroke-width="1"/></svg></div>
+        <span class="prod-collection-badge">Per Lei</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">LP531U</span>
+        <span class="prod-name">Per Lei Diamond Oval Pendant</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $2,980</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="pendants">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="36" r="14" stroke="#AC3438" stroke-width="1.5"/><line x1="28" y1="8" x2="28" y2="22" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="8" r="3" stroke="#AC3438" stroke-width="1"/></svg></div>
+        <span class="prod-collection-badge">Eleganza</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">ZP507U</span>
+        <span class="prod-name">Eleganza Braided Round Pendant</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $3,800</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="pendants">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="36" r="14" stroke="#AC3438" stroke-width="1.5"/><line x1="28" y1="8" x2="28" y2="22" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="8" r="3" stroke="#AC3438" stroke-width="1"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RP503U</span>
+        <span class="prod-name">Norme de Danhov Shamrock Pendant with Rolo Chain</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold</span>
+        <span class="prod-price">From $1,925</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Rings / Bands Fine -->
+    <div class="prod-card" data-cat="fine" data-col="rings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Diamante</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">HE500P</span>
+        <span class="prod-name">Diamante Round Fine Ring</span>
+        <span class="prod-metals">14k White Gold · Rose Gold · Yellow Gold</span>
+        <span class="prod-price">From $1,535</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="rings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Diamante</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">HE505P</span>
+        <span class="prod-name">Diamante Cluster Pear Shape Fine Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $5,095</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="rings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Fashion Band</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">KB600MA</span>
+        <span class="prod-name">Yin-Yang Fashion Band</span>
+        <span class="prod-metals">18k Rose Gold · 18k White Gold · Platinum</span>
+        <span class="prod-price">From $1,765</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="rings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Fashion Band</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">KB560MA</span>
+        <span class="prod-name">Four Colors in One Band</span>
+        <span class="prod-metals">18k Gold (Four Colors) · 14k Gold</span>
+        <span class="prod-price">From $4,465</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="fine" data-col="rings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M14 28 C14 20 20 14 28 14 C36 14 42 20 42 28" stroke="#AC3438" stroke-width="1.5" fill="none"/><path d="M14 28 C14 36 20 42 28 42 C36 42 42 36 42 28" stroke="#AC3438" stroke-width="1.5" fill="none" stroke-dasharray="3 3"/></svg></div>
+        <span class="prod-collection-badge">Limited Edition</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TRR100</span>
+        <span class="prod-name">Trenta Limited Edition Rose Gold and Pearl Diamond Ring</span>
+        <span class="prod-metals">Rose Gold · Pearl</span>
+        <span class="prod-price">$13,510</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- Limited Edition Earrings -->
+    <div class="prod-card" data-cat="fine" data-col="earrings">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M20 10 C20 10 16 20 16 32 C16 38 20 44 28 44 C36 44 40 38 40 32 C40 20 36 10 36 10" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Limited Edition</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TRH101</span>
+        <span class="prod-name">Trenta Limited Edition Pearl Diamond Earrings</span>
+        <span class="prod-metals">14k White Gold · Pearl</span>
+        <span class="prod-price">$17,180</span>
+      </div>
+      <a class="prod-cta" href="fine-jewelry.html">Shop Now &rarr;</a>
+    </div>
+
+    <!-- ===== MEN'S JEWELRY ===== -->
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM500UA</span>
+        <span class="prod-name">Tubetto Award Winning Wedding Band for Men</span>
+        <span class="prod-metals">18k Black &amp; White Gold</span>
+        <span class="prod-price">$14,280</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM503P</span>
+        <span class="prod-name">Tubetto Award Winning Wedding Band for Men</span>
+        <span class="prod-metals">18k White Gold · Yellow Gold</span>
+        <span class="prod-price">From $3,710</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TM501ZA</span>
+        <span class="prod-name">Tubetto Men's Black Diamond Wedding Ring</span>
+        <span class="prod-metals">14k White Gold · 18k White Gold</span>
+        <span class="prod-price">From $8,970</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB528LR</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $8,340</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB504VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k Yellow Gold · White Gold · Rose Gold</span>
+        <span class="prod-price">From $8,200</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB523VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $7,310</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB545CA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k Rose Gold · White Gold · Yellow Gold</span>
+        <span class="prod-price">From $10,600</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB502VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">Platinum · 14k White Gold</span>
+        <span class="prod-price">From $7,150</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB506VA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $12,040</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="3"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="1.5" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Tubetto</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">TB544CA</span>
+        <span class="prod-name">Tubetto Diamond Wedding Ring</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $11,530</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M10 20 C10 20 14 28 28 28 C42 28 46 20 46 20" stroke="#AC3438" stroke-width="1.5" fill="none"/><path d="M10 36 C10 36 14 28 28 28 C42 28 46 36 46 36" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RK500P</span>
+        <span class="prod-name">Norme de Danhov Twisted Chain Bracelet</span>
+        <span class="prod-metals">14k Yellow Gold · Platinum</span>
+        <span class="prod-price">From $5,475</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><path d="M8 28 C8 28 14 16 28 16 C42 16 48 28 48 28 C48 28 42 40 28 40 C14 40 8 28 8 28 Z" stroke="#AC3438" stroke-width="1.5" fill="none"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RQ500P</span>
+        <span class="prod-name">Norme de Danhov Twisted Chain Necklace</span>
+        <span class="prod-metals">14k Yellow Gold · Platinum</span>
+        <span class="prod-price">From $13,645</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+    <div class="prod-card" data-cat="mens">
+      <div class="prod-img">
+        <div class="prod-img-placeholder"><svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="20" stroke="#AC3438" stroke-width="1.5"/><circle cx="28" cy="28" r="12" stroke="#AC3438" stroke-width="0.75" opacity="0.5"/></svg></div>
+        <span class="prod-collection-badge">Norme de Danhov</span>
+      </div>
+      <div class="prod-info">
+        <span class="prod-style">RM600S</span>
+        <span class="prod-name">Norme de Danhov Engagement Ring for Men</span>
+        <span class="prod-metals">14k White Gold · Yellow Gold · Rose Gold</span>
+        <span class="prod-price">From $1,660</span>
+      </div>
+      <a class="prod-cta" href="mens.html">Shop Now &rarr;</a>
+    </div>
+
+  </div>
+
+  <div class="products-load-more">
+    <a href="engagement-rings.html"><button class="btn-load-more">View All on Danhov.com &rarr;</button></a>
+  </div>
+</section>
+
+<script>
+  function switchTab(cat, btn) {
+    document.querySelectorAll('.prod-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = document.getElementById('filter-engagement');
+    if (cat === 'engagement') {
+      filter.style.display = 'flex';
+      filterCol('all', filter.querySelector('.prod-filter'));
+    } else {
+      filter.style.display = 'none';
+      document.querySelectorAll('.prod-card').forEach(card => {
+        card.style.display = card.dataset.cat === cat ? 'flex' : 'none';
+      });
+    }
+  }
+  function filterCol(col, btn) {
+    document.querySelectorAll('#filter-engagement .prod-filter').forEach(f => f.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.prod-card').forEach(card => {
+      if (card.dataset.cat !== 'engagement') { card.style.display = 'none'; return; }
+      card.style.display = (col === 'all' || card.dataset.col === col) ? 'flex' : 'none';
+    });
+  }
+  // Init: show engagement rings only
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.prod-card').forEach(card => {
+      card.style.display = card.dataset.cat === 'engagement' ? 'flex' : 'none';
+    });
+  });
+</script>
+
+<!-- DIAMOND SHAPES -->
+<section class="shapes-section">
+  <div class="shapes-header">
+    <span class="section-eyebrow">Shop by Shape</span>
+    <h2 class="section-title">Find your <em>form</em></h2>
+  </div>
+  <div class="shapes-scroll">
+    <!-- Simplified diamond shape SVGs -->
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="18" stroke="#c9a0ac" stroke-width="1"/>
+        <circle cx="24" cy="24" r="10" stroke="#c9a0ac" stroke-width="0.5" opacity="0.4"/>
+      </svg>
+      <span class="shape-name">Round</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <ellipse cx="24" cy="24" rx="12" ry="20" stroke="#c9a0ac" stroke-width="1"/>
+      </svg>
+      <span class="shape-name">Oval</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <polygon points="24,4 44,20 44,32 24,44 4,32 4,20" stroke="#c9a0ac" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="shape-name">Cushion</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <rect x="10" y="8" width="28" height="32" stroke="#c9a0ac" stroke-width="1"/>
+      </svg>
+      <span class="shape-name">Emerald</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <polygon points="24,4 44,44 24,36 4,44" stroke="#c9a0ac" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="shape-name">Pear</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <polygon points="24,4 44,24 24,44 4,24" stroke="#c9a0ac" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="shape-name">Radiant</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <path d="M24 8 C12 8 4 16 4 24 C4 32 24 44 24 44 C24 44 44 32 44 24 C44 16 36 8 24 8Z" stroke="#c9a0ac" stroke-width="1" fill="none"/>
+      </svg>
+      <span class="shape-name">Heart</span>
+    </div>
+    <div class="shape-item">
+      <svg class="shape-svg" viewBox="0 0 48 48" fill="none">
+        <rect x="8" y="8" width="32" height="32" stroke="#c9a0ac" stroke-width="1"/>
+      </svg>
+      <span class="shape-name">Princess</span>
+    </div>
+  </div>
+</section>
+
+<!-- BIG QUOTE -->
+<section class="big-quote">
+  <blockquote class="big-quote-text">
+    "Out beyond ideas of wrongdoing and rightdoing, there is a field.<br>
+    I'll meet you <em>there</em>."
+  </blockquote>
+  <div class="big-quote-author">&mdash; Rumi</div>
+</section>
+
+<!-- VIRTUAL APPOINTMENT -->
+<div style="background: #f7ebe8; padding: 2px 0;">
+<section class="appointment-section">
+  <div class="appt-left">
+    <span class="section-eyebrow">Personal Experience</span>
+    <h2 class="section-title">Book a Virtual Appointment</h2>
+    <p class="section-body">Meet one-to-one with a DANHOV jewelry specialist. We'll guide you through every detail &mdash; from sacred geometry to stone selection &mdash; from the comfort of your home.</p>
+    <ul class="appt-features">
+      <li>One-on-one with a certified specialist</li>
+      <li>Live ring customization and preview</li>
+      <li>Diamond education &mdash; cut, clarity, carat</li>
+      <li>No pressure, no obligation</li>
+      <li>Available worldwide via Zoom or FaceTime</li>
+    </ul>
+    <a href="#" class="btn-primary">Schedule Now</a>
+  </div>
+  <div class="appt-right">
+    <div class="appt-form-title">Request a Consultation</div>
+    <input type="text" class="appt-input" placeholder="Your Name">
+    <input type="email" class="appt-input" placeholder="Email Address">
+    <input type="tel" class="appt-input" placeholder="Phone (optional)">
+    <input type="text" class="appt-input" placeholder="Preferred Date & Time">
+    <input type="text" class="appt-input" placeholder="What are you looking for?">
+    <button class="appt-btn">Book My Appointment</button>
+  </div>
+</section>
+</div>
+
+<!-- GALLERY STRIP -->
+<section class="gallery-section">
+  <div class="gallery-header">
+    <span class="section-eyebrow">The World of DANHOV</span>
+    <h2 class="section-title">Oneness, <em>in every frame</em></h2>
+  </div>
+  <div class="gallery-strip">
+    <div class="gallery-item" data-label="Galaxy Spiral"><span style="font-size:1em">&#127756;</span></div>
+    <div class="gallery-item" data-label="The Ring"><span style="font-size:1em">&#128141;</span></div>
+    <div class="gallery-item" data-label="Water Vortex"><span style="font-size:1em">&#127744;</span></div>
+    <div class="gallery-item" data-label="Diamond Close-up">&#128142;</div>
+    <div class="gallery-item" data-label="Eternal Love">&#10024;</div>
+    <div class="gallery-item" data-label="Sacred Form">&#128302;</div>
+    <div class="gallery-item" data-label="Galaxy Spiral"><span style="font-size:1em">&#127756;</span></div>
+    <div class="gallery-item" data-label="The Ring"><span style="font-size:1em">&#128141;</span></div>
+    <div class="gallery-item" data-label="Water Vortex"><span style="font-size:1em">&#127744;</span></div>
+    <div class="gallery-item" data-label="Diamond Close-up">&#128142;</div>
+    <div class="gallery-item" data-label="Eternal Love">&#10024;</div>
+    <div class="gallery-item" data-label="Sacred Form">&#128302;</div>
+  </div>
+</section>
+
+<!-- SUSTAINABILITY -->
+<section class="sustain-section">
+  <div class="sustain-badge">&#10022; #1 Most Sustainable Jewelry Brand &#10022;</div>
+  <span class="section-eyebrow">Our Commitment</span>
+  <h2 class="section-title">Love <em>the Earth</em> as you love each other</h2>
+  <p class="section-body" style="max-width:560px;margin:24px auto 0;font-size:15px;line-height:1.9;color:var(--grey);">Oneness extends beyond the ring. We are one with the planet. Every DANHOV piece is ethically sourced, responsibly crafted, and designed to last forever &mdash; just like the love it represents.</p>
+  <div class="sustain-pillars">
+    <div class="pillar">
+      <span class="pillar-icon">&#127807;</span>
+      <div class="pillar-title">Ethical Sourcing</div>
+      <p class="pillar-body">Every diamond traced to its origin. Conflict-free, certified, transparent.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">&#9851;</span>
+      <div class="pillar-title">Recycled Metals</div>
+      <p class="pillar-body">Gold and platinum reclaimed and refined. The earth stays whole.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">&#129309;</span>
+      <div class="pillar-title">Fair Craft</div>
+      <p class="pillar-body">Made in Los Angeles by artisans paid living wages with full benefits.</p>
+    </div>
+    <div class="pillar">
+      <span class="pillar-icon">&#127757;</span>
+      <div class="pillar-title">1% for the Planet</div>
+      <p class="pillar-body">Every purchase plants trees and supports clean water initiatives globally.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter-section">
+  <h2 class="newsletter-title">Join the <em>Oneness</em> Circle</h2>
+  <p class="newsletter-sub">Spiritual teachings &middot; New collections &middot; Exclusive events &middot; Stories of love</p>
+  <div class="newsletter-form">
+    <input type="email" class="newsletter-input" placeholder="Your email address">
+    <button class="newsletter-btn">Join</button>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <span class="footer-brand-name"><img src="danhov-logo-transparent.png" alt="DANHOV" style="height:36px; width:auto; display:block;"></span>
+      <p class="footer-tagline">"Waves are the ocean."<br>Sacred geometry. Eternal love.<br>Handcrafted in Los Angeles since 1984.</p>
+      <div class="footer-contact">
+        Founded by Jack Hovsepian &middot; Est. 1984<br>
+        Los Angeles, California<br>
+        care@danhov.com<br>
+        1 (888) DANHOV-7
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <ul class="footer-links">
+        <li><a href="engagement-rings.html">Engagement Rings</a></li>
+        <li><a href="wedding-bands.html">Wedding Bands</a></li>
+        <li><a href="fine-jewelry.html">Fine Jewelry</a></li>
+        <li><a href="mens.html">Men's Jewelry</a></li>
+        <li><a href="engagement-rings.html">Ring Builder</a></li>
+        <li><a href="#">New Arrivals</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Learn</div>
+      <ul class="footer-links">
+        <li><a href="#">Diamond Guide</a></li>
+        <li><a href="#">Ring Size Guide</a></li>
+        <li><a href="#">Gemstone Guide</a></li>
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">The Philosophy</a></li>
+        <li><a href="#">Sustainability</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Connect</div>
+      <ul class="footer-links">
+        <li><a href="#">Book Appointment</a></li>
+        <li><a href="#">Store Locations</a></li>
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Pinterest</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">&copy; 2025 DANHOV. All rights reserved. Made with love in Los Angeles.</span>
+    <span class="footer-final-quote">Waves are the ocean.</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const cursorRing = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX - 4 + 'px';
+    cursor.style.top = mouseY - 4 + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    cursorRing.style.left = ringX - 18 + 'px';
+    cursorRing.style.top = ringY - 18 + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.style.transform = 'scale(1.5)');
+    el.addEventListener('mouseleave', () => cursor.style.transform = 'scale(1)');
+  });
+
+  // Hide custom cursor over selectable text so the native I-beam shows cleanly
+  document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, li, blockquote').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.opacity = '0';
+      cursorRing.style.opacity = '0';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.opacity = '1';
+      cursorRing.style.opacity = '0.5';
+    });
+  });
+
+  // CINEMATIC HERO &mdash; word by word reveal with silence between
+  const heroSequence = [
+    { id: 'chLine1', delay: 800 },
+    { id: 'chLine2', delay: 2200 },
+    { id: 'chLine3', delay: 3800 },
+    { id: 'chDiv',   delay: 5600 },
+    { id: 'chLine4', delay: 6400 },
+    { id: 'chLine5', delay: 8000 },
+    { id: 'heroFounder', delay: 9600 },
+    { id: 'heroScroll', delay: 10200 }
+  ];
+  heroSequence.forEach(({ id, delay }) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.transition = 'opacity 1.4s ease, transform 1.4s ease, width 1.2s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+        if (el.classList.contains('ch-divider')) el.style.width = '60px';
+        el.classList.add('visible');
+      }
+    }, delay);
+  });
+
+  // Generate stars
+  const starsContainer = document.getElementById('stars');
+  for (let i = 0; i < 200; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.top = Math.random() * 100 + '%';
+    const size = Math.random() * 2 + 0.5;
+    star.style.width = size + 'px';
+    star.style.height = size + 'px';
+    star.style.setProperty('--dur', (Math.random() * 4 + 2) + 's');
+    star.style.setProperty('--min-op', Math.random() * 0.3 + 0.1);
+    starsContainer.appendChild(star);
+  }
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.message-card, .triad-item, .pillar, .collection-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    observer.observe(el);
+  });
+
+  // DAILY TRUTH &mdash; rotates through all 19 messages based on the date
+  const allMessages = [
+    "We are already whole.",
+    "Waves are the ocean.",
+    "The way out is to go in.",
+    "The longest journey of a human is only 12 inches &mdash; from the mind to the heart.",
+    "Self love.",
+    "You are the universe."
+  ];
+
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+  const msgIndex = dayOfYear % allMessages.length;
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  const msgEl = document.getElementById('dailyMessage');
+  const dateEl = document.getElementById('dailyDate');
+
+  msgEl.innerHTML = '&ldquo;' + allMessages[msgIndex] + '&rdquo;';
+  dateEl.textContent = monthNames[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+
+  setTimeout(() => msgEl.classList.add('visible'), 300);
+</script>
+<script src="chat-widget.js"></script>
+</body>
+</html>

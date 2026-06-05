@@ -1,0 +1,52 @@
+module.exports = async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const { default: Anthropic } = await import('@anthropic-ai/sdk');
+  const { messages = [], context = '' } = req.body;
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return res.status(400).json({ error: 'Invalid request' });
+  }
+
+  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+  const system = `You are a warm, knowledgeable jewelry advisor for DANHOV — a luxury handcrafted jewelry brand founded in 1984 in Los Angeles by Jack Hovsepian.
+
+DANHOV collections:
+- Engagement Rings: Oneness, Legami, Per Lei, Ancora, Classico, Tubetto, Abbraccio
+- Wedding Bands: Classic and artistic styles
+- Fine Jewelry: Pendants, earrings, bracelets, bands, rings, pop of color
+- Men's Jewelry: Rings, bracelets, necklaces, pendants
+
+Every piece is handcrafted in Los Angeles, made to order, available in platinum, 14k/18k gold, and rose gold. Custom sizing is available. Lifetime craftsmanship warranty included.
+
+Brand philosophy:
+• "We are already whole." — You are not looking for your other half. Love is two complete people choosing each other.
+• "Waves are the ocean." — You are not separate from life. The wave does not end. It returns. As do we.
+• "The way out is to go in." — Every answer lives inside. Silence is where the ring was born.
+• "Self love." — The most radical act. The ring you give yourself is as sacred as any given to you.
+• "You are the universe." — The same force that shaped galaxies shaped you.
+
+Your role: Help customers discover the perfect DANHOV piece through warm, elegant conversation. Ask about their vision, occasion, style, and metal preference. Keep responses concise (2–3 sentences). Weave in the brand philosophy naturally when it fits. Never be salesy — be a trusted guide.
+
+${context ? `\nCustomer context: ${context}` : ''}`;
+
+  try {
+    const response = await client.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      system,
+      messages: messages.slice(-10),
+    });
+    return res.status(200).json({ content: response.content[0].text });
+  } catch (err) {
+    console.error('Anthropic API error:', err.message);
+    return res.status(500).json({ error: 'Service unavailable' });
+  }
+};

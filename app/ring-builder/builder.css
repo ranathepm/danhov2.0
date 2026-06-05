@@ -1,0 +1,1878 @@
+/* ── Ring Builder ────────────────────────────────────────────────── */
+.builder-page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 110px 32px 140px;
+}
+
+/* Stepper */
+.builder-stepper {
+  margin-bottom: 56px;
+  border-top: 1px solid rgba(172, 52, 56, 0.1);
+  border-bottom: 1px solid rgba(172, 52, 56, 0.1);
+}
+.builder-stepper-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin: 0;
+  padding: 0;
+}
+.builder-stepper-item {
+  border-right: 1px solid rgba(172, 52, 56, 0.08);
+}
+.builder-stepper-item:last-child { border-right: none; }
+.builder-stepper-link {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 22px 24px;
+  text-decoration: none;
+  color: var(--grey);
+  transition: background 0.18s, color 0.18s;
+}
+.builder-stepper-link:hover {
+  background: rgba(172, 52, 56, 0.04);
+  color: var(--logo-red);
+}
+.builder-stepper-num {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 600;
+}
+.builder-stepper-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+.builder-stepper-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.builder-stepper-sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-dim);
+  margin-top: 2px;
+}
+.builder-stepper-item.is-current .builder-stepper-link {
+  color: var(--logo-red);
+  background: rgba(172, 52, 56, 0.06);
+  cursor: default;
+}
+.builder-stepper-item.is-current .builder-stepper-num {
+  background: var(--logo-red);
+  color: #fff8f6;
+  border-color: var(--logo-red);
+}
+.builder-stepper-item.is-past .builder-stepper-link { color: var(--cream); }
+.builder-stepper-item.is-locked .builder-stepper-link {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* Hero + section heads */
+.builder-hero,
+.builder-section-head {
+  text-align: center;
+  margin-bottom: 56px;
+}
+/* Top continue bar on the setting step — lets the customer jump to the
+   diamond step without scrolling to the sticky bottom bar. */
+.builder-top-continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 28px auto 0;
+  padding: 14px 22px;
+  background: rgba(172, 52, 56, 0.06);
+  border: 1px solid rgba(172, 52, 56, 0.18);
+  border-radius: 999px;
+}
+.builder-top-continue-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--logo-red, #AC3438);
+}
+.builder-hero .section-title { margin-top: 18px; }
+.builder-hero .section-body,
+.builder-section-head .section-body {
+  margin-top: 22px;
+  max-width: 600px;
+}
+
+/* Step 1 intro grid */
+.builder-intro-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+.builder-intro-card {
+  background: #fdf0ed;
+  border: 1px solid rgba(172, 52, 56, 0.1);
+  padding: 36px 28px;
+  text-align: left;
+}
+.builder-intro-step {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--logo-red);
+  margin-bottom: 16px;
+  line-height: 1;
+}
+.builder-intro-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  margin: 0 0 10px;
+  color: var(--cream);
+}
+.builder-intro-card p {
+  font-size: 14px;
+  color: var(--grey);
+  line-height: 1.7;
+  margin: 0;
+}
+.builder-cta { text-align: center; margin-top: 40px; }
+.builder-cta-btn { font-size: 13px; padding: 18px 44px; }
+.builder-cta-sub {
+  margin-top: 24px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--gold);
+  font-size: 15px;
+}
+
+/* Step 2: rings */
+.builder-collection-block { margin-bottom: 56px; }
+.builder-collection-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(172, 52, 56, 0.1);
+}
+.builder-rings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+.builder-ring-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.12);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+  cursor: pointer;
+}
+.builder-ring-card:hover {
+  border-color: var(--logo-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(172, 52, 56, 0.1);
+}
+.builder-ring-card.is-selected {
+  border-color: var(--logo-red);
+  border-width: 2px;
+  box-shadow: 0 8px 28px rgba(172, 52, 56, 0.18);
+}
+.builder-ring-img {
+  position: relative;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 100%);
+  overflow: hidden;
+}
+.builder-ring-img img { width: 100%; height: 100%; object-fit: cover; }
+.builder-ring-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.builder-ring-fallback svg { width: 56px; height: 56px; opacity: 0.5; }
+.builder-ring-selected {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--logo-red);
+  color: #fff8f6;
+  padding: 4px 10px;
+  border-radius: 2px;
+}
+.builder-ring-body {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.builder-ring-sku {
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold-dim);
+}
+.builder-ring-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--cream);
+  line-height: 1.3;
+}
+.builder-ring-price {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--logo-red);
+  margin-top: 4px;
+}
+/* "Select & choose diamond →" hint — reveals on card hover so the click
+   action reads clearly (clicking goes straight to the diamond step). */
+.builder-ring-choose {
+  display: block;
+  margin-top: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.builder-ring-card:hover .builder-ring-choose,
+.builder-ring-card:focus-visible .builder-ring-choose {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Step 3 filters */
+.builder-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  background: #fdf0ed;
+  border: 1px solid rgba(172, 52, 56, 0.12);
+}
+.builder-filter-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.builder-filter-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  min-width: 80px;
+}
+.builder-filter-pill {
+  background: transparent;
+  border: 1px solid rgba(172, 52, 56, 0.2);
+  padding: 5px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  text-decoration: none;
+  transition: all 0.18s;
+}
+.builder-filter-pill:hover {
+  border-color: var(--logo-red);
+  color: var(--logo-red);
+}
+.builder-filter-pill.is-active {
+  background: var(--logo-red);
+  color: #fff8f6;
+  border-color: var(--logo-red);
+}
+.builder-shape-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.builder-shape-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.builder-shape-icon svg { width: 100%; height: 100%; }
+.builder-filter-pill.is-active .builder-shape-icon svg * { stroke: #fff8f6; }
+
+.builder-count {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.builder-count strong { color: var(--logo-red); font-size: 14px; }
+
+/* Diamond grid */
+.builder-diamonds-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+  margin-bottom: 56px;
+}
+.builder-diamond-card {
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.12);
+  padding: 22px 18px 20px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+  cursor: pointer;
+  position: relative;
+}
+.builder-diamond-card:hover {
+  border-color: var(--logo-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(172, 52, 56, 0.12);
+}
+.builder-diamond-card.is-selected {
+  border-color: var(--logo-red);
+  border-width: 2px;
+  box-shadow: 0 8px 28px rgba(172, 52, 56, 0.18);
+}
+.builder-diamond-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.builder-diamond-icon svg { width: 100%; height: 100%; }
+.builder-diamond-tick {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--logo-red);
+  color: #fff8f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.builder-diamond-meta {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.builder-diamond-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: baseline;
+}
+.builder-diamond-carat {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--cream);
+}
+.builder-diamond-shape {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+.builder-diamond-grade {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--grey);
+}
+.builder-diamond-cert {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--gold-dim);
+  margin-top: 2px;
+}
+.builder-diamond-price {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--logo-red);
+  margin-top: 4px;
+}
+
+.builder-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px;
+}
+.builder-empty p {
+  margin-bottom: 18px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  color: var(--grey);
+}
+
+/* Sticky CTA */
+.builder-cta-bar {
+  position: sticky;
+  bottom: 16px;
+  margin: 32px 0 0;
+  background: rgba(255, 248, 246, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(172, 52, 56, 0.2);
+  border-radius: 4px;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 10px 32px rgba(172, 52, 56, 0.1);
+  z-index: 50;
+}
+.builder-cta-bar.is-active {
+  background: rgba(172, 52, 56, 0.95);
+  border-color: var(--logo-red);
+}
+.builder-cta-bar.is-active .builder-cta-summary { color: #fff8f6; }
+.builder-cta-summary {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--grey);
+}
+.builder-cta-next {
+  background: #fff8f6;
+  color: var(--logo-red);
+  padding: 11px 24px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 1px solid #fff8f6;
+  transition: background 0.18s;
+}
+.builder-cta-next:hover {
+  background: var(--cream);
+  color: #fff8f6;
+}
+
+/* Step 4 review */
+.builder-review {
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.12);
+  padding: 36px;
+  margin-bottom: 32px;
+}
+.builder-review-top {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.builder-review-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.builder-review-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 100%);
+  overflow: hidden;
+}
+.builder-review-img img { width: 100%; height: 100%; object-fit: cover; }
+.builder-review-tagline {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--gold);
+  text-align: center;
+}
+.builder-review-details {
+  display: flex;
+  flex-direction: column;
+}
+.builder-review-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+}
+.builder-review-line h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--cream);
+}
+.builder-review-sku {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--gold-dim);
+}
+.builder-review-collection {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--grey);
+}
+.builder-review-grade {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--grey);
+  margin-top: 6px;
+}
+.builder-review-price {
+  font-family: 'Jost', sans-serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--logo-red);
+  flex-shrink: 0;
+}
+.builder-review-divider {
+  height: 1px;
+  background: rgba(172, 52, 56, 0.1);
+  margin: 24px 0;
+}
+.builder-review-divider-strong { background: rgba(172, 52, 56, 0.3); }
+.builder-review-totals { margin-bottom: 24px; }
+.builder-review-total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--cream);
+}
+.builder-review-total-row strong { font-size: 18px; color: var(--logo-red); }
+.builder-review-deposit {
+  font-weight: 700;
+  border-top: 1px solid rgba(172, 52, 56, 0.1);
+  padding-top: 10px;
+  margin-top: 6px;
+}
+.builder-review-balance {
+  margin-top: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--grey);
+  line-height: 1.6;
+}
+.builder-review-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.builder-commission-btn {
+  background: var(--logo-red);
+  color: #fff8f6;
+  border: 1px solid var(--logo-red);
+  font-size: 13px;
+  padding: 12px 22px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.builder-commission-btn:hover { background: var(--logo-red-dark); }
+.builder-commission-btn:disabled { opacity: 0.6; cursor: default; }
+.builder-review-secured {
+  margin-top: 16px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--grey);
+  line-height: 1.6;
+}
+.builder-review-edit-row {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.builder-review-edit-row a {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  text-decoration: none;
+}
+.builder-review-edit-row a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .builder-stepper-list { grid-template-columns: repeat(4, 1fr); }
+  .builder-stepper-link {
+    padding: 14px 8px;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .builder-stepper-text { align-items: center; }
+  .builder-intro-grid { grid-template-columns: 1fr; }
+  .builder-review-top { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .builder-page { padding: 100px 16px 100px; }
+  .builder-stepper-label { font-size: 9px; letter-spacing: 0.08em; }
+  .builder-stepper-sub { display: none; }
+  .builder-rings-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .builder-diamonds-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .builder-cta-bar { flex-direction: column; align-items: stretch; }
+  .builder-cta-next { text-align: center; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   DIAMOND PICKER (Nivoda)
+   ───────────────────────────────────────────────────────────────────── */
+
+.dpicker {
+  margin-top: 24px;
+}
+
+.dpicker-filters {
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.12);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dpicker-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dpicker-row-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6a5f57;
+  width: 80px;
+  flex-shrink: 0;
+}
+.dpicker-row-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+.dpicker-row-range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dpicker-range-dash { color: #b4a89d; }
+.dpicker-num {
+  width: 80px;
+  padding: 6px 10px;
+  border: 1px solid #e0d5cb;
+  border-radius: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+.dpicker-num:focus { outline: none; border-color: #AC3438; }
+
+.dpicker-chip {
+  background: transparent;
+  border: 1px solid #e0d5cb;
+  border-radius: 16px;
+  padding: 5px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #5a4e47;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 44px;
+  text-align: center;
+}
+.dpicker-chip:hover { border-color: #AC3438; color: #AC3438; }
+.dpicker-chip.is-active {
+  background: #AC3438;
+  border-color: #AC3438;
+  color: #fff;
+}
+
+.dpicker-shape {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid rgba(218, 168, 80, 0.4);
+  border-radius: 999px;
+  padding: 6px 14px 6px 10px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #5a4e47;
+  cursor: pointer;
+  position: relative;
+  /* Quiet edge glow at rest — all chips look sacred */
+  box-shadow:
+    0 0 3px rgba(218, 168, 80, 0.28),
+    0 0 8px rgba(218, 168, 80, 0.12);
+  transition: color 0.2s ease, background 0.2s ease,
+              border-color 0.3s ease, box-shadow 0.35s ease;
+}
+.dpicker-shape:hover {
+  border-color: rgba(232, 188, 100, 0.9);
+  color: var(--logo-red);
+  box-shadow:
+    0 0 6px rgba(218, 168, 80, 0.6),
+    0 0 14px rgba(218, 168, 80, 0.3),
+    0 0 28px rgba(218, 168, 80, 0.15);
+}
+.dpicker-shape.is-active {
+  background: rgba(172, 52, 56, 0.06);
+  border-color: rgba(232, 188, 100, 0.95);
+  color: var(--logo-red);
+  box-shadow:
+    0 0 8px rgba(218, 168, 80, 0.8),
+    0 0 18px rgba(218, 168, 80, 0.45),
+    0 0 36px rgba(218, 168, 80, 0.22),
+    inset 0 0 10px rgba(218, 168, 80, 0.2);
+  animation: sacredBreatheSoft 5s ease-in-out infinite;
+}
+.dpicker-shape svg {
+  filter:
+    drop-shadow(0 0 1.5px rgba(218, 168, 80, 0.5))
+    drop-shadow(0 0 3px rgba(218, 168, 80, 0.25));
+}
+.dpicker-shape-icon { width: 22px; height: 22px; display: flex; }
+.dpicker-shape-icon svg { width: 100%; height: 100%; }
+
+.dpicker-row--small {
+  border-top: 1px solid rgba(172, 52, 56, 0.08);
+  padding-top: 12px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.dpicker-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #5a4e47;
+  cursor: pointer;
+}
+.dpicker-toggle input { cursor: pointer; }
+.dpicker-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6a5f57;
+}
+.dpicker-select {
+  padding: 5px 8px;
+  border: 1px solid #e0d5cb;
+  border-radius: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #1a1410;
+  background: #fff;
+  cursor: pointer;
+}
+.dpicker-select:focus { outline: none; border-color: #AC3438; }
+
+.dpicker-count {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: #6a5f57;
+  margin-bottom: 12px;
+  padding-left: 4px;
+}
+.dpicker-count strong { color: #1a1410; }
+.dpicker-err { color: #AC3438; }
+
+.dpicker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.dpicker-card {
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+.dpicker-card:hover {
+  border-color: #AC3438;
+  box-shadow: 0 4px 20px rgba(172, 52, 56, 0.08);
+  transform: translateY(-1px);
+}
+.dpicker-card.is-selected {
+  border-color: #AC3438;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px rgba(172, 52, 56, 0.3);
+}
+
+.dpicker-card-media {
+  aspect-ratio: 1;
+  /* Warm cream-to-blush wash so empty stones still read as a luxury
+     studio plate. When a real image is present it covers this. */
+  background: radial-gradient(ellipse at 50% 38%,
+                              #fff6f1 0%,
+                              #faece4 60%,
+                              #f4dccf 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+/* Soft inner shadow for a printed-paper feel */
+.dpicker-card-media::after {
+  content: '';
+  position: absolute; inset: 0;
+  box-shadow: inset 0 0 24px rgba(172, 52, 56, 0.06);
+  pointer-events: none;
+}
+.dpicker-card-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* Shimmer skeleton while a real diamond image is loading */
+.dpicker-skel {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 246, 241, 0.4) 0%,
+    rgba(255, 224, 211, 0.65) 50%,
+    rgba(255, 246, 241, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: dpicker-shimmer 1.4s linear infinite;
+}
+@keyframes dpicker-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.dpicker-card-media svg { display: block; }
+/* Legacy: kept so older callers still render */
+.dpicker-card-shape {
+  width: 60%;
+  height: 60%;
+  opacity: 0.6;
+}
+.dpicker-card-shape svg { width: 100%; height: 100%; }
+
+.dpicker-card-meta {
+  padding: 12px 14px 4px;
+  flex: 1;
+}
+.dpicker-card-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.dpicker-card-carat {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 18px;
+  color: #1a1410;
+  font-weight: 500;
+}
+.dpicker-card-shape-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6a5f57;
+}
+.dpicker-card-grade {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #5a4e47;
+}
+.dpicker-card-cert {
+  font-family: 'Jost', sans-serif;
+  font-size: 10.5px;
+  color: #8a7f76;
+  margin-top: 2px;
+  letter-spacing: 0.05em;
+}
+
+.dpicker-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 14px;
+  border-top: 1px solid rgba(172, 52, 56, 0.06);
+  margin-top: 8px;
+}
+.dpicker-card-price {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #AC3438;
+}
+.dpicker-card-cta {
+  background: transparent;
+  border: 1px solid #AC3438;
+  color: #AC3438;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dpicker-card-cta:hover:not(:disabled) {
+  background: #AC3438;
+  color: #fff;
+}
+.dpicker-card-cta:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.dpicker-card-cta.is-selected {
+  background: #AC3438;
+  color: #fff;
+}
+
+.dpicker-empty {
+  grid-column: 1 / -1;
+  padding: 48px 24px;
+  text-align: center;
+  background: #fff;
+  border: 1px dashed rgba(172, 52, 56, 0.2);
+  border-radius: 8px;
+  color: #6a5f57;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+}
+.dpicker-empty-hint {
+  font-size: 11px;
+  color: #8a7f76;
+  margin-top: 4px;
+}
+
+.dpicker-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+}
+.dpicker-pager-btn {
+  background: transparent;
+  border: 1px solid #e0d5cb;
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a4e47;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.dpicker-pager-btn:hover:not(:disabled) {
+  border-color: #AC3438;
+  color: #AC3438;
+}
+.dpicker-pager-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.dpicker-pager-status {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #6a5f57;
+}
+
+.builder-review-diamond-img {
+  margin-top: 12px;
+  text-align: center;
+}
+.builder-review-diamond-img img {
+  max-width: 180px;
+  max-height: 180px;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #faf6f1;
+  padding: 8px;
+}
+.builder-review-diamond-caption {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6a5f57;
+  margin-top: 6px;
+}
+
+@media (max-width: 700px) {
+  .dpicker-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .dpicker-row-label { width: auto; }
+  .dpicker-row--small { flex-direction: row; align-items: center; }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────
+   BRILLIANT EARTH-STYLE DIAMOND PICKER
+   - Left sidebar with collapsible facets
+   - Right results grid with cursor-parallax 3D tilt on each card
+   ───────────────────────────────────────────────────────────────────── */
+
+.be-picker {
+  margin-top: 24px;
+}
+
+/* Top toolbar — count on left, sort on right */
+.be-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  border-top: 1px solid rgba(172, 52, 56, 0.1);
+  border-bottom: 1px solid rgba(172, 52, 56, 0.1);
+  background: #fbf7f4;
+}
+.be-toolbar-count {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: #2a1d18;
+  letter-spacing: 0.04em;
+}
+.be-toolbar-count-num { font-weight: 500; color: var(--logo-red); }
+.be-toolbar-err { color: var(--logo-red); font-size: 13px; margin-left: 6px; }
+.be-toolbar-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.be-toolbar-sort label {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6a5f57;
+  letter-spacing: 0.04em;
+}
+.be-toolbar-sort select {
+  background: transparent;
+  border: 1px solid rgba(172, 52, 56, 0.2);
+  border-radius: 4px;
+  padding: 7px 30px 7px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #2a1d18;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236a5f57' stroke-width='1.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+
+/* Two-column layout */
+.be-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  padding: 24px;
+  align-items: start;
+}
+
+/* Sidebar */
+.be-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: sticky;
+  top: 130px;
+}
+.be-facet {
+  border-bottom: 1px solid rgba(172, 52, 56, 0.08);
+  padding: 4px 0;
+}
+.be-facet[open] { padding-bottom: 18px; }
+.be-facet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 4px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #2a1d18;
+  cursor: pointer;
+  list-style: none;
+  letter-spacing: 0.02em;
+}
+.be-facet-head::-webkit-details-marker { display: none; }
+.be-facet-head::after {
+  content: '+';
+  font-family: 'Jost', sans-serif;
+  font-size: 18px;
+  font-weight: 300;
+  color: #6a5f57;
+  transition: transform 0.2s;
+}
+.be-facet[open] .be-facet-head::after {
+  content: '−';
+}
+.be-facet-body {
+  padding: 0 4px;
+}
+
+.be-toggle-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid rgba(172, 52, 56, 0.25);
+  border-radius: 0;
+}
+.be-toggle {
+  background: transparent;
+  border: none;
+  padding: 10px 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6a5f57;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.be-toggle:first-child { border-right: 1px solid rgba(172, 52, 56, 0.25); }
+.be-toggle:hover { color: var(--logo-red); }
+.be-toggle.is-on {
+  background: var(--logo-red);
+  color: #fff8f6;
+}
+
+.be-shape-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.be-shape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 10px 4px 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  border-radius: 4px;
+}
+.be-shape:hover {
+  border-color: rgba(172, 52, 56, 0.2);
+  background: rgba(172, 52, 56, 0.03);
+}
+.be-shape.is-active {
+  border-color: var(--logo-red);
+  background: rgba(172, 52, 56, 0.05);
+}
+.be-shape-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.be-shape-icon svg { width: 100%; height: 100%; }
+.be-shape-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #5a4e47;
+}
+.be-shape.is-active .be-shape-label { color: var(--logo-red); }
+
+.be-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.be-range label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.be-range label > span {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6a5f57;
+}
+.be-range input {
+  background: transparent;
+  border: 1px solid rgba(172, 52, 56, 0.2);
+  padding: 8px 10px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #2a1d18;
+  outline: none;
+  text-align: center;
+  border-radius: 0;
+  transition: border-color 0.2s;
+}
+.be-range input:focus { border-color: var(--logo-red); }
+
+.be-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.be-chip-row--wide .be-chip {
+  flex: 1 0 calc(50% - 3px);
+  text-align: center;
+}
+.be-chip {
+  background: transparent;
+  border: 1px solid rgba(172, 52, 56, 0.2);
+  padding: 6px 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: #5a4e47;
+  cursor: pointer;
+  transition: all 0.18s;
+  min-width: 32px;
+}
+.be-chip:hover { border-color: var(--logo-red); color: var(--logo-red); }
+.be-chip.is-active {
+  background: var(--logo-red);
+  border-color: var(--logo-red);
+  color: #fff8f6;
+}
+
+/* Results */
+.be-results { min-width: 0; }
+.be-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* Card stays still — only the diamond rotates with the cursor */
+.be-card {
+  --shine-x: 50%;
+  --shine-y: 50%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.be-card:hover {
+  border-color: rgba(218, 168, 80, 0.6);
+  box-shadow:
+    0 8px 28px rgba(20, 12, 8, 0.12),
+    0 2px 8px rgba(218, 168, 80, 0.18);
+}
+.be-card.is-selected {
+  border-color: var(--logo-red);
+  box-shadow:
+    0 0 0 2px rgba(172, 52, 56, 0.25),
+    0 8px 28px rgba(20, 12, 8, 0.15);
+}
+
+.be-card-media {
+  position: relative;
+  aspect-ratio: 1;
+  /* Background matches the neutral gray Nivoda bakes into every diamond
+     photo so the rectangular image bg is invisible against the card.
+     The whole diamond shape is shown — no circular crop. */
+  background: #e8e3dc;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Perspective for a dimensional spin */
+  perspective: 900px;
+  perspective-origin: center center;
+}
+/* No mask — the full square frame is visible, just like Brilliant Earth.
+   The wrapper preserves 3D context for the inner image rotation. */
+.be-card-media-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+}
+/* The diamond image rotates with the cursor.
+   Cursor X drives Y rotation; cursor Y nudges X slightly. The whole
+   diamond shape is shown (no circular crop). Image is sized to fully
+   fill the square so there's no visible bg edge.
+   Note: Brilliant Earth uses a sprite-sheet of multi-angle photos for
+   true 360° rotation. Nivoda gives us a single photo per diamond, so
+   we can't replicate true spinning — what we can do is a tasteful 3D
+   tilt that stays believable. */
+.be-card-media-inner svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform-origin: center center;
+  filter: drop-shadow(0 6px 14px rgba(60, 30, 20, 0.15));
+}
+
+/* ── 360° cursor-scrub diamond media (Brilliant Earth carbon-copy) ──── */
+.dpicker-media {
+  position: absolute;
+  inset: 0;
+  cursor: ew-resize; /* signals "drag to spin" */
+}
+.dpicker-media-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  /* contain (not cover) so the whole diamond is visible — cover was
+     cropping the stone so it read as too large / cut off. The Nivoda photo
+     already includes the neutral backdrop, so contain sits flush. */
+  object-fit: contain;
+  transition: opacity 0.18s ease;
+  filter: drop-shadow(0 6px 14px rgba(60, 30, 20, 0.15));
+  backface-visibility: hidden;
+}
+.be-card:hover .dpicker-media-img {
+  filter: drop-shadow(0 10px 22px rgba(60, 30, 20, 0.22));
+}
+/* loupe360 360° viewer — fills the media box exactly so it stays centred and
+   matches the still image. The parent clips any viewer chrome/scrollbars. */
+.dpicker-spin-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  transition: opacity 0.2s ease;
+}
+.dpicker-media-spin {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  background: transparent;
+  /* Fill the media box exactly so the viewer is always centred to the card
+     and the same size as the still image — no fixed px, no scale overflow
+     (which previously pushed the off-centre diamond to the right edge). */
+  pointer-events: auto;
+}
+
+/* Loading spinner shown while the 360° viewer is fetching on hover */
+.dpicker-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.dpicker-loading-ring {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(172, 52, 56, 0.2);
+  border-top-color: var(--logo-red, #AC3438);
+  animation: dpicker-spin-anim 0.7s linear infinite;
+}
+@keyframes dpicker-spin-anim {
+  to { transform: rotate(360deg); }
+}
+/* idle 360° hint badge */
+.dpicker-spin {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(28, 20, 18, 0.5);
+  color: #fef9ef;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  pointer-events: none;
+  opacity: 0.85;
+  transition: opacity 0.18s ease;
+}
+.be-card:hover .dpicker-spin { opacity: 0; }
+
+.be-card-body {
+  padding: 18px 18px 20px;
+}
+.be-card-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 400;
+  color: #2a1d18;
+  margin: 0 0 4px;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+}
+.be-card-grade {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6a5f57;
+  margin-bottom: 4px;
+  letter-spacing: 0.02em;
+}
+.be-card-cert {
+  font-family: 'Jost', sans-serif;
+  font-size: 10.5px;
+  color: #8a7f76;
+  margin-bottom: 12px;
+  letter-spacing: 0.04em;
+}
+.be-card-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--logo-red);
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+}
+.be-card-cta {
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  color: var(--logo-red);
+  border: 1px solid var(--logo-red);
+  border-radius: 0;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.be-card-cta:hover:not(:disabled) {
+  background: var(--logo-red);
+  color: #fff8f6;
+}
+.be-card-cta:disabled { opacity: 0.65; cursor: default; }
+.be-card-cta.is-selected {
+  background: var(--logo-red);
+  color: #fff8f6;
+}
+
+.be-empty {
+  grid-column: 1 / -1;
+  padding: 64px 24px;
+  text-align: center;
+  background: #fbf7f4;
+  border: 1px dashed rgba(172, 52, 56, 0.2);
+  color: #6a5f57;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+}
+.be-empty-hint {
+  font-size: 13px;
+  color: #8a7f76;
+  margin-top: 6px;
+}
+
+.be-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-top: 36px;
+}
+.be-pager-btn {
+  background: transparent;
+  border: 1px solid rgba(172, 52, 56, 0.25);
+  padding: 9px 22px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5a4e47;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.be-pager-btn:hover:not(:disabled) {
+  border-color: var(--logo-red);
+  color: var(--logo-red);
+}
+.be-pager-btn:disabled { opacity: 0.35; cursor: default; }
+.be-pager-status {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: #6a5f57;
+}
+
+@media (max-width: 1100px) {
+  .be-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 880px) {
+  .be-layout { grid-template-columns: 1fr; gap: 16px; }
+  .be-sidebar { position: static; }
+}
+@media (max-width: 560px) {
+  .be-grid { grid-template-columns: 1fr; }
+  .be-toolbar { padding: 12px 16px; }
+  .be-layout { padding: 16px; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Ring builder · Diamond step — loading skeleton
+   ───────────────────────────────────────────────────────────────────── */
+.be-loading {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 36px 32px 96px;
+}
+.be-loading-head { margin-bottom: 28px; }
+.be-loading-eyebrow,
+.be-loading-title,
+.be-loading-sub,
+.be-loading-facet,
+.be-loading-toolbar,
+.be-loading-card-media,
+.be-loading-card-line,
+.be-loading-card-cta {
+  background: linear-gradient(
+    90deg,
+    rgba(60, 30, 20, 0.05) 0%,
+    rgba(60, 30, 20, 0.1) 50%,
+    rgba(60, 30, 20, 0.05) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 3px;
+  animation: be-skel-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes be-skel-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+.be-loading-eyebrow { width: 140px; height: 12px; margin-bottom: 14px; }
+.be-loading-title   { width: 380px; height: 32px; margin-bottom: 10px; max-width: 90%; }
+.be-loading-sub     { width: 520px; height: 14px; max-width: 95%; }
+
+.be-loading-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.be-loading-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.be-loading-facet { height: 64px; border-radius: 4px; }
+.be-loading-toolbar {
+  height: 40px;
+  margin-bottom: 24px;
+  border-radius: 3px;
+}
+.be-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.be-loading-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  padding: 0 0 18px;
+}
+.be-loading-card-media {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 0;
+  margin-bottom: 14px;
+}
+.be-loading-card-line {
+  height: 12px;
+  margin: 0 18px;
+}
+.be-loading-card-line--name  { width: 70%; height: 16px; }
+.be-loading-card-line--meta  { width: 50%; }
+.be-loading-card-line--price { width: 35%; height: 14px; margin-top: 4px; }
+.be-loading-card-cta {
+  height: 34px;
+  margin: 14px 18px 0;
+  border-radius: 3px;
+}
+@media (max-width: 1100px) {
+  .be-loading-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 880px) {
+  .be-loading-layout { grid-template-columns: 1fr; }
+  .be-loading-sidebar { flex-direction: row; flex-wrap: wrap; }
+  .be-loading-facet { flex: 1 0 calc(50% - 7px); height: 48px; }
+}
+@media (max-width: 560px) {
+  .be-loading { padding: 24px 18px 60px; }
+  .be-loading-grid { grid-template-columns: 1fr; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────
+   Diamond Picker — bundle bar
+   ───────────────────────────────────────────────────────────────────── */
+.be-bundle-bar {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 56px -32px -32px;
+  background: #fff;
+  border-top: 1px solid rgba(60, 30, 20, 0.12);
+  box-shadow: 0 -8px 28px rgba(60, 30, 20, 0.08);
+  z-index: 50;
+}
+.be-bundle-bar-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: grid;
+  grid-template-columns: 1.4fr auto 1.4fr 1fr 1fr;
+  gap: 18px;
+  align-items: center;
+}
+.be-bundle-line {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.be-bundle-eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9b8b80;
+}
+.be-bundle-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 500;
+  color: #1a1410;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+.be-bundle-meta {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6a5f57;
+  letter-spacing: 0.04em;
+}
+.be-bundle-price {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #1a1410;
+  letter-spacing: 0.02em;
+  margin-top: 2px;
+}
+.be-bundle-plus {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: #c9a898;
+  text-align: center;
+  user-select: none;
+}
+.be-bundle-size {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.be-bundle-size-select {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #1a1410;
+  background: #fff;
+  border: 1px solid rgba(60, 30, 20, 0.2);
+  border-radius: 3px;
+  padding: 10px 30px 10px 12px;
+  outline: none;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #6a5f57 50%),
+                    linear-gradient(135deg, #6a5f57 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.be-bundle-size-select:focus {
+  border-color: var(--logo-red);
+  box-shadow: 0 0 0 3px rgba(172, 52, 56, 0.1);
+}
+.be-bundle-size-help {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--logo-red);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding-top: 2px;
+}
+.be-bundle-total {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.be-bundle-total-amount {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--logo-red);
+  letter-spacing: 0.005em;
+  line-height: 1;
+}
+.be-bundle-add {
+  background: var(--logo-red);
+  color: #fff8f6;
+  border: none;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  margin-top: 4px;
+  transition: background 0.2s, transform 0.12s;
+  white-space: nowrap;
+}
+.be-bundle-add:hover { background: var(--logo-red-dark); }
+.be-bundle-add:active { transform: scale(0.985); }
+.be-bundle-add:disabled {
+  background: #c9a898;
+  cursor: not-allowed;
+}
+.be-bundle-err {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 32px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #b1373b;
+}
+
+@media (max-width: 980px) {
+  .be-bundle-bar-inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+    padding: 16px 20px;
+  }
+  .be-bundle-plus { display: none; }
+  .be-bundle-line--diamond { grid-column: 2; }
+  .be-bundle-line--setting { grid-column: 1; }
+  .be-bundle-size { grid-column: 1; }
+  .be-bundle-total { grid-column: 2; align-items: stretch; }
+  .be-bundle-total-amount { text-align: right; }
+  .be-bundle-add { width: 100%; }
+}
+@media (max-width: 560px) {
+  .be-bundle-bar { margin: 40px -16px -16px; }
+  .be-bundle-bar-inner {
+    grid-template-columns: 1fr;
+    padding: 14px 16px;
+  }
+  .be-bundle-line--setting,
+  .be-bundle-line--diamond,
+  .be-bundle-size,
+  .be-bundle-total { grid-column: 1; }
+  .be-bundle-total { align-items: stretch; }
+  .be-bundle-total-amount { text-align: left; }
+  .be-bundle-name { white-space: normal; }
+  .be-bundle-err { padding: 0 16px 12px; }
+}
