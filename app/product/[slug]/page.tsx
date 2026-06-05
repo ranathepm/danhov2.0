@@ -16,6 +16,7 @@ import {
   getOrGenerateNarrative,
   occasionForCategory,
 } from '@/lib/narratives';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 type Params = { slug: string };
 
@@ -69,6 +70,7 @@ export default async function ProductPage({ params }: { params: Params }) {
 
   const occasion = occasionForCategory(product.category);
   const narrative = await getOrGenerateNarrative(product, occasion);
+  const displayName = stripMetalSuffix(product.name);
 
   // Approximate price for the Product JSON-LD (display string parses, else 0)
   const priceForLd = parsePrice(product.price_display);
@@ -97,7 +99,7 @@ export default async function ProductPage({ params }: { params: Params }) {
         <span className="bc-sep">/</span>
         <Link href={catLink.href}>{catLink.label}</Link>
         <span className="bc-sep">/</span>
-        <span>{product.name}</span>
+        <span>{displayName}</span>
       </nav>
 
       {/* PRODUCT DETAIL — wrapped in MetalProvider so the gallery on
@@ -127,7 +129,7 @@ export default async function ProductPage({ params }: { params: Params }) {
             <span className="product-category-label">{product.collection}</span>
           )}
           <div className="product-name-row">
-            <h1 className="product-name">{product.name}</h1>
+            <h1 className="product-name">{displayName}</h1>
             <WishlistHeart slug={product.slug} />
           </div>
           <span className="product-style-num">Style {product.sku}</span>
@@ -154,7 +156,7 @@ export default async function ProductPage({ params }: { params: Params }) {
             defaultNarrative={narrative.narrative}
           />
           <p className="product-desc product-desc-sub">
-            Each {product.name} is individually cast, set, and finished by master jewelers in Los Angeles — made to order in your preferred metal and size. Available in {product.metals.length > 0 ? product.metals.join(', ') : '14k or 18k gold (yellow, white, or rose)'}.
+            Each {displayName} is individually cast, set, and finished by master jewelers in Los Angeles — made to order in your preferred metal and size. Available in {product.metals.length > 0 ? product.metals.join(', ') : '14k or 18k gold (yellow, white, or rose)'}.
           </p>
 
           <button
