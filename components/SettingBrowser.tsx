@@ -47,7 +47,7 @@ function parseMetalOption(raw: string): MetalOption {
 }
 
 function productMatchesMetal(product: Product, metalKey: string): boolean {
-  return product.metals.some((m) => normaliseMetalKey(m) === metalKey);
+  return (product.metals ?? []).some((m) => normaliseMetalKey(m) === metalKey);
 }
 
 // ─── Price helpers ────────────────────────────────────────────────────────────
@@ -144,7 +144,7 @@ export default function SettingBrowser({ products }: Props) {
   const allMetals = useMemo(() => {
     const seen = new Map<string, MetalOption>();
     for (const p of products) {
-      for (const m of p.metals) {
+      for (const m of (p.metals ?? [])) {
         const opt = parseMetalOption(m);
         if (!seen.has(opt.key)) seen.set(opt.key, opt);
       }
@@ -213,7 +213,7 @@ export default function SettingBrowser({ products }: Props) {
     }
     if (activeMetals.size > 0) {
       result = result.filter((p) =>
-        p.metals.some((m) => activeMetals.has(normaliseMetalKey(m)))
+        (p.metals ?? []).some((m) => activeMetals.has(normaliseMetalKey(m)))
       );
     }
     // Shape filter: passed as URL param when selecting setting; no product-level shape data
@@ -445,7 +445,7 @@ function SettingCard({ product: p, chosenShape }: { product: Product; chosenShap
   const metalSwatches = useMemo(() => {
     const seen = new Set<string>();
     const out: MetalOption[] = [];
-    for (const m of p.metals) {
+    for (const m of (p.metals ?? [])) {
       const opt = parseMetalOption(m);
       if (!seen.has(opt.color)) {
         seen.add(opt.color);

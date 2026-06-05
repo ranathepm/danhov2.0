@@ -19,8 +19,6 @@ interface Props {
   defaultShape: string;
   defaultMetal: string | null;
   shapes: ShapeOption[];
-  metalColour: (raw: string) => string;
-  metalKarat: (raw: string) => string;
 }
 
 const SHAPE_ICONS: Record<string, React.ReactNode> = {
@@ -36,24 +34,36 @@ const SHAPE_ICONS: Record<string, React.ReactNode> = {
   asscher:  <AsscherSVG />,
 };
 
+function metalColour(raw: string): string {
+  const up = raw.toUpperCase();
+  if (/ROSE|PINK/.test(up)) return '#C98080';
+  if (/WHITE/.test(up)) return '#C8C8C8';
+  if (/PLAT/.test(up)) return '#E8E8F0';
+  return '#D4A843';
+}
+
+function metalKarat(raw: string): string {
+  const m = raw.match(/(\d+)\s*[kK]/);
+  return m ? `${m[1]}K` : '';
+}
+
 export default function SettingDetailClient({
   product,
   defaultShape,
   defaultMetal,
   shapes,
-  metalColour,
-  metalKarat,
 }: Props) {
   const router = useRouter();
+  const productMetals = product.metals ?? [];
   const [shape, setShape] = useState(defaultShape);
-  const [metal, setMetal] = useState(defaultMetal ?? product.metals[0] ?? '');
+  const [metal, setMetal] = useState(defaultMetal ?? productMetals[0] ?? '');
   const [showMoreShapes, setShowMoreShapes] = useState(false);
   const [showMoreMetals, setShowMoreMetals] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const visibleShapes = showMoreShapes ? shapes : shapes.slice(0, 5);
-  const visibleMetals = showMoreMetals ? product.metals : product.metals.slice(0, 5);
+  const visibleMetals = showMoreMetals ? productMetals : productMetals.slice(0, 5);
 
   function handleSelect() {
     const params = new URLSearchParams({ setting: product.slug });
@@ -141,7 +151,7 @@ export default function SettingDetailClient({
       </div>
 
       {/* Metal selector */}
-      {product.metals.length > 0 && (
+      {productMetals.length > 0 && (
         <div className="sd-selector">
           <div className="sd-selector-head">
             <span className="sd-selector-title">Metal</span>
@@ -166,7 +176,7 @@ export default function SettingDetailClient({
               </button>
             ))}
           </div>
-          {product.metals.length > 5 && (
+          {productMetals.length > 5 && (
             <button className="sd-more-btn" onClick={() => setShowMoreMetals((v) => !v)}>
               {showMoreMetals ? '∧ Fewer Metals' : '∨ More Metals'}
             </button>
@@ -225,10 +235,10 @@ export default function SettingDetailClient({
             </p>
             <table className="sd-specs-table">
               <tbody>
-                {product.metals.length > 0 && (
+                {productMetals.length > 0 && (
                   <tr>
                     <td>Available metals</td>
-                    <td>{product.metals.join(', ')}</td>
+                    <td>{productMetals.join(', ')}</td>
                   </tr>
                 )}
                 <tr>

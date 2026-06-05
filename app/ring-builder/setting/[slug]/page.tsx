@@ -40,19 +40,6 @@ const SHAPES = [
   { value: 'asscher',  label: 'Asscher' },
 ];
 
-function metalColour(raw: string): string {
-  const up = raw.toUpperCase();
-  if (/ROSE|PINK/.test(up)) return '#C98080';
-  if (/WHITE|PLAT/.test(up)) return '#C8C8C8';
-  if (/YELLOW|GOLD/.test(up)) return '#D4A843';
-  return '#C4B8A0';
-}
-
-function metalKarat(raw: string): string {
-  const m = raw.match(/(\d+)\s*[kK]/);
-  return m ? `${m[1]}K` : '';
-}
-
 export default async function SettingDetailPage({ params, searchParams }: Props) {
   const product = await fetchProductBySlug(params.slug);
   if (!product) notFound();
@@ -135,8 +122,6 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
           defaultShape={defaultShape}
           defaultMetal={defaultMetal}
           shapes={SHAPES}
-          metalColour={metalColour}
-          metalKarat={metalKarat}
         />
       </div>
     </main>
