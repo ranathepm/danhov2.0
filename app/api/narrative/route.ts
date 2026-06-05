@@ -6,6 +6,7 @@ import {
   type Occasion,
   OCCASIONS,
 } from '@/lib/narratives';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,15 @@ const Query = z.object({
 });
 
 export async function GET(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(ip, 'narrative', 30, 60 * 60 * 1000); // 30 per hour
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } }
+    );
+  }
+
   const url = new URL(req.url);
   const parsed = Query.safeParse({
     slug: url.searchParams.get('slug'),

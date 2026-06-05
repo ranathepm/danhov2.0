@@ -14,6 +14,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI, type Part } from '@google/generative-ai';
 import { createServiceClient } from '@/lib/supabase/server';
 import { IMAGE_MODEL_PRIMARY, IMAGE_MODEL_FALLBACK } from '@/lib/gemini';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -40,6 +41,15 @@ const STYLE_HEADER = `Generate ONE photograph of luxury fine jewelry in the unmi
 Customer's request: `;
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(ip, 'image-generate', 5, 60 * 60 * 1000); // 5 per hour
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } }
+    );
+  }
+
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: 'Service not configured' }, { status: 500 });

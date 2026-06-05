@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { bufferToPart, describeMedia } from '@/lib/gemini';
 import { createServiceClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -26,6 +27,15 @@ const SessionFields = z.object({
 });
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(ip, 'voice', 10, 60 * 60 * 1000); // 10 per hour
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } }
+    );
+  }
+
   let form: FormData;
   try {
     form = await req.formData();

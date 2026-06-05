@@ -18,6 +18,7 @@ import {
   CHAT_MODEL_FALLBACK,
   SAFETY_SETTINGS,
 } from '@/lib/gemini';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -37,6 +38,15 @@ const BodySchema = z.object({
 const MODELS = [CHAT_MODEL_PRIMARY, ...CHAT_MODEL_FALLBACK];
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  const rl = checkRateLimit(ip, 'chat', 20, 60 * 60 * 1000); // 20 per hour
+  if (!rl.allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again later.' },
+      { status: 429, headers: { 'Retry-After': String(rl.retryAfter) } }
+    );
+  }
+
   let body: z.infer<typeof BodySchema>;
   try {
     body = BodySchema.parse(await req.json());
