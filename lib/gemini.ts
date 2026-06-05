@@ -33,8 +33,8 @@ export const CHAT_MODEL_FALLBACK = ['gemini-1.5-flash', 'gemini-1.5-flash-latest
 export const VISION_MODEL_PRIMARY = 'gemini-2.0-flash';
 export const VISION_MODEL_FALLBACK = ['gemini-1.5-flash', 'gemini-1.5-pro'];
 
-export const IMAGE_MODEL_PRIMARY = 'gemini-2.5-flash-image';
-export const IMAGE_MODEL_FALLBACK = ['gemini-2.5-flash-image-preview'];
+export const IMAGE_MODEL_PRIMARY = 'gemini-2.0-flash-preview-image-generation';
+export const IMAGE_MODEL_FALLBACK = ['gemini-2.0-flash-exp'];
 
 // Casual jewelry advisor — don't let default safety filters block benign
 // content (e.g. "hello", "wedding", "couple").

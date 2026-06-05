@@ -162,6 +162,67 @@
   font-size: 15px;
 }
 
+/* ── Collection filter bar ───────────────────────────────────────────── */
+.builder-collection-filter {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 0 0 24px;
+  max-width: 1200px; margin: 0 auto;
+}
+.builder-filter-chip {
+  display: inline-block;
+  padding: 7px 16px; border-radius: 999px;
+  border: 1px solid rgba(172,52,56,0.18);
+  font-family: 'Jost', sans-serif; font-size: 12px;
+  letter-spacing: 0.06em; color: #6b5e57;
+  text-decoration: none; background: #fff;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.builder-filter-chip:hover { border-color: #AC3438; color: #AC3438; }
+.builder-filter-chip.active {
+  background: #AC3438; color: #fff; border-color: #AC3438;
+}
+.builder-result-count {
+  font-size: 12px; color: #9c8f86; letter-spacing: 0.06em;
+  padding-bottom: 20px; max-width: 1200px; margin: 0 auto;
+}
+
+/* ── Metal swatches ──────────────────────────────────────────────────── */
+.builder-ring-metals {
+  display: flex; gap: 5px; align-items: center; margin: 4px 0;
+}
+.builder-ring-metal-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1); display: inline-block;
+}
+
+/* ── Empty state ─────────────────────────────────────────────────────── */
+.builder-empty {
+  text-align: center; padding: 64px 24px;
+  font-size: 15px; color: #6b5e57;
+}
+.builder-empty-reset {
+  display: inline-block; margin-top: 16px;
+  color: #AC3438; font-size: 13px; letter-spacing: 0.08em;
+  text-decoration: underline;
+}
+
+/* ── AI Advisor strip ────────────────────────────────────────────────── */
+.builder-advisor-strip {
+  display: flex; align-items: center; justify-content: center;
+  gap: 16px; flex-wrap: wrap;
+  background: rgba(172,52,56,0.04); border: 1px solid rgba(172,52,56,0.12);
+  border-radius: 8px; padding: 16px 24px; margin: 8px 0 40px;
+  max-width: 1200px; margin-inline: auto;
+}
+.builder-advisor-text { font-size: 14px; color: #6b5e57; }
+.builder-advisor-btn {
+  background: #AC3438; color: #fff; border: none; border-radius: 999px;
+  padding: 9px 22px; font-size: 12px; font-family: 'Jost', sans-serif;
+  letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  transition: background 0.18s;
+}
+.builder-advisor-btn:hover { background: #8B2A2D; }
+
 /* Step 2: rings */
 .builder-collection-block { margin-bottom: 56px; }
 .builder-collection-name {
@@ -205,7 +266,7 @@
   background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 100%);
   overflow: hidden;
 }
-.builder-ring-img img { width: 100%; height: 100%; object-fit: cover; }
+.builder-ring-img img { width: 100%; height: 100%; object-fit: contain; padding: 10px; }
 .builder-ring-fallback {
   width: 100%;
   height: 100%;
@@ -531,7 +592,7 @@
   background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 100%);
   overflow: hidden;
 }
-.builder-review-img img { width: 100%; height: 100%; object-fit: cover; }
+.builder-review-img img { width: 100%; height: 100%; object-fit: contain; padding: 12px; }
 .builder-review-tagline {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -899,7 +960,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 8px;
 }
 /* Shimmer skeleton while a real diamond image is loading */
 .dpicker-skel {

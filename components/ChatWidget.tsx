@@ -83,10 +83,12 @@ export default function ChatWidget() {
     setMsgs(working);
 
     try {
+      // Strip system-role notes — the chat API only accepts 'user' | 'assistant'.
+      const apiMessages = next.filter((m) => m.role === 'user' || m.role === 'assistant');
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: next, context: getContext() }),
+        body: JSON.stringify({ messages: apiMessages, context: getContext() }),
       });
 
       if (!res.ok || !res.body) {

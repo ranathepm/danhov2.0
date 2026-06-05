@@ -106,11 +106,24 @@ export default function Footer() {
           <div className="footer-col-title">Good to Know</div>
           <ul className="footer-links">
             <li><Link href="/story">Our Story</Link></li>
+            <li><Link href="/sustainability">Sustainability</Link></li>
+            <li><Link href="/blog">Journal</Link></li>
             <li><Link href="/faq">FAQs</Link></li>
             <li><Link href="/shipping-and-return-policy">Shipping &amp; Returns</Link></li>
             <li><Link href="/warranty">Lifetime Warranty</Link></li>
+            <li><Link href="/gift-cards">Gift Cards</Link></li>
+            <li><Link href="/affiliate">Affiliate Program</Link></li>
+            <li><Link href="/track-order">Track Order</Link></li>
             <li><Link href="/privacy-policy">Privacy Policy</Link></li>
             <li><Link href="/terms-of-use">Terms &amp; Conditions</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <div className="footer-col-title">Trade &amp; Partners</div>
+          <ul className="footer-links">
+            <li><Link href="/partner">Partner With Us</Link></li>
+            <li><a href="mailto:trade@danhov.com">trade@danhov.com</a></li>
           </ul>
         </div>
 
