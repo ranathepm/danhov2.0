@@ -5,8 +5,10 @@ const SHAPES = [
     name: 'Round', value: 'ROUND', meaning: 'Wholeness, complete',
     svg: (
       <>
-        <circle cx="28" cy="28" r="22" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="28,10 38,20 38,36 28,46 18,36 18,20" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.45" />
+        <circle cx="28" cy="28" r="22" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,12 40,22 40,34 28,44 16,34 16,22" stroke="#b8923a" strokeWidth="0.6" fill="none" opacity="0.5" />
+        <line x1="16" y1="22" x2="40" y2="34" stroke="#b8923a" strokeWidth="0.4" opacity="0.4" />
+        <line x1="40" y1="22" x2="16" y2="34" stroke="#b8923a" strokeWidth="0.4" opacity="0.4" />
       </>
     ),
   },
@@ -14,8 +16,9 @@ const SHAPES = [
     name: 'Oval', value: 'OVAL', meaning: 'Soft eternity',
     svg: (
       <>
-        <ellipse cx="28" cy="28" rx="16" ry="22" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="28,9 38,22 38,34 28,47 18,34 18,22" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
+        <ellipse cx="28" cy="28" rx="16" ry="22" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,10 38,22 38,34 28,46 18,34 18,22" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="18" y1="28" x2="38" y2="28" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -23,8 +26,10 @@ const SHAPES = [
     name: 'Cushion', value: 'CUSHION', meaning: 'Held, supported',
     svg: (
       <>
-        <rect x="7" y="7" width="42" height="42" rx="9" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="28,12 43,28 28,44 13,28" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
+        <rect x="10" y="10" width="36" height="36" rx="6" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,14 42,28 28,42 14,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="10" y1="10" x2="46" y2="46" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
+        <line x1="46" y1="10" x2="10" y2="46" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -32,8 +37,9 @@ const SHAPES = [
     name: 'Pear', value: 'PEAR', meaning: 'Flowing, like water',
     svg: (
       <>
-        <path d="M28 6 C34 10 40 20 40 30 C40 40 34 50 28 50 C22 50 16 40 16 30 C16 20 22 10 28 6 Z" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <line x1="28" y1="6" x2="28" y2="50" stroke="#9b6b4a" strokeWidth="0.4" opacity="0.4" />
+        <path d="M28 12 C20 12 12 22 12 32 C12 42 20 50 28 50 C36 50 44 42 44 32 C44 22 36 12 28 12 Z" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <ellipse cx="28" cy="32" rx="10" ry="14" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="28" y1="12" x2="28" y2="50" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -41,8 +47,8 @@ const SHAPES = [
     name: 'Heart', value: 'HEART', meaning: 'Cannot be hidden',
     svg: (
       <>
-        <path d="M28 48 C12 34 8 20 14 13 C19 8 24 10 28 15 C32 10 37 8 42 13 C48 20 44 34 28 48 Z" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <line x1="28" y1="15" x2="28" y2="48" stroke="#9b6b4a" strokeWidth="0.4" opacity="0.4" />
+        <path d="M28 50 C20 38 12 32 12 22 C12 15 18 12 24 14 C26 15 28 18 28 18 C28 18 30 15 32 14 C38 12 44 15 44 22 C44 32 36 38 28 50 Z" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <line x1="28" y1="18" x2="28" y2="50" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -50,8 +56,9 @@ const SHAPES = [
     name: 'Emerald', value: 'EMERALD', meaning: 'Clarity, depth',
     svg: (
       <>
-        <polygon points="17,5 39,5 51,17 51,39 39,51 17,51 5,39 5,17" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="21,13 35,13 43,21 43,35 35,43 21,43 13,35 13,21" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
+        <rect x="14" y="10" width="28" height="36" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,16 38,28 28,40 18,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="14" y1="10" x2="42" y2="46" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -59,9 +66,10 @@ const SHAPES = [
     name: 'Princess', value: 'PRINCESS', meaning: 'Sharp, sovereign',
     svg: (
       <>
-        <rect x="8" y="8" width="40" height="40" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="28,12 44,28 28,44 12,28" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
-        <line x1="8" y1="8" x2="48" y2="48" stroke="#9b6b4a" strokeWidth="0.35" opacity="0.35" />
+        <rect x="14" y="14" width="28" height="28" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,18 38,28 28,38 18,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="14" y1="14" x2="42" y2="42" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
+        <line x1="42" y1="14" x2="14" y2="42" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -69,8 +77,9 @@ const SHAPES = [
     name: 'Marquise', value: 'MARQUISE', meaning: 'Reach, expansion',
     svg: (
       <>
-        <path d="M28 8 L46 28 L28 48 L10 28 Z" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="28,14 40,28 28,42 16,28" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
+        <path d="M28 8 L42 28 L28 48 L14 28 Z" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="28,16 36,28 28,40 20,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="14" y1="28" x2="42" y2="28" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -78,8 +87,9 @@ const SHAPES = [
     name: 'Radiant', value: 'RADIANT', meaning: 'Light in all directions',
     svg: (
       <>
-        <polygon points="17,5 39,5 51,17 51,39 39,51 17,51 5,39 5,17" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="21,12 35,12 44,21 44,35 35,44 21,44 12,35 12,21" stroke="#9b6b4a" strokeWidth="0.5" fill="none" opacity="0.4" />
+        <polygon points="14,14 42,14 46,28 42,42 14,42 10,28" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="20,20 36,20 38,28 36,36 20,36 18,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <line x1="14" y1="14" x2="42" y2="42" stroke="#b8923a" strokeWidth="0.3" opacity="0.4" />
       </>
     ),
   },
@@ -87,9 +97,9 @@ const SHAPES = [
     name: 'Asscher', value: 'ASSCHER', meaning: 'Stepped, ancient',
     svg: (
       <>
-        <polygon points="20,6 36,6 50,20 50,36 36,50 20,50 6,36 6,20" stroke="#AC3438" strokeWidth="1.5" fill="rgba(172,52,56,0.05)" />
-        <polygon points="24,14 32,14 38,20 38,36 32,42 24,42 18,36 18,20" stroke="#9b6b4a" strokeWidth="0.6" fill="none" opacity="0.4" />
-        <circle cx="28" cy="28" r="5" fill="rgba(172,52,56,0.12)" />
+        <polygon points="20,12 36,12 44,28 36,44 20,44 12,28" stroke="#8b2a2a" strokeWidth="1.5" fill="rgba(184,146,58,0.05)" />
+        <polygon points="24,18 32,18 38,28 32,38 24,38 18,28" stroke="#b8923a" strokeWidth="0.5" fill="none" opacity="0.5" />
+        <circle cx="28" cy="28" r="4" fill="rgba(184,146,58,0.2)" />
       </>
     ),
   },
@@ -102,7 +112,7 @@ export default function FindFormSection() {
         <div className="findform-section-header">
           <span className="section-eyebrow">Find Your Form</span>
           <h2 className="section-title">
-            Light enters from the cracks<br />of <em>the darkness</em>
+            Light enters from the cracks of <em>the darkness.</em>
           </h2>
           <p className="findform-teaching">
             &ldquo;The diamond was created in the dark. Now it sparkles.&rdquo;
@@ -138,7 +148,7 @@ export default function FindFormSection() {
             Begin Your Search
           </Link>
           <span className="findform-cta-note">
-            Or let our AI advisor guide you to your perfect form
+            Or let the form find you &mdash; design in silence
           </span>
         </div>
       </div>

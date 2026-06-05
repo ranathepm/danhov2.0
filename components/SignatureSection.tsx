@@ -1,41 +1,39 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import { supabaseAnon } from '@/lib/supabase/anon';
 
-async function getSwirlRing(): Promise<{ slug: string; image: string } | null> {
+async function getSwirlRingSlug(): Promise<string | null> {
   try {
     const { data } = await supabaseAnon
       .from('products')
-      .select('slug, images')
+      .select('slug')
       .or('name.ilike.%swirl%,name.ilike.%love ring%')
       .eq('is_active', true)
       .limit(1)
       .maybeSingle();
-    if (data?.images?.[0]) return { slug: data.slug, image: data.images[0] };
-  } catch { /* fall through to static fallback */ }
-  return null;
+    return data?.slug ?? null;
+  } catch { return null; }
 }
 
 export default async function SignatureSection() {
-  const ring = await getSwirlRing();
-  const imageSrc = ring?.image ?? '/triad-galaxy.png';
-  const href = ring ? `/product/${ring.slug}` : '/engagement-rings';
+  const slug = await getSwirlRingSlug();
+  const href = slug ? `/product/${slug}` : '/engagement-rings';
 
   return (
     <section className="sig-section">
       <div className="sig-inner">
         <Link href={href} className="sig-img-wrap" aria-label="View The Swirl Love Ring">
-          <Image
-            src={imageSrc}
-            alt="The Swirl Love Ring — DANHOV"
-            fill
-            style={{ objectFit: 'cover' }}
-            sizes="(max-width: 880px) 90vw, 45vw"
-          />
+          <div className="sig-ring-label">RING PHOTOGRAPHY</div>
+          <svg width="240" height="240" viewBox="0 0 240 240" fill="none" className="sig-ring-svg">
+            <circle cx="120" cy="130" r="78" stroke="#8b2a2a" strokeWidth="1" opacity="0.3" fill="none" />
+            <circle cx="120" cy="120" r="68" stroke="#b8923a" strokeWidth="14" fill="none" />
+            <circle cx="120" cy="120" r="68" stroke="#d4b260" strokeWidth="0.5" fill="none" opacity="0.6" />
+            <path d="M52 120 Q120 60 188 120" stroke="#d4b260" strokeWidth="0.5" fill="none" opacity="0.4" />
+            <circle cx="120" cy="84" r="9" fill="#fffaf3" stroke="#b8923a" strokeWidth="0.5" />
+          </svg>
         </Link>
 
         <div className="sig-text">
-          <span className="sig-eyebrow">The Signature Ring</span>
+          <span className="sig-eyebrow">The Signature</span>
           <h2 className="sig-title">The <em>Swirl Love</em> Ring</h2>
           <div className="sig-rule" />
           <p className="sig-body">
@@ -43,7 +41,7 @@ export default async function SignatureSection() {
             no end. Two becoming one without losing themselves.
             The ring was not designed &mdash; it was received.&rdquo;
           </p>
-          <Link href={href} className="btn-solid" style={{ marginLeft: 0 }}>
+          <Link href={href} className="sig-cta">
             See the Ring
           </Link>
         </div>

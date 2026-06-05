@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import HomepageScripts from '@/components/HomepageScripts';
-import HeroCanvas from '@/components/HeroCanvas';
 import CollectionsSlider from '@/components/CollectionsSlider';
 import PhilosophySlider from '@/components/PhilosophySlider';
 import TwelveInches from '@/components/TwelveInches';
@@ -41,23 +40,21 @@ export default function HomePage() {
 
       <HomepageScripts />
 
-      {/* ── HERO ─────────────────────────────────────────────────── */}
+      {/* ── HERO — light centered design ─────────────────────────── */}
       <section className="hero">
-        <HeroCanvas />
-
         <div className="hero-content">
           <div className="cinematic-hero">
-            <div className="ch-line ch-silence" id="chLine1">In silence</div>
+            <div className="ch-line ch-silence" id="chLine1">In Silence</div>
             <div className="ch-line ch-realized" id="chLine2">I realized</div>
             <div className="ch-line ch-oneness" id="chLine3">the oneness of the universe.</div>
-            <div className="ch-divider" id="chDiv" />
+            <div className="hero-rule" id="chDiv" />
             <div className="ch-line ch-ring" id="chLine4">The Swirl Love Ring</div>
             <div className="ch-line ch-messaged" id="chLine5">was messaged.</div>
           </div>
 
           <div className="origin-founder" id="heroFounder" style={{ opacity: 0 }}>
             <div className="origin-founder-line" />
-            <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 'clamp(13px,1.6vw,18px)', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>
+            <span style={{ fontFamily: "'Jost', sans-serif", fontSize: 'clamp(11px,1.4vw,14px)', letterSpacing: '0.4em', textTransform: 'uppercase' }}>
               Jack Hovsepian — Founder, DANHOV — Est. 1984
             </span>
             <div className="origin-founder-line" />

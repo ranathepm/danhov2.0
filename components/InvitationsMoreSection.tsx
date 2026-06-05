@@ -34,7 +34,7 @@ export default function InvitationsMoreSection() {
         </button>
 
         <Link href="/engagement-rings" className="invmore-card">
-          <div className="invmore-icon">∷</div>
+          <div className="invmore-icon">◇</div>
           <span className="invmore-label">The Collections</span>
           <h3 className="invmore-name">The <em>Signposts</em></h3>
           <p className="invmore-body">
