@@ -7346,7 +7346,7 @@ aside {
 .invmore-header .section-title em,
 .findform-section-header .section-title em {
   color: var(--logo-red);
-  font-style: italic;
+  font-style: normal;
   font-weight: 300;
 }
 .cocreate-header .section-title {
@@ -7355,7 +7355,7 @@ aside {
   font-weight: 300;
   text-align: center;
 }
-.cocreate-header .section-title em { color: var(--logo-red); font-style: italic; font-weight: 300; }
+.cocreate-header .section-title em { color: var(--logo-red); font-style: normal; font-weight: 300; }
 
 /* ============================================================
    SIGNATURE SECTION
@@ -7413,7 +7413,6 @@ aside {
   color: #2a1a14;
   margin: 0 0 24px;
 }
-.sig-title em { font-style: italic; color: #8b2a2a; }
 .sig-rule {
   width: 32px;
   height: 1px;
@@ -7423,7 +7422,6 @@ aside {
 .sig-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.1rem;
-  font-style: italic;
   color: #6e6357;
   line-height: 1.8;
   margin: 0 0 32px;
@@ -7438,6 +7436,7 @@ aside {
   letter-spacing: 0.35em;
   text-transform: uppercase;
   text-decoration: none;
+  border-radius: 999px;
   transition: background 0.3s;
 }
 .sig-cta:hover { background: #6e2020; }
@@ -7479,7 +7478,6 @@ aside {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1rem, 2vw, 1.25rem);
   font-weight: 400;
-  font-style: italic;
   color: rgba(255,255,255,0.55);
   letter-spacing: 0.03em;
   margin: 0 0 28px;
@@ -7501,7 +7499,7 @@ aside {
   margin: 0 0 48px;
   letter-spacing: -0.01em;
 }
-.inv-headline em { font-style: italic; color: var(--gold-light); }
+.inv-headline em { font-style: normal; color: var(--gold-light); }
 .inv-cta { margin-bottom: 24px; }
 .inv-note {
   font-family: 'Jost', sans-serif;
@@ -7535,7 +7533,6 @@ aside {
 .findform-teaching {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.05rem;
-  font-style: italic;
   color: #7a5c58;
   margin: 12px 0 0;
 }
@@ -7585,7 +7582,6 @@ aside {
 }
 .findform-card-meaning {
   font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
   font-size: 0.82rem;
   color: #6e6357;
   line-height: 1.4;
@@ -7600,7 +7596,6 @@ aside {
 .findform-cta-note {
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.95rem;
-  font-style: italic;
   color: #7a5c58;
 }
 
@@ -7639,8 +7634,8 @@ aside {
 }
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 .cat-card {
   display: flex;
@@ -7667,7 +7662,13 @@ aside {
   position: relative;
   overflow: hidden;
 }
-.cat-photo--svg { background: linear-gradient(135deg, rgba(184,146,58,0.06) 0%, rgba(139,42,42,0.04) 100%); }
+.cat-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 .cat-info { padding: 36px 32px 40px; flex: 1; display: flex; flex-direction: column; }
 .cat-eyebrow {
   font-family: 'Jost', sans-serif;
@@ -7681,20 +7682,10 @@ aside {
 }
 .cat-meaning {
   font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
   font-size: 0.9rem;
   color: #6e6357;
   margin-bottom: 12px;
   letter-spacing: 0.04em;
-}
-.cat-teaching {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.2rem;
-  font-weight: 300;
-  font-style: italic;
-  color: #8b2a2a;
-  line-height: 1.3;
-  margin-bottom: 12px;
 }
 .cat-body {
   font-family: 'Jost', sans-serif;
@@ -7717,8 +7708,9 @@ aside {
   margin-top: 14px;
 }
 
-@media (max-width: 1100px) { .categories-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 600px) {
+@media (max-width: 1100px) { .categories-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 760px)  { .categories-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) {
   .categories-section { padding: 64px 20px; }
   .categories-grid { grid-template-columns: 1fr; }
 }
@@ -7741,7 +7733,6 @@ aside {
 .cocreate-statement {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(17px, 2vw, 22px);
-  font-style: italic;
   color: #6e6357;
   line-height: 1.65;
   max-width: 560px;
@@ -7784,7 +7775,6 @@ aside {
 .cocreate-step-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.95rem;
-  font-style: italic;
   color: #6e6357;
   line-height: 1.6;
   margin: 0;
@@ -7823,7 +7813,6 @@ aside {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(1.5rem, 4vw, 2.6rem);
   font-weight: 300;
-  font-style: italic;
   color: #fff;
   max-width: 820px;
   line-height: 1.5;
@@ -7889,7 +7878,6 @@ aside {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.4rem;
   color: #b8923a;
-  font-style: italic;
   margin-bottom: 24px;
   line-height: 1;
 }
@@ -7911,11 +7899,10 @@ aside {
   line-height: 1.15;
   margin: 0 0 12px;
 }
-.invmore-name em { font-style: italic; color: #8b2a2a; }
+.invmore-name em { font-style: normal; color: #8b2a2a; }
 .invmore-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.9rem;
-  font-style: italic;
   color: #6e6357;
   line-height: 1.65;
   margin: 0 0 auto;
@@ -7966,7 +7953,7 @@ aside {
   line-height: 1.35;
   margin: 0 0 52px;
 }
-.heritage-title em { font-style: italic; color: var(--logo-red); }
+.heritage-title em { font-style: normal; color: var(--logo-red); }
 .heritage-stats {
   display: flex;
   justify-content: center;
@@ -7985,7 +7972,7 @@ aside {
   color: #8b2a2a;
   line-height: 1;
 }
-.heritage-stat-num em { font-style: italic; color: #b8923a; }
+.heritage-stat-num em { font-style: normal; color: #b8923a; }
 .heritage-stat-label {
   font-family: 'Jost', sans-serif;
   font-size: 0.72rem;
