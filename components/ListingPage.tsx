@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/products';
@@ -31,6 +30,7 @@ type Props = {
   philosophyStripe?: { eyebrow?: string; quote: string; attribution?: string };
   aiPrompt: string;
   products: Product[];
+  initialCollection?: string;
 };
 
 const METAL_FILTERS: MetalFilter[] = [
@@ -143,11 +143,9 @@ export default function ListingPage({
   philosophyStripe,
   aiPrompt,
   products,
+  initialCollection,
 }: Props) {
-  const searchParams = useSearchParams();
-  const [collectionFilter, setCollectionFilter] = useState<string>(
-    () => searchParams.get('collection') ?? 'all'
-  );
+  const [collectionFilter, setCollectionFilter] = useState<string>(initialCollection ?? 'all');
   const [metalFilter, setMetalFilter] = useState<MetalFilter['value']>('all');
   const [sortKey, setSortKey] = useState<SortKey>('featured');
 

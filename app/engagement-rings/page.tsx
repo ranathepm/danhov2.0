@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
@@ -34,27 +33,32 @@ const COLLECTIONS = [
   { label: 'Unito', value: 'unito' },
 ];
 
-export default async function EngagementRingsPage() {
+export default async function EngagementRingsPage({
+  searchParams,
+}: {
+  searchParams: { collection?: string };
+}) {
   const products = await fetchProductsByCategory('engagement');
+  const initialCollection = searchParams.collection ?? 'all';
+
   return (
     <>
       <ListingSchema category="engagement" title="Engagement Rings" />
-      <Suspense fallback={null}>
-        <ListingPage
-          category=”engagement”
-          title=”Engagement Rings”
-          subtitle=”Sacred geometry. Eternal love.”
-          collections={COLLECTIONS}
-          showMetalFilter
-          aiPrompt=”I'm browsing engagement rings and could use help finding the right style for me.”
-          philosophyStripe={{
-            quote:
-              '”Every ring is a <span>living geometry</span> — an eternal circle holding the infinite story of two souls becoming one.”',
-          }}
-          products={products}
-        />
-      </Suspense>
-    <PageBlocks pageSlug="engagement-rings" />
+      <ListingPage
+        category="engagement"
+        title="Engagement Rings"
+        subtitle="Sacred geometry. Eternal love."
+        collections={COLLECTIONS}
+        showMetalFilter
+        aiPrompt="I'm browsing engagement rings and could use help finding the right style for me."
+        philosophyStripe={{
+          quote:
+            '"Every ring is a <span>living geometry</span> — an eternal circle holding the infinite story of two souls becoming one."',
+        }}
+        products={products}
+        initialCollection={initialCollection}
+      />
+      <PageBlocks pageSlug="engagement-rings" />
     </>
   );
 }
