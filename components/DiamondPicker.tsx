@@ -14,6 +14,10 @@ import { useCart, formatUsd, parsePriceDisplay } from '@/components/CartProvider
 //
 // Nivoda image URLs can be slow / 4xx / CDN-blocked; on any error we
 // degrade gracefully so the customer never sees a broken-image icon.
+// loupe360's native canvas width — viewer renders at this size internally.
+// We measure the card and scale the iframe down to match.
+const LOUPE360_NATIVE = 500;
+
 function DiamondCardMedia({
   image,
   video,
@@ -31,6 +35,8 @@ function DiamondCardMedia({
   const [hovering, setHovering] = useState(false);
   const [spinMounted, setSpinMounted] = useState(false);
   const [spinReady, setSpinReady] = useState(false);
+  const [spinScale, setSpinScale] = useState(1);
+  const mediaRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setImgStatus(image ? 'loading' : 'error');
@@ -40,22 +46,34 @@ function DiamondCardMedia({
     setSpinReady(false);
   }, [video]);
 
+  // Measure the card and compute the scale needed to fit the loupe360 viewer.
+  useEffect(() => {
+    const el = mediaRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width;
+      if (w > 0) setSpinScale(w / LOUPE360_NATIVE);
+    });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const hasSpin = !!video;
   const hasImage = !!image && imgStatus !== 'error';
 
   const onEnter = () => {
     setHovering(true);
-    if (hasSpin) setSpinMounted(true); // lazy-mount the viewer on first hover
+    if (hasSpin) setSpinMounted(true);
   };
   const onLeave = () => setHovering(false);
 
-  // Neither image nor spin usable → synthetic glyph.
   if (!hasImage && !hasSpin) {
     return <DiamondGlyph shape={shape} carat={carat} />;
   }
 
   return (
     <div
+      ref={mediaRef}
       className="dpicker-media"
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
@@ -79,11 +97,10 @@ function DiamondCardMedia({
         />
       )}
 
-      {/* loupe360 360° spin viewer — mounted on first hover, revealed once
-          loaded. The viewer is scaled to fit the card (its native canvas is
-          ~500px, which otherwise overflows/zooms) and scrollbars are
-          suppressed. It only shows while hovering, so the card is a calm
-          still image until the customer interacts. */}
+      {/* loupe360 viewer — set at its native 500px canvas size, then scaled
+          down via transform to exactly fill the card. This prevents the partial-
+          viewport zoom (where 280px iframe shows only the centre of a 500px
+          canvas, making the diamond look cropped/zoomed). */}
       {hasSpin && spinMounted && (
         <div className="dpicker-spin-frame" style={{ opacity: hovering && spinReady ? 1 : 0 }}>
           <iframe
@@ -92,19 +109,23 @@ function DiamondCardMedia({
             loading="lazy"
             scrolling="no"
             className="dpicker-media-spin"
+            style={{
+              width: LOUPE360_NATIVE,
+              height: LOUPE360_NATIVE,
+              transform: `scale(${spinScale})`,
+              transformOrigin: 'top left',
+            }}
             onLoad={() => setSpinReady(true)}
           />
         </div>
       )}
 
-      {/* loading spinner — while the viewer is fetching on hover */}
       {hasSpin && hovering && spinMounted && !spinReady && (
         <span className="dpicker-loading" aria-label="Loading 360° view">
           <span className="dpicker-loading-ring" />
         </span>
       )}
 
-      {/* idle 360° hint badge — invites the hover-to-spin interaction */}
       {hasSpin && !hovering && (
         <span className="dpicker-spin" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none">

@@ -3135,9 +3135,10 @@ footer { background: #f0e0dc; border-top: 1px solid rgba(181,96,106,0.15); paddi
 .prose-body p { margin: 0 0 22px; }
 .prose-lead {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(22px, 3vw, 30px);
-  font-style: italic;
-  line-height: 1.5;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.55;
   color: var(--cream);
   margin-bottom: 28px;
 }

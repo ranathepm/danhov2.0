@@ -107,7 +107,7 @@ export default function Footer() {
           <ul className="footer-links">
             <li><Link href="/story">Our Story</Link></li>
             <li><Link href="/sustainability">Sustainability</Link></li>
-            <li><Link href="/blog">Journal</Link></li>
+            <li><Link href="/blog">Blog</Link></li>
             <li><Link href="/faq">FAQs</Link></li>
             <li><Link href="/shipping-and-return-policy">Shipping &amp; Returns</Link></li>
             <li><Link href="/warranty">Lifetime Warranty</Link></li>

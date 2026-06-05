@@ -28,7 +28,7 @@ const SessionFields = z.object({
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = checkRateLimit(ip, 'voice', 10, 60 * 60 * 1000); // 10 per hour
+  const rl = checkRateLimit(ip, 'voice', 10, 24 * 60 * 60 * 1000); // 10 per 24hr
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },

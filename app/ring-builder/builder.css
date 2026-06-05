@@ -1491,16 +1491,14 @@
 }
 .dpicker-media-spin {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
   border: 0;
   display: block;
   background: transparent;
-  /* Fill the media box exactly so the viewer is always centred to the card
-     and the same size as the still image — no fixed px, no scale overflow
-     (which previously pushed the off-centre diamond to the right edge). */
   pointer-events: auto;
+  /* width/height/transform are set via inline style by DiamondCardMedia
+     based on the measured card size — see LOUPE360_NATIVE constant. */
 }
 
 /* Loading spinner shown while the 360° viewer is fetching on hover */

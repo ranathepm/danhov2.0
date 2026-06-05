@@ -2,96 +2,79 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'The DANHOV Journal · Stories from the Atelier',
+  title: 'Blog · DANHOV Jewelry',
   description:
-    'Stories, guides, and reflections from the DANHOV atelier in Los Angeles — on sacred geometry, handcrafted jewelry, diamond guidance, proposal ideas, and the philosophy behind every ring.',
+    'Tips, guides, and inspiration from the DANHOV atelier — engagement ring advice, wedding band trends, rose gold guides, and stories from Los Angeles.',
   alternates: { canonical: '/blog' },
 };
 
 const POSTS = [
   {
-    slug: 'the-swirl-its-origin',
-    category: 'The House',
-    title: 'The Swirl: How One Shape Became a Philosophy',
+    slug: 'mothers-day-gift-guide-2024',
+    category: "Mother's Day",
+    title: "Mother's Day Gift Guide 2024",
     excerpt:
-      'In 1984, Jack Hovsepian sat in silence in his Los Angeles atelier and began to twist a thread of gold. What emerged was not a design — it was a revelation. The spiral has no beginning, no end. That single gesture became DANHOV.',
-    date: 'May 2025',
-    readTime: '5 min read',
+      "Looking for the perfect Mother's Day gift? Discover our curated selection of handcrafted DANHOV jewelry pieces — from delicate pendants to timeless bands — that will make any mother feel truly celebrated.",
+    date: 'April 16, 2024',
     featured: true,
   },
   {
-    slug: 'engagement-ring-guide-2025',
-    category: 'Education',
-    title: 'The Complete Engagement Ring Guide for 2025',
+    slug: 'rose-gold-wedding-bands-for-brides',
+    category: 'Engagement Rings',
+    title: 'The Timeless Elegance of Rose Gold Wedding Bands for Brides',
     excerpt:
-      'From choosing the right metal to understanding the 4 Cs, this guide walks you through every decision with the clarity of a specialist — without the pressure of a showroom.',
-    date: 'April 2025',
-    readTime: '8 min read',
+      "Rose gold has captivated brides for generations with its warm, romantic hue. Discover why rose gold wedding bands continue to be a timeless choice and how DANHOV's handcrafted designs make each piece uniquely yours.",
+    date: 'November 18, 2023',
     featured: false,
   },
   {
-    slug: 'abbraccio-collection-story',
-    category: 'Collections',
-    title: 'Abbraccio: The Embrace That Never Lets Go',
+    slug: 'tension-set-ring-promise-of-forever',
+    category: 'Engagement Rings',
+    title: 'A Tension Set Ring As A Promise Of Forever: Is It Right For Your Proposal?',
     excerpt:
-      'The word means "embrace" in Italian. DANHOV\'s most iconic collection wraps every stone in a spiral of gold — holding it the way two people hold each other. Not tightly. Completely.',
-    date: 'March 2025',
-    readTime: '4 min read',
+      "A tension setting suspends the diamond in mid-air — held only by the spring of the metal. It looks impossible. It requires decades of mastery. Here's everything you need to know before choosing one for your proposal.",
+    date: 'November 17, 2023',
     featured: false,
   },
   {
-    slug: 'lab-grown-vs-natural-diamonds',
-    category: 'Education',
-    title: 'Lab-Grown vs Natural Diamonds: An Honest Guide',
+    slug: 'unique-wedding-bands-budget-grooms',
+    category: 'Wedding Bands',
+    title: 'Affordable and Stylish: Unique Wedding Bands for Budget-Conscious Grooms',
     excerpt:
-      'Both are real diamonds. Both are beautiful. The difference is origin, price, and the story you want to tell. We break it down without bias — because the right choice is yours to make.',
-    date: 'February 2025',
-    readTime: '6 min read',
+      "Your wedding band doesn't have to break the bank to be meaningful. Explore our guide to stylish, unique wedding bands that combine exceptional craftsmanship with smart value — made to last a lifetime.",
+    date: 'November 16, 2023',
     featured: false,
   },
   {
-    slug: 'proposal-guide-los-angeles',
-    category: 'Inspiration',
-    title: 'How to Propose in Los Angeles: 12 Locations Worth the Moment',
+    slug: 'grooms-guide-to-wedding-bands',
+    category: 'Wedding Bands',
+    title: "A Groom's Guide to Wedding Bands: Trends and Traditions",
     excerpt:
-      'From Griffith Park at golden hour to the quiet of a private rooftop, Los Angeles holds more proposal stages than any city in America. Here are the twelve we recommend most.',
-    date: 'January 2025',
-    readTime: '7 min read',
+      "From classic gold bands to contemporary mixed-metal designs, grooms today have more options than ever. This guide covers the trends shaping men's wedding jewelry and the timeless traditions worth honoring.",
+    date: 'October 20, 2023',
     featured: false,
   },
   {
-    slug: 'recycled-gold-what-it-means',
-    category: 'Sustainability',
-    title: 'What Recycled Gold Really Means — and Why It Matters',
+    slug: 'why-couples-choose-handcrafted-rings',
+    category: 'Engagement Rings',
+    title: 'Why Couples Choose Handcrafted Engagement Rings',
     excerpt:
-      'Every DANHOV piece is crafted from recycled gold. Not as a marketing claim, but as a commitment. Here\'s where it comes from, how it\'s refined, and why it\'s the only choice that made sense for us.',
-    date: 'December 2024',
-    readTime: '5 min read',
+      "In a world of mass production, handcrafted engagement rings stand apart. They carry the mark of a skilled jeweler, the warmth of intention, and a quality that machine-made rings simply cannot replicate.",
+    date: 'October 19, 2023',
     featured: false,
   },
   {
-    slug: 'voltaggio-tension-settings',
-    category: 'Collections',
-    title: 'Voltaggio: The Diamond That Floats',
+    slug: 'warmth-of-rose-gold',
+    category: 'Wedding Bands',
+    title: 'The Warmth of Rose Gold: Why Brides and Grooms Love It',
     excerpt:
-      'In a tension setting, the stone is held by nothing but the spring of the metal itself. It looks impossible. It isn\'t — but it requires a mastery that only decades of handcraft can teach.',
-    date: 'November 2024',
-    readTime: '4 min read',
-    featured: false,
-  },
-  {
-    slug: 'ring-sizing-at-home',
-    category: 'Education',
-    title: 'How to Find Your Ring Size at Home (Accurately)',
-    excerpt:
-      'Getting the size right is everything. We explain three reliable methods — the string technique, the printable ring sizer, and the trusted old way — and what to do if you\'re between sizes.',
-    date: 'October 2024',
-    readTime: '4 min read',
+      "Rose gold flatters every skin tone and pairs beautifully with both diamonds and colored stones. Discover the history of this beloved metal and why DANHOV's rose gold pieces have become some of our most cherished designs.",
+    date: 'October 18, 2023',
     featured: false,
   },
 ];
 
-const CATEGORIES = ['All', 'The House', 'Collections', 'Education', 'Inspiration', 'Sustainability'];
+const CATEGORIES = ['All', 'Engagement Rings', 'Wedding Bands', "Mother's Day"];
 
 export default function BlogPage() {
   const featured = POSTS.find((p) => p.featured)!;
@@ -134,16 +117,16 @@ export default function BlogPage() {
           display: flex; gap: 0; overflow-x: auto; scrollbar-width: none;
         }
         .blog-filter-inner::-webkit-scrollbar { display: none; }
-        .blog-cat-btn {
-          background: none; border: none; cursor: pointer;
+        .blog-cat-link {
           font-family: 'Jost', sans-serif; font-size: 12px;
           letter-spacing: 0.1em; text-transform: uppercase;
           color: #8a7f76; padding: 18px 20px;
           border-bottom: 2px solid transparent;
           white-space: nowrap; transition: color 0.15s, border-color 0.15s;
+          text-decoration: none; display: inline-block;
         }
-        .blog-cat-btn:first-child { border-color: #b8923a; color: #1a1410; }
-        .blog-cat-btn:hover { color: #1a1410; }
+        .blog-cat-link:first-child { border-color: #b8923a; color: #1a1410; }
+        .blog-cat-link:hover { color: #1a1410; }
 
         /* Featured post */
         .blog-featured { max-width: 1100px; margin: 0 auto; padding: 64px 24px 0; }
@@ -255,10 +238,10 @@ export default function BlogPage() {
 
       {/* Header */}
       <section className="blog-header">
-        <span className="blog-eyebrow">The DANHOV Journal</span>
-        <h1>Stories from the Atelier</h1>
+        <span className="blog-eyebrow">DANHOV Blog</span>
+        <h1>Tips, Stories &amp; Inspiration</h1>
         <p className="blog-header-sub">
-          On jewelry, love, craft, and the geometry of things that matter.
+          Engagement ring guides, wedding band trends, and stories from the DANHOV atelier in Los Angeles.
         </p>
       </section>
 
@@ -266,7 +249,7 @@ export default function BlogPage() {
       <nav className="blog-filter" aria-label="Blog categories">
         <div className="blog-filter-inner">
           {CATEGORIES.map((c) => (
-            <button key={c} className="blog-cat-btn">{c}</button>
+            <span key={c} className="blog-cat-link">{c}</span>
           ))}
         </div>
       </nav>
@@ -285,9 +268,9 @@ export default function BlogPage() {
             <span className="blog-post-cat">{featured.category} · Featured</span>
             <h2 className="blog-featured-title">{featured.title}</h2>
             <p className="blog-featured-excerpt">{featured.excerpt}</p>
-            <p className="blog-featured-meta">{featured.date} · {featured.readTime}</p>
+            <p className="blog-featured-meta">{featured.date}</p>
             <Link href={`/blog/${featured.slug}`} className="blog-featured-link">
-              Read the Story &rarr;
+              Read More &rarr;
             </Link>
           </div>
         </div>
@@ -295,7 +278,7 @@ export default function BlogPage() {
 
       {/* Grid */}
       <section className="blog-grid-section">
-        <span className="blog-grid-label">Latest from the Journal</span>
+        <span className="blog-grid-label">Recent Posts</span>
         <div className="blog-grid">
           {rest.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="blog-card">
@@ -309,8 +292,8 @@ export default function BlogPage() {
                 <span className="blog-post-cat">{post.category}</span>
                 <h3 className="blog-card-title">{post.title}</h3>
                 <p className="blog-card-excerpt">{post.excerpt}</p>
-                <p className="blog-card-meta">{post.date} · {post.readTime}</p>
-                <span className="blog-card-read">Read &rarr;</span>
+                <p className="blog-card-meta">{post.date}</p>
+                <span className="blog-card-read">Read More &rarr;</span>
               </div>
             </Link>
           ))}
@@ -319,8 +302,8 @@ export default function BlogPage() {
 
       {/* Newsletter */}
       <section className="blog-newsletter">
-        <h2>Letters from the Atelier</h2>
-        <p>New stories, collection launches, and quiet reflections — delivered monthly.</p>
+        <h2>Stay Inspired</h2>
+        <p>New articles, collection launches, and jewelry guides — delivered to your inbox.</p>
         <form className="blog-newsletter-form" action="#">
           <input
             className="blog-newsletter-input"

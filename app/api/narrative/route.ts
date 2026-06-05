@@ -25,7 +25,7 @@ const Query = z.object({
 
 export async function GET(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = checkRateLimit(ip, 'narrative', 30, 60 * 60 * 1000); // 30 per hour
+  const rl = checkRateLimit(ip, 'narrative', 30, 24 * 60 * 60 * 1000); // 30 per 24hr
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },

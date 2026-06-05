@@ -30,7 +30,7 @@ const Fields = z.object({
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = checkRateLimit(ip, 'vision', 8, 60 * 60 * 1000); // 8 per hour
+  const rl = checkRateLimit(ip, 'vision', 8, 24 * 60 * 60 * 1000); // 8 per 24hr
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },
