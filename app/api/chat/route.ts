@@ -119,17 +119,17 @@ export async function POST(req: NextRequest) {
             lastError = err;
             const msg = err instanceof Error ? err.message : String(err);
             console.error(`chat-stream: ${modelName} failed —`, msg);
-            if (!/429|503|404|quota|exceeded|unavailable/i.test(msg)) break;
+            if (!/429|503|404|quota|exceeded|unavailable|not.found|RESOURCE_EXHAUSTED|UNAVAILABLE/i.test(msg)) break;
           }
         }
 
         const lastMsg =
           lastError instanceof Error ? lastError.message : String(lastError ?? 'unknown');
-        console.error('chat-stream: all models failed', lastError);
+        console.error('chat-stream: all models failed —', lastMsg);
         send('error', {
-          message:
-            'The advisor is briefly unavailable. Please try again in a moment.',
+          message: 'The advisor is briefly unavailable. Please try again in a moment.',
           detail: lastMsg,
+          debug: process.env.NODE_ENV !== 'production' ? lastMsg : undefined,
         });
         controller.close();
       },
@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`chat: ${modelName} failed —`, msg);
       lastError = err;
-      if (!/429|503|404|quota|exceeded|unavailable/i.test(msg)) break;
+      if (!/429|503|404|quota|exceeded|unavailable|not.found|RESOURCE_EXHAUSTED|UNAVAILABLE/i.test(msg)) break;
     }
   }
 

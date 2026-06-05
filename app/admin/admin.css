@@ -148,7 +148,7 @@ body:has(.admin-root) {
 .adm-h2 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; margin: 0; color: var(--adm-text); }
 .adm-page-sub { font-size: 13px; color: var(--adm-mute); margin: 0; }
 .adm-back-link { display: inline-block; font-size: 12px; color: var(--adm-mute) !important; letter-spacing: 0.05em; margin-bottom: 6px; }
-.adm-mono { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12.5px; }
+.adm-mono { font-family: monospace; font-size: 12.5px; }
 
 /* ── Cards ─────────────────────────────────────────────────────────── */
 .adm-card {
@@ -318,7 +318,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .adm-input:focus, .adm-select:focus {
   outline: none; border-color: var(--adm-accent); box-shadow: 0 0 0 3px rgba(172,52,56,0.10);
 }
-.adm-input--mono { font-family: 'SF Mono', Menlo, Consolas, monospace; font-size: 12.5px; }
+.adm-input--mono { font-family: monospace; font-size: 12.5px; }
 .adm-input[disabled] { background: #fbf7f4; color: var(--adm-mute); }
 .adm-select--sm { padding: 6px 10px; font-size: 12.5px; }
 
