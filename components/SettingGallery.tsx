@@ -38,13 +38,31 @@ export default function SettingGallery({ images, name }: Props) {
 
   function applyAngle(deg: number) {
     angleRef.current = deg;
-    if (stageRef.current) stageRef.current.style.transform = `rotateY(${deg}deg)`;
+    const rad = (deg * Math.PI) / 180;
+
+    // A single-axis rotateY reads as "the picture is being skewed" — what
+    // sells an object as genuinely turning in space is *layered* motion:
+    // a slight counter-tilt on the other axis, and real depth travel
+    // (translateZ) so the piece swells toward camera as it faces you and
+    // recedes as it turns away. Combined with the perspective on the
+    // parent, this is what gives the spin actual volume.
+    const tilt = Math.sin(rad * 1.7) * 4;
+    const depth = Math.cos(rad) * 34;
+    const scale = 1 + Math.cos(rad) * 0.045;
+    if (stageRef.current) {
+      stageRef.current.style.transform =
+        `rotateX(${tilt.toFixed(2)}deg) rotateY(${deg.toFixed(2)}deg) translateZ(${depth.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+    }
     if (sheenRef.current) {
-      const rad = (deg * Math.PI) / 180;
-      const x = 50 + Math.sin(rad) * 42;
-      const glow = 0.08 + 0.1 * Math.max(0, Math.cos(rad));
+      // A specular highlight that sweeps and flares as facets/metal catch
+      // a fixed studio light while the piece rotates through it — brightest
+      // and tightest face-on, broad and dim edge-on, just like a real turn.
+      const facing = Math.max(0, Math.cos(rad));
+      const x = 50 + Math.sin(rad) * 40;
+      const spread = 70 - facing * 28;
+      const glow = 0.05 + facing * facing * 0.22;
       sheenRef.current.style.background =
-        `radial-gradient(ellipse 60% 80% at ${x.toFixed(1)}% 42%, rgba(255,255,255,${glow.toFixed(3)}), transparent 60%)`;
+        `radial-gradient(ellipse ${spread.toFixed(0)}% ${(spread * 1.1).toFixed(0)}% at ${x.toFixed(1)}% 40%, rgba(255,255,255,${glow.toFixed(3)}), transparent 62%)`;
     }
   }
 

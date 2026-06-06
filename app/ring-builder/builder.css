@@ -352,9 +352,11 @@
      seamlessly to the card's corners — no visible "boxed" gutter. */
   background: #fff; border-radius: 6px; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  /* 3D viewing context for the turntable spin below — large enough that
-     the rotation reads as gentle depth, not a fisheye warp. */
-  perspective: 2000px;
+  /* 3D viewing context for the turntable spin below — tight enough that
+     the depth travel (translateZ/scale in SettingGallery) actually reads
+     as the piece swelling toward camera, not just a flat tilt. */
+  perspective: 1300px;
+  perspective-origin: 50% 46%;
 }
 .sd-main-img.is-spinnable { cursor: ew-resize; }
 .sd-main-img.is-spinnable.is-dragging { cursor: grabbing; }
