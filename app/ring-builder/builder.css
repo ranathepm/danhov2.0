@@ -352,10 +352,46 @@
      seamlessly to the card's corners — no visible "boxed" gutter. */
   background: #fff; border-radius: 6px; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
+  /* 3D viewing context for the turntable spin below — large enough that
+     the rotation reads as gentle depth, not a fisheye warp. */
+  perspective: 2000px;
 }
 .sd-main-img.is-spinnable { cursor: ew-resize; }
 .sd-main-img.is-spinnable.is-dragging { cursor: grabbing; }
-.sd-main-img img { transition: opacity 70ms linear; }
+
+/* Single-image 360° "turntable" stage. A flat in-plane rotate() makes a
+   ring photo tumble through sideways/upside-down orientations — wrong for
+   a piece of jewellery, which should stay upright as you turn it. Instead
+   we spin the photo around its vertical axis in 3D (rotateY), which keeps
+   it upright the whole way round; the lone real photo stands in for both
+   the front face and — mirrored — the far side (see .is-back). The angle
+   is written straight to this element's transform via ref each frame, so
+   it stays at 60fps without round-tripping through React state.  */
+.sd-spin-stage {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: 50% 50%;
+  will-change: transform;
+}
+.sd-spin-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.sd-spin-face.is-back { transform: rotateY(180deg) scaleX(-1); }
+/* Soft light glint that sweeps across the photo as it turns — simulating
+   a fixed studio light catching the metal/facets on a real turntable. */
+.sd-spin-sheen {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.sd-main-img.is-spinnable:hover .sd-spin-sheen,
+.sd-main-img.is-dragging .sd-spin-sheen {
+  opacity: 1;
+}
 .sd-img-placeholder { opacity: 0.4; }
 .sd-img-placeholder svg { width: 80px; height: 80px; }
 
@@ -2055,6 +2091,15 @@
   display: block;
   background: transparent;
   pointer-events: auto;
+  /* The site-wide responsive-media reset (globals.css) caps img/video/
+     canvas/iframe/svg at max-width:100% + height:auto — which clamps this
+     iframe's width to the card (274px) while its inline height stays at
+     500px, then the uniform scale() transform squashes that already-
+     distorted box into a narrow sliver, "splitting" the card visually.
+     Override both so the inline 500x500 + scale() combo stays a true
+     square that fills the card edge-to-edge. */
+  max-width: none;
+  max-height: none;
   /* width/height/transform are set via inline style by DiamondCardMedia
      based on the measured card size — see LOUPE360_NATIVE constant. */
 }

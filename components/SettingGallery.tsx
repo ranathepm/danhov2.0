@@ -3,47 +3,69 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
-// ── Setting gallery: functional 360°-style spin viewer ───────────────────
-// DANHOV product shoots give us a handful of angle photos per setting
-// (avg. ~6.5), not a true turntable frame sequence or a video. So instead
-// of a static "360°" badge that does nothing, we drive an actual rotation
-// illusion from the real photos: hovering auto-advances through the angles
-// on a loop, and dragging lets the customer scrub through them by hand —
-// exactly the interaction language of premium 360° viewers, built from the
-// assets we actually have.
+// ── Setting gallery: single-image 360° spin viewer ───────────────────────
+// DANHOV product shoots aren't true turntable sequences, so cutting between
+// the handful of real angle photos on hover just reads as the picture
+// "jumping" between different shots. Instead, the single photo on display
+// performs a smooth, continuous 360° spin on hover — the classic luxury
+// product-viewer language — with a soft light glint that tracks the
+// rotation, plus drag-to-rotate for hands-on control. The angle is written
+// straight to the DOM via refs each frame so the spin stays buttery at
+// 60fps without round-tripping through React state on every tick.
 
 type Props = {
   images: string[];
   name: string;
 };
 
-const SPIN_INTERVAL_MS = 140;
-const PX_PER_FRAME = 34;
+const DEG_PER_SECOND = 36; // 10s per revolution — slow, deliberate "turntable" pace
+const DEG_PER_PIXEL = 0.6;
 
 export default function SettingGallery({ images, name }: Props) {
-  const frames = images;
-  const canSpin = frames.length > 1;
+  const thumbs = images.slice(0, 4);
+  const hero = thumbs[0];
+  const canSpin = !!hero;
 
-  const [frame, setFrame] = useState(0);
+  const [active, setActive] = useState(0);
   const [hovering, setHovering] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const dragRef = useRef({ startX: 0, startFrame: 0 });
-  const spinRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Auto-rotate on hover (paused while the customer is dragging manually).
-  useEffect(() => {
-    if (hovering && !dragging && canSpin) {
-      spinRef.current = setInterval(() => {
-        setFrame((f) => (f + 1) % frames.length);
-      }, SPIN_INTERVAL_MS);
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const sheenRef = useRef<HTMLDivElement | null>(null);
+  const angleRef = useRef(0);
+  const dragRef = useRef({ startX: 0, startAngle: 0 });
+  const rafRef = useRef<number | null>(null);
+
+  function applyAngle(deg: number) {
+    angleRef.current = deg;
+    if (stageRef.current) stageRef.current.style.transform = `rotateY(${deg}deg)`;
+    if (sheenRef.current) {
+      const rad = (deg * Math.PI) / 180;
+      const x = 50 + Math.sin(rad) * 42;
+      const glow = 0.08 + 0.1 * Math.max(0, Math.cos(rad));
+      sheenRef.current.style.background =
+        `radial-gradient(ellipse 60% 80% at ${x.toFixed(1)}% 42%, rgba(255,255,255,${glow.toFixed(3)}), transparent 60%)`;
     }
-    return () => {
-      if (spinRef.current) {
-        clearInterval(spinRef.current);
-        spinRef.current = null;
-      }
+  }
+
+  // Smooth continuous rotation while hovering (and not actively dragged) —
+  // always resumes from the photo's current angle, so starting, stopping,
+  // and grabbing the image mid-spin never causes a visual jump.
+  useEffect(() => {
+    if (!hovering || dragging || !canSpin) return;
+    let last = performance.now();
+    const tick = (now: number) => {
+      const dt = (now - last) / 1000;
+      last = now;
+      applyAngle(angleRef.current + DEG_PER_SECOND * dt);
+      rafRef.current = requestAnimationFrame(tick);
     };
-  }, [hovering, dragging, canSpin, frames.length]);
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    };
+  }, [hovering, dragging, canSpin]);
 
   function handleEnter() {
     setHovering(true);
@@ -55,22 +77,24 @@ export default function SettingGallery({ images, name }: Props) {
   function handlePointerDown(e: React.PointerEvent<HTMLDivElement>) {
     if (!canSpin) return;
     setDragging(true);
-    dragRef.current = { startX: e.clientX, startFrame: frame };
+    dragRef.current = { startX: e.clientX, startAngle: angleRef.current };
     e.currentTarget.setPointerCapture(e.pointerId);
   }
   function handlePointerMove(e: React.PointerEvent<HTMLDivElement>) {
-    if (!dragging || !canSpin) return;
+    if (!dragging) return;
     const dx = e.clientX - dragRef.current.startX;
-    const delta = Math.round(dx / PX_PER_FRAME);
-    let next = (dragRef.current.startFrame - delta) % frames.length;
-    if (next < 0) next += frames.length;
-    setFrame(next);
+    applyAngle(dragRef.current.startAngle + dx * DEG_PER_PIXEL);
   }
   function handlePointerUp() {
     setDragging(false);
   }
 
-  if (frames.length === 0) {
+  function selectThumb(idx: number) {
+    setActive(idx);
+    applyAngle(0);
+  }
+
+  if (!hero) {
     return (
       <div className="sd-gallery">
         <div className="sd-main-img">
@@ -86,6 +110,8 @@ export default function SettingGallery({ images, name }: Props) {
     );
   }
 
+  const shown = thumbs[active] ?? hero;
+
   return (
     <div className="sd-gallery">
       <div
@@ -97,47 +123,58 @@ export default function SettingGallery({ images, name }: Props) {
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {frames.map((src, i) => (
-          <Image
-            key={src}
-            src={src}
-            alt={i === 0 ? name : `${name} — angle ${i + 1}`}
-            fill
-            sizes="(max-width: 880px) 100vw, 580px"
-            style={{ objectFit: 'contain', opacity: i === frame ? 1 : 0 }}
-            priority={i === 0}
-            loading={i === 0 ? undefined : 'lazy'}
-            draggable={false}
-          />
-        ))}
+        <div ref={stageRef} className="sd-spin-stage">
+          <div className="sd-spin-face">
+            <Image
+              src={shown}
+              alt={name}
+              fill
+              sizes="(max-width: 880px) 100vw, 580px"
+              style={{ objectFit: 'contain' }}
+              priority
+              draggable={false}
+            />
+          </div>
+          {/* Mirrored stand-in for the far side — DANHOV doesn't shoot a
+              true back-view photo, and a mirrored front reads as a
+              plausible reverse for a roughly-symmetric solitaire band. */}
+          <div className="sd-spin-face is-back" aria-hidden="true">
+            <Image
+              src={shown}
+              alt=""
+              fill
+              sizes="(max-width: 880px) 100vw, 580px"
+              style={{ objectFit: 'contain' }}
+              draggable={false}
+            />
+          </div>
+        </div>
+        {canSpin && <div ref={sheenRef} className="sd-spin-sheen" aria-hidden="true" />}
 
         {canSpin && (
           <div className={`sd-360-badge${hovering ? ' is-active' : ''}`}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
               <path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9" />
             </svg>
-            <span>{hovering ? 'Drag to rotate' : '360° View'}</span>
+            <span>{dragging ? 'Drag to rotate' : hovering ? 'Spinning · drag to steer' : '360° View'}</span>
           </div>
         )}
       </div>
 
-      {frames.length > 1 && (
+      {thumbs.length > 1 && (
         <div className="sd-thumbs">
-          {frames.slice(1, 5).map((src, i) => {
-            const idx = i + 1;
-            return (
-              <button
-                key={src}
-                type="button"
-                className={`sd-thumb${frame === idx ? ' is-active' : ''}`}
-                onClick={() => setFrame(idx)}
-                aria-label={`View ${name} — angle ${idx + 1}`}
-                aria-pressed={frame === idx}
-              >
-                <Image src={src} alt="" fill sizes="140px" style={{ objectFit: 'contain' }} loading="lazy" draggable={false} />
-              </button>
-            );
-          })}
+          {thumbs.map((src, idx) => (
+            <button
+              key={src}
+              type="button"
+              className={`sd-thumb${active === idx ? ' is-active' : ''}`}
+              onClick={() => selectThumb(idx)}
+              aria-label={idx === 0 ? `View ${name} — main photo` : `View ${name} — angle ${idx + 1}`}
+              aria-pressed={active === idx}
+            >
+              <Image src={src} alt="" fill sizes="140px" style={{ objectFit: 'contain' }} loading="lazy" draggable={false} />
+            </button>
+          ))}
         </div>
       )}
     </div>
