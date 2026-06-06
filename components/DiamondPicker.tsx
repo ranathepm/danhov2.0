@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useCart, formatUsd, parsePriceDisplay } from '@/components/CartProvider';
 
 // ── Diamond media: still image + loupe360 360° viewer on hover ───────────
 // Brilliant Earth carbon-copy. Nivoda's `video` field is a loupe360 viewer
@@ -18,7 +17,7 @@ import { useCart, formatUsd, parsePriceDisplay } from '@/components/CartProvider
 // We measure the card and scale the iframe down to match.
 const LOUPE360_NATIVE = 500;
 
-function DiamondCardMedia({
+export function DiamondCardMedia({
   image,
   video,
   shape,
@@ -138,7 +137,7 @@ function DiamondCardMedia({
     </div>
   );
 }
-type ShapeT =
+export type ShapeT =
   | 'ROUND' | 'OVAL' | 'PRINCESS' | 'CUSHION' | 'EMERALD'
   | 'PEAR' | 'HEART' | 'MARQUISE' | 'RADIANT' | 'ASSCHER';
 
@@ -336,22 +335,9 @@ function ensureSessionId(): string {
   return sid;
 }
 
-type SettingSummary = {
-  sku: string;
-  slug: string;
-  name: string;
-  collection: string | null;
-  image: string | null;
-  price_display: string | null;
-  metal: string | null;
-};
-
 type Props = {
   settingSlug?: string;
-  /** Pre-fetched setting details so the bundle bar can render setting
-   *  name + price without an extra client roundtrip. */
-  setting?: SettingSummary | null;
-  /** Called when the customer picks a stone — after the hold succeeds. */
+  /** Called once the stone is held and we're navigating to Complete Ring. */
   onSelected?: (offerId: string, holdId: string) => void;
   /** If a stone is already selected (e.g. coming back to /diamond from /review). */
   initialOfferId?: string;
@@ -359,24 +345,7 @@ type Props = {
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-// Brilliant Earth-style ring size catalogue: half + quarter sizes from 3
-// through 13.5, plus "Less than 3" for the smallest hands. Stored as
-// display strings since fractional sizes like "6 1/4" don't parse cleanly
-// as numbers.
-const RING_SIZES: string[] = (() => {
-  const out: string[] = ['Less than 3'];
-  for (let whole = 3; whole <= 13; whole++) {
-    out.push(`${whole}`);
-    out.push(`${whole} 1/4`);
-    out.push(`${whole} 1/2`);
-    out.push(`${whole} 3/4`);
-  }
-  out.push('13 1/2');
-  return Array.from(new Set(out));
-})();
-
-export default function DiamondPicker({ settingSlug, setting, onSelected, initialOfferId }: Props) {
-  const cart = useCart();
+export default function DiamondPicker({ settingSlug, onSelected, initialOfferId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -403,10 +372,6 @@ export default function DiamondPicker({ settingSlug, setting, onSelected, initia
   const [err, setErr] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(initialOfferId ?? null);
   const [holding, setHolding] = useState<string | null>(null);
-  // Ring size + add-to-cart state for the sticky bundle bar.
-  const [ringSize, setRingSize] = useState<string>('');
-  const [addingToCart, setAddingToCart] = useState(false);
-  const [cartError, setCartError] = useState<string | null>(null);
 
   const sessionId = useMemo(() => ensureSessionId(), []);
   const PAGE_SIZE = 24;
@@ -479,114 +444,46 @@ export default function DiamondPicker({ settingSlug, setting, onSelected, initia
       });
   }, [filterSignature, offset, shape, labgrown, caratMin, caratMax, colors, clarities, cuts, sortField, sortDir]);
 
-  // Picking a stone now just records it locally — the actual Nivoda hold
-  // and the cart add fire only when the customer clicks the bottom-bar
-  // "Add to Cart" button after also choosing a ring size. That mirrors
-  // Brilliant Earth's pattern and means the customer can swap stones
-  // freely without burning Nivoda hold quota.
-  function selectStone(d: Diamond) {
+  // Selecting a stone places a short Nivoda hold (reserves it while the
+  // customer reviews) and advances straight to the Complete Ring screen —
+  // mirroring the Nivoda reference flow exactly: pick a diamond here, then
+  // see the assembled setting + diamond on /ring-builder/review. A failed
+  // hold is non-fatal — the studio re-confirms availability at checkout.
+  async function selectStone(d: Diamond) {
+    if (holding) return;
     setSelected(d.id);
+    setHolding(d.id);
     setErr(null);
-    setCartError(null);
-    // Scroll the bottom bar into view if it's been pushed below the fold.
-    if (typeof window !== 'undefined') {
-      window.requestAnimationFrame(() => {
-        const bar = document.querySelector<HTMLElement>('.be-bundle-bar');
-        bar?.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      });
-    }
-    void onSelected;
-  }
 
-  async function handleAddBundleToCart() {
-    if (!selected) {
-      setCartError('Please pick a diamond first.');
-      return;
-    }
-    if (!ringSize) {
-      setCartError('Please choose a ring size.');
-      return;
-    }
-    if (!setting) {
-      setCartError('Setting not found. Please re-open this page from the product detail.');
-      return;
-    }
-    const diamondItem = items.find((d) => d.id === selected);
-    if (!diamondItem) {
-      setCartError('Selected diamond is no longer in the list. Please pick another.');
-      return;
-    }
-
-    setAddingToCart(true);
-    setCartError(null);
-
+    let holdId: string | null = null;
     try {
-      // Place a Nivoda hold so the stone is reserved while the customer
-      // completes the cart flow. If the hold fails, surface a clean error.
       const holdRes = await fetch('/api/nivoda/hold', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          offer_id: diamondItem.id,
+          offer_id: d.id,
           session_id: sessionId,
           setting_slug: settingSlug,
         }),
       });
-      let holdId: string | null = null;
       if (holdRes.ok) {
         const holdJson = await holdRes.json().catch(() => ({}));
         holdId = holdJson.hold_id ?? null;
       } else {
-        // Hold failure is non-fatal — we still add the bundle to the
-        // cart, and the studio re-confirms availability at checkout.
         const e = await holdRes.json().catch(() => ({}));
         console.warn('[diamond] hold failed, continuing without hold:', e);
       }
-
-      const cert = diamondItem.diamond.certificate;
-      const diamondPrice = Number(diamondItem.markup_price ?? diamondItem.price ?? 0);
-      const settingPrice = parsePriceDisplay(setting.price_display);
-      const bundleTotal = settingPrice + diamondPrice;
-
-      const bundleId = `bundle:${setting.sku}:${diamondItem.id}:${ringSize}`;
-      cart.addItem({
-        id: bundleId,
-        sku: setting.sku,
-        slug: setting.slug,
-        name: setting.name,
-        collection: setting.collection,
-        metal: setting.metal,
-        image: setting.image,
-        price_display: setting.price_display,
-        price_num: bundleTotal,
-        ring_size: ringSize,
-        bundle: {
-          setting_price_usd: settingPrice,
-          diamond: {
-            offer_id: diamondItem.id,
-            hold_id: holdId,
-            shape: (cert?.shape ?? shape).toString(),
-            carat: cert?.carats ?? 0,
-            color: cert?.color ?? '—',
-            clarity: cert?.clarity ?? '—',
-            cut: cert?.cut ?? '—',
-            lab: cert?.lab ?? null,
-            cert_number: cert?.certNumber ?? null,
-            price_usd: diamondPrice,
-            image: diamondItem.diamond.image,
-          },
-        },
-      });
-      router.push('/cart');
     } catch (e) {
-      setCartError(e instanceof Error ? e.message : 'Could not add to cart. Please try again.');
-    } finally {
-      setAddingToCart(false);
+      console.warn('[diamond] hold request failed, continuing without hold:', e);
     }
+
+    onSelected?.(d.id, holdId ?? '');
+
+    const qs = new URLSearchParams({ diamond: d.id });
+    if (settingSlug) qs.set('setting', settingSlug);
+    if (holdId) qs.set('hold', holdId);
+    router.push(`/ring-builder/review?${qs.toString()}`);
   }
-  // keep the unused holding state path for backwards compat
-  void holding;
-  void setHolding;
 
   const page = Math.floor(offset / PAGE_SIZE);
   const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
@@ -806,12 +703,13 @@ export default function DiamondPicker({ settingSlug, setting, onSelected, initia
                     <button
                       type="button"
                       className={`be-card-cta${isSelected ? ' is-selected' : ''}`}
+                      disabled={!!holding}
                       onClick={(e) => {
                         e.stopPropagation();
                         selectStone(d);
                       }}
                     >
-                      {isSelected ? '✓ Selected' : 'Select this diamond'}
+                      {isHolding ? 'Reserving…' : isSelected ? '✓ Selected' : 'Select this diamond'}
                     </button>
                   </div>
                 </div>
@@ -853,84 +751,6 @@ export default function DiamondPicker({ settingSlug, setting, onSelected, initia
           )}
         </section>
       </div>
-
-      {/* ── Sticky bundle bar — appears once a diamond is selected.
-            Mirrors Brilliant Earth's pattern: setting summary + diamond
-            summary + ring size dropdown + Add to Cart CTA. */}
-      {selected && setting && (() => {
-        const d = items.find((it) => it.id === selected);
-        if (!d) return null;
-        const cert = d.diamond.certificate;
-        const diamondPrice = Number(d.markup_price ?? d.price ?? 0);
-        const settingPrice = parsePriceDisplay(setting.price_display);
-        const bundleTotal = settingPrice + diamondPrice;
-        return (
-          <div className="be-bundle-bar" role="region" aria-label="Your ring bundle">
-            <div className="be-bundle-bar-inner">
-              <div className="be-bundle-line be-bundle-line--setting">
-                <div className="be-bundle-eyebrow">Setting</div>
-                <div className="be-bundle-name">{setting.name}</div>
-                <div className="be-bundle-meta">
-                  {setting.metal ? setting.metal.replace(/_/g, ' ') : '—'}
-                </div>
-                <div className="be-bundle-price">{formatUsd(settingPrice)}</div>
-              </div>
-              <div className="be-bundle-plus" aria-hidden="true">+</div>
-              <div className="be-bundle-line be-bundle-line--diamond">
-                <div className="be-bundle-eyebrow">Diamond</div>
-                <div className="be-bundle-name">
-                  {cert?.carats ? cert.carats.toFixed(2) : '—'} ct {(cert?.shape || shape).toString().toLowerCase()}
-                </div>
-                <div className="be-bundle-meta">
-                  {cert?.cut === 'EX' || cert?.cut === 'ID' ? 'Super Ideal' : (cert?.cut ?? '—')}
-                  {' · '}{cert?.color ?? '—'}{' · '}{cert?.clarity ?? '—'}
-                </div>
-                <div className="be-bundle-price">{formatUsd(diamondPrice)}</div>
-              </div>
-              <div className="be-bundle-size">
-                <label htmlFor="be-ring-size" className="be-bundle-eyebrow">Ring size</label>
-                <select
-                  id="be-ring-size"
-                  className="be-bundle-size-select"
-                  value={ringSize}
-                  onChange={(e) => {
-                    setRingSize(e.target.value);
-                    setCartError(null);
-                  }}
-                >
-                  <option value="">Select size</option>
-                  {RING_SIZES.map((s) => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-                <a
-                  href="https://www.danhov.com/ring-size-guide"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="be-bundle-size-help"
-                >
-                  Size Guide
-                </a>
-              </div>
-              <div className="be-bundle-total">
-                <div className="be-bundle-eyebrow">Bundle total</div>
-                <div className="be-bundle-total-amount">{formatUsd(bundleTotal)}</div>
-                <button
-                  type="button"
-                  className="be-bundle-add"
-                  onClick={handleAddBundleToCart}
-                  disabled={addingToCart || !ringSize}
-                >
-                  {addingToCart ? 'Adding…' : 'Add to Cart'}
-                </button>
-              </div>
-            </div>
-            {cartError && (
-              <div className="be-bundle-err" role="alert">{cartError}</div>
-            )}
-          </div>
-        );
-      })()}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import BuilderStepper from '@/components/BuilderStepper';
 import DiamondPicker from '@/components/DiamondPicker';
-import { fetchProductBySlug } from '@/lib/products';
 import '../builder.css';
 
 export const metadata: Metadata = {
@@ -25,12 +24,6 @@ export default async function SelectDiamondPage({
 }: {
   searchParams: Search;
 }) {
-  // Pre-fetch the chosen setting so the picker can render the setting
-  // summary in its add-to-cart bar without an extra client roundtrip.
-  const setting = searchParams.setting
-    ? await fetchProductBySlug(searchParams.setting)
-    : null;
-
   return (
     <main className="builder-page">
       <BuilderStepper
@@ -54,19 +47,6 @@ export default async function SelectDiamondPage({
       <DiamondPicker
         settingSlug={searchParams.setting}
         initialOfferId={searchParams.diamond}
-        setting={
-          setting
-            ? {
-                sku: setting.sku,
-                slug: setting.slug,
-                name: setting.name,
-                collection: setting.collection,
-                image: setting.images?.[0] ?? null,
-                price_display: setting.price_display,
-                metal: searchParams.metal ?? setting.default_metal ?? null,
-              }
-            : null
-        }
       />
     </main>
   );

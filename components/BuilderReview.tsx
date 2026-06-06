@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
+import { DiamondCardMedia, type ShapeT } from '@/components/DiamondPicker';
 
 export type ReviewDiamond = {
   offer_id: string;
@@ -81,11 +82,19 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
               </div>
             )}
           </div>
-          {diamond.image && (
+          {(diamond.image || diamond.video) && (
             <div className="builder-review-diamond-img">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={diamond.image} alt={`${diamond.carat}ct ${diamond.shape} diamond`} />
-              <span className="builder-review-diamond-caption">Your stone</span>
+              <div className="builder-review-diamond-media">
+                <DiamondCardMedia
+                  image={diamond.image}
+                  video={diamond.video}
+                  shape={diamond.shape.toUpperCase() as ShapeT}
+                  carat={diamond.carat}
+                />
+              </div>
+              <span className="builder-review-diamond-caption">
+                Your stone{diamond.video ? ' · hover to spin 360°' : ''}
+              </span>
             </div>
           )}
           <p className="builder-review-tagline">

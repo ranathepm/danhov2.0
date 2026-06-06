@@ -574,7 +574,7 @@ export async function getDiamondByOfferId(
   offerId: string
 ): Promise<NivodaRequestResult<NivodaDiamond | null>> {
   // Validate offerId — must be safe to inline as a GraphQL string literal.
-  const safe = String(offerId).replace(/[^A-Za-z0-9-_]/g, '');
+  const safe = safeId(offerId);
   if (!safe) {
     return { ok: false, error: 'invalid offer id', errors: [] };
   }
@@ -611,7 +611,14 @@ export async function getDiamondByOfferId(
 // ── Holds + orders (Pro API) ──────────────────────────────────────────────
 
 function safeId(s: string | undefined | null): string {
-  return String(s ?? '').replace(/[^A-Za-z0-9-_]/g, '');
+  // Nivoda search results return offer ids as type-prefixed composites,
+  // e.g. "DIAMOND/c5241ce8-799e-441a-a02d-e2a49c6a6dd3". The lookup/hold/
+  // order APIs all expect the bare UUID — the type travels separately as
+  // ProductType — so strip the "TYPE/" prefix before sanitizing. Without
+  // this, Nivoda rejects the id with "invalid input syntax for type uuid".
+  const raw = String(s ?? '');
+  const id = raw.includes('/') ? raw.slice(raw.lastIndexOf('/') + 1) : raw;
+  return id.replace(/[^A-Za-z0-9-]/g, '');
 }
 function safeStringLit(s: string | undefined | null): string {
   // Escape backslashes and double-quotes for a GraphQL string literal.

@@ -466,7 +466,7 @@ function SettingCard({ product: p, chosenShape }: { product: Product; chosenShap
             alt={p.name}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            style={{ objectFit: 'contain', padding: '12px' }}
+            style={{ objectFit: 'contain' }}
             loading="lazy"
           />
         ) : (

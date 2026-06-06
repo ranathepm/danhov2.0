@@ -46,8 +46,8 @@
 }
 .rb-step-link:hover { color: #1a1410; background: #faf6f1; }
 .rb-step--active .rb-step-link {
-  color: #1a1410;
-  border-bottom-color: #1a1410;
+  color: var(--logo-red);
+  border-bottom-color: var(--logo-red);
   cursor: default;
 }
 .rb-step--done .rb-step-link { color: #6b5e57; }
@@ -64,8 +64,8 @@
   font-size: 15px; font-weight: 600;
   transition: background 0.15s, color 0.15s;
 }
-.rb-step-badge--active { background: #1a1410; color: #fff; }
-.rb-step-badge--done   { background: #4a3f38; color: #fff; }
+.rb-step-badge--active { background: var(--logo-red); color: #fff; }
+.rb-step-badge--done   { background: var(--logo-red-dark); color: #fff; }
 
 .rb-step-content {
   display: flex; flex-direction: column; line-height: 1.2;
@@ -78,7 +78,7 @@
   font-size: 15px; font-weight: 600; color: inherit;
 }
 .rb-step--active .rb-step-sub { color: #6b5e57; }
-.rb-step--active .rb-step-name { color: #1a1410; }
+.rb-step--active .rb-step-name { color: var(--logo-red); }
 
 .rb-step-sep { display: none; } /* handled by ::after pseudo */
 
@@ -149,8 +149,8 @@
   font-family: 'Jost', sans-serif;
   transition: border-color 0.15s, background 0.15s;
 }
-.sb-style-chip:hover { border-color: #1a1410; }
-.sb-style-chip.is-active { border-color: #1a1410; background: #1a1410; color: #fff; }
+.sb-style-chip:hover { border-color: var(--logo-red); }
+.sb-style-chip.is-active { border-color: var(--logo-red); background: var(--logo-red); color: #fff; }
 .sb-style-icon { width: 48px; height: 24px; display: flex; align-items: center; }
 .sb-style-icon svg { width: 100%; height: 100%; }
 .sb-style-label { font-size: 11px; letter-spacing: 0.04em; white-space: nowrap; }
@@ -164,7 +164,7 @@
   font-family: 'Jost', sans-serif;
 }
 .sb-metal-chip:hover { background: #f5f0eb; }
-.sb-metal-chip.is-active .sb-metal-circle { box-shadow: 0 0 0 2px #1a1410; }
+.sb-metal-chip.is-active .sb-metal-circle { box-shadow: 0 0 0 2px var(--logo-red); }
 .sb-metal-circle {
   width: 44px; height: 44px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.5);
@@ -189,18 +189,18 @@
 .sb-range::-webkit-slider-thumb {
   -webkit-appearance: none; pointer-events: all;
   width: 18px; height: 18px; border-radius: 50%;
-  background: #1a1410; cursor: pointer;
+  background: var(--logo-red); cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 .sb-range::-moz-range-thumb {
   pointer-events: all; width: 18px; height: 18px; border-radius: 50%;
-  background: #1a1410; cursor: pointer; border: none;
+  background: var(--logo-red); cursor: pointer; border: none;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
 .sb-range::-webkit-slider-runnable-track {
   background: #e8e2db; height: 4px; border-radius: 2px;
 }
-.sb-range--min::-webkit-slider-runnable-track { background: #1a1410; }
+.sb-range--min::-webkit-slider-runnable-track { background: var(--logo-red); }
 .sb-price-inputs {
   display: flex; align-items: center; gap: 10px;
 }
@@ -226,13 +226,13 @@
   font-family: 'Jost', sans-serif;
   transition: border-color 0.15s, background 0.15s;
 }
-.sb-shape-chip:hover { border-color: #1a1410; }
-.sb-shape-chip.is-active { border-color: #1a1410; background: #faf6f1; }
+.sb-shape-chip:hover { border-color: var(--logo-red); }
+.sb-shape-chip.is-active { border-color: var(--logo-red); background: #faf6f1; }
 .sb-shape-icon { width: 36px; height: 36px; color: #4a3f38; }
-.sb-shape-chip.is-active .sb-shape-icon { color: #1a1410; }
+.sb-shape-chip.is-active .sb-shape-icon { color: var(--logo-red); }
 .sb-shape-icon svg { width: 100%; height: 100%; }
 .sb-shape-label { font-size: 11px; color: #6b5e57; letter-spacing: 0.03em; }
-.sb-shape-chip.is-active .sb-shape-label { color: #1a1410; font-weight: 600; }
+.sb-shape-chip.is-active .sb-shape-label { color: var(--logo-red); font-weight: 600; }
 
 /* More buttons */
 .sb-more-btn {
@@ -293,7 +293,9 @@
 }
 .sb-card-img {
   aspect-ratio: 1; position: relative;
-  background: #f0ede8;
+  /* White — matches the photo's own backdrop so it blends flush to the
+     card's corners with no visible tinted gutter. */
+  background: #fff;
   display: flex; align-items: center; justify-content: center;
   overflow: hidden;
 }
@@ -346,21 +348,34 @@
 .sd-gallery { display: flex; flex-direction: column; gap: 12px; }
 .sd-main-img {
   position: relative; aspect-ratio: 1;
-  background: #f0ede8; border-radius: 6px; overflow: hidden;
+  /* Transparent / page-matched so the photo's own white backdrop blends
+     seamlessly to the card's corners — no visible "boxed" gutter. */
+  background: #fff; border-radius: 6px; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
 }
+.sd-main-img.is-spinnable { cursor: ew-resize; }
+.sd-main-img.is-spinnable.is-dragging { cursor: grabbing; }
+.sd-main-img img { transition: opacity 70ms linear; }
 .sd-img-placeholder { opacity: 0.4; }
 .sd-img-placeholder svg { width: 80px; height: 80px; }
 
 .sd-360-badge {
   position: absolute; bottom: 14px; left: 14px;
-  display: inline-flex; align-items: center; gap: 5px;
-  background: rgba(255,255,255,0.9); border: 1px solid #e8e2db;
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.92); border: 1px solid #e8e2db;
   border-radius: 999px; padding: 5px 12px;
   font-family: 'Jost', sans-serif; font-size: 12px;
   color: #1a1410; font-weight: 500;
   backdrop-filter: blur(4px);
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  pointer-events: none;
 }
+.sd-360-badge svg { transition: transform 0.18s ease; }
+.sd-360-badge.is-active {
+  background: rgba(172, 52, 56, 0.88); border-color: transparent; color: #fff8f6;
+}
+.sd-360-badge.is-active svg { animation: sd-badge-spin 1.05s linear infinite; }
+@keyframes sd-badge-spin { to { transform: rotate(360deg); } }
 
 .sd-thumbs {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -368,11 +383,12 @@
 }
 .sd-thumb {
   position: relative; aspect-ratio: 1;
-  background: #f0ede8; border-radius: 4px; overflow: hidden;
+  display: block; width: 100%; padding: 0; appearance: none;
+  background: #fff; border-radius: 4px; overflow: hidden;
   border: 1px solid #e8e2db; cursor: pointer;
   transition: border-color 0.15s;
 }
-.sd-thumb:hover { border-color: #1a1410; }
+.sd-thumb:hover, .sd-thumb.is-active { border-color: var(--logo-red); }
 
 /* Detail panel */
 .sd-panel {
@@ -428,13 +444,13 @@
   font-family: 'Jost', sans-serif;
   transition: border-color 0.15s;
 }
-.sd-option-chip:hover { border-color: #1a1410; }
-.sd-option-chip.is-active { border: 2px solid #1a1410; }
+.sd-option-chip:hover { border-color: var(--logo-red); }
+.sd-option-chip.is-active { border: 2px solid var(--logo-red); }
 .sd-option-icon { width: 32px; height: 32px; color: #4a3f38; }
 .sd-option-icon svg { width: 100%; height: 100%; }
-.sd-option-chip.is-active .sd-option-icon { color: #1a1410; }
+.sd-option-chip.is-active .sd-option-icon { color: var(--logo-red); }
 .sd-option-label { font-size: 11px; color: #6b5e57; }
-.sd-option-chip.is-active .sd-option-label { color: #1a1410; font-weight: 600; }
+.sd-option-chip.is-active .sd-option-label { color: var(--logo-red); font-weight: 600; }
 
 /* Metal options */
 .sd-metal-options { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -445,7 +461,7 @@
   transition: background 0.15s;
 }
 .sd-metal-option:hover { background: #f5f0eb; }
-.sd-metal-option.is-active .sd-metal-circle { box-shadow: 0 0 0 2px #fff, 0 0 0 4px #1a1410; }
+.sd-metal-option.is-active .sd-metal-circle { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--logo-red); }
 .sd-metal-circle {
   width: 48px; height: 48px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -483,13 +499,13 @@
 /* CTAs */
 .sd-cta-primary {
   width: 100%; margin-top: 20px;
-  background: #1a1410; color: #fff; border: none;
+  background: var(--logo-red); color: #fff; border: none;
   padding: 16px; font-family: 'Jost', sans-serif;
   font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
   text-transform: uppercase; cursor: pointer; border-radius: 4px;
   transition: background 0.18s;
 }
-.sd-cta-primary:hover { background: #2c1f18; }
+.sd-cta-primary:hover { background: var(--logo-red-dark); }
 .sd-cta-secondary {
   width: 100%; margin-top: 10px;
   background: #fff; color: #1a1410;
@@ -1123,10 +1139,12 @@
 .builder-review-img {
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 100%);
+  /* Plain white — matches the page backdrop so the ring photo's own
+     neutral background blends in flush, the way the reference renders it. */
+  background: #fff;
   overflow: hidden;
 }
-.builder-review-img img { width: 100%; height: 100%; object-fit: contain; padding: 12px; }
+.builder-review-img img { width: 100%; height: 100%; object-fit: contain; }
 .builder-review-tagline {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
@@ -1654,14 +1672,20 @@
   margin-top: 12px;
   text-align: center;
 }
-.builder-review-diamond-img img {
-  max-width: 180px;
-  max-height: 180px;
-  object-fit: contain;
-  border-radius: 6px;
-  background: #faf6f1;
-  padding: 8px;
+.builder-review-diamond-media {
+  position: relative;
+  width: 168px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #f0e9e4;
+  border-radius: 8px;
+  overflow: hidden;
 }
+.builder-review-diamond-media:hover .dpicker-media-img {
+  filter: drop-shadow(0 10px 22px rgba(60, 30, 20, 0.22));
+}
+.builder-review-diamond-media:hover .dpicker-spin { opacity: 0; }
 .builder-review-diamond-caption {
   display: block;
   font-family: 'Jost', sans-serif;
@@ -2065,8 +2089,8 @@
   gap: 4px;
   padding: 3px 8px;
   border-radius: 999px;
-  background: rgba(28, 20, 18, 0.5);
-  color: #fef9ef;
+  background: rgba(172, 52, 56, 0.55);
+  color: #fff8f6;
   font-family: 'Jost', sans-serif;
   font-size: 10px;
   font-weight: 600;
