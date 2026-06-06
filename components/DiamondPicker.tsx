@@ -787,7 +787,20 @@ export default function DiamondPicker({ settingSlug, setting, onSelected, initia
                       {cert?.clarity ?? '—'}
                     </div>
                     {cert?.lab && (
-                      <div className="be-card-cert">{cert.lab}{cert.certNumber ? ` ${cert.certNumber}` : ''}</div>
+                      <div className="be-card-cert">
+                        <span>{cert.lab}{cert.certNumber ? ` ${cert.certNumber}` : ''}</span>
+                        {cert.pdfUrl && (
+                          <a
+                            href={cert.pdfUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="be-card-cert-link"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            View Certificate ↗
+                          </a>
+                        )}
+                      </div>
                     )}
                     <div className="be-card-price">${Number(price).toLocaleString('en-US')}</div>
                     <button

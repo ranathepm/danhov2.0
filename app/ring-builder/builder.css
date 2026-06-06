@@ -2102,6 +2102,19 @@
   color: #8a7f76;
   margin-bottom: 12px;
   letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.be-card-cert-link {
+  color: #AC3438;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(172,52,56,0.3);
+  white-space: nowrap;
+}
+.be-card-cert-link:hover {
+  border-bottom-color: rgba(172,52,56,0.7);
 }
 .be-card-price {
   font-family: 'Cormorant Garamond', serif;

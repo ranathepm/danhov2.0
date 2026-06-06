@@ -88,7 +88,7 @@ export default async function CompleteRingPage({
       />
 
       <section className="builder-section-head">
-        <span className="section-eyebrow">Step 04 of 04</span>
+        <span className="section-eyebrow">Step 3 of 3</span>
         <h1 className="section-title">Complete <em>your ring</em></h1>
         <p className="section-body">
           Review your pairing below. When you&apos;re ready, the 50% deposit secures your

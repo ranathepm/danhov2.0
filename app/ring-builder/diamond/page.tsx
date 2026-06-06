@@ -42,7 +42,7 @@ export default async function SelectDiamondPage({
       />
 
       <section className="builder-section-head">
-        <span className="section-eyebrow">Step 03 of 04</span>
+        <span className="section-eyebrow">Step 2 of 3</span>
         <h1 className="section-title">Select your <em>diamond</em></h1>
         <p className="section-body">
           Live inventory from our certified diamond network. Every stone is GIA- or IGI-graded,
