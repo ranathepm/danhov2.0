@@ -337,6 +337,8 @@ function ensureSessionId(): string {
 
 type Props = {
   settingSlug?: string;
+  /** The metal the customer selected on the setting detail page. */
+  metal?: string;
   /** Called once the stone is held and we're navigating to Complete Ring. */
   onSelected?: (offerId: string, holdId: string) => void;
   /** If a stone is already selected (e.g. coming back to /diamond from /review). */
@@ -345,7 +347,7 @@ type Props = {
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default function DiamondPicker({ settingSlug, onSelected, initialOfferId }: Props) {
+export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -482,6 +484,7 @@ export default function DiamondPicker({ settingSlug, onSelected, initialOfferId 
     const qs = new URLSearchParams({ diamond: d.id });
     if (settingSlug) qs.set('setting', settingSlug);
     if (holdId) qs.set('hold', holdId);
+    if (metal) qs.set('metal', metal);
     router.push(`/ring-builder/review?${qs.toString()}`);
   }
 

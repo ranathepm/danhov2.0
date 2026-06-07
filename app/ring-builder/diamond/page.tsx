@@ -46,6 +46,7 @@ export default async function SelectDiamondPage({
 
       <DiamondPicker
         settingSlug={searchParams.setting}
+        metal={searchParams.metal}
         initialOfferId={searchParams.diamond}
       />
     </main>

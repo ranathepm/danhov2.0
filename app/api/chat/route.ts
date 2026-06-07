@@ -129,14 +129,10 @@ export async function POST(req: NextRequest) {
             lastError = err;
             const msg = err instanceof Error ? err.message : String(err);
             console.error(`chat-stream: ${modelName} failed —`, msg);
-            // 403/leaked/permission errors are not retryable — break immediately.
-            // 429/503/quota/unavailable are transient — fall through to next model.
-            if (!/429|503|404|quota|exceeded|unavailable|not.found|RESOURCE_EXHAUSTED|UNAVAILABLE/i.test(msg)) {
-              if (/403|PERMISSION_DENIED|leaked|API_KEY/i.test(msg)) {
-                console.error('chat-stream: API key invalid or revoked — update GEMINI_API_KEY in env');
-              }
-              break;
+            if (/403|PERMISSION_DENIED|leaked|API_KEY/i.test(msg)) {
+              console.error('chat-stream: API key issue — update GEMINI_API_KEY in Vercel env');
             }
+            // Always continue to next model regardless of error type
           }
         }
 
@@ -196,12 +192,10 @@ export async function POST(req: NextRequest) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`chat: ${modelName} failed —`, msg);
       lastError = err;
-      if (!/429|503|404|quota|exceeded|unavailable|not.found|RESOURCE_EXHAUSTED|UNAVAILABLE/i.test(msg)) {
-        if (/403|PERMISSION_DENIED|leaked|API_KEY/i.test(msg)) {
-          console.error('chat: API key invalid or revoked — update GEMINI_API_KEY in env');
-        }
-        break;
+      if (/403|PERMISSION_DENIED|leaked|API_KEY/i.test(msg)) {
+        console.error('chat: API key issue — update GEMINI_API_KEY in Vercel env');
       }
+      // Always continue to next model
     }
   }
 

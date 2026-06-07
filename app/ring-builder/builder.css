@@ -313,10 +313,18 @@
 }
 .sb-card-sku { font-weight: 400; color: #6b5e57; font-size: 13px; }
 .sb-card-swatches { display: flex; gap: 5px; margin-bottom: 8px; }
+.sb-card-img-link { display: block; text-decoration: none; }
+.sb-card-name-link { display: block; text-decoration: none; color: inherit; }
 .sb-card-swatch {
+  display: inline-block;
   width: 16px; height: 16px; border-radius: 50%;
   border: 1.5px solid rgba(255,255,255,0.7);
   box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  transition: box-shadow 0.15s, transform 0.15s;
+}
+.sb-card-swatch:hover {
+  box-shadow: 0 0 0 2px #AC3438;
+  transform: scale(1.15);
 }
 .sb-card-price {
   font-family: 'Jost', sans-serif; font-size: 14px; color: #1a1410;

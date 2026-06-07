@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
   const { data: rows, error } = await sb
     .from('orders')
     .select('id, status, created_at, updated_at, customer_email, shipping_address, total_usd, product_name, estimated_delivery')
-    .eq('customer_email', email)
+    .ilike('customer_email', email)
     .order('created_at', { ascending: false })
     .limit(50);
 

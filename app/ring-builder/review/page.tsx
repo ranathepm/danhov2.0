@@ -44,11 +44,12 @@ function shapeDisplay(s: string | null): string {
 export default async function CompleteRingPage({
   searchParams,
 }: {
-  searchParams: { setting?: string; diamond?: string; hold?: string };
+  searchParams: { setting?: string; diamond?: string; hold?: string; metal?: string };
 }) {
   const settingSlug = searchParams.setting;
   const offerId = searchParams.diamond;
   const holdId = searchParams.hold;
+  const chosenMetal = searchParams.metal ?? null;
 
   // Need at least one of setting or diamond
   if (!settingSlug && !offerId) redirect('/ring-builder/setting');
@@ -63,7 +64,7 @@ export default async function CompleteRingPage({
     setting = await fetchProductWithPricingBySlug(settingSlug!);
     if (!setting) redirect('/ring-builder/setting');
     try {
-      const breakdown = await priceProduct(setting, setting.default_metal);
+      const breakdown = await priceProduct(setting, chosenMetal ?? setting.default_metal);
       settingPrice = breakdown.total_usd;
     } catch {
       const m = setting.price_display?.match(/[\d,]+/);
@@ -145,6 +146,7 @@ export default async function CompleteRingPage({
         diamond={reviewDiamond}
         settingPrice={settingPrice}
         holdId={holdId}
+        metal={chosenMetal}
       />
 
       <div className="builder-review-edit-row">

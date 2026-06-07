@@ -9,11 +9,11 @@ import { stripMetalSuffix } from '@/lib/product-display';
 // ─── Metal helpers ─────────────────────────────────────────────────────────
 
 interface MetalOption {
-  key: string;      // normalised lookup key
-  display: string;  // "14K White Gold"
-  karat: string;    // "14K"
-  name: string;     // "White Gold"
-  color: string;    // swatch CSS colour
+  key: string;
+  display: string;
+  karat: string;
+  name: string;
+  color: string;
 }
 
 function normaliseMetalKey(raw: string): string {
@@ -22,10 +22,8 @@ function normaliseMetalKey(raw: string): string {
 
 function parseMetalOption(raw: string): MetalOption {
   const up = raw.toUpperCase();
-  // Karat
   const karatMatch = up.match(/(\d+)\s*K/);
   const karat = karatMatch ? `${karatMatch[1]}K` : '';
-  // Colour family
   const isRose = /ROSE/i.test(raw) || /PINK/i.test(raw);
   const isYellow = /YELLOW/i.test(raw) || (!isRose && /GOLD/i.test(raw) && !/WHITE/i.test(raw));
   const isWhite = /WHITE/i.test(raw);
@@ -47,11 +45,93 @@ function parseMetalOption(raw: string): MetalOption {
   };
 }
 
-function productMatchesMetal(product: Product, metalKey: string): boolean {
-  return (product.metals ?? []).some((m) => normaliseMetalKey(m) === metalKey);
+// ─── Grouping helpers ──────────────────────────────────────────────────────
+
+// Strip trailing metal/karat code from SKU: -14r, -14w, -14y, -18r, -pl, -plat, etc.
+function baseSkuKey(sku: string | null | undefined): string {
+  if (!sku) return `__no_sku__${Math.random()}`;
+  return sku.replace(/-\d*[a-z]+$/i, '').toLowerCase();
 }
 
-// ─── Price helpers ────────────────────────────────────────────────────────────
+function displayBaseSku(sku: string): string {
+  return sku.replace(/-\d*[a-z]+$/i, '');
+}
+
+// Determine the primary metal for this product variant (for swatch colour)
+function variantPrimaryMetal(p: Product): string | null {
+  if (p.default_metal) return p.default_metal;
+  const sku = p.sku ?? '';
+  const m = sku.match(/-(\d{2})?([a-z]+)$/i);
+  if (m) {
+    const karat = m[1] ?? '14';
+    const code = m[2].toLowerCase();
+    const codeMap: Record<string, string> = {
+      r: `${karat}k_rose_gold`, rg: `${karat}k_rose_gold`,
+      y: `${karat}k_yellow_gold`, yg: `${karat}k_yellow_gold`,
+      w: `${karat}k_white_gold`, wg: `${karat}k_white_gold`,
+      pl: 'platinum', plat: 'platinum',
+    };
+    if (codeMap[code]) return codeMap[code];
+  }
+  return p.metals?.[0] ?? null;
+}
+
+type ProductGroup = {
+  key: string;
+  canonical: Product;
+  variants: Product[];
+  swatches: Array<{ metal: MetalOption; slug: string; metalRaw: string }>;
+  minPrice: number | null;
+};
+
+function buildGroups(products: Product[]): ProductGroup[] {
+  const map = new Map<string, Product[]>();
+  for (const p of products) {
+    const key = baseSkuKey(p.sku);
+    if (!map.has(key)) map.set(key, []);
+    map.get(key)!.push(p);
+  }
+
+  return Array.from(map.values()).map((variants) => {
+    const seenColors = new Set<string>();
+    const swatches: Array<{ metal: MetalOption; slug: string; metalRaw: string }> = [];
+    for (const v of variants) {
+      const primaryMetal = variantPrimaryMetal(v);
+      if (!primaryMetal) continue;
+      const opt = parseMetalOption(primaryMetal);
+      if (!seenColors.has(opt.color)) {
+        seenColors.add(opt.color);
+        swatches.push({ metal: opt, slug: v.slug, metalRaw: primaryMetal });
+      }
+    }
+    // Fallback: derive swatches from first variant's metals array
+    if (swatches.length === 0 && variants[0]) {
+      for (const m of (variants[0].metals ?? []).slice(0, 4)) {
+        const opt = parseMetalOption(m);
+        if (!seenColors.has(opt.color)) {
+          seenColors.add(opt.color);
+          swatches.push({ metal: opt, slug: variants[0].slug, metalRaw: m });
+        }
+      }
+    }
+
+    let minPrice: number | null = null;
+    for (const v of variants) {
+      const p = parsePrice(v.price_display);
+      if (p !== null && (minPrice === null || p < minPrice)) minPrice = p;
+    }
+
+    return {
+      key: baseSkuKey(variants[0].sku),
+      canonical: variants[0],
+      variants,
+      swatches: swatches.slice(0, 4),
+      minPrice,
+    };
+  });
+}
+
+// ─── Price helpers ─────────────────────────────────────────────────────────
 
 function parsePrice(display: string | null): number | null {
   if (!display) return null;
@@ -59,7 +139,7 @@ function parsePrice(display: string | null): number | null {
   return m ? Math.round(Number(m[0])) : null;
 }
 
-// ─── Ring style icon (generic) ────────────────────────────────────────────────
+// ─── Ring style icon (generic) ─────────────────────────────────────────────
 
 function StyleRingIcon() {
   return (
@@ -71,16 +151,15 @@ function StyleRingIcon() {
   );
 }
 
-// ─── Props ────────────────────────────────────────────────────────────────────
+// ─── Props ─────────────────────────────────────────────────────────────────
 
 interface Props {
   products: Product[];
 }
 
-// ─── Main component ───────────────────────────────────────────────────────────
+// ─── Main component ────────────────────────────────────────────────────────
 
 export default function SettingBrowser({ products }: Props) {
-  // Derive unique, sorted collections
   const allCollections = useMemo(() => {
     const seen = new Set<string>();
     const out: string[] = [];
@@ -93,7 +172,6 @@ export default function SettingBrowser({ products }: Props) {
     return out.sort();
   }, [products]);
 
-  // Derive unique metal options
   const allMetals = useMemo(() => {
     const seen = new Map<string, MetalOption>();
     for (const p of products) {
@@ -102,7 +180,6 @@ export default function SettingBrowser({ products }: Props) {
         if (!seen.has(opt.key)) seen.set(opt.key, opt);
       }
     }
-    // Sort: Rose, Yellow, White, Platinum; then by karat desc
     return Array.from(seen.values()).sort((a, b) => {
       const order = ['Rose Gold', 'Yellow Gold', 'White Gold', 'Gold', 'Platinum'];
       const ia = order.indexOf(a.name);
@@ -112,33 +189,34 @@ export default function SettingBrowser({ products }: Props) {
     });
   }, [products]);
 
-  // Derive price bounds
+  // Group products by base SKU — one card per unique setting
+  const groups = useMemo(() => buildGroups(products), [products]);
+
   const { globalMin, globalMax } = useMemo(() => {
     let min = Infinity;
     let max = 0;
-    for (const p of products) {
-      const price = parsePrice(p.price_display);
-      if (price !== null) {
-        if (price < min) min = price;
-        if (price > max) max = price;
+    for (const g of groups) {
+      if (g.minPrice !== null) {
+        if (g.minPrice < min) min = g.minPrice;
+        if (g.minPrice > max) max = g.minPrice;
       }
     }
-    return { globalMin: Math.floor((min === Infinity ? 100 : min) / 100) * 100, globalMax: Math.ceil((max || 10000) / 1000) * 1000 };
-  }, [products]);
+    return {
+      globalMin: Math.floor((min === Infinity ? 100 : min) / 100) * 100,
+      globalMax: Math.ceil((max || 10000) / 1000) * 1000,
+    };
+  }, [groups]);
 
-  // ── Filter state ──────────────────────────────────────────────────────────
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [showMoreStyles, setShowMoreStyles] = useState(false);
   const [showMoreMetals, setShowMoreMetals] = useState(false);
 
   const [activeStyles, setActiveStyles] = useState<Set<string>>(new Set());
   const [activeMetals, setActiveMetals] = useState<Set<string>>(new Set());
-  // Both thumbs start at globalMin → fill = 0 (empty). Sentinel: filter only when max > globalMin.
   const [priceMin, setPriceMin] = useState(globalMin);
   const [priceMax, setPriceMax] = useState(globalMin);
   const [sort, setSort] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
 
-  // Local strings for the text inputs — allow free typing, commit on blur/Enter
   const [inputMin, setInputMin] = useState(String(globalMin));
   const [inputMax, setInputMax] = useState(String(globalMin));
   useEffect(() => { setInputMin(String(priceMin)); }, [priceMin]);
@@ -161,34 +239,34 @@ export default function SettingBrowser({ products }: Props) {
     setSort('featured');
   }, [globalMin]);
 
-  // ── Filtered + sorted products ─────────────────────────────────────────────
-  const filtered = useMemo(() => {
-    let result = products;
+  const filteredGroups = useMemo(() => {
+    let result = groups;
 
     if (activeStyles.size > 0) {
-      result = result.filter((p) => p.collection && activeStyles.has(p.collection));
+      result = result.filter((g) => g.canonical.collection && activeStyles.has(g.canonical.collection));
     }
     if (activeMetals.size > 0) {
-      result = result.filter((p) =>
-        (p.metals ?? []).some((m) => activeMetals.has(normaliseMetalKey(m)))
+      result = result.filter((g) =>
+        g.variants.some((v) =>
+          (v.metals ?? []).some((m) => activeMetals.has(normaliseMetalKey(m)))
+        )
       );
     }
     if (priceFiltered) {
-      result = result.filter((p) => {
-        const price = parsePrice(p.price_display);
-        if (price === null) return true;
-        return price >= priceMin && price <= priceMax;
+      result = result.filter((g) => {
+        if (g.minPrice === null) return true;
+        return g.minPrice >= priceMin && g.minPrice <= priceMax;
       });
     }
 
     if (sort === 'price-asc') {
-      result = [...result].sort((a, b) => (parsePrice(a.price_display) ?? 0) - (parsePrice(b.price_display) ?? 0));
+      result = [...result].sort((a, b) => (a.minPrice ?? 0) - (b.minPrice ?? 0));
     } else if (sort === 'price-desc') {
-      result = [...result].sort((a, b) => (parsePrice(b.price_display) ?? 0) - (parsePrice(a.price_display) ?? 0));
+      result = [...result].sort((a, b) => (b.minPrice ?? 0) - (a.minPrice ?? 0));
     }
 
     return result;
-  }, [products, activeStyles, activeMetals, priceFiltered, priceMin, priceMax, sort]);
+  }, [groups, activeStyles, activeMetals, priceFiltered, priceMin, priceMax, sort]);
 
   const visibleStyles = showMoreStyles ? allCollections : allCollections.slice(0, 5);
   const visibleMetals = showMoreMetals ? allMetals : allMetals.slice(0, 5);
@@ -216,7 +294,6 @@ export default function SettingBrowser({ products }: Props) {
       {/* ── Filter panel ──────────────────────────────────────────────── */}
       {filtersOpen && (
         <div className="sb-filters">
-          {/* Left column: Style + Metal */}
           <div className="sb-filters-col">
             {/* Style */}
             <div className="sb-filter-section">
@@ -353,7 +430,7 @@ export default function SettingBrowser({ products }: Props) {
       {/* ── Toolbar: count + sort ──────────────────────────────────────── */}
       <div className="sb-toolbar">
         <span className="sb-toolbar-count">
-          {filtered.length} setting{filtered.length !== 1 ? 's' : ''}
+          {filteredGroups.length} setting{filteredGroups.length !== 1 ? 's' : ''}
           {activeCount > 0 ? ' matching filters' : ''}
         </span>
         <label className="sb-sort-label">
@@ -372,14 +449,14 @@ export default function SettingBrowser({ products }: Props) {
 
       {/* ── Product grid ──────────────────────────────────────────────── */}
       <div className="sb-grid">
-        {filtered.length === 0 ? (
+        {filteredGroups.length === 0 ? (
           <div className="sb-empty">
             <p>No settings match the current filters.</p>
             <button className="sb-reset-btn" onClick={resetAll}>Clear all filters</button>
           </div>
         ) : (
-          filtered.map((p) => (
-            <SettingCard key={p.slug} product={p} />
+          filteredGroups.map((g) => (
+            <SettingGroupCard key={g.key} group={g} />
           ))
         )}
       </div>
@@ -387,13 +464,13 @@ export default function SettingBrowser({ products }: Props) {
   );
 }
 
-// ─── Product card ─────────────────────────────────────────────────────────────
+// ─── Group card ────────────────────────────────────────────────────────────
 
-function SettingCard({ product: p }: { product: Product }) {
-  const href = `/ring-builder/setting/${p.slug}`;
-  const cardRef = useRef<HTMLAnchorElement>(null);
+function SettingGroupCard({ group }: { group: ProductGroup }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const p = group.canonical;
 
-  function onMouseMove(e: React.MouseEvent<HTMLAnchorElement>) {
+  function onMouseMove(e: React.MouseEvent<HTMLDivElement>) {
     const el = cardRef.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
@@ -410,77 +487,67 @@ function SettingCard({ product: p }: { product: Product }) {
     setTimeout(() => { if (el) el.style.transition = ''; }, 450);
   }
 
-  const metalSwatches = useMemo(() => {
-    const seen = new Set<string>();
-    const out: MetalOption[] = [];
-    for (const m of (p.metals ?? [])) {
-      const opt = parseMetalOption(m);
-      if (!seen.has(opt.color)) {
-        seen.add(opt.color);
-        out.push(opt);
-      }
-    }
-    return out.slice(0, 4);
-  }, [p.metals]);
-
   const heroImage = p.images?.[0] ?? null;
+  const canonicalHref = `/ring-builder/setting/${p.slug}`;
+  const baseSku = p.sku ? displayBaseSku(p.sku) : null;
 
   return (
-    <Link
+    <div
       ref={cardRef}
-      href={href}
       className="sb-card"
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      <div className="sb-card-img">
-        {heroImage ? (
-          <Image
-            src={heroImage}
-            alt={p.name}
-            fill
-            sizes="(max-width: 768px) 50vw, 25vw"
-            style={{ objectFit: 'contain' }}
-            loading="lazy"
-          />
-        ) : (
-          <svg className="sb-card-placeholder" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-            <circle cx="40" cy="40" r="28" stroke="#c9b8ad" strokeWidth="1" />
-            <circle cx="40" cy="40" r="16" stroke="#c9b8ad" strokeWidth="0.6" />
-            <circle cx="40" cy="12" r="4" fill="#c9b8ad" />
-          </svg>
-        )}
-      </div>
+      <Link href={canonicalHref} className="sb-card-img-link" tabIndex={-1} aria-hidden="true">
+        <div className="sb-card-img">
+          {heroImage ? (
+            <Image
+              src={heroImage}
+              alt={p.name}
+              fill
+              sizes="(max-width: 768px) 50vw, 25vw"
+              style={{ objectFit: 'contain' }}
+              loading="lazy"
+            />
+          ) : (
+            <svg className="sb-card-placeholder" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <circle cx="40" cy="40" r="28" stroke="#c9b8ad" strokeWidth="1" />
+              <circle cx="40" cy="40" r="16" stroke="#c9b8ad" strokeWidth="0.6" />
+              <circle cx="40" cy="12" r="4" fill="#c9b8ad" />
+            </svg>
+          )}
+        </div>
+      </Link>
 
       <div className="sb-card-body">
-        <h3 className="sb-card-name">
-          {stripMetalSuffix(p.name)}
-          {p.sku && <span className="sb-card-sku"> ({p.sku})</span>}
-        </h3>
+        <Link href={canonicalHref} className="sb-card-name-link">
+          <h3 className="sb-card-name">
+            {stripMetalSuffix(p.name)}
+            {baseSku && <span className="sb-card-sku"> ({baseSku})</span>}
+          </h3>
+        </Link>
 
-        {metalSwatches.length > 0 && (
+        {group.swatches.length > 0 && (
           <div className="sb-card-swatches">
-            {metalSwatches.map((m) => (
-              <span
-                key={m.color}
+            {group.swatches.map((s) => (
+              <Link
+                key={s.slug}
+                href={`/ring-builder/setting/${s.slug}`}
                 className="sb-card-swatch"
-                style={{ background: m.color }}
-                title={m.display}
+                style={{ background: s.metal.color }}
+                title={s.metal.display}
+                aria-label={`View in ${s.metal.display}`}
               />
             ))}
           </div>
         )}
 
-        {p.price_display && (
-          <p className="sb-card-price">{formatUSD(p.price_display)}</p>
+        {group.minPrice !== null && (
+          <p className="sb-card-price">
+            {group.swatches.length > 1 ? 'From ' : ''}${group.minPrice.toLocaleString('en-US')} USD
+          </p>
         )}
       </div>
-    </Link>
+    </div>
   );
-}
-
-function formatUSD(display: string): string {
-  const price = parsePrice(display);
-  if (price === null) return display;
-  return `$${price.toLocaleString('en-US')} USD`;
 }

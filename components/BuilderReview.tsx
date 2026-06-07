@@ -27,6 +27,7 @@ type Props = {
   diamond: ReviewDiamond | null;
   settingPrice: number;
   holdId?: string;
+  metal?: string | null;
 };
 
 const US_RING_SIZES = [
@@ -34,7 +35,7 @@ const US_RING_SIZES = [
   '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '12.5', '13',
 ];
 
-export default function BuilderReview({ mode, setting, diamond, settingPrice, holdId }: Props) {
+export default function BuilderReview({ mode, setting, diamond, settingPrice, holdId, metal }: Props) {
   const { addItem } = useCart();
 
   const [email, setEmail] = useState('');
@@ -75,7 +76,10 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         email,
         ring_size: ringSize || undefined,
       };
-      if (mode === 'ring' || mode === 'setting') body.setting_slug = setting?.slug;
+      if (mode === 'ring' || mode === 'setting') {
+        body.setting_slug = setting?.slug;
+        if (metal) body.metal = metal;
+      }
       if (mode === 'ring' || mode === 'diamond') {
         body.diamond_offer_id = diamond?.offer_id;
         body.hold_id = holdId;

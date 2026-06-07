@@ -33,6 +33,7 @@ const Body = z.object({
   hold_id: z.string().uuid().optional(),
   email: z.string().email().max(254),
   ring_size: z.string().max(20).optional(),
+  metal: z.string().max(60).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -74,7 +75,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Setting not found' }, { status: 404 });
     }
     try {
-      const breakdown = await priceProduct(setting, setting.default_metal);
+      const breakdown = await priceProduct(setting, body.metal ?? setting.default_metal);
       settingPrice = breakdown.total_usd;
       settingBreakdown = breakdown;
     } catch (e) {
@@ -150,7 +151,7 @@ export async function POST(req: NextRequest) {
   if (mode === 'ring' && setting && diamondData) {
     itemName = `${setting.name} + ${diamondData.carat.toFixed(2)}ct ${diamondData.shape} diamond — 50% commission deposit`;
     itemDesc = [
-      `Setting (${setting.sku}, ${(setting.default_metal || '14k_yellow').replace(/_/g, ' ')}): $${settingPrice.toLocaleString('en-US')}`,
+      `Setting (${setting.sku}, ${(body.metal ?? setting.default_metal ?? '14k_yellow').replace(/_/g, ' ')}): $${settingPrice.toLocaleString('en-US')}`,
       `Diamond (${diamondData.lab}${diamondData.certNumber ? ` ${diamondData.certNumber}` : ''}, ${diamondData.color}/${diamondData.clarity}/${diamondData.cut}): $${diamondData.price.toLocaleString('en-US')}`,
       ringSize ? `Ring size: ${ringSize}` : '',
       `Total: $${total.toLocaleString('en-US')} · Balance of $${balance.toLocaleString('en-US')} due before shipping.`,
@@ -158,7 +159,7 @@ export async function POST(req: NextRequest) {
   } else if (mode === 'setting' && setting) {
     itemName = `${setting.name} — setting commission, 50% deposit`;
     itemDesc = [
-      `Setting (${setting.sku}, ${(setting.default_metal || '14k_yellow').replace(/_/g, ' ')}): $${settingPrice.toLocaleString('en-US')}`,
+      `Setting (${setting.sku}, ${(body.metal ?? setting.default_metal ?? '14k_yellow').replace(/_/g, ' ')}): $${settingPrice.toLocaleString('en-US')}`,
       ringSize ? `Ring size: ${ringSize}` : '',
       `Total: $${total.toLocaleString('en-US')} · Balance of $${balance.toLocaleString('en-US')} due before shipping.`,
     ].filter(Boolean).join('\n');
@@ -210,6 +211,7 @@ export async function POST(req: NextRequest) {
       ring_size: ringSize ?? '',
       setting_slug: setting?.slug ?? '',
       setting_sku: setting?.sku ?? '',
+      setting_metal: body.metal ?? setting?.default_metal ?? '',
       nivoda_offer_id: body.diamond_offer_id ?? '',
       nivoda_hold_id: body.hold_id ?? '',
       diamond_shape: diamondData?.shape ?? '',
@@ -271,7 +273,7 @@ export async function POST(req: NextRequest) {
               sku: setting.sku,
               slug: setting.slug,
               name: setting.name,
-              metal: setting.default_metal,
+              metal: body.metal ?? setting.default_metal,
               price_usd: settingPrice,
               breakdown: settingBreakdown,
             }
