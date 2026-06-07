@@ -17,7 +17,8 @@ interface ProductInfo {
 
 interface Props {
   product: ProductInfo;
-  defaultMetal: string | null;
+  metal: string;
+  onMetalChange: (m: string) => void;
 }
 
 function metalColour(raw: string): string {
@@ -35,11 +36,11 @@ function metalKarat(raw: string): string {
 
 export default function SettingDetailClient({
   product,
-  defaultMetal,
+  metal,
+  onMetalChange,
 }: Props) {
   const router = useRouter();
   const productMetals = product.metals ?? [];
-  const [metal, setMetal] = useState(defaultMetal ?? productMetals[0] ?? '');
   const [showMoreMetals, setShowMoreMetals] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -120,7 +121,7 @@ export default function SettingDetailClient({
               <button
                 key={m}
                 className={`sd-metal-option${metal === m ? ' is-active' : ''}`}
-                onClick={() => setMetal(m)}
+                onClick={() => onMetalChange(m)}
                 aria-pressed={metal === m}
                 title={m}
               >

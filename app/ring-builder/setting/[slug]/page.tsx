@@ -52,6 +52,7 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
         }}
         defaultMetal={defaultMetal}
         images={product.images ?? []}
+        metalImages={(product.metal_images as Record<string, string[]>) ?? {}}
       />
     </main>
   );

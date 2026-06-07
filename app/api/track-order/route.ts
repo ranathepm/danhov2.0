@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   // prefix collisions (astronomically rare for UUIDs but handled correctly).
   const { data: rows, error } = await sb
     .from('orders')
-    .select('id, status, created_at, updated_at, customer_email, shipping_address, total_usd, product_name, estimated_delivery')
+    .select('id, status, created_at, updated_at, customer_email, shipping_address, total_usd, product_name')
     .ilike('customer_email', email)
     .order('created_at', { ascending: false })
     .limit(50);

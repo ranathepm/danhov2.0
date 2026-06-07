@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import SettingGallery from '@/components/SettingGallery';
 import SettingDetailClient from '@/components/SettingDetailClient';
 
@@ -16,15 +17,25 @@ interface Props {
   product: ProductInfo;
   defaultMetal: string | null;
   images: string[];
+  metalImages: Record<string, string[]>;
 }
 
-export default function SettingDetailLayout({ product, defaultMetal, images }: Props) {
+export default function SettingDetailLayout({ product, defaultMetal, images, metalImages }: Props) {
+  const [metal, setMetal] = useState(defaultMetal ?? product.metals?.[0] ?? '');
+
+  // Use metal-specific images when available, fall back to default product images
+  const activeImages =
+    metal && metalImages[metal] && metalImages[metal].length > 0
+      ? metalImages[metal]
+      : images;
+
   return (
     <div className="sd-layout">
-      <SettingGallery images={images} name={product.name} />
+      <SettingGallery images={activeImages} name={product.name} />
       <SettingDetailClient
         product={product}
-        defaultMetal={defaultMetal}
+        metal={metal}
+        onMetalChange={setMetal}
       />
     </div>
   );
