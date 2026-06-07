@@ -130,7 +130,10 @@ export async function POST(req: NextRequest) {
             const msg = err instanceof Error ? err.message : String(err);
             console.error(`chat-stream: ${modelName} failed —`, msg);
             if (/403|PERMISSION_DENIED|leaked|API_KEY/i.test(msg)) {
-              console.error('chat-stream: API key issue — update GEMINI_API_KEY in Vercel env');
+              console.error('chat-stream: GEMINI_API_KEY invalid or expired — regenerate at aistudio.google.com and update in Vercel env vars');
+            }
+            if (/404|not found|deprecated/i.test(msg)) {
+              console.error(`chat-stream: model ${modelName} not found or deprecated — trying next`);
             }
             // Always continue to next model regardless of error type
           }

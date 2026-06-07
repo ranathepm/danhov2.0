@@ -23,15 +23,14 @@ if (!apiKey && process.env.NODE_ENV !== 'production') {
 }
 
 // ── Models ────────────────────────────────────────────────────────────
-// Flash for low-latency text replies; Pro for multimodal understanding
-// where quality + nuance matter more than latency. `*-latest` aliases
-// keep us on the freshest stable revision without code changes.
+// Gemini 2.x family is the current stable generation.
+// 1.5 models are deprecated — keep as last-resort fallbacks only.
 
-export const CHAT_MODEL_PRIMARY = 'gemini-1.5-flash';
-export const CHAT_MODEL_FALLBACK = ['gemini-1.5-flash-latest', 'gemini-2.0-flash', 'gemini-1.5-pro'];
+export const CHAT_MODEL_PRIMARY = 'gemini-2.0-flash';
+export const CHAT_MODEL_FALLBACK = ['gemini-2.0-flash-lite', 'gemini-1.5-flash', 'gemini-1.5-pro'];
 
 export const VISION_MODEL_PRIMARY = 'gemini-2.0-flash';
-export const VISION_MODEL_FALLBACK = ['gemini-1.5-flash', 'gemini-1.5-pro'];
+export const VISION_MODEL_FALLBACK = ['gemini-2.0-flash-lite', 'gemini-1.5-flash'];
 
 export const IMAGE_MODEL_PRIMARY = 'gemini-2.0-flash-preview-image-generation';
 export const IMAGE_MODEL_FALLBACK = ['gemini-2.0-flash-exp'];
