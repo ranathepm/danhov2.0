@@ -3,8 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { fetchProductBySlug, fetchProductsByCategory } from '@/lib/products';
 import BuilderStepper from '@/components/BuilderStepper';
-import SettingDetailClient from '@/components/SettingDetailClient';
-import SettingGallery from '@/components/SettingGallery';
+import SettingDetailLayout from '@/components/SettingDetailLayout';
 import '../../builder.css';
 
 interface Props {
@@ -58,25 +57,20 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
         ← Back to browse
       </Link>
 
-      <div className="sd-layout">
-        {/* ── Left: interactive 360°-style spin gallery ─────────────────── */}
-        <SettingGallery images={product.images ?? []} name={product.name} />
-
-        {/* ── Right: detail panel (client for shape/metal selection) ────── */}
-        <SettingDetailClient
-          product={{
-            slug: product.slug,
-            sku: product.sku,
-            name: product.name,
-            collection: product.collection,
-            metals,
-            price_display: product.price_display,
-          }}
-          defaultShape={defaultShape}
-          defaultMetal={defaultMetal}
-          shapes={SHAPES}
-        />
-      </div>
+      <SettingDetailLayout
+        product={{
+          slug: product.slug,
+          sku: product.sku,
+          name: product.name,
+          collection: product.collection,
+          metals,
+          price_display: product.price_display,
+        }}
+        defaultShape={defaultShape}
+        defaultMetal={defaultMetal}
+        shapes={SHAPES}
+        images={product.images ?? []}
+      />
     </main>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
@@ -324,6 +324,15 @@ export default function SettingBrowser({ products }: Props) {
               <div className="sb-filter-title">Price</div>
               <div className="sb-price-wrap">
                 <div className="sb-price-slider-track">
+                  {/* Visual track — drawn behind the native range inputs */}
+                  <div className="sb-price-track-bg" />
+                  <div
+                    className="sb-price-track-fill"
+                    style={{
+                      left: `${((priceMin - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
+                      right: `${100 - ((priceMax - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
+                    }}
+                  />
                   <input
                     type="range"
                     className="sb-range sb-range--min"
@@ -442,6 +451,24 @@ export default function SettingBrowser({ products }: Props) {
 
 function SettingCard({ product: p, chosenShape }: { product: Product; chosenShape: string | null }) {
   const href = `/ring-builder/setting/${p.slug}${chosenShape ? `?shape=${chosenShape}` : ''}`;
+  const cardRef = useRef<HTMLAnchorElement>(null);
+
+  function onMouseMove(e: React.MouseEvent<HTMLAnchorElement>) {
+    const el = cardRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 2;
+    const y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    el.style.transform = `perspective(700px) rotateX(${(-y * 5).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg) translateY(-3px)`;
+  }
+
+  function onMouseLeave() {
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transition = 'transform 0.45s cubic-bezier(0.23,1,0.32,1), box-shadow 0.18s, border-color 0.18s';
+    el.style.transform = '';
+    setTimeout(() => { if (el) el.style.transition = ''; }, 450);
+  }
 
   const metalSwatches = useMemo(() => {
     const seen = new Set<string>();
@@ -459,7 +486,13 @@ function SettingCard({ product: p, chosenShape }: { product: Product; chosenShap
   const heroImage = p.images?.[0] ?? null;
 
   return (
-    <Link href={href} className="sb-card">
+    <Link
+      ref={cardRef}
+      href={href}
+      className="sb-card"
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
       <div className="sb-card-img">
         {heroImage ? (
           <Image

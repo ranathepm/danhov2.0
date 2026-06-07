@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { stripMetalSuffix } from '@/lib/product-display';
 
-interface ShapeOption { value: string; label: string; }
+export interface ShapeOption { value: string; label: string; }
 
 interface ProductInfo {
   slug: string;
@@ -20,6 +20,7 @@ interface Props {
   defaultShape: string;
   defaultMetal: string | null;
   shapes: ShapeOption[];
+  onShapeChange?: (shape: string, shapeIndex: number) => void;
 }
 
 const SHAPE_ICONS: Record<string, React.ReactNode> = {
@@ -53,6 +54,7 @@ export default function SettingDetailClient({
   defaultShape,
   defaultMetal,
   shapes,
+  onShapeChange,
 }: Props) {
   const router = useRouter();
   const productMetals = product.metals ?? [];
@@ -140,7 +142,11 @@ export default function SettingDetailClient({
             <button
               key={s.value}
               className={`sd-option-chip${shape === s.value ? ' is-active' : ''}`}
-              onClick={() => setShape(s.value)}
+              onClick={() => {
+                setShape(s.value);
+                const idx = shapes.findIndex((x) => x.value === s.value);
+                onShapeChange?.(s.value, idx);
+              }}
               aria-pressed={shape === s.value}
             >
               <span className="sd-option-icon">{SHAPE_ICONS[s.value]}</span>

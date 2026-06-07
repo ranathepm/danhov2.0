@@ -180,27 +180,46 @@
 
 /* Price slider */
 .sb-price-wrap { display: flex; flex-direction: column; gap: 12px; }
-.sb-price-slider-track { position: relative; height: 20px; }
+.sb-price-slider-track { position: relative; height: 28px; }
+
+/* Visual track layers — sit behind the range inputs */
+.sb-price-track-bg {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  left: 0; right: 0;
+  height: 4px; background: #e8e2db; border-radius: 2px;
+  pointer-events: none; z-index: 0;
+}
+.sb-price-track-fill {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  height: 4px; background: var(--logo-red); border-radius: 2px;
+  pointer-events: none; z-index: 0;
+}
+
+/* Range inputs are full-height so the browser centres the thumb on the track */
 .sb-range {
-  position: absolute; width: 100%; height: 4px;
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 28px;
   background: transparent; -webkit-appearance: none;
-  pointer-events: none; top: 8px;
+  pointer-events: none; z-index: 1;
+}
+.sb-range::-webkit-slider-runnable-track {
+  background: transparent; height: 4px; border-radius: 2px;
 }
 .sb-range::-webkit-slider-thumb {
   -webkit-appearance: none; pointer-events: all;
   width: 18px; height: 18px; border-radius: 50%;
   background: var(--logo-red); cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.22);
+  border: 2px solid #fff;
 }
+.sb-range::-moz-range-track { background: transparent; height: 4px; }
 .sb-range::-moz-range-thumb {
-  pointer-events: all; width: 18px; height: 18px; border-radius: 50%;
-  background: var(--logo-red); cursor: pointer; border: none;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  pointer-events: all; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--logo-red); cursor: pointer; border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
-.sb-range::-webkit-slider-runnable-track {
-  background: #e8e2db; height: 4px; border-radius: 2px;
-}
-.sb-range--min::-webkit-slider-runnable-track { background: var(--logo-red); }
 .sb-price-inputs {
   display: flex; align-items: center; gap: 10px;
 }
@@ -279,17 +298,19 @@
 }
 .sb-empty p { margin-bottom: 16px; }
 
-/* Setting card */
+/* Setting card — 3D tilt applied via JS on mousemove */
 .sb-card {
   display: flex; flex-direction: column;
   background: #f7f4f0; border: 1px solid #e8e2db; border-radius: 6px;
   text-decoration: none; color: inherit; overflow: hidden;
-  transition: box-shadow 0.18s, transform 0.18s, border-color 0.18s;
+  will-change: transform;
+  transform-style: preserve-3d;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: box-shadow 0.18s, border-color 0.18s;
 }
 .sb-card:hover {
   border-color: #c9b8ad;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12), 0 2px 8px rgba(172,52,56,0.06);
 }
 .sb-card-img {
   aspect-ratio: 1; position: relative;
@@ -349,10 +370,34 @@
 .sd-main-img {
   position: relative; aspect-ratio: 1;
   background: #fff; border-radius: 6px; overflow: hidden;
-  display: flex; align-items: center; justify-content: center;
+  cursor: crosshair;
 }
-.sd-img-placeholder { opacity: 0.4; }
+/* Inner frame that receives the 3D tilt transform */
+.sd-img-inner {
+  position: absolute; inset: 0;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+.sd-img-placeholder { opacity: 0.4; display: flex; align-items: center; justify-content: center; height: 100%; }
 .sd-img-placeholder svg { width: 80px; height: 80px; }
+
+/* Hover hint badge */
+.sd-tilt-hint {
+  position: absolute; bottom: 12px; left: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(255,255,255,0.90);
+  border: 1px solid #e8e2db; border-radius: 999px;
+  padding: 4px 10px;
+  font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 500;
+  color: #1a1410;
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  animation: sd-hint-in 0.25s ease;
+}
+@keyframes sd-hint-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
 .sd-thumbs {
   display: grid; grid-template-columns: 1fr 1fr;
