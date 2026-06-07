@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PartnerForm from '@/components/PartnerForm';
 
 export const metadata: Metadata = {
   title: 'Partner With Us · DANHOV Trade & B2B',
@@ -283,58 +284,7 @@ export default function PartnerPage() {
             Complete the form below and a DANHOV trade specialist will respond within
             one business day. All applications are reviewed individually.
           </p>
-          <form className="partner-form" action="mailto:trade@danhov.com" method="get" encType="text/plain">
-            <div className="partner-form-row">
-              <div className="partner-form-group">
-                <label htmlFor="p-first">First Name</label>
-                <input id="p-first" name="first_name" type="text" required placeholder="Jack" />
-              </div>
-              <div className="partner-form-group">
-                <label htmlFor="p-last">Last Name</label>
-                <input id="p-last" name="last_name" type="text" required placeholder="Hovsepian" />
-              </div>
-            </div>
-            <div className="partner-form-row">
-              <div className="partner-form-group">
-                <label htmlFor="p-email">Business Email</label>
-                <input id="p-email" name="email" type="email" required placeholder="you@yourbusiness.com" />
-              </div>
-              <div className="partner-form-group">
-                <label htmlFor="p-phone">Phone</label>
-                <input id="p-phone" name="phone" type="tel" placeholder="+1 (555) 000-0000" />
-              </div>
-            </div>
-            <div className="partner-form-group">
-              <label htmlFor="p-business">Business / Store Name</label>
-              <input id="p-business" name="business" type="text" required placeholder="Your Jewelry Boutique" />
-            </div>
-            <div className="partner-form-row">
-              <div className="partner-form-group">
-                <label htmlFor="p-type">Business Type</label>
-                <select id="p-type" name="business_type">
-                  <option value="">Select type…</option>
-                  <option>Independent Jeweler</option>
-                  <option>Luxury Boutique</option>
-                  <option>Department Store</option>
-                  <option>Online Retailer</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="partner-form-group">
-                <label htmlFor="p-country">Country</label>
-                <input id="p-country" name="country" type="text" placeholder="United States" />
-              </div>
-            </div>
-            <div className="partner-form-group">
-              <label htmlFor="p-website">Website</label>
-              <input id="p-website" name="website" type="url" placeholder="https://yourbusiness.com" />
-            </div>
-            <div className="partner-form-group">
-              <label htmlFor="p-message">Tell us about your store and what you&apos;re looking for</label>
-              <textarea id="p-message" name="message" placeholder="We carry luxury engagement rings and are looking to add a handcrafted Los Angeles brand…" />
-            </div>
-            <button type="submit" className="partner-submit">Submit Application</button>
-          </form>
+          <PartnerForm />
         </div>
       </section>
 

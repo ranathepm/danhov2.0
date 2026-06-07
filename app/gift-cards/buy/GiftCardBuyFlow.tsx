@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useCart } from '@/components/CartProvider';
 
 type Step = 1 | 2 | 3 | 4 | 5;
 
@@ -23,8 +24,10 @@ interface FormData {
 const STEP_LABELS = ['Who is it for?', 'How much?', 'Your message', 'Delivery', 'Review'];
 
 export default function GiftCardBuyFlow() {
+  const { addItem } = useCart();
   const [step, setStep] = useState<Step>(1);
   const [busy, setBusy] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState<FormData>({
     forSelf: false,
@@ -71,6 +74,35 @@ export default function GiftCardBuyFlow() {
     return true;
   }
 
+  function addToCart() {
+    const recipientName = form.forSelf ? form.senderName : form.recipientName;
+    const recipientEmail = form.forSelf ? form.senderEmail : form.recipientEmail;
+    const amount = resolvedAmount();
+    addItem({
+      id: `gc_${Date.now()}_${amount}`,
+      sku: 'GIFT-CARD',
+      slug: 'gift-cards',
+      name: `DANHOV Gift Card · $${amount.toLocaleString()}`,
+      collection: 'Gift Cards',
+      metal: null,
+      image: null,
+      price_display: `$${amount.toLocaleString()}`,
+      price_num: amount,
+      qty: form.quantity,
+      giftCard: {
+        recipientName: recipientName.trim(),
+        recipientEmail: recipientEmail.trim(),
+        senderName: form.senderName.trim(),
+        senderEmail: form.senderEmail.trim(),
+        message: form.message.trim(),
+        deliverAt: form.deliverAt,
+        amount,
+        quantity: form.quantity,
+      },
+    });
+    setAddedToCart(true);
+  }
+
   async function startPurchase() {
     setBusy(true);
     setError('');
@@ -109,7 +141,7 @@ export default function GiftCardBuyFlow() {
   return (
     <div style={{ fontFamily: "'Jost', sans-serif", minHeight: '100vh', background: '#faf6f1' }}>
       <style>{`
-        .gcb-wrap { max-width: 700px; margin: 0 auto; padding: 48px 24px 80px; }
+        .gcb-wrap { max-width: 700px; margin: 0 auto; padding: 88px 24px 80px; }
         .gcb-breadcrumb {
           font-size: 12px; color: #9c8f86; margin-bottom: 32px; display: flex; align-items: center; gap: 8px;
         }
@@ -235,6 +267,20 @@ export default function GiftCardBuyFlow() {
         .gcb-checkout-btn:hover:not(:disabled) { background: #8f2b2e; }
         .gcb-checkout-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .gcb-error { font-size: 13px; color: #AC3438; padding: 10px 14px; background: rgba(172,52,56,0.06); border-left: 3px solid #AC3438; border-radius: 4px; margin-top: 12px; }
+        .gcb-addcart-btn {
+          background: #fff; color: #1a1410; border: 1.5px solid #1a1410; border-radius: 2px;
+          padding: 16px 32px; font-size: 12px; font-family: 'Jost', sans-serif;
+          letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+          transition: all 0.2s; min-width: 180px;
+        }
+        .gcb-addcart-btn:hover:not(:disabled) { background: #1a1410; color: #fff; }
+        .gcb-addcart-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .gcb-cart-success {
+          display: flex; align-items: center; gap: 10px;
+          padding: 12px 16px; background: rgba(42,122,42,0.08);
+          border-left: 3px solid #2a7a2a; border-radius: 4px; margin-top: 12px;
+          font-size: 13px; color: #2a7a2a;
+        }
 
         @media (max-width: 540px) {
           .gcb-row { grid-template-columns: 1fr; }
@@ -551,16 +597,30 @@ export default function GiftCardBuyFlow() {
             </div>
 
             {error && <div className="gcb-error">{error}</div>}
+            {addedToCart && (
+              <div className="gcb-cart-success">
+                ✓ Added to your cart — checkout when you&apos;re ready.
+              </div>
+            )}
 
-            <div className="gcb-actions">
+            <div className="gcb-actions" style={{ flexWrap: 'wrap', gap: 12 }}>
               <button className="gcb-back-btn" onClick={() => setStep(4)}>← Edit</button>
-              <button
-                className="gcb-checkout-btn"
-                disabled={busy}
-                onClick={startPurchase}
-              >
-                {busy ? 'Redirecting…' : `Checkout — $${totalAmount().toLocaleString()}`}
-              </button>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <button
+                  className="gcb-addcart-btn"
+                  disabled={busy || addedToCart}
+                  onClick={addToCart}
+                >
+                  {addedToCart ? '✓ In Cart' : 'Add to Cart'}
+                </button>
+                <button
+                  className="gcb-checkout-btn"
+                  disabled={busy}
+                  onClick={startPurchase}
+                >
+                  {busy ? 'Redirecting…' : `Checkout — $${totalAmount().toLocaleString()}`}
+                </button>
+              </div>
             </div>
 
             <p style={{ fontSize: 11, color: '#9c8f86', textAlign: 'center', marginTop: 16 }}>

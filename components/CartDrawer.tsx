@@ -72,10 +72,13 @@ export default function CartDrawer() {
         ) : (
           <>
             <ul className="cart-drawer-list">
-              {items.map((it) => (
+              {items.map((it) => {
+                const isGiftCard = it.sku === 'GIFT-CARD';
+                const itemHref = isGiftCard ? '/gift-cards' : `/product/${it.slug}`;
+                return (
                 <li key={it.id} className="cart-line">
                   <Link
-                    href={`/product/${it.slug}`}
+                    href={itemHref}
                     className="cart-line-media"
                     onClick={closeDrawer}
                   >
@@ -89,9 +92,17 @@ export default function CartDrawer() {
                       />
                     ) : (
                       <div className="cart-line-media-fallback">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M6 9l6-6 6 6-6 12L6 9z" stroke="currentColor" strokeWidth="1" />
-                        </svg>
+                        {isGiftCard ? (
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <rect x="2" y="8" width="20" height="13" rx="1" stroke="currentColor" strokeWidth="1.4"/>
+                            <path d="M2 11h20" stroke="currentColor" strokeWidth="1.4"/>
+                            <path d="M12 8V3M9 5.5C9 4.12 10.12 3 11.5 3s2.5 1.12 2.5 2.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+                          </svg>
+                        ) : (
+                          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M6 9l6-6 6 6-6 12L6 9z" stroke="currentColor" strokeWidth="1" />
+                          </svg>
+                        )}
                       </div>
                     )}
                   </Link>
@@ -102,7 +113,7 @@ export default function CartDrawer() {
                           <div className="cart-line-coll">{it.collection}</div>
                         )}
                         <Link
-                          href={`/product/${it.slug}`}
+                          href={itemHref}
                           className="cart-line-name"
                           onClick={closeDrawer}
                         >
@@ -110,6 +121,11 @@ export default function CartDrawer() {
                         </Link>
                         {it.metal && (
                           <div className="cart-line-meta">{it.metal}</div>
+                        )}
+                        {isGiftCard && it.giftCard && (
+                          <div className="cart-line-meta" style={{ fontSize: 11 }}>
+                            To: {it.giftCard.recipientName}
+                          </div>
                         )}
                       </div>
                       <button
@@ -143,7 +159,8 @@ export default function CartDrawer() {
                     </div>
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
 
             <footer className="cart-drawer-foot">

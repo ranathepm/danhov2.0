@@ -12,6 +12,10 @@ const PatchBody = z.object({
   notes: z.string().max(1000).optional(),
 });
 
+const DeleteBody = z.object({
+  id: z.string().uuid(),
+});
+
 export async function PATCH(req: NextRequest) {
   const admin = await getAdmin();
   if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -34,6 +38,31 @@ export async function PATCH(req: NextRequest) {
 
   if (error) {
     console.error('admin/affiliates PATCH:', error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
+
+export async function DELETE(req: NextRequest) {
+  const admin = await getAdmin();
+  if (!admin) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  let body: z.infer<typeof DeleteBody>;
+  try {
+    body = DeleteBody.parse(await req.json());
+  } catch {
+    return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
+  }
+
+  const sb = createServiceClient();
+  const { error } = await sb
+    .from('affiliate_applications')
+    .delete()
+    .eq('id', body.id);
+
+  if (error) {
+    console.error('admin/affiliates DELETE:', error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

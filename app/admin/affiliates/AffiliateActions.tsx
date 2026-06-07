@@ -28,6 +28,21 @@ export default function AffiliateActions({ id, currentStatus, email, name }: Pro
     }
   }
 
+  async function deleteRow() {
+    if (!confirm(`Delete application from ${name}? This cannot be undone.`)) return;
+    setBusy(true);
+    try {
+      await fetch('/api/admin/affiliates', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      router.refresh();
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
       {currentStatus !== 'approved' && (
@@ -56,6 +71,14 @@ export default function AffiliateActions({ id, currentStatus, email, name }: Pro
       >
         Email
       </a>
+      <button
+        onClick={deleteRow}
+        disabled={busy}
+        style={btnStyle('#6b5e57')}
+        title={`Delete application from ${name}`}
+      >
+        Delete
+      </button>
     </div>
   );
 }

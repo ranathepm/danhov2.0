@@ -123,7 +123,6 @@ export default function Footer() {
           <div className="footer-col-title">Trade &amp; Partners</div>
           <ul className="footer-links">
             <li><Link href="/partner">Partner With Us</Link></li>
-            <li><a href="mailto:trade@danhov.com">trade@danhov.com</a></li>
           </ul>
         </div>
 

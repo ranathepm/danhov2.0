@@ -138,12 +138,12 @@ export default function SustainabilityPage() {
         }
         .sr-hero-cta {
           display: inline-block; padding: 14px 36px;
-          background: #1a1410; color: #faf6f1;
+          background: #AC3438; color: #faf6f1;
           font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
           text-decoration: none; align-self: flex-start;
           transition: background 0.2s;
         }
-        .sr-hero-cta:hover { background: #AC3438; }
+        .sr-hero-cta:hover { background: #8f2b2e; }
 
         .sr-hero-right {
           position: relative; overflow: hidden;
@@ -217,7 +217,7 @@ export default function SustainabilityPage() {
         .sr-pillar-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
         .sr-pillar-icon {
           width: 52px; height: 52px; border-radius: 50%;
-          background: #1a1410; display: flex; align-items: center; justify-content: center;
+          background: #AC3438; display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         }
         .sr-pillar-title {

@@ -24,6 +24,17 @@ export type CartBundleDiamond = {
   image: string | null;
 };
 
+export type CartGiftCard = {
+  recipientName: string;
+  recipientEmail: string;
+  senderName: string;
+  senderEmail: string;
+  message: string;
+  deliverAt: string;
+  amount: number;
+  quantity: number;
+};
+
 export type CartItem = {
   id: string;          // composite key
   sku: string;
@@ -43,6 +54,7 @@ export type CartItem = {
     setting_price_usd: number;
     diamond: CartBundleDiamond;
   } | null;
+  giftCard?: CartGiftCard | null;
 };
 
 type CartContextValue = {
