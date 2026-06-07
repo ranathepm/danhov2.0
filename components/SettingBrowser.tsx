@@ -301,35 +301,37 @@ export default function SettingBrowser({ products }: Props) {
                     }}
                   />
                 </div>
-                {priceFiltered ? (
-                  <div className="sb-price-inputs">
-                    <input
-                      type="number"
-                      className="sb-price-input"
-                      value={priceMin}
-                      min={globalMin}
-                      max={priceMax}
-                      step={100}
-                      onChange={(e) => setPriceMin(Math.max(globalMin, Math.min(priceMax, Number(e.target.value))))}
-                      aria-label="Minimum price"
-                    />
-                    <span className="sb-price-dash">—</span>
-                    <input
-                      type="number"
-                      className="sb-price-input"
-                      value={priceMax}
-                      min={priceMin}
-                      max={globalMax}
-                      step={100}
-                      onChange={(e) => setPriceMax(Math.min(globalMax, Math.max(priceMin, Number(e.target.value))))}
-                      aria-label="Maximum price"
-                    />
-                  </div>
-                ) : (
-                  <div className="sb-price-inputs">
-                    <span className="sb-price-range-hint">Drag to set price range</span>
-                  </div>
-                )}
+                <div className="sb-price-inputs">
+                  <input
+                    type="number"
+                    className="sb-price-input"
+                    value={priceMin}
+                    min={globalMin}
+                    max={globalMax}
+                    step={100}
+                    onChange={(e) => {
+                      const v = Math.max(globalMin, Math.min(globalMax, Number(e.target.value)));
+                      setPriceMin(v);
+                      if (v > priceMax) setPriceMax(v);
+                    }}
+                    aria-label="Minimum price"
+                  />
+                  <span className="sb-price-dash">—</span>
+                  <input
+                    type="number"
+                    className="sb-price-input"
+                    value={priceMax}
+                    min={globalMin}
+                    max={globalMax}
+                    step={100}
+                    onChange={(e) => {
+                      const v = Math.max(globalMin, Math.min(globalMax, Number(e.target.value)));
+                      setPriceMax(v);
+                      if (v < priceMin) setPriceMin(v);
+                    }}
+                    aria-label="Maximum price"
+                  />
+                </div>
               </div>
             </div>
           </div>
