@@ -175,6 +175,44 @@ export function consultationConfirmEmail(args: {
   };
 }
 
+export function giftCardEmail(args: {
+  recipientName: string;
+  senderName: string;
+  code: string;
+  amountUsd: number;
+  message?: string | null;
+}): { subject: string; html: string; text: string } {
+  const amount = '$' + args.amountUsd.toLocaleString('en-US');
+  const msgBlock = args.message
+    ? `<div style="margin:20px 0;padding:18px 24px;background:#fdf0ed;border-left:3px solid #AC3438;font-style:italic;color:#7a5c58;">"${escape(args.message)}"<br/><span style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:#9b6b4a;">— ${escape(args.senderName)}</span></div>`
+    : '';
+
+  const body = `
+    <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;color:#AC3438;">You've received a gift.</p>
+    <p style="margin:0 0 16px;">Dear ${escape(args.recipientName)},</p>
+    <p style="margin:0 0 16px;"><strong>${escape(args.senderName)}</strong> has sent you a DANHOV gift card — a gesture as enduring as the jewelry itself.</p>
+    ${msgBlock}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background:#fdf0ed;border:1px solid rgba(172,52,56,0.18);">
+      <tr><td style="padding:28px 32px;text-align:center;">
+        <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#AC3438;font-weight:700;margin-bottom:8px;">Your Gift Card</div>
+        <div style="font-size:36px;font-weight:700;color:#AC3438;margin-bottom:6px;">${amount}</div>
+        <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#7a5c58;margin-bottom:20px;">NEVER EXPIRES</div>
+        <div style="font-size:15px;letter-spacing:0.22em;font-weight:700;color:#3d2520;background:#fff;padding:14px 24px;border:1px solid rgba(172,52,56,0.2);display:inline-block;border-radius:4px;">${escape(args.code)}</div>
+        <p style="margin:12px 0 0;font-size:11px;color:#9b6b4a;">Enter this code at checkout on danhov.com</p>
+      </td></tr>
+    </table>
+    <div style="text-align:center;margin:24px 0;">
+      <a href="https://danhov.com/engagement-rings" style="display:inline-block;padding:14px 36px;background:#AC3438;color:#fff8f6;text-decoration:none;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">EXPLORE THE COLLECTION</a>
+    </div>
+    <p style="margin:16px 0 0;font-size:13px;color:#9b6b4a;text-align:center;">This gift card is redeemable on any engagement ring, wedding band, or fine jewelry piece — including custom commissions.</p>`;
+
+  return {
+    subject: `${escape(args.senderName)} sent you a DANHOV gift card — ${amount}`,
+    html: shell('You have a DANHOV gift card', body),
+    text: `Dear ${args.recipientName},\n\n${args.senderName} has sent you a DANHOV gift card worth ${amount}.\n\n${args.message ? `Message: "${args.message}"\n\n` : ''}Your code: ${args.code}\n\nEnter this code at checkout on danhov.com. It never expires.\n\nWith love,\nDANHOV Atelier`,
+  };
+}
+
 export function depositReceiptEmail(args: {
   productName: string;
   sku: string;

@@ -18,7 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
 import { createServiceClient } from '@/lib/supabase/server';
-import { sendEmail, depositReceiptEmail } from '@/lib/email';
+import { sendEmail, depositReceiptEmail, giftCardEmail } from '@/lib/email';
 import { createOrder as nivodaCreateOrder, NIVODA_PRO_ENABLED } from '@/lib/nivoda';
 import { isFallbackOffer } from '@/lib/nivoda-fallback';
 
@@ -70,6 +70,12 @@ async function onCheckoutCompleted(
   session: Stripe.Checkout.Session
 ) {
   if (session.payment_status !== 'paid') return;
+
+  // Gift card flow — activate cards and email recipient(s)
+  if (session.metadata?.flow === 'gift_card') {
+    await onGiftCardPaid(client, session);
+    return;
+  }
 
   // Look up our order row by checkout session id
   const { data: order } = await client
@@ -197,6 +203,66 @@ async function onCheckoutCompleted(
 </p>
 <p>Confirm details with the customer within one business day.</p>`,
     replyTo: customerEmail || undefined,
+  });
+}
+
+async function onGiftCardPaid(
+  client: ReturnType<typeof createServiceClient>,
+  session: Stripe.Checkout.Session
+) {
+  const meta = session.metadata ?? {};
+  const cardIds = (meta.gift_card_ids ?? '').split(',').filter(Boolean);
+  if (!cardIds.length) {
+    console.warn('gift_card webhook: no gift_card_ids in metadata', session.id);
+    return;
+  }
+
+  // Activate all gift cards
+  const { data: cards, error } = await client
+    .from('gift_cards')
+    .update({
+      status: 'active',
+      stripe_payment_intent: typeof session.payment_intent === 'string' ? session.payment_intent : null,
+    })
+    .in('id', cardIds)
+    .select('code, amount_usd, recipient_name, recipient_email, sender_name, message, deliver_at');
+
+  if (error || !cards) {
+    console.error('gift_card webhook: db update failed', error?.message);
+    return;
+  }
+
+  // Email each recipient (or schedule for deliver_at)
+  for (const card of cards as Array<{
+    code: string; amount_usd: number; recipient_name: string;
+    recipient_email: string; sender_name: string; message: string | null; deliver_at: string | null;
+  }>) {
+    const now = new Date();
+    const deliverAt = card.deliver_at ? new Date(card.deliver_at) : null;
+    if (deliverAt && deliverAt > now) {
+      // Scheduled for future — skip for now (a cron job would handle this)
+      console.log('gift card scheduled for future delivery:', card.code, card.deliver_at);
+      continue;
+    }
+    const tpl = giftCardEmail({
+      recipientName: card.recipient_name,
+      senderName: card.sender_name,
+      code: card.code,
+      amountUsd: card.amount_usd,
+      message: card.message,
+    });
+    await sendEmail({ to: card.recipient_email, ...tpl });
+  }
+
+  // Notify studio
+  await sendEmail({
+    to: 'care@danhov.com',
+    subject: `[Gift Card] ${cards.length} × $${meta.amount_usd} gift card(s) purchased by ${meta.sender_name}`,
+    html: `<p>Gift card purchase confirmed via Stripe.</p>
+<p><strong>From:</strong> ${escapeHtml(meta.sender_name)} (${escapeHtml(meta.sender_email)})<br/>
+<strong>To:</strong> ${escapeHtml(meta.recipient_name)} (${escapeHtml(meta.recipient_email)})<br/>
+<strong>Amount:</strong> $${meta.amount_usd} × ${meta.quantity}<br/>
+<strong>Session:</strong> ${session.id}</p>`,
   });
 }
 

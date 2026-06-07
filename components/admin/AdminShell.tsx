@@ -13,6 +13,7 @@ const NAV: { href: string; label: string; icon: React.ReactNode }[] = [
   { href: '/admin/orders', label: 'Orders', icon: <CartIcon /> },
   { href: '/admin/customers', label: 'Customers', icon: <UserIcon /> },
   { href: '/admin/consultations', label: 'Consultations', icon: <CalendarIcon /> },
+  { href: '/admin/affiliates', label: 'Affiliates', icon: <AffIcon /> },
   { href: '/admin/content', label: 'Page Content', icon: <DocIcon /> },
   { href: '/admin/ai', label: 'AI Assistant', icon: <AIIcon /> },
   { href: '/admin/settings', label: 'Settings', icon: <CogIcon /> },
@@ -166,6 +167,16 @@ function CogIcon() {
         stroke="currentColor"
         strokeWidth="1.5"
       />
+    </svg>
+  );
+}
+function AffIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      <circle cx="9" cy="7" r="4" stroke="currentColor" strokeWidth="1.8"/>
+      <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+      <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
     </svg>
   );
 }

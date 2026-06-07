@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import AffiliateForm from '@/components/AffiliateForm';
 
 export const metadata: Metadata = {
   title: 'Affiliate Program · DANHOV Jewelry',
@@ -189,6 +190,22 @@ export default function AffiliatePage() {
           cursor: pointer; align-self: center; transition: background 0.2s;
         }
         .aff-submit:hover { background: #b8923a; }
+        .aff-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .aff-form-error {
+          font-size: 13px; color: #AC3438; margin: 0; padding: 10px 14px;
+          background: rgba(172,52,56,0.06); border-left: 3px solid #AC3438; border-radius: 4px;
+        }
+        .aff-success {
+          text-align: center; padding: 48px 24px;
+          background: rgba(184,146,58,0.04); border: 1px solid rgba(184,146,58,0.2);
+          border-radius: 12px;
+        }
+        .aff-success-icon { font-size: 32px; color: #b8923a; margin-bottom: 16px; }
+        .aff-success-title {
+          font-family: 'Cormorant Garamond', serif; font-size: 28px;
+          color: #1a1410; margin: 0 0 12px;
+        }
+        .aff-success-body { font-size: 15px; color: #6b5e57; line-height: 1.7; margin: 0; }
 
         @media (max-width: 600px) {
           .aff-form-row { grid-template-columns: 1fr; }
@@ -261,53 +278,7 @@ export default function AffiliatePage() {
             We approve bloggers, content creators, influencers, stylists, wedding planners,
             and anyone with an engaged audience who loves fine jewelry. Tell us about yourself.
           </p>
-          <form className="aff-form" action="mailto:affiliate@danhov.com" method="get">
-            <div className="aff-form-row">
-              <div className="aff-form-group">
-                <label htmlFor="a-name">Full Name</label>
-                <input id="a-name" name="name" type="text" required placeholder="Your name" />
-              </div>
-              <div className="aff-form-group">
-                <label htmlFor="a-email">Email</label>
-                <input id="a-email" name="email" type="email" required placeholder="you@email.com" />
-              </div>
-            </div>
-            <div className="aff-form-group">
-              <label htmlFor="a-website">Website / Profile URL</label>
-              <input id="a-website" name="website" type="url" placeholder="https://yourwebsite.com or instagram.com/handle" />
-            </div>
-            <div className="aff-form-row">
-              <div className="aff-form-group">
-                <label htmlFor="a-platform">Primary Platform</label>
-                <select id="a-platform" name="platform">
-                  <option value="">Select…</option>
-                  <option>Instagram</option>
-                  <option>Pinterest</option>
-                  <option>YouTube</option>
-                  <option>TikTok</option>
-                  <option>Blog / Website</option>
-                  <option>Email Newsletter</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="aff-form-group">
-                <label htmlFor="a-audience">Audience Size</label>
-                <select id="a-audience" name="audience">
-                  <option value="">Select…</option>
-                  <option>Under 5,000</option>
-                  <option>5,000 – 25,000</option>
-                  <option>25,000 – 100,000</option>
-                  <option>100,000 – 500,000</option>
-                  <option>500,000+</option>
-                </select>
-              </div>
-            </div>
-            <div className="aff-form-group">
-              <label htmlFor="a-about">Tell us about your audience and why DANHOV is a fit</label>
-              <textarea id="a-about" name="about" placeholder="My audience is primarily engaged couples in the US who follow me for wedding planning content…" />
-            </div>
-            <button type="submit" className="aff-submit">Submit Application</button>
-          </form>
+          <AffiliateForm />
         </div>
       </section>
     </main>
