@@ -8,12 +8,30 @@ import { fetchProductWithPricingBySlug } from '@/lib/products';
 import { priceProduct } from '@/lib/pricing';
 import { cachedGetDiamond } from '@/lib/nivoda-cache';
 
-export const metadata: Metadata = {
-  title: 'Complete Your Ring · Ring Builder',
-  description:
-    'Review your DANHOV ring commission — chosen setting, chosen diamond, total, and 50% deposit. Begin your made-to-order piece in Los Angeles.',
-  alternates: { canonical: '/ring-builder/review' },
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: { setting?: string; diamond?: string; hold?: string };
+}): Promise<Metadata> {
+  const hasSetting = !!searchParams.setting;
+  const hasDiamond = !!searchParams.diamond;
+  if (hasSetting && hasDiamond)
+    return {
+      title: 'Complete Your Ring · Ring Builder',
+      description:
+        'Review your DANHOV ring commission — chosen setting, chosen diamond, total, and 50% deposit. Begin your made-to-order piece in Los Angeles.',
+      alternates: { canonical: '/ring-builder/review' },
+    };
+  if (hasSetting)
+    return {
+      title: 'Purchase Setting · Ring Builder · DANHOV',
+      description: 'Review and purchase your chosen DANHOV ring setting, handcrafted to order in Los Angeles.',
+    };
+  return {
+    title: 'Purchase Diamond · Ring Builder · DANHOV',
+    description: 'Review and purchase your chosen GIA-graded diamond from DANHOV.',
+  };
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -32,84 +50,114 @@ export default async function CompleteRingPage({
   const offerId = searchParams.diamond;
   const holdId = searchParams.hold;
 
-  if (!settingSlug) redirect('/ring-builder/setting');
-  if (!offerId) redirect(`/ring-builder/diamond?setting=${settingSlug}`);
+  // Need at least one of setting or diamond
+  if (!settingSlug && !offerId) redirect('/ring-builder/setting');
 
-  const setting = await fetchProductWithPricingBySlug(settingSlug);
-  if (!setting) redirect('/ring-builder/setting');
+  const mode: 'ring' | 'setting' | 'diamond' =
+    settingSlug && offerId ? 'ring' : settingSlug ? 'setting' : 'diamond';
 
-  // Pull the stone from Nivoda (60s cache; stale-safe)
-  let nivoda: Awaited<ReturnType<typeof cachedGetDiamond>> | null = null;
-  try {
-    nivoda = await cachedGetDiamond(offerId);
-  } catch (e) {
-    console.error('review: nivoda lookup failed', e);
-  }
-
-  if (!nivoda || !nivoda.stone) {
-    redirect(`/ring-builder/diamond?setting=${settingSlug}`);
-  }
-
-  // Live price for the setting (current spot)
+  // ── Load setting (ring / setting modes) ───────────────────────────────
+  let setting: Awaited<ReturnType<typeof fetchProductWithPricingBySlug>> | null = null;
   let settingPrice = 0;
-  try {
-    const breakdown = await priceProduct(setting, setting.default_metal);
-    settingPrice = breakdown.total_usd;
-  } catch {
-    const m = setting.price_display?.match(/[\d,]+/);
-    settingPrice = m ? Number(m[0].replace(/,/g, '')) : 0;
+  if (mode === 'ring' || mode === 'setting') {
+    setting = await fetchProductWithPricingBySlug(settingSlug!);
+    if (!setting) redirect('/ring-builder/setting');
+    try {
+      const breakdown = await priceProduct(setting, setting.default_metal);
+      settingPrice = breakdown.total_usd;
+    } catch {
+      const m = setting.price_display?.match(/[\d,]+/);
+      settingPrice = m ? Number(m[0].replace(/,/g, '')) : 0;
+    }
   }
 
-  const cert = nivoda.stone.diamond.certificate;
-  const reviewDiamond: ReviewDiamond = {
-    offer_id: nivoda.stone.id,
-    carat: cert?.carats ?? 1,
-    shape: shapeDisplay(cert?.shape ?? null),
-    color: cert?.color ?? '—',
-    clarity: cert?.clarity ?? '—',
-    cut: cert?.cut ?? '—',
-    lab: cert?.lab ?? 'GIA',
-    cert_number: cert?.certNumber ?? null,
-    image: nivoda.stone.diamond.image ?? null,
-    video: nivoda.stone.diamond.video ?? null,
-    price_usd: Math.round(
-      Number(nivoda.stone.markup_price ?? nivoda.stone.price ?? 0)
-    ),
-  };
+  // ── Load diamond (ring / diamond modes) ───────────────────────────────
+  let reviewDiamond: ReviewDiamond | null = null;
+  if (mode === 'ring' || mode === 'diamond') {
+    let nivoda: Awaited<ReturnType<typeof cachedGetDiamond>> | null = null;
+    try {
+      nivoda = await cachedGetDiamond(offerId!);
+    } catch (e) {
+      console.error('review: nivoda lookup failed', e);
+    }
+
+    if (!nivoda?.stone) {
+      if (mode === 'ring') redirect(`/ring-builder/diamond?setting=${settingSlug}`);
+      else redirect('/ring-builder/diamond');
+    } else {
+      const cert = nivoda.stone.diamond.certificate;
+      reviewDiamond = {
+        offer_id: nivoda.stone.id,
+        carat: cert?.carats ?? 1,
+        shape: shapeDisplay(cert?.shape ?? null),
+        color: cert?.color ?? '—',
+        clarity: cert?.clarity ?? '—',
+        cut: cert?.cut ?? '—',
+        lab: cert?.lab ?? 'GIA',
+        cert_number: cert?.certNumber ?? null,
+        image: nivoda.stone.diamond.image ?? null,
+        video: nivoda.stone.diamond.video ?? null,
+        price_usd: Math.round(
+          Number(nivoda.stone.markup_price ?? nivoda.stone.price ?? 0)
+        ),
+      };
+    }
+  }
+
+  const stepperHasSetting = mode === 'ring' || mode === 'setting';
+  const stepperHasDiamond = mode === 'ring' || mode === 'diamond';
 
   return (
     <main className="builder-page">
       <BuilderStepper
         current={3}
-        hasSetting={true}
-        hasDiamond={true}
+        hasSetting={stepperHasSetting}
+        hasDiamond={stepperHasDiamond}
         settingSlug={settingSlug}
         diamondId={offerId}
       />
 
       <section className="builder-section-head">
-        <span className="section-eyebrow">Step 3 of 3</span>
-        <h1 className="section-title">Complete <em>your ring</em></h1>
+        <span className="section-eyebrow">
+          {mode === 'ring' ? 'Step 3 of 3' : 'Final Step'}
+        </span>
+        <h1 className="section-title">
+          {mode === 'ring' ? (
+            <>Complete <em>your ring</em></>
+          ) : mode === 'setting' ? (
+            <>Purchase <em>your setting</em></>
+          ) : (
+            <>Purchase <em>your diamond</em></>
+          )}
+        </h1>
         <p className="section-body">
-          Review your pairing below. When you&apos;re ready, the 50% deposit secures your
-          commission and your piece begins in our Los Angeles atelier.
+          {mode === 'ring'
+            ? "Review your pairing below. When you're ready, the 50% deposit secures your commission and your piece begins in our Los Angeles atelier."
+            : mode === 'setting'
+            ? "Review your chosen setting. A 50% deposit secures your commission — your piece will be handcrafted to order in Los Angeles in 4–6 weeks."
+            : "Review your chosen diamond. Place a 50% deposit to secure it — a specialist will reach out to confirm shipping and any additional preferences."}
         </p>
       </section>
 
       <BuilderReview
-        setting={setting}
+        mode={mode}
+        setting={setting ?? null}
         diamond={reviewDiamond}
         settingPrice={settingPrice}
         holdId={holdId}
       />
 
       <div className="builder-review-edit-row">
-        <Link href={`/ring-builder/setting?setting=${settingSlug}&diamond=${offerId}${holdId ? `&hold=${holdId}` : ''}`}>
-          ← Edit Setting
-        </Link>
-        <Link href={`/ring-builder/diamond?setting=${settingSlug}&diamond=${offerId}${holdId ? `&hold=${holdId}` : ''}`}>
-          ← Edit Diamond
-        </Link>
+        {mode !== 'diamond' && (
+          <Link href={`/ring-builder/setting${settingSlug ? `?setting=${settingSlug}` : ''}${offerId ? `&diamond=${offerId}` : ''}${holdId ? `&hold=${holdId}` : ''}`}>
+            ← Edit Setting
+          </Link>
+        )}
+        {mode !== 'setting' && (
+          <Link href={`/ring-builder/diamond${settingSlug ? `?setting=${settingSlug}` : ''}${offerId ? `&diamond=${offerId}` : ''}${holdId ? `&hold=${holdId}` : ''}`}>
+            ← {mode === 'diamond' ? 'Change Diamond' : 'Edit Diamond'}
+          </Link>
+        )}
       </div>
     </main>
   );

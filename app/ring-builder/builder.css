@@ -553,6 +553,11 @@
   transition: border-color 0.15s, background 0.15s;
 }
 .sd-cta-secondary:hover { border-color: #1a1410; background: #faf6f1; }
+.sd-cta-setting-only {
+  border-color: var(--logo-red);
+  color: var(--logo-red);
+}
+.sd-cta-setting-only:hover { background: #fff5f5; border-color: var(--logo-red); }
 
 /* Accordion */
 .sd-accordion { margin-top: 20px; border: 1px solid #e8e2db; border-radius: 4px; }
@@ -748,6 +753,90 @@
   font-style: italic;
   color: var(--gold);
   font-size: 15px;
+}
+
+/* ── 3 purchase paths ────────────────────────────────────────────────── */
+.builder-paths {
+  margin-top: 56px;
+  padding-top: 48px;
+  border-top: 1px solid #e8e2db;
+}
+.builder-paths-eyebrow {
+  text-align: center;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 28px;
+}
+.builder-paths-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.builder-path-card {
+  border: 1px solid #e8e2db;
+  border-radius: 4px;
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #faf8f5;
+  transition: border-color 0.18s, background 0.18s;
+}
+.builder-path-card:hover { border-color: #c9b8ad; background: #fff; }
+.builder-path-icon {
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4px;
+}
+.builder-path-icon svg { width: 40px; height: 40px; }
+.builder-path-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px;
+  font-weight: 500;
+  color: #1a1410;
+  margin: 0;
+}
+.builder-path-card p {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: var(--grey);
+  line-height: 1.65;
+  flex: 1;
+  margin: 0;
+}
+.builder-path-btn {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 12px 0;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  text-decoration: none;
+  border-bottom: 1px solid var(--logo-red);
+  transition: color 0.15s, border-color 0.15s;
+  align-self: flex-start;
+}
+.builder-path-btn:hover { color: var(--logo-red-dark); border-color: var(--logo-red-dark); }
+.builder-path-btn--primary {
+  background: var(--logo-red);
+  color: #fff;
+  padding: 12px 20px;
+  border: 1px solid var(--logo-red);
+  border-radius: 3px;
+}
+.builder-path-btn--primary:hover {
+  background: var(--logo-red-dark);
+  color: #fff;
+  border-color: var(--logo-red-dark);
+}
+@media (max-width: 768px) {
+  .builder-paths-grid { grid-template-columns: 1fr; }
 }
 
 /* ── Collection filter bar ───────────────────────────────────────────── */
@@ -1263,11 +1352,68 @@
   color: var(--grey);
   line-height: 1.6;
 }
+.builder-review-ring-size {
+  margin: 20px 0 4px;
+}
+.builder-review-ring-size-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1a1410;
+  margin-bottom: 8px;
+}
+.builder-review-ring-size-us {
+  font-size: 10px;
+  color: var(--grey);
+  text-transform: none;
+  letter-spacing: 0;
+}
+.builder-review-ring-size-req {
+  margin-left: auto;
+  background: var(--logo-red);
+  color: #fff;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.builder-review-ring-size-select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid #d9d0c8;
+  background: #fff;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: #1a1410;
+  cursor: pointer;
+  appearance: auto;
+}
+.builder-review-ring-size-select:focus {
+  outline: 1px solid var(--logo-red);
+  border-color: var(--logo-red);
+}
+.builder-review-ring-size-hint {
+  margin-top: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--grey);
+  line-height: 1.5;
+}
 .builder-review-form {
   display: flex;
   gap: 10px;
-  margin-top: 8px;
+  margin-top: 16px;
   flex-wrap: wrap;
+}
+.builder-review-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 .builder-commission-btn {
   background: var(--logo-red);
@@ -1277,9 +1423,30 @@
   padding: 12px 22px;
   cursor: pointer;
   white-space: nowrap;
+  flex: 1;
 }
 .builder-commission-btn:hover { background: var(--logo-red-dark); }
 .builder-commission-btn:disabled { opacity: 0.6; cursor: default; }
+.builder-addtocart-btn {
+  background: transparent;
+  color: var(--logo-red);
+  border: 1px solid var(--logo-red);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  padding: 12px 22px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex: 1;
+  transition: background 0.15s, color 0.15s;
+}
+.builder-addtocart-btn:hover {
+  background: var(--logo-red);
+  color: #fff;
+}
+.builder-review-diamond-img--hero {
+  flex: 1;
+}
 .builder-review-secured {
   margin-top: 16px;
   font-family: 'Jost', sans-serif;

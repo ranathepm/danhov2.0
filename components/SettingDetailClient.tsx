@@ -72,6 +72,10 @@ export default function SettingDetailClient({
     router.push(`/ring-builder/diamond?${params.toString()}`);
   }
 
+  function handleBuySettingOnly() {
+    router.push(`/ring-builder/review?setting=${encodeURIComponent(product.slug)}`);
+  }
+
   function handleSave() {
     setSaved(true);
     // Could integrate with wishlist here
@@ -199,7 +203,10 @@ export default function SettingDetailClient({
 
       {/* CTAs */}
       <button className="sd-cta-primary" onClick={handleSelect}>
-        Select Setting
+        Select Setting → Add Diamond
+      </button>
+      <button className="sd-cta-secondary sd-cta-setting-only" onClick={handleBuySettingOnly}>
+        Buy Setting Only (No Diamond)
       </button>
       <button className="sd-cta-secondary" onClick={handleSave}>
         {saved ? 'Saved ✓' : 'Save for later'}

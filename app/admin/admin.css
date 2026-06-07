@@ -1231,3 +1231,58 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   font-size: 12px;
   color: var(--adm-text-muted, #6a5f57);
 }
+
+/* ── Commission bundle card (ring-builder orders) ───────────────── */
+.adm-commission-bundle { border-left: 3px solid #AC3438; }
+.adm-commission-type {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.adm-commission-mode {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #AC3438;
+  background: rgba(172,52,56,0.07);
+  padding: 4px 10px;
+  border-radius: 3px;
+}
+.adm-commission-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.adm-commission-value {
+  font-size: 14px;
+  color: #1a1410;
+}
+.adm-commission-ring-size {
+  font-size: 18px;
+  color: #AC3438;
+}
+.adm-commission-row--warn .adm-commission-warn {
+  font-size: 12px;
+  color: #b8761e;
+  font-style: italic;
+}
+.adm-commission-section { margin-top: 16px; }
+.adm-commission-section > .adm-field-label { display: block; margin-bottom: 8px; }
+.adm-commission-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-family: 'Jost', sans-serif;
+}
+.adm-commission-table td {
+  padding: 5px 10px 5px 0;
+  vertical-align: top;
+}
+.adm-commission-table td:first-child {
+  color: #7a6f68;
+  width: 36%;
+  white-space: nowrap;
+}
+.adm-commission-table tr + tr td { border-top: 1px solid #f0ebe4; }

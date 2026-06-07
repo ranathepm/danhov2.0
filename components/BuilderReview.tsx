@@ -4,15 +4,16 @@ import { useState } from 'react';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import { DiamondCardMedia, type ShapeT } from '@/components/DiamondPicker';
+import { useCart } from '@/components/CartProvider';
 
 export type ReviewDiamond = {
   offer_id: string;
   carat: number;
-  shape: string;        // e.g. 'Round' (display-cased)
+  shape: string;
   color: string;
   clarity: string;
   cut: string;
-  lab: string;          // e.g. 'GIA'
+  lab: string;
   cert_number: string | null;
   image: string | null;
   video: string | null;
@@ -20,36 +21,69 @@ export type ReviewDiamond = {
 };
 
 type Props = {
-  setting: Product;
-  diamond: ReviewDiamond;
+  mode: 'ring' | 'setting' | 'diamond';
+  setting: Product | null;
+  diamond: ReviewDiamond | null;
   settingPrice: number;
   holdId?: string;
 };
 
-export default function BuilderReview({ setting, diamond, settingPrice, holdId }: Props) {
+const US_RING_SIZES = [
+  '3', '3.5', '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5',
+  '8', '8.5', '9', '9.5', '10', '10.5', '11', '11.5', '12', '12.5', '13',
+];
+
+export default function BuilderReview({ mode, setting, diamond, settingPrice, holdId }: Props) {
+  const { addItem } = useCart();
+
   const [email, setEmail] = useState('');
+  const [ringSize, setRingSize] = useState('');
   const [loading, setLoading] = useState(false);
+  const [cartAdded, setCartAdded] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const total = settingPrice + diamond.price_usd;
+
+  const needsRingSize = mode === 'ring' || mode === 'setting';
+  const diamondPrice = diamond?.price_usd ?? 0;
+  const total =
+    mode === 'ring'
+      ? settingPrice + diamondPrice
+      : mode === 'setting'
+      ? settingPrice
+      : diamondPrice;
   const deposit = Math.round(total * 0.5);
 
-  async function startCommission() {
+  function validate(): boolean {
     setErr(null);
     if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-      setErr('Please enter a valid email.');
-      return;
+      setErr('Please enter a valid email address.');
+      return false;
     }
+    if (needsRingSize && !ringSize) {
+      setErr('Please select a ring size before continuing.');
+      return false;
+    }
+    return true;
+  }
+
+  async function startCommission() {
+    if (!validate()) return;
     setLoading(true);
     try {
+      const body: Record<string, unknown> = {
+        mode,
+        email,
+        ring_size: ringSize || undefined,
+      };
+      if (mode === 'ring' || mode === 'setting') body.setting_slug = setting?.slug;
+      if (mode === 'ring' || mode === 'diamond') {
+        body.diamond_offer_id = diamond?.offer_id;
+        body.hold_id = holdId;
+      }
+
       const r = await fetch('/api/ring-builder/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          setting_slug: setting.slug,
-          diamond_offer_id: diamond.offer_id,
-          hold_id: holdId,
-          email,
-        }),
+        body: JSON.stringify(body),
       });
       const data = await r.json();
       if (!r.ok || !data.url) {
@@ -62,28 +96,103 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
     }
   }
 
-  const heroImage = setting.images?.[0] ?? null;
-  const certLabel = diamond.cert_number
-    ? `${diamond.lab} · ${diamond.cert_number}`
-    : diamond.lab;
+  function addToCart() {
+    if (needsRingSize && !ringSize) {
+      setErr('Please select a ring size before adding to cart.');
+      return;
+    }
+    setErr(null);
+
+    if (mode === 'ring' && setting && diamond) {
+      addItem({
+        id: `bundle-${setting.slug}-${diamond.offer_id}`,
+        sku: setting.sku,
+        slug: setting.slug,
+        name: `${setting.name} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
+        collection: setting.collection ?? null,
+        metal: setting.default_metal ?? null,
+        image: setting.images?.[0] ?? null,
+        price_display: `$${total.toLocaleString('en-US')}`,
+        price_num: total,
+        ring_size: ringSize || null,
+        bundle: {
+          setting_price_usd: settingPrice,
+          diamond: {
+            offer_id: diamond.offer_id,
+            hold_id: holdId ?? null,
+            shape: diamond.shape,
+            carat: diamond.carat,
+            color: diamond.color,
+            clarity: diamond.clarity,
+            cut: diamond.cut,
+            lab: diamond.lab,
+            cert_number: diamond.cert_number,
+            price_usd: diamond.price_usd,
+            image: diamond.image,
+          },
+        },
+      });
+    } else if (mode === 'setting' && setting) {
+      addItem({
+        id: `setting-${setting.slug}-${ringSize}`,
+        sku: setting.sku,
+        slug: setting.slug,
+        name: setting.name,
+        collection: setting.collection ?? null,
+        metal: setting.default_metal ?? null,
+        image: setting.images?.[0] ?? null,
+        price_display: `$${settingPrice.toLocaleString('en-US')}`,
+        price_num: settingPrice,
+        ring_size: ringSize || null,
+        bundle: null,
+      });
+    } else if (mode === 'diamond' && diamond) {
+      addItem({
+        id: `diamond-${diamond.offer_id}`,
+        sku: diamond.offer_id.slice(0, 20),
+        slug: 'loose-diamond',
+        name: `${diamond.carat.toFixed(2)} ct ${diamond.shape} Diamond`,
+        collection: `${diamond.lab}${diamond.cert_number ? ` · ${diamond.cert_number}` : ''}`,
+        metal: null,
+        image: diamond.image,
+        price_display: `$${diamondPrice.toLocaleString('en-US')}`,
+        price_num: diamondPrice,
+        ring_size: null,
+        bundle: null,
+      });
+    }
+
+    setCartAdded(true);
+    setTimeout(() => setCartAdded(false), 2500);
+  }
+
+  const heroImage = setting?.images?.[0] ?? null;
+  const certLabel = diamond
+    ? diamond.cert_number
+      ? `${diamond.lab} · ${diamond.cert_number}`
+      : diamond.lab
+    : null;
 
   return (
     <div className="builder-review">
       <div className="builder-review-top">
+        {/* ── Visuals ─────────────────────────────────────────────────── */}
         <div className="builder-review-visual">
-          <div className="builder-review-img">
-            {heroImage ? (
-              <Image src={heroImage} alt={setting.name} width={520} height={520} />
-            ) : (
-              <div className="builder-ring-fallback">
-                <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
-                  <circle cx="28" cy="28" r="20" stroke="#AC3438" strokeWidth="1.5" />
-                </svg>
-              </div>
-            )}
-          </div>
-          {(diamond.image || diamond.video) && (
-            <div className="builder-review-diamond-img">
+          {mode !== 'diamond' && (
+            <div className="builder-review-img">
+              {heroImage ? (
+                <Image src={heroImage} alt={setting?.name ?? 'Setting'} width={520} height={520} />
+              ) : (
+                <div className="builder-ring-fallback">
+                  <svg viewBox="0 0 56 56" fill="none" aria-hidden="true">
+                    <circle cx="28" cy="28" r="20" stroke="#AC3438" strokeWidth="1.5" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          )}
+          {diamond && (diamond.image || diamond.video) && (
+            <div className={`builder-review-diamond-img${mode === 'diamond' ? ' builder-review-diamond-img--hero' : ''}`}>
               <div className="builder-review-diamond-media">
                 <DiamondCardMedia
                   image={diamond.image}
@@ -98,47 +207,64 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
             </div>
           )}
           <p className="builder-review-tagline">
-            Your one-of-one — handcrafted in Los Angeles, made in 4–6 weeks.
+            {mode === 'ring'
+              ? 'Your one-of-one — handcrafted in Los Angeles, made in 4–6 weeks.'
+              : mode === 'setting'
+              ? 'Handcrafted to order in Los Angeles · 4–6 week lead time.'
+              : 'GIA-graded · conflict-free · ethically traced.'}
           </p>
         </div>
 
+        {/* ── Details & form ──────────────────────────────────────────── */}
         <div className="builder-review-details">
-          <div className="builder-review-line">
-            <div>
-              <h3>{setting.name}</h3>
-              <span className="builder-review-sku">Style {setting.sku}</span>
-              {setting.collection && (
-                <span className="builder-review-collection"> · {setting.collection}</span>
-              )}
-            </div>
-            <span className="builder-review-price">
-              ${settingPrice.toLocaleString('en-US')}
-            </span>
-          </div>
-
-          <div className="builder-review-divider" />
-
-          <div className="builder-review-line">
-            <div>
-              <h3>
-                {diamond.carat.toFixed(2)} ct {diamond.shape} Diamond
-              </h3>
-              <span className="builder-review-sku">{certLabel}</span>
-              <div className="builder-review-grade">
-                {diamond.color} colour · {diamond.clarity} clarity · {diamond.cut} cut
-                {holdId && <> · reserved for you for 24h</>}
+          {/* Setting line */}
+          {mode !== 'diamond' && setting && (
+            <div className="builder-review-line">
+              <div>
+                <h3>{setting.name}</h3>
+                <span className="builder-review-sku">Style {setting.sku}</span>
+                {setting.collection && (
+                  <span className="builder-review-collection"> · {setting.collection}</span>
+                )}
+                {mode === 'setting' && (
+                  <div className="builder-review-grade">Setting only · diamond not included</div>
+                )}
               </div>
+              <span className="builder-review-price">
+                ${settingPrice.toLocaleString('en-US')}
+              </span>
             </div>
-            <span className="builder-review-price">
-              ${diamond.price_usd.toLocaleString('en-US')}
-            </span>
-          </div>
+          )}
+
+          {mode === 'ring' && <div className="builder-review-divider" />}
+
+          {/* Diamond line */}
+          {mode !== 'setting' && diamond && (
+            <div className="builder-review-line">
+              <div>
+                <h3>
+                  {diamond.carat.toFixed(2)} ct {diamond.shape} Diamond
+                </h3>
+                <span className="builder-review-sku">{certLabel}</span>
+                <div className="builder-review-grade">
+                  {diamond.color} colour · {diamond.clarity} clarity · {diamond.cut} cut
+                  {holdId && <> · reserved for you for 24h</>}
+                </div>
+              </div>
+              <span className="builder-review-price">
+                ${diamondPrice.toLocaleString('en-US')}
+              </span>
+            </div>
+          )}
 
           <div className="builder-review-divider builder-review-divider-strong" />
 
+          {/* Totals */}
           <div className="builder-review-totals">
             <div className="builder-review-total-row">
-              <span>Commission total</span>
+              <span>
+                {mode === 'ring' ? 'Commission total' : mode === 'setting' ? 'Setting total' : 'Diamond total'}
+              </span>
               <strong>${total.toLocaleString('en-US')}</strong>
             </div>
             <div className="builder-review-total-row builder-review-deposit">
@@ -147,10 +273,36 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
             </div>
             <p className="builder-review-balance">
               Balance of ${(total - deposit).toLocaleString('en-US')} due before shipping.
-              Production: 4–6 weeks. Lifetime craftsmanship warranty.
+              {mode !== 'diamond' && ' Production: 4–6 weeks.'} Lifetime craftsmanship warranty.
             </p>
           </div>
 
+          {/* Ring size — required for ring/setting, hidden for diamond-only */}
+          {needsRingSize && (
+            <div className="builder-review-ring-size">
+              <label className="builder-review-ring-size-label" htmlFor="rb-ring-size">
+                Ring Size <span className="builder-review-ring-size-us">(US sizing)</span>
+                <span className="builder-review-ring-size-req">Required</span>
+              </label>
+              <select
+                id="rb-ring-size"
+                className="builder-review-ring-size-select"
+                value={ringSize}
+                onChange={(e) => { setRingSize(e.target.value); setErr(null); }}
+              >
+                <option value="">— Select your size —</option>
+                {US_RING_SIZES.map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+                <option value="other">Other / International — I&apos;ll note in email</option>
+              </select>
+              <p className="builder-review-ring-size-hint">
+                Not sure of your size? A specialist will confirm before production begins.
+              </p>
+            </div>
+          )}
+
+          {/* Email + action buttons */}
           <div className="builder-review-form">
             <input
               type="email"
@@ -160,14 +312,23 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
               onChange={(e) => setEmail(e.target.value)}
               autoComplete="email"
             />
-            <button
-              type="button"
-              className="builder-cta-next builder-commission-btn"
-              onClick={startCommission}
-              disabled={loading}
-            >
-              {loading ? 'Opening secure checkout…' : 'Begin Commission →'}
-            </button>
+            <div className="builder-review-actions">
+              <button
+                type="button"
+                className="builder-cta-next builder-commission-btn"
+                onClick={startCommission}
+                disabled={loading}
+              >
+                {loading ? 'Opening secure checkout…' : 'Begin Commission →'}
+              </button>
+              <button
+                type="button"
+                className="builder-addtocart-btn"
+                onClick={addToCart}
+              >
+                {cartAdded ? '✓ Added to Cart' : 'Add to Cart'}
+              </button>
+            </div>
           </div>
 
           {err && <p className="quote-lock-err" style={{ marginTop: 8 }}>{err}</p>}
@@ -175,7 +336,7 @@ export default function BuilderReview({ setting, diamond, settingPrice, holdId }
           <p className="builder-review-secured">
             Secured by Stripe · Your card is charged only when you confirm. We will email
             you the order reference and a specialist will reach out within one business
-            day to confirm size, engraving, and stone details.
+            day to confirm {needsRingSize ? 'size, engraving, and stone' : 'shipping and order'} details.
           </p>
         </div>
       </div>

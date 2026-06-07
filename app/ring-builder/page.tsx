@@ -53,12 +53,58 @@ export default function RingBuilderLandingPage() {
         </article>
       </section>
 
+      {/* ── Three purchase paths ─────────────────────────────────── */}
+      <section className="builder-paths">
+        <p className="builder-paths-eyebrow">Choose how you&apos;d like to shop</p>
+        <div className="builder-paths-grid">
+          <article className="builder-path-card">
+            <div className="builder-path-icon">
+              <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <circle cx="20" cy="20" r="13" stroke="#AC3438" strokeWidth="1.4" />
+                <circle cx="20" cy="20" r="7" stroke="#AC3438" strokeWidth="0.8" />
+                <circle cx="20" cy="7" r="2.5" fill="#AC3438" />
+              </svg>
+            </div>
+            <h3>Build a Complete Ring</h3>
+            <p>Choose your setting, then pair it with a certified diamond. The classic commission path.</p>
+            <Link href="/ring-builder/setting" className="builder-path-btn builder-path-btn--primary">
+              Start with a Setting →
+            </Link>
+          </article>
+
+          <article className="builder-path-card">
+            <div className="builder-path-icon">
+              <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <circle cx="20" cy="20" r="13" stroke="#AC3438" strokeWidth="1.4" />
+                <circle cx="20" cy="20" r="7" stroke="#AC3438" strokeWidth="0.8" />
+              </svg>
+            </div>
+            <h3>Buy a Setting Alone</h3>
+            <p>Purchase just the ring setting — handcrafted to your size and metal choice, without a diamond.</p>
+            <Link href="/ring-builder/setting" className="builder-path-btn">
+              Browse Settings →
+            </Link>
+          </article>
+
+          <article className="builder-path-card">
+            <div className="builder-path-icon">
+              <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
+                <polygon points="20,5 34,15 20,35 6,15" stroke="#AC3438" strokeWidth="1.4" fill="none" />
+                <polyline points="6,15 20,22 34,15" stroke="#AC3438" strokeWidth="0.8" />
+              </svg>
+            </div>
+            <h3>Buy a Loose Diamond</h3>
+            <p>Select a GIA-graded diamond from live inventory. No setting required — a specialist will assist.</p>
+            <Link href="/ring-builder/diamond" className="builder-path-btn">
+              Browse Diamonds →
+            </Link>
+          </article>
+        </div>
+      </section>
+
       <section className="builder-cta">
-        <Link href="/ring-builder/setting" className="btn-primary builder-cta-btn">
-          Begin with the Setting →
-        </Link>
         <p className="builder-cta-sub">
-          Or speak with a specialist first — a private 30-minute consultation is just
+          Prefer to speak with a specialist first? A private 30-minute consultation is just
           one click away.
         </p>
       </section>

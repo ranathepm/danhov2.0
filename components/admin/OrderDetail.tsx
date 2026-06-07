@@ -20,6 +20,30 @@ type ShippingAddress = {
   region?: string;
   postal_code?: string;
   country?: string;
+  _bundle?: CommissionBundle | null;
+};
+
+type CommissionBundle = {
+  flow?: string;
+  mode?: 'ring' | 'setting' | 'diamond';
+  ring_size?: string | null;
+  setting?: {
+    sku?: string;
+    name?: string;
+    metal?: string | null;
+    price_usd?: number;
+  } | null;
+  diamond?: {
+    offer_id?: string;
+    shape?: string;
+    carat?: number;
+    color?: string;
+    clarity?: string;
+    cut?: string;
+    lab?: string;
+    cert_number?: string | null;
+    price_usd?: number;
+  } | null;
 };
 
 type CustomOverrides = {
@@ -212,6 +236,15 @@ export default function OrderDetail({
 
   const balance = Math.max(0, (totalUsd || 0) - (depositUsd || 0));
   const heroImage = product?.images?.[0];
+  const bundle = (initialOrder.shipping_address as ShippingAddress | null)?._bundle ?? null;
+  const modeLabel =
+    bundle?.mode === 'ring'
+      ? 'Complete Ring (Setting + Diamond)'
+      : bundle?.mode === 'setting'
+      ? 'Setting Only'
+      : bundle?.mode === 'diamond'
+      ? 'Diamond Only'
+      : null;
 
   return (
     <>
@@ -269,6 +302,90 @@ export default function OrderDetail({
               <div className="adm-page-sub" style={{ marginTop: 4 }}>
                 Manual order. Edit the spec below and the labor will recompute.
               </div>
+            </section>
+          )}
+
+          {/* Commission bundle — read-only detail card, shown for ring-builder orders */}
+          {bundle?.flow === 'ring_builder' && (
+            <section className="adm-card adm-commission-bundle">
+              <h3 className="adm-h3">Commission Details</h3>
+              {modeLabel && (
+                <div className="adm-commission-type">
+                  <span className="adm-field-label">Order type</span>
+                  <span className="adm-commission-mode">{modeLabel}</span>
+                </div>
+              )}
+              {bundle.ring_size && (
+                <div className="adm-commission-row">
+                  <span className="adm-field-label">Ring size</span>
+                  <strong className="adm-commission-value adm-commission-ring-size">
+                    US {bundle.ring_size}
+                  </strong>
+                </div>
+              )}
+              {!bundle.ring_size && bundle.mode !== 'diamond' && (
+                <div className="adm-commission-row adm-commission-row--warn">
+                  <span className="adm-field-label">Ring size</span>
+                  <span className="adm-commission-warn">Not yet provided — confirm with customer</span>
+                </div>
+              )}
+
+              {/* Setting details */}
+              {bundle.setting && (
+                <div className="adm-commission-section">
+                  <span className="adm-field-label">Setting</span>
+                  <table className="adm-commission-table">
+                    <tbody>
+                      {bundle.setting.name && (
+                        <tr><td>Name</td><td><strong>{bundle.setting.name}</strong></td></tr>
+                      )}
+                      {bundle.setting.sku && (
+                        <tr><td>SKU</td><td><span className="adm-mono">{bundle.setting.sku}</span></td></tr>
+                      )}
+                      {bundle.setting.metal && (
+                        <tr><td>Metal</td><td>{bundle.setting.metal.replace(/_/g, ' ')}</td></tr>
+                      )}
+                      {bundle.setting.price_usd != null && (
+                        <tr><td>Setting price</td><td><strong>${bundle.setting.price_usd.toLocaleString('en-US')}</strong></td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Diamond details */}
+              {bundle.diamond && (
+                <div className="adm-commission-section">
+                  <span className="adm-field-label">Diamond (Nivoda)</span>
+                  <table className="adm-commission-table">
+                    <tbody>
+                      {bundle.diamond.carat != null && (
+                        <tr><td>Stone</td><td><strong>{bundle.diamond.carat.toFixed(2)} ct {bundle.diamond.shape}</strong></td></tr>
+                      )}
+                      {bundle.diamond.color && (
+                        <tr><td>Grade</td><td>{bundle.diamond.color} colour · {bundle.diamond.clarity} clarity · {bundle.diamond.cut} cut</td></tr>
+                      )}
+                      {bundle.diamond.lab && (
+                        <tr>
+                          <td>Certificate</td>
+                          <td>
+                            {bundle.diamond.lab}
+                            {bundle.diamond.cert_number && (
+                              <> · <span className="adm-mono">{bundle.diamond.cert_number}</span></>
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                      {bundle.diamond.offer_id && (
+                        <tr><td>Nivoda offer ID</td><td><span className="adm-mono adm-page-sub">{bundle.diamond.offer_id}</span></td></tr>
+                      )}
+                      {bundle.diamond.price_usd != null && (
+                        <tr><td>Diamond price</td><td><strong>${bundle.diamond.price_usd.toLocaleString('en-US')}</strong></td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </section>
           )}
 
