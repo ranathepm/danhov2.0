@@ -133,11 +133,12 @@ export default function SettingBrowser({ products }: Props) {
 
   const [activeStyles, setActiveStyles] = useState<Set<string>>(new Set());
   const [activeMetals, setActiveMetals] = useState<Set<string>>(new Set());
-  // priceMax=globalMin means "no max filter" (sentinel for unset)
+  // Both thumbs start at globalMin → fill = 0 (empty). Sentinel: filter only when max > globalMin.
+  const [priceMin, setPriceMin] = useState(globalMin);
   const [priceMax, setPriceMax] = useState(globalMin);
   const [sort, setSort] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
 
-  const priceFiltered = priceMax !== globalMin;
+  const priceFiltered = priceMax > globalMin;
   const activeCount = activeStyles.size + activeMetals.size + (priceFiltered ? 1 : 0);
 
   function toggleSet<T>(set: Set<T>, val: T): Set<T> {
@@ -149,6 +150,7 @@ export default function SettingBrowser({ products }: Props) {
   const resetAll = useCallback(() => {
     setActiveStyles(new Set());
     setActiveMetals(new Set());
+    setPriceMin(globalMin);
     setPriceMax(globalMin);
     setSort('featured');
   }, [globalMin]);
@@ -169,7 +171,7 @@ export default function SettingBrowser({ products }: Props) {
       result = result.filter((p) => {
         const price = parsePrice(p.price_display);
         if (price === null) return true;
-        return price <= priceMax;
+        return price >= priceMin && price <= priceMax;
       });
     }
 
@@ -180,7 +182,7 @@ export default function SettingBrowser({ products }: Props) {
     }
 
     return result;
-  }, [products, activeStyles, activeMetals, priceFiltered, priceMax, sort]);
+  }, [products, activeStyles, activeMetals, priceFiltered, priceMin, priceMax, sort]);
 
   const visibleStyles = showMoreStyles ? allCollections : allCollections.slice(0, 5);
   const visibleMetals = showMoreMetals ? allMetals : allMetals.slice(0, 5);
@@ -263,39 +265,71 @@ export default function SettingBrowser({ products }: Props) {
           {/* Right column: Price */}
           <div className="sb-filters-col">
             <div className="sb-filter-section">
-              <div className="sb-filter-title">
-                Price
-                {priceFiltered && (
-                  <span className="sb-price-max-label"> — up to ${priceMax.toLocaleString('en-US')}</span>
-                )}
-              </div>
+              <div className="sb-filter-title">Price</div>
               <div className="sb-price-wrap">
                 <div className="sb-price-slider-track">
                   <div className="sb-price-track-bg" />
                   <div
                     className="sb-price-track-fill"
                     style={{
-                      left: 0,
+                      left: `${((priceMin - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
                       right: `${100 - ((priceMax - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
                     }}
                   />
                   <input
                     type="range"
-                    className="sb-range"
+                    className="sb-range sb-range--min"
+                    min={globalMin}
+                    max={globalMax}
+                    step={100}
+                    value={priceMin}
+                    onChange={(e) => {
+                      const v = Number(e.target.value);
+                      if (v <= priceMax) setPriceMin(v);
+                    }}
+                  />
+                  <input
+                    type="range"
+                    className="sb-range sb-range--max"
                     min={globalMin}
                     max={globalMax}
                     step={100}
                     value={priceMax}
-                    onChange={(e) => setPriceMax(Number(e.target.value))}
+                    onChange={(e) => {
+                      const v = Number(e.target.value);
+                      if (v >= priceMin) setPriceMax(v);
+                    }}
                   />
                 </div>
-                <div className="sb-price-inputs">
-                  <span className="sb-price-range-hint">
-                    {priceFiltered
-                      ? `Up to $${priceMax.toLocaleString('en-US')}`
-                      : 'Any price — drag to set budget'}
-                  </span>
-                </div>
+                {priceFiltered ? (
+                  <div className="sb-price-inputs">
+                    <input
+                      type="number"
+                      className="sb-price-input"
+                      value={priceMin}
+                      min={globalMin}
+                      max={priceMax}
+                      step={100}
+                      onChange={(e) => setPriceMin(Math.max(globalMin, Math.min(priceMax, Number(e.target.value))))}
+                      aria-label="Minimum price"
+                    />
+                    <span className="sb-price-dash">—</span>
+                    <input
+                      type="number"
+                      className="sb-price-input"
+                      value={priceMax}
+                      min={priceMin}
+                      max={globalMax}
+                      step={100}
+                      onChange={(e) => setPriceMax(Math.min(globalMax, Math.max(priceMin, Number(e.target.value))))}
+                      aria-label="Maximum price"
+                    />
+                  </div>
+                ) : (
+                  <div className="sb-price-inputs">
+                    <span className="sb-price-range-hint">Drag to set price range</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>

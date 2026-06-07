@@ -220,14 +220,22 @@
   background: var(--logo-red); cursor: pointer; border: 2px solid #fff;
   box-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
-.sb-price-inputs { display: flex; align-items: center; }
+.sb-price-inputs { display: flex; align-items: center; gap: 10px; }
+.sb-price-input {
+  flex: 1; border: 1px solid #e8e2db; border-radius: 4px;
+  padding: 8px 12px; font-family: 'Jost', sans-serif;
+  font-size: 14px; text-align: center; color: #1a1410;
+  outline: none; background: #fff;
+  transition: border-color 0.15s;
+  -moz-appearance: textfield;
+}
+.sb-price-input::-webkit-outer-spin-button,
+.sb-price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.sb-price-input:focus { border-color: #1a1410; }
+.sb-price-dash { color: #9a8f86; }
 .sb-price-range-hint {
   font-family: 'Jost', sans-serif; font-size: 13px;
   color: #9a8f86; letter-spacing: 0.02em;
-}
-.sb-price-max-label {
-  font-family: 'Jost', sans-serif; font-size: 12px;
-  color: var(--logo-red); font-weight: 500;
 }
 
 /* More buttons */
