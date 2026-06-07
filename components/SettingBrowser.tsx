@@ -6,7 +6,7 @@ import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import { stripMetalSuffix } from '@/lib/product-display';
 
-// ─── Metal helpers ────────────────────────────────────────────────────────────
+// ─── Metal helpers ─────────────────────────────────────────────────────────
 
 interface MetalOption {
   key: string;      // normalised lookup key
@@ -57,54 +57,6 @@ function parsePrice(display: string | null): number | null {
   if (!display) return null;
   const m = display.replace(/,/g, '').match(/[\d.]+/);
   return m ? Math.round(Number(m[0])) : null;
-}
-
-// ─── Shape data ──────────────────────────────────────────────────────────────
-
-const SHAPES = [
-  { value: 'round',    label: 'Round',    icon: <RoundSVG /> },
-  { value: 'oval',     label: 'Oval',     icon: <OvalSVG /> },
-  { value: 'cushion',  label: 'Cushion',  icon: <CushionSVG /> },
-  { value: 'princess', label: 'Princess', icon: <PrincessSVG /> },
-  { value: 'pear',     label: 'Pear',     icon: <PearSVG /> },
-  { value: 'emerald',  label: 'Emerald',  icon: <EmeraldSVG /> },
-  { value: 'marquise', label: 'Marquise', icon: <MarquiseSVG /> },
-  { value: 'radiant',  label: 'Radiant',  icon: <RadiantSVG /> },
-  { value: 'heart',    label: 'Heart',    icon: <HeartSVG /> },
-  { value: 'asscher',  label: 'Asscher',  icon: <AsscherSVG /> },
-];
-
-// ─── Shape SVGs ──────────────────────────────────────────────────────────────
-
-function RoundSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="20" cy="20" r="14"/><line x1="20" y1="6" x2="14" y2="20"/><line x1="14" y1="20" x2="20" y2="34"/><line x1="20" y1="6" x2="26" y2="20"/><line x1="26" y1="20" x2="20" y2="34"/><line x1="6" y1="20" x2="14" y2="20"/><line x1="26" y1="20" x2="34" y2="20"/></svg>;
-}
-function OvalSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><ellipse cx="20" cy="20" rx="11" ry="15"/><line x1="20" y1="5" x2="14" y2="20"/><line x1="14" y1="20" x2="20" y2="35"/><line x1="20" y1="5" x2="26" y2="20"/><line x1="26" y1="20" x2="20" y2="35"/></svg>;
-}
-function CushionSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="8" y="8" width="24" height="24" rx="5"/><line x1="8" y1="8" x2="20" y2="20"/><line x1="32" y1="8" x2="20" y2="20"/><line x1="8" y1="32" x2="20" y2="20"/><line x1="32" y1="32" x2="20" y2="20"/></svg>;
-}
-function PrincessSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="8" y="8" width="24" height="24"/><line x1="8" y1="8" x2="20" y2="20"/><line x1="32" y1="8" x2="20" y2="20"/><line x1="8" y1="32" x2="20" y2="20"/><line x1="32" y1="32" x2="20" y2="20"/></svg>;
-}
-function PearSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 34 C10 34, 8 26, 8 22 C8 14, 14 8, 20 8 C26 8, 32 14, 32 22 C32 26, 30 34, 20 34Z"/><line x1="20" y1="8" x2="14" y2="25"/><line x1="20" y1="8" x2="26" y2="25"/></svg>;
-}
-function EmeraldSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12,6 28,6 34,14 34,26 28,34 12,34 6,26 6,14"/><line x1="12" y1="6" x2="6" y2="14"/><line x1="28" y1="6" x2="34" y2="14"/><line x1="12" y1="34" x2="6" y2="26"/><line x1="28" y1="34" x2="34" y2="26"/></svg>;
-}
-function MarquiseSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 5 C28 11, 35 15, 35 20 C35 25, 28 29, 20 35 C12 29, 5 25, 5 20 C5 15, 12 11, 20 5Z"/><line x1="5" y1="20" x2="35" y2="20"/><line x1="20" y1="5" x2="20" y2="35"/></svg>;
-}
-function RadiantSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="10,6 30,6 34,10 34,30 30,34 10,34 6,30 6,10"/><line x1="10" y1="6" x2="20" y2="20"/><line x1="30" y1="6" x2="20" y2="20"/><line x1="10" y1="34" x2="20" y2="20"/><line x1="30" y1="34" x2="20" y2="20"/></svg>;
-}
-function HeartSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 34 L6 20 C4 18, 4 10, 10 8 C14 7, 18 10, 20 14 C22 10, 26 7, 30 8 C36 10, 36 18, 34 20 Z"/></svg>;
-}
-function AsscherSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12,6 28,6 34,12 34,28 28,34 12,34 6,28 6,12"/><polygon points="14,10 26,10 30,14 30,26 26,30 14,30 10,26 10,14"/></svg>;
 }
 
 // ─── Ring style icon (generic) ────────────────────────────────────────────────
@@ -178,17 +130,15 @@ export default function SettingBrowser({ products }: Props) {
   const [filtersOpen, setFiltersOpen] = useState(true);
   const [showMoreStyles, setShowMoreStyles] = useState(false);
   const [showMoreMetals, setShowMoreMetals] = useState(false);
-  const [showMoreShapes, setShowMoreShapes] = useState(false);
 
   const [activeStyles, setActiveStyles] = useState<Set<string>>(new Set());
   const [activeMetals, setActiveMetals] = useState<Set<string>>(new Set());
-  const [activeShapes, setActiveShapes] = useState<Set<string>>(new Set());
-  const [priceMin, setPriceMin] = useState(globalMin);
-  const [priceMax, setPriceMax] = useState(globalMax);
+  // priceMax=globalMin means "no max filter" (sentinel for unset)
+  const [priceMax, setPriceMax] = useState(globalMin);
   const [sort, setSort] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
 
-  const activeCount = activeStyles.size + activeMetals.size + activeShapes.size +
-    (priceMin !== globalMin || priceMax !== globalMax ? 1 : 0);
+  const priceFiltered = priceMax !== globalMin;
+  const activeCount = activeStyles.size + activeMetals.size + (priceFiltered ? 1 : 0);
 
   function toggleSet<T>(set: Set<T>, val: T): Set<T> {
     const next = new Set(set);
@@ -199,11 +149,9 @@ export default function SettingBrowser({ products }: Props) {
   const resetAll = useCallback(() => {
     setActiveStyles(new Set());
     setActiveMetals(new Set());
-    setActiveShapes(new Set());
-    setPriceMin(globalMin);
-    setPriceMax(globalMax);
+    setPriceMax(globalMin);
     setSort('featured');
-  }, [globalMin, globalMax]);
+  }, [globalMin]);
 
   // ── Filtered + sorted products ─────────────────────────────────────────────
   const filtered = useMemo(() => {
@@ -217,14 +165,13 @@ export default function SettingBrowser({ products }: Props) {
         (p.metals ?? []).some((m) => activeMetals.has(normaliseMetalKey(m)))
       );
     }
-    // Shape filter: passed as URL param when selecting setting; no product-level shape data
-    // so we don't filter products by shape here — it's a diamond pre-selection
-
-    result = result.filter((p) => {
-      const price = parsePrice(p.price_display);
-      if (price === null) return true;
-      return price >= priceMin && price <= priceMax;
-    });
+    if (priceFiltered) {
+      result = result.filter((p) => {
+        const price = parsePrice(p.price_display);
+        if (price === null) return true;
+        return price <= priceMax;
+      });
+    }
 
     if (sort === 'price-asc') {
       result = [...result].sort((a, b) => (parsePrice(a.price_display) ?? 0) - (parsePrice(b.price_display) ?? 0));
@@ -233,14 +180,10 @@ export default function SettingBrowser({ products }: Props) {
     }
 
     return result;
-  }, [products, activeStyles, activeMetals, priceMin, priceMax, sort]);
+  }, [products, activeStyles, activeMetals, priceFiltered, priceMax, sort]);
 
   const visibleStyles = showMoreStyles ? allCollections : allCollections.slice(0, 5);
   const visibleMetals = showMoreMetals ? allMetals : allMetals.slice(0, 5);
-  const visibleShapes = showMoreShapes ? SHAPES : SHAPES.slice(0, 5);
-
-  // Chosen shape (for passing to diamond step via setting detail URL)
-  const chosenShape = activeShapes.size === 1 ? Array.from(activeShapes)[0] : null;
 
   return (
     <div className="sb">
@@ -317,94 +260,43 @@ export default function SettingBrowser({ products }: Props) {
             </div>
           </div>
 
-          {/* Right column: Price + Shape */}
+          {/* Right column: Price */}
           <div className="sb-filters-col">
-            {/* Price */}
             <div className="sb-filter-section">
-              <div className="sb-filter-title">Price</div>
+              <div className="sb-filter-title">
+                Price
+                {priceFiltered && (
+                  <span className="sb-price-max-label"> — up to ${priceMax.toLocaleString('en-US')}</span>
+                )}
+              </div>
               <div className="sb-price-wrap">
                 <div className="sb-price-slider-track">
-                  {/* Visual track — drawn behind the native range inputs */}
                   <div className="sb-price-track-bg" />
                   <div
                     className="sb-price-track-fill"
                     style={{
-                      left: `${((priceMin - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
+                      left: 0,
                       right: `${100 - ((priceMax - globalMin) / Math.max(globalMax - globalMin, 1)) * 100}%`,
                     }}
                   />
                   <input
                     type="range"
-                    className="sb-range sb-range--min"
-                    min={globalMin}
-                    max={globalMax}
-                    step={100}
-                    value={priceMin}
-                    onChange={(e) => {
-                      const v = Number(e.target.value);
-                      if (v < priceMax) setPriceMin(v);
-                    }}
-                  />
-                  <input
-                    type="range"
-                    className="sb-range sb-range--max"
+                    className="sb-range"
                     min={globalMin}
                     max={globalMax}
                     step={100}
                     value={priceMax}
-                    onChange={(e) => {
-                      const v = Number(e.target.value);
-                      if (v > priceMin) setPriceMax(v);
-                    }}
+                    onChange={(e) => setPriceMax(Number(e.target.value))}
                   />
                 </div>
                 <div className="sb-price-inputs">
-                  <input
-                    type="number"
-                    className="sb-price-input"
-                    value={priceMin}
-                    min={globalMin}
-                    max={priceMax - 100}
-                    step={100}
-                    onChange={(e) => setPriceMin(Math.max(globalMin, Number(e.target.value)))}
-                    aria-label="Minimum price"
-                  />
-                  <span className="sb-price-dash">—</span>
-                  <input
-                    type="number"
-                    className="sb-price-input"
-                    value={priceMax}
-                    min={priceMin + 100}
-                    max={globalMax}
-                    step={100}
-                    onChange={(e) => setPriceMax(Math.min(globalMax, Number(e.target.value)))}
-                    aria-label="Maximum price"
-                  />
+                  <span className="sb-price-range-hint">
+                    {priceFiltered
+                      ? `Up to $${priceMax.toLocaleString('en-US')}`
+                      : 'Any price — drag to set budget'}
+                  </span>
                 </div>
               </div>
-            </div>
-
-            {/* Shape */}
-            <div className="sb-filter-section">
-              <div className="sb-filter-title">Shape</div>
-              <div className="sb-shape-chips">
-                {visibleShapes.map((s) => (
-                  <button
-                    key={s.value}
-                    className={`sb-shape-chip${activeShapes.has(s.value) ? ' is-active' : ''}`}
-                    onClick={() => setActiveShapes((st) => toggleSet(st, s.value))}
-                    aria-pressed={activeShapes.has(s.value)}
-                  >
-                    <span className="sb-shape-icon">{s.icon}</span>
-                    <span className="sb-shape-label">{s.label}</span>
-                  </button>
-                ))}
-              </div>
-              {SHAPES.length > 5 && (
-                <button className="sb-more-btn" onClick={() => setShowMoreShapes((v) => !v)}>
-                  {showMoreShapes ? '∧ Less' : '∨ More Shapes'}
-                </button>
-              )}
             </div>
           </div>
         </div>
@@ -439,7 +331,7 @@ export default function SettingBrowser({ products }: Props) {
           </div>
         ) : (
           filtered.map((p) => (
-            <SettingCard key={p.slug} product={p} chosenShape={chosenShape} />
+            <SettingCard key={p.slug} product={p} />
           ))
         )}
       </div>
@@ -449,8 +341,8 @@ export default function SettingBrowser({ products }: Props) {
 
 // ─── Product card ─────────────────────────────────────────────────────────────
 
-function SettingCard({ product: p, chosenShape }: { product: Product; chosenShape: string | null }) {
-  const href = `/ring-builder/setting/${p.slug}${chosenShape ? `?shape=${chosenShape}` : ''}`;
+function SettingCard({ product: p }: { product: Product }) {
+  const href = `/ring-builder/setting/${p.slug}`;
   const cardRef = useRef<HTMLAnchorElement>(null);
 
   function onMouseMove(e: React.MouseEvent<HTMLAnchorElement>) {

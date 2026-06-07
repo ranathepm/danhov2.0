@@ -17,24 +17,8 @@ interface ProductInfo {
 
 interface Props {
   product: ProductInfo;
-  defaultShape: string;
   defaultMetal: string | null;
-  shapes: ShapeOption[];
-  onShapeChange?: (shape: string, shapeIndex: number) => void;
 }
-
-const SHAPE_ICONS: Record<string, React.ReactNode> = {
-  round:    <RoundSVG />,
-  oval:     <OvalSVG />,
-  cushion:  <CushionSVG />,
-  princess: <PrincessSVG />,
-  pear:     <PearSVG />,
-  emerald:  <EmeraldSVG />,
-  marquise: <MarquiseSVG />,
-  radiant:  <RadiantSVG />,
-  heart:    <HeartSVG />,
-  asscher:  <AsscherSVG />,
-};
 
 function metalColour(raw: string): string {
   const up = raw.toUpperCase();
@@ -51,26 +35,19 @@ function metalKarat(raw: string): string {
 
 export default function SettingDetailClient({
   product,
-  defaultShape,
   defaultMetal,
-  shapes,
-  onShapeChange,
 }: Props) {
   const router = useRouter();
   const productMetals = product.metals ?? [];
-  const [shape, setShape] = useState(defaultShape);
   const [metal, setMetal] = useState(defaultMetal ?? productMetals[0] ?? '');
-  const [showMoreShapes, setShowMoreShapes] = useState(false);
   const [showMoreMetals, setShowMoreMetals] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const visibleShapes = showMoreShapes ? shapes : shapes.slice(0, 5);
   const visibleMetals = showMoreMetals ? productMetals : productMetals.slice(0, 5);
 
   function handleSelect() {
     const params = new URLSearchParams({ setting: product.slug });
-    if (shape) params.set('shape', shape);
     if (metal) params.set('metal', metal);
     router.push(`/ring-builder/diamond?${params.toString()}`);
   }
@@ -129,36 +106,6 @@ export default function SettingDetailClient({
           </svg>
           Share
         </button>
-      </div>
-
-      {/* Shape selector */}
-      <div className="sd-selector">
-        <div className="sd-selector-head">
-          <span className="sd-selector-title">Shape</span>
-          <span className="sd-selector-current">{shapes.find((s) => s.value === shape)?.label ?? 'Round'}</span>
-        </div>
-        <div className="sd-option-chips">
-          {visibleShapes.map((s) => (
-            <button
-              key={s.value}
-              className={`sd-option-chip${shape === s.value ? ' is-active' : ''}`}
-              onClick={() => {
-                setShape(s.value);
-                const idx = shapes.findIndex((x) => x.value === s.value);
-                onShapeChange?.(s.value, idx);
-              }}
-              aria-pressed={shape === s.value}
-            >
-              <span className="sd-option-icon">{SHAPE_ICONS[s.value]}</span>
-              <span className="sd-option-label">{s.label}</span>
-            </button>
-          ))}
-        </div>
-        {shapes.length > 5 && (
-          <button className="sd-more-btn" onClick={() => setShowMoreShapes((v) => !v)}>
-            {showMoreShapes ? '∧ Fewer Shapes' : '∨ More Shapes'}
-          </button>
-        )}
       </div>
 
       {/* Metal selector */}
@@ -291,35 +238,3 @@ function metalLabel(raw: string): string {
   return raw;
 }
 
-// ─── Shape SVGs (duplicated here so this file is self-contained) ────────────
-
-function RoundSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="20" cy="20" r="14"/><line x1="20" y1="6" x2="14" y2="20"/><line x1="14" y1="20" x2="20" y2="34"/><line x1="20" y1="6" x2="26" y2="20"/><line x1="26" y1="20" x2="20" y2="34"/><line x1="6" y1="20" x2="14" y2="20"/><line x1="26" y1="20" x2="34" y2="20"/></svg>;
-}
-function OvalSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><ellipse cx="20" cy="20" rx="11" ry="15"/><line x1="20" y1="5" x2="14" y2="20"/><line x1="14" y1="20" x2="20" y2="35"/><line x1="20" y1="5" x2="26" y2="20"/><line x1="26" y1="20" x2="20" y2="35"/></svg>;
-}
-function CushionSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="8" y="8" width="24" height="24" rx="5"/><line x1="8" y1="8" x2="20" y2="20"/><line x1="32" y1="8" x2="20" y2="20"/><line x1="8" y1="32" x2="20" y2="20"/><line x1="32" y1="32" x2="20" y2="20"/></svg>;
-}
-function PrincessSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="8" y="8" width="24" height="24"/><line x1="8" y1="8" x2="20" y2="20"/><line x1="32" y1="8" x2="20" y2="20"/><line x1="8" y1="32" x2="20" y2="20"/><line x1="32" y1="32" x2="20" y2="20"/></svg>;
-}
-function PearSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 34 C10 34, 8 26, 8 22 C8 14, 14 8, 20 8 C26 8, 32 14, 32 22 C32 26, 30 34, 20 34Z"/><line x1="20" y1="8" x2="14" y2="25"/><line x1="20" y1="8" x2="26" y2="25"/></svg>;
-}
-function EmeraldSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12,6 28,6 34,14 34,26 28,34 12,34 6,26 6,14"/><line x1="12" y1="6" x2="6" y2="14"/><line x1="28" y1="6" x2="34" y2="14"/><line x1="12" y1="34" x2="6" y2="26"/><line x1="28" y1="34" x2="34" y2="26"/></svg>;
-}
-function MarquiseSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 5 C28 11, 35 15, 35 20 C35 25, 28 29, 20 35 C12 29, 5 25, 5 20 C5 15, 12 11, 20 5Z"/><line x1="5" y1="20" x2="35" y2="20"/><line x1="20" y1="5" x2="20" y2="35"/></svg>;
-}
-function RadiantSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="10,6 30,6 34,10 34,30 30,34 10,34 6,30 6,10"/><line x1="10" y1="6" x2="20" y2="20"/><line x1="30" y1="6" x2="20" y2="20"/><line x1="10" y1="34" x2="20" y2="20"/><line x1="30" y1="34" x2="20" y2="20"/></svg>;
-}
-function HeartSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M20 34 L6 20 C4 18, 4 10, 10 8 C14 7, 18 10, 20 14 C22 10, 26 7, 30 8 C36 10, 36 18, 34 20 Z"/></svg>;
-}
-function AsscherSVG() {
-  return <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12,6 28,6 34,12 34,28 28,34 12,34 6,28 6,12"/><polygon points="14,10 26,10 30,14 30,26 26,30 14,30 10,26 10,14"/></svg>;
-}
