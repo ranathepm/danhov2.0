@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback, useRef } from 'react';
+import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
@@ -137,6 +137,12 @@ export default function SettingBrowser({ products }: Props) {
   const [priceMin, setPriceMin] = useState(globalMin);
   const [priceMax, setPriceMax] = useState(globalMin);
   const [sort, setSort] = useState<'featured' | 'price-asc' | 'price-desc'>('featured');
+
+  // Local strings for the text inputs — allow free typing, commit on blur/Enter
+  const [inputMin, setInputMin] = useState(String(globalMin));
+  const [inputMax, setInputMax] = useState(String(globalMin));
+  useEffect(() => { setInputMin(String(priceMin)); }, [priceMin]);
+  useEffect(() => { setInputMax(String(priceMax)); }, [priceMax]);
 
   const priceFiltered = priceMax > globalMin;
   const activeCount = activeStyles.size + activeMetals.size + (priceFiltered ? 1 : 0);
@@ -305,30 +311,36 @@ export default function SettingBrowser({ products }: Props) {
                   <input
                     type="number"
                     className="sb-price-input"
-                    value={priceMin}
+                    value={inputMin}
                     min={globalMin}
                     max={globalMax}
                     step={100}
-                    onChange={(e) => {
-                      const v = Math.max(globalMin, Math.min(globalMax, Number(e.target.value)));
-                      setPriceMin(v);
-                      if (v > priceMax) setPriceMax(v);
+                    onChange={(e) => setInputMin(e.target.value)}
+                    onBlur={() => {
+                      const v = Math.max(globalMin, Math.min(globalMax, Number(inputMin) || globalMin));
+                      const clamped = Math.min(v, priceMax > globalMin ? priceMax : globalMax);
+                      setPriceMin(clamped);
+                      setInputMin(String(clamped));
                     }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
                     aria-label="Minimum price"
                   />
                   <span className="sb-price-dash">—</span>
                   <input
                     type="number"
                     className="sb-price-input"
-                    value={priceMax}
+                    value={inputMax}
                     min={globalMin}
                     max={globalMax}
                     step={100}
-                    onChange={(e) => {
-                      const v = Math.max(globalMin, Math.min(globalMax, Number(e.target.value)));
-                      setPriceMax(v);
-                      if (v < priceMin) setPriceMin(v);
+                    onChange={(e) => setInputMax(e.target.value)}
+                    onBlur={() => {
+                      const v = Math.max(globalMin, Math.min(globalMax, Number(inputMax) || globalMin));
+                      const clamped = Math.max(v, priceMin);
+                      setPriceMax(clamped);
+                      setInputMax(String(clamped));
                     }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
                     aria-label="Maximum price"
                   />
                 </div>
