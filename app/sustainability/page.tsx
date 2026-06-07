@@ -1,317 +1,464 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'Sustainability · DANHOV Ethical Jewelry',
+  title: 'Sustainability Report · DANHOV Jewelry',
   description:
-    'Ranked #1 Most Sustainable Jewelry Brand. Every DANHOV piece is crafted from recycled gold with conflict-free, ethically traced stones. Made in Los Angeles by artisans paid living wages.',
+    'DANHOV sustainability report — 100% recycled gold, conflict-free stones, handcrafted in Los Angeles since 1984. Jewelry built on love, not compromise.',
   alternates: { canonical: '/sustainability' },
 };
 
 const PILLARS = [
   {
-    number: '01',
-    title: 'Recycled Gold — Always',
-    body: 'Every DANHOV ring, band, and pendant is crafted from 100% recycled gold — both 14k and 18k. No newly mined gold enters our atelier. Ever. The metal in your piece was already in the world; we gave it a more beautiful purpose.',
-    stat: '100%',
-    statLabel: 'recycled gold',
+    title: 'Recycled Gold',
+    bullets: ['100% recycled 14K & 18K gold', 'No newly mined metal, ever', 'Same purity, zero compromise'],
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#faf6f1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      </svg>
+    ),
   },
   {
-    number: '02',
     title: 'Conflict-Free Stones',
-    body: 'All diamonds and gemstones we source are conflict-free and ethically traced from mine to setting. Natural diamonds carry GIA or AGS certification. Lab-grown stones are verified to the same standard — because a ring built on love should have a clean conscience.',
-    stat: '100%',
-    statLabel: 'conflict-free',
+    bullets: ['GIA & AGS-certified diamonds', 'Kimberley Process compliant', 'Full mine-to-setting traceability'],
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#faf6f1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 3h12l4 6-10 13L2 9z"/><path d="M2 9h20M12 22V9"/>
+        <path d="M6 3l4 6M18 3l-4 6"/>
+      </svg>
+    ),
   },
   {
-    number: '03',
     title: 'Made in Los Angeles',
-    body: 'Every piece is handcrafted in our Los Angeles atelier by master jewelers who earn living wages with full benefits — healthcare, paid leave, and a stake in the quality of what they make. No offshore manufacturing. No shortcuts.',
-    stat: '40+',
-    statLabel: 'years in LA',
+    bullets: ['Every piece crafted in our LA atelier', 'Master jewelers earning living wages', 'No offshore manufacturing'],
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#faf6f1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+      </svg>
+    ),
   },
   {
-    number: '04',
-    title: '1% for the Planet',
-    body: 'One percent of every purchase goes directly to global reforestation and clean-water initiatives. Not as a rounding error on a balance sheet — as a structural commitment built into every transaction since 2019.',
-    stat: '1%',
-    statLabel: 'every sale',
-  },
-  {
-    number: '05',
     title: 'Made to Order',
-    body: 'We produce nothing speculatively. Every piece is made after it is commissioned — eliminating overstock, unsold inventory, and the waste that mass production demands as the price of convenience.',
-    stat: '0',
-    statLabel: 'wasted pieces',
-  },
-  {
-    number: '06',
-    title: 'Packaging Without Plastic',
-    body: 'All DANHOV packaging is plastic-free, made from FSC-certified materials, and designed to be kept and reused — not discarded. The box your ring arrives in is worth keeping. It is part of the piece.',
-    stat: '0',
-    statLabel: 'plastic packaging',
+    bullets: ['Zero speculative production', 'No unsold inventory or waste', 'Your piece, made for you alone'],
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#faf6f1" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    ),
   },
 ];
 
-const CERTIFICATIONS = [
-  'Ranked #1 Most Sustainable Jewelry Brand',
-  'GIA-certified diamond sourcing',
-  'Conflict-free stone compliance (Kimberley Process)',
-  'Recycled metal sourcing — SCS Global verified',
-  '1% for the Planet member',
-  'Living wage employer — Los Angeles',
+const SECTIONS = [
+  {
+    num: '01',
+    title: 'We Source Only Recycled Gold',
+    body: 'Since our founding in 1984, DANHOV has never used newly mined gold. Every ring, band, and pendant we craft is made from 100% recycled 14K and 18K gold — metal already in the world, transformed into something worth keeping forever. We believe the earth has given enough. Our job is to work beautifully with what already exists.',
+    image: '/triad-ring.jpg',
+    alt: 'DANHOV triad ring in recycled gold',
+    reverse: false,
+  },
+  {
+    num: '02',
+    title: 'Conflict-Free Stones, Every Time',
+    body: 'Every diamond and gemstone that enters our atelier is conflict-free and ethically traced from mine to setting. Natural diamonds are GIA or AGS certified. Lab-grown stones meet the same standard. We believe a ring built to mark love should carry no burden of harm — and we trace every stone to make sure it doesn\'t.',
+    image: '/triad-galaxy.png',
+    alt: 'DANHOV galaxy ring with certified stones',
+    reverse: true,
+  },
+  {
+    num: '03',
+    title: 'Handcrafted in Los Angeles',
+    body: 'Our atelier has been in Los Angeles for over four decades. Every piece is made by master jewelers who are paid living wages, receive full healthcare benefits, and have a genuine stake in the quality of what they create. No offshore production. No shortcuts. The hands that shape your ring are the same hands that have shaped DANHOV since 1984.',
+    image: '/phil-5.jpg',
+    alt: 'DANHOV ring crafted in Los Angeles',
+    reverse: false,
+  },
+  {
+    num: '04',
+    title: 'Made to Order — Nothing Wasted',
+    body: 'We produce nothing speculatively. Every DANHOV piece is commissioned before it is made — eliminating overstock, unsold inventory, and the quiet waste that mass production treats as the cost of doing business. When you order, we begin. Not before. This is how fine jewelry has always worked, and how we intend to keep working.',
+    image: '/triad-vortex.jpg',
+    alt: 'DANHOV vortex ring made to order',
+    reverse: true,
+  },
+  {
+    num: '05',
+    title: 'Packaging Without Plastic',
+    body: 'The box your ring arrives in is made from FSC-certified, plastic-free materials — designed to be kept, not discarded. We view packaging as part of the piece, not an afterthought. No bubble wrap, no styrofoam, no unnecessary inserts. Just materials that were made thoughtfully, for something made to last.',
+    image: '/phil-6.jpg',
+    alt: 'DANHOV sustainable packaging',
+    reverse: false,
+  },
 ];
 
 export default function SustainabilityPage() {
   return (
-    <main className="sustain-page">
+    <main style={{ fontFamily: "'Jost', sans-serif", color: '#1a1410', background: '#faf6f1' }}>
       <style>{`
-        .sustain-page { font-family: 'Jost', sans-serif; color: #1a1410; background: #faf6f1; }
+        /* ── Breadcrumb ── */
+        .sr-crumb {
+          padding: 14px max(24px, calc((100vw - 1200px)/2));
+          font-size: 12px; color: #9c8f86; background: #fff;
+          border-bottom: 1px solid #ede8e2;
+          display: flex; align-items: center; gap: 8px;
+        }
+        .sr-crumb a { color: #b8923a; text-decoration: none; }
+        .sr-crumb a:hover { text-decoration: underline; }
 
-        /* Hero */
-        .sustain-hero {
-          background: linear-gradient(160deg, #0f1a12 0%, #1a2d1f 55%, #243a28 100%);
-          padding: 110px 24px 90px;
-          text-align: center; position: relative; overflow: hidden;
+        /* ── Hero ── */
+        .sr-hero {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          min-height: 560px;
+          background: #faf6f1;
+          position: relative;
         }
-        .sustain-hero::before {
-          content: '';
-          position: absolute; inset: 0;
-          background: radial-gradient(ellipse 55% 40% at 50% 65%, rgba(100,160,80,0.12) 0%, transparent 70%);
-          pointer-events: none;
+        .sr-hero-left {
+          padding: 72px max(24px, calc((100vw - 1200px)/2 + 24px)) 72px max(48px, calc((100vw - 1200px)/2 + 48px));
+          display: flex; flex-direction: column; justify-content: center; gap: 20px;
+          position: relative; z-index: 1;
         }
-        .sustain-eyebrow {
-          display: block; font-size: 11px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: #7ab86b; margin-bottom: 18px;
+        .sr-hero-eyebrow {
+          font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+          color: #AC3438; display: block;
         }
-        .sustain-hero h1 {
+        .sr-hero h1 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(34px, 5.5vw, 62px); font-weight: 400;
-          color: #f0f5ef; margin: 0 auto 22px; max-width: 720px; line-height: 1.15;
+          font-size: clamp(34px, 4vw, 54px); font-weight: 400;
+          color: #1a1410; margin: 0; line-height: 1.1;
         }
-        .sustain-hero-sub {
-          font-size: 15px; color: #b4c9ae; line-height: 1.7;
-          max-width: 520px; margin: 0 auto 48px;
+        .sr-hero-year {
+          font-size: 13px; letter-spacing: 0.14em; color: #9c8f86;
+          text-transform: uppercase;
         }
-        .sustain-ranked {
-          display: inline-flex; align-items: center; gap: 12px;
-          background: rgba(122,184,107,0.12); border: 1px solid rgba(122,184,107,0.25);
-          border-radius: 999px; padding: 10px 24px;
-          font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
-          color: #7ab86b;
+        .sr-hero-body {
+          font-size: 15px; color: #6b5e57; line-height: 1.75;
+          max-width: 420px;
         }
-        .sustain-ranked::before {
-          content: '✦'; font-size: 14px;
+        .sr-hero-cta {
+          display: inline-block; padding: 14px 36px;
+          background: #1a1410; color: #faf6f1;
+          font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+          text-decoration: none; align-self: flex-start;
+          transition: background 0.2s;
+        }
+        .sr-hero-cta:hover { background: #AC3438; }
+
+        .sr-hero-right {
+          position: relative; overflow: hidden;
+          background: #1a1410;
+        }
+        .sr-hero-img {
+          width: 100%; height: 100%; object-fit: cover;
+          opacity: 0.88;
+        }
+        .sr-hero-side-label {
+          position: absolute; right: 0; top: 50%;
+          transform: translateY(-50%) rotate(90deg);
+          transform-origin: center;
+          font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+          color: rgba(250,246,241,0.5);
+          white-space: nowrap; writing-mode: horizontal-tb;
+          padding: 8px 12px;
         }
 
-        /* Stat banner */
-        .sustain-stats {
-          background: #fff; border-bottom: 1px solid #ede8e2;
-          padding: 40px 24px;
+        /* ── Journey section ── */
+        .sr-journey {
+          background: #fff; padding: 88px 24px;
         }
-        .sustain-stats-inner {
-          max-width: 900px; margin: 0 auto;
-          display: flex; justify-content: space-around; flex-wrap: wrap; gap: 32px;
-          text-align: center;
+        .sr-journey-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+        .sr-label {
+          display: block; font-size: 11px; letter-spacing: 0.2em;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 16px;
         }
-        .sustain-stat-num {
+        .sr-journey h2 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 48px; font-weight: 400; color: #3a7d2c; line-height: 1;
-          display: block; margin-bottom: 4px;
+          font-size: clamp(26px, 3.5vw, 38px); font-weight: 400;
+          color: #1a1410; margin: 0 0 24px;
         }
-        .sustain-stat-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a7f76; }
+        .sr-journey-body {
+          font-size: 15px; color: #6b5e57; line-height: 1.8; margin: 0 0 40px;
+        }
+        .sr-journey-stats {
+          display: flex; justify-content: center; gap: 48px; flex-wrap: wrap;
+          padding-top: 32px; border-top: 1px solid #ede8e2;
+        }
+        .sr-stat { text-align: center; }
+        .sr-stat-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 44px; color: #AC3438; line-height: 1; display: block;
+        }
+        .sr-stat-label {
+          font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+          color: #8a7f76; margin-top: 4px; display: block;
+        }
 
-        /* Pillars */
-        .sustain-pillars { max-width: 1100px; margin: 0 auto; padding: 80px 24px; }
-        .sustain-section-label {
-          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-          color: #7ab86b; margin-bottom: 12px; display: block; text-align: center;
+        /* ── How We Do It pillars ── */
+        .sr-pillars {
+          background: #faf6f1; padding: 88px 24px;
         }
-        .sustain-section-title {
+        .sr-pillars-inner { max-width: 1100px; margin: 0 auto; }
+        .sr-pillars h2 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(28px, 4vw, 42px); font-weight: 400;
+          font-size: clamp(26px, 3.5vw, 38px); font-weight: 400;
           text-align: center; color: #1a1410; margin: 0 0 56px;
         }
-        .sustain-pillars-grid {
+        .sr-pillars-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 32px;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 28px;
         }
-        .sustain-pillar {
-          background: #fff; border: 1px solid #ede8e2; border-radius: 10px;
-          padding: 32px 28px; position: relative; overflow: hidden;
+        .sr-pillar-card {
+          background: #fff; border: 1px solid #ede8e2;
+          padding: 32px 24px; display: flex; flex-direction: column; gap: 18px;
+          transition: box-shadow 0.2s;
         }
-        .sustain-pillar::before {
+        .sr-pillar-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+        .sr-pillar-icon {
+          width: 52px; height: 52px; border-radius: 50%;
+          background: #1a1410; display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
+        }
+        .sr-pillar-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 20px; color: #1a1410;
+        }
+        .sr-pillar-bullets {
+          list-style: none; padding: 0; margin: 0;
+          display: flex; flex-direction: column; gap: 8px;
+        }
+        .sr-pillar-bullets li {
+          font-size: 13px; color: #6b5e57; display: flex; gap: 9px; align-items: flex-start; line-height: 1.5;
+        }
+        .sr-pillar-bullets li::before {
+          content: '—'; color: #AC3438; flex-shrink: 0; font-size: 12px; margin-top: 1px;
+        }
+
+        /* ── Alternating sections ── */
+        .sr-sections { background: #fff; }
+        .sr-section {
+          display: grid; grid-template-columns: 1fr 1fr;
+          min-height: 500px; border-bottom: 1px solid #ede8e2;
+        }
+        .sr-section-text {
+          padding: 72px 56px; display: flex; flex-direction: column;
+          justify-content: center; gap: 20px;
+        }
+        .sr-section-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 80px; color: rgba(172,52,56,0.1); line-height: 1;
+          display: block; margin-bottom: -8px;
+        }
+        .sr-section-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(22px, 2.5vw, 32px); color: #1a1410; font-weight: 400;
+          margin: 0;
+        }
+        .sr-section-divider {
+          width: 40px; height: 2px; background: #AC3438; flex-shrink: 0;
+        }
+        .sr-section-body {
+          font-size: 14.5px; color: #6b5e57; line-height: 1.8; margin: 0; max-width: 420px;
+        }
+        .sr-section-img {
+          position: relative; overflow: hidden; background: #f4f0eb;
+        }
+        .sr-section-img img {
+          width: 100%; height: 100%; object-fit: cover;
+          transition: transform 0.6s ease;
+        }
+        .sr-section:hover .sr-section-img img { transform: scale(1.03); }
+
+        /* ── CTA ── */
+        .sr-cta {
+          background: #1a1410; padding: 96px 24px; text-align: center; position: relative; overflow: hidden;
+        }
+        .sr-cta::before {
           content: '';
-          position: absolute; top: 0; left: 0; right: 0; height: 3px;
-          background: linear-gradient(90deg, #3a7d2c, #7ab86b);
+          position: absolute; inset: 0;
+          background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(172,52,56,0.18) 0%, transparent 70%);
+          pointer-events: none;
         }
-        .sustain-pillar-num {
+        .sr-cta-label {
+          display: block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+          color: rgba(184,146,58,0.8); margin-bottom: 18px; position: relative; z-index: 1;
+        }
+        .sr-cta h2 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 13px; color: #7ab86b; letter-spacing: 0.12em;
-          margin-bottom: 8px; display: block;
+          font-size: clamp(28px, 4vw, 48px); font-weight: 400;
+          color: #faf6f1; margin: 0 0 16px; max-width: 640px; margin-inline: auto;
+          position: relative; z-index: 1;
         }
-        .sustain-pillar-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 22px; color: #1a1410; margin-bottom: 12px;
+        .sr-cta p {
+          font-size: 15px; color: rgba(250,246,241,0.65); line-height: 1.7;
+          max-width: 480px; margin: 0 auto 40px;
+          position: relative; z-index: 1;
         }
-        .sustain-pillar-body { font-size: 14px; color: #6b5e57; line-height: 1.7; margin-bottom: 20px; }
-        .sustain-pillar-stat {
-          display: flex; align-items: baseline; gap: 8px;
-          border-top: 1px solid #ede8e2; padding-top: 16px;
+        .sr-cta-buttons {
+          display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+          position: relative; z-index: 1;
         }
-        .sustain-pillar-stat-num {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 32px; color: #3a7d2c; line-height: 1;
+        .sr-cta-btn-primary {
+          display: inline-block; padding: 15px 44px;
+          background: #AC3438; color: #fff;
+          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          text-decoration: none; transition: background 0.2s;
         }
-        .sustain-pillar-stat-label { font-size: 12px; color: #8a7f76; letter-spacing: 0.08em; }
+        .sr-cta-btn-primary:hover { background: #8f2b2e; }
+        .sr-cta-btn-outline {
+          display: inline-block; padding: 15px 44px;
+          border: 1px solid rgba(250,246,241,0.35); color: rgba(250,246,241,0.8);
+          font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+          text-decoration: none; transition: all 0.2s;
+        }
+        .sr-cta-btn-outline:hover { border-color: #faf6f1; color: #faf6f1; }
 
-        /* Certifications */
-        .sustain-certs {
-          background: linear-gradient(135deg, #0f1a12 0%, #1a2d1f 100%);
-          padding: 72px 24px;
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+          .sr-hero { grid-template-columns: 1fr; min-height: auto; }
+          .sr-hero-right { height: 380px; }
+          .sr-hero-left { padding: 56px 24px; }
+          .sr-pillars-grid { grid-template-columns: 1fr 1fr; }
+          .sr-section { grid-template-columns: 1fr; }
+          .sr-section.reverse .sr-section-img { order: -1; }
+          .sr-section-text { padding: 48px 24px; }
+          .sr-section-img { height: 300px; }
+          .sr-section-num { font-size: 56px; }
         }
-        .sustain-certs-inner { max-width: 800px; margin: 0 auto; text-align: center; }
-        .sustain-certs h2 {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 34px; font-weight: 400; color: #f0f5ef; margin-bottom: 40px;
-        }
-        .sustain-certs-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-        .sustain-certs-list li {
-          display: flex; align-items: center; justify-content: center; gap: 12px;
-          font-size: 14px; color: #b4c9ae; letter-spacing: 0.04em;
-        }
-        .sustain-certs-list li::before { content: '✓'; color: #7ab86b; font-size: 16px; }
-
-        /* Philosophy */
-        .sustain-philosophy { background: #fff; padding: 80px 24px; }
-        .sustain-philosophy-inner { max-width: 640px; margin: 0 auto; text-align: center; }
-        .sustain-philosophy blockquote {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(20px, 3vw, 28px); font-weight: 400;
-          color: #1a1410; line-height: 1.55; margin: 0 0 24px;
-          border: none; padding: 0;
-        }
-        .sustain-philosophy-attr { font-size: 13px; color: #8a7f76; letter-spacing: 0.08em; }
-
-        /* CTA */
-        .sustain-cta { background: #faf6f1; padding: 72px 24px; text-align: center; }
-        .sustain-cta h2 {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 32px; font-weight: 400; color: #1a1410; margin-bottom: 12px;
-        }
-        .sustain-cta p { font-size: 15px; color: #6b5e57; margin-bottom: 32px; max-width: 420px; margin-inline: auto; }
-        .sustain-cta-btn {
-          display: inline-block; background: #3a7d2c; color: #fff;
-          padding: 14px 40px; border-radius: 999px;
-          font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
-          text-decoration: none; transition: background 0.2s; margin-right: 12px;
-        }
-        .sustain-cta-btn:hover { background: #2d6422; }
-        .sustain-cta-link {
-          display: inline-block; color: #3a7d2c;
-          font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
-          text-decoration: none; border-bottom: 1px solid rgba(58,125,44,0.35);
-          padding-bottom: 2px; transition: border-color 0.15s;
-        }
-        .sustain-cta-link:hover { border-color: #3a7d2c; }
-
-        @media (max-width: 640px) {
-          .sustain-hero { padding: 80px 20px 64px; }
-          .sustain-stats-inner { gap: 24px; }
+        @media (max-width: 600px) {
+          .sr-pillars-grid { grid-template-columns: 1fr; }
+          .sr-journey-stats { gap: 28px; }
+          .sr-cta { padding: 64px 20px; }
         }
       `}</style>
 
-      {/* Hero */}
-      <section className="sustain-hero">
-        <span className="sustain-eyebrow">Sustainability</span>
-        <h1>Jewelry That Gives Back More Than It Takes</h1>
-        <p className="sustain-hero-sub">
-          Every decision we make — the gold, the stones, the hands that craft it,
-          the box it ships in — is made with the earth in mind. Not as aspiration. As practice.
-        </p>
-        <span className="sustain-ranked">#1 Most Sustainable Jewelry Brand</span>
+      {/* ── Breadcrumb ── */}
+      <nav className="sr-crumb" aria-label="Breadcrumb">
+        <Link href="/">Home</Link>
+        <span>›</span>
+        <span>Sustainability Report</span>
+      </nav>
+
+      {/* ── Hero ── */}
+      <section className="sr-hero">
+        <div className="sr-hero-left">
+          <span className="sr-hero-eyebrow">Sustainability Report · 2024</span>
+          <h1>Jewelry That Gives Back More Than It Takes</h1>
+          <p className="sr-hero-body">
+            Since 1984, every decision we make — the gold we use, the stones we source,
+            the hands that craft each piece, and the box it ships in — is guided by
+            a single principle: leave the world more whole than you found it.
+          </p>
+          <Link href="/engagement-rings" className="sr-hero-cta">
+            Shop the Collection
+          </Link>
+        </div>
+        <div className="sr-hero-right">
+          <Image
+            src="/triad-ring.jpg"
+            alt="DANHOV handcrafted ring"
+            fill
+            style={{ objectFit: 'cover', opacity: 0.88 }}
+            priority
+          />
+          <span className="sr-hero-side-label">DANHOV · SUSTAINABILITY REPORT · 2024</span>
+        </div>
       </section>
 
-      {/* Stats */}
-      <div className="sustain-stats">
-        <div className="sustain-stats-inner">
-          <div>
-            <span className="sustain-stat-num">100%</span>
-            <span className="sustain-stat-label">Recycled Gold</span>
-          </div>
-          <div>
-            <span className="sustain-stat-num">100%</span>
-            <span className="sustain-stat-label">Conflict-Free Stones</span>
-          </div>
-          <div>
-            <span className="sustain-stat-num">1%</span>
-            <span className="sustain-stat-label">to Reforestation</span>
-          </div>
-          <div>
-            <span className="sustain-stat-num">40+</span>
-            <span className="sustain-stat-label">Years Handcrafted in LA</span>
-          </div>
-          <div>
-            <span className="sustain-stat-num">0</span>
-            <span className="sustain-stat-label">Plastic Packaging</span>
+      {/* ── Our Journey ── */}
+      <section className="sr-journey">
+        <div className="sr-journey-inner">
+          <span className="sr-label">Our Journey</span>
+          <h2>Toward a More Responsible Fine Jewelry</h2>
+          <p className="sr-journey-body">
+            DANHOV was founded in Los Angeles in 1984 with an obsession: to create jewelry
+            of enduring beauty without enduring harm. Over four decades, we have built that
+            commitment into every layer of how we operate — not as a marketing story, but as
+            the only way we know how to work. 100% recycled gold. Conflict-free, certified
+            stones. Every piece made to order by artisans earning living wages in our
+            Los Angeles atelier. We have never compromised on these principles, and we
+            have no intention of starting now.
+          </p>
+          <div className="sr-journey-stats">
+            {[
+              { num: '1984', label: 'Founded in LA' },
+              { num: '100%', label: 'Recycled Gold' },
+              { num: '100%', label: 'Conflict-Free' },
+              { num: '0', label: 'Plastic Packaging' },
+            ].map((s) => (
+              <div key={s.label} className="sr-stat">
+                <span className="sr-stat-num">{s.num}</span>
+                <span className="sr-stat-label">{s.label}</span>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
+
+      {/* ── How We Do It ── */}
+      <section className="sr-pillars">
+        <div className="sr-pillars-inner">
+          <span className="sr-label" style={{ textAlign: 'center', display: 'block' }}>How We Do It</span>
+          <h2>Four Commitments We Never Compromise</h2>
+          <div className="sr-pillars-grid">
+            {PILLARS.map((p) => (
+              <div key={p.title} className="sr-pillar-card">
+                <div className="sr-pillar-icon">{p.icon}</div>
+                <p className="sr-pillar-title">{p.title}</p>
+                <ul className="sr-pillar-bullets">
+                  {p.bullets.map((b) => <li key={b}>{b}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Numbered alternating sections ── */}
+      <div className="sr-sections">
+        {SECTIONS.map((s) => (
+          <div
+            key={s.num}
+            className={`sr-section${s.reverse ? ' reverse' : ''}`}
+            style={s.reverse ? { direction: 'rtl' } : {}}
+          >
+            <div className="sr-section-text" style={s.reverse ? { direction: 'ltr' } : {}}>
+              <span className="sr-section-num">{s.num}</span>
+              <h3 className="sr-section-title">{s.title}</h3>
+              <div className="sr-section-divider" />
+              <p className="sr-section-body">{s.body}</p>
+            </div>
+            <div className="sr-section-img" style={s.reverse ? { direction: 'ltr' } : {}}>
+              <Image
+                src={s.image}
+                alt={s.alt}
+                fill
+                style={{ objectFit: 'cover' }}
+                sizes="(max-width: 900px) 100vw, 50vw"
+              />
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Pillars */}
-      <section className="sustain-pillars">
-        <p className="sustain-section-label">Our Commitments</p>
-        <h2 className="sustain-section-title">Six principles we never compromise</h2>
-        <div className="sustain-pillars-grid">
-          {PILLARS.map((p) => (
-            <div key={p.number} className="sustain-pillar">
-              <span className="sustain-pillar-num">{p.number}</span>
-              <p className="sustain-pillar-title">{p.title}</p>
-              <p className="sustain-pillar-body">{p.body}</p>
-              <div className="sustain-pillar-stat">
-                <span className="sustain-pillar-stat-num">{p.stat}</span>
-                <span className="sustain-pillar-stat-label">{p.statLabel}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Certifications */}
-      <section className="sustain-certs">
-        <div className="sustain-certs-inner">
-          <h2>Verified commitments, not marketing claims</h2>
-          <ul className="sustain-certs-list">
-            {CERTIFICATIONS.map((c) => (
-              <li key={c}>{c}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* Philosophy */}
-      <section className="sustain-philosophy">
-        <div className="sustain-philosophy-inner">
-          <p className="sustain-section-label">The Philosophy</p>
-          <blockquote>
-            &ldquo;We are already whole. The earth is already whole.
-            A ring that comes from that understanding should leave the world
-            more whole than it found it.&rdquo;
-          </blockquote>
-          <p className="sustain-philosophy-attr">— Jack Hovsepian, Founder, DANHOV</p>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="sustain-cta">
-        <h2>Wear something that means something.</h2>
+      {/* ── CTA ── */}
+      <section className="sr-cta">
+        <span className="sr-cta-label">In It Together</span>
+        <h2>Every piece you commission is a vote for how jewelry should be made.</h2>
         <p>
-          Every DANHOV piece you commission is one less reason to mine new gold
-          or compromise on how artisans are treated.
+          When you choose DANHOV, you choose recycled gold, certified stones,
+          living-wage craft, and zero waste. And you choose something made to last
+          longer than a trend.
         </p>
-        <Link href="/engagement-rings" className="sustain-cta-btn">Shop the Collection</Link>
-        <Link href="/blog/recycled-gold-what-it-means" className="sustain-cta-link">Read our sustainability story</Link>
+        <div className="sr-cta-buttons">
+          <Link href="/engagement-rings" className="sr-cta-btn-primary">
+            Explore the Collection
+          </Link>
+          <Link href="/ring-builder/setting" className="sr-cta-btn-outline">
+            Build Your Ring
+          </Link>
+        </div>
       </section>
     </main>
   );
