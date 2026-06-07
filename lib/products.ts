@@ -24,6 +24,20 @@ export type Product = {
  * Uses the JSONB `categories` array so multi-category products (e.g. unisex
  * wedding bands shown under both /wedding-bands and /mens) show up correctly.
  */
+export async function fetchAllActiveProducts(): Promise<Product[]> {
+  const { data, error } = await supabaseAnon
+    .from('products')
+    .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
+    .eq('is_active', true)
+    .order('sku', { ascending: true });
+
+  if (error) {
+    console.error('fetchAllActiveProducts error:', error);
+    return [];
+  }
+  return (data ?? []) as Product[];
+}
+
 export async function fetchProductsByCategory(category: string): Promise<Product[]> {
   // JSONB array contains — use explicit `cs` filter with a JSON-stringified value
   const { data, error } = await supabaseAnon

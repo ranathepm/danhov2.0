@@ -92,7 +92,13 @@ export default function ChatWidget() {
       });
 
       if (!res.ok || !res.body) {
-        throw new Error(`status ${res.status}`);
+        if (res.status === 429) {
+          throw new Error('rate_limit');
+        }
+        // Try to extract server error message
+        let serverMsg = '';
+        try { const j = await res.json(); serverMsg = j.error || ''; } catch {}
+        throw new Error(serverMsg || `status ${res.status}`);
       }
 
       const ctype = res.headers.get('content-type') || '';
@@ -181,14 +187,16 @@ export default function ChatWidget() {
           return copy;
         });
       }
-    } catch {
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '';
+      const content = msg === 'rate_limit'
+        ? "You've sent many messages recently. Please wait a moment before trying again."
+        : msg && msg !== `status 500` && !msg.startsWith('status ')
+          ? `Advisory note: ${msg}`
+          : "I'm having trouble connecting right now. Please contact us at care@danhov.com for assistance.";
       setMsgs((prev) => {
         const copy = [...prev];
-        copy[assistantIndex] = {
-          role: 'assistant',
-          content:
-            "I'm having trouble connecting right now. Please contact us at care@danhov.com for assistance.",
-        };
+        copy[assistantIndex] = { role: 'assistant', content };
         return copy;
       });
     } finally {

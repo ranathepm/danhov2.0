@@ -39,7 +39,7 @@ const MODELS = [CHAT_MODEL_PRIMARY, ...CHAT_MODEL_FALLBACK];
 
 export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
-  const rl = checkRateLimit(ip, 'chat', 20, 24 * 60 * 60 * 1000); // 20 per 24hr
+  const rl = checkRateLimit(ip, 'chat', 200, 24 * 60 * 60 * 1000); // 200 per 24hr
   if (!rl.allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again later.' },

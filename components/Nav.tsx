@@ -104,7 +104,7 @@ export default function Nav() {
             <Link href="/account" className="nav-icon-btn nav-glow-frame" aria-label="Account">
               <AccountIcon />
             </Link>
-            <Link href="/account" className="nav-icon-btn nav-glow-frame nav-wishlist-btn" aria-label={wishlistCount > 0 ? `Wishlist, ${wishlistCount} saved` : 'Wishlist'}>
+            <Link href="/wishlist" className="nav-icon-btn nav-glow-frame nav-wishlist-btn" aria-label={wishlistCount > 0 ? `Wishlist, ${wishlistCount} saved` : 'Wishlist'}>
               <WishlistIcon />
               {wishlistCount > 0 && (
                 <span className="nav-cart-badge" aria-hidden="true">{wishlistCount}</span>

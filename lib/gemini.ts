@@ -28,7 +28,7 @@ if (!apiKey && process.env.NODE_ENV !== 'production') {
 // keep us on the freshest stable revision without code changes.
 
 export const CHAT_MODEL_PRIMARY = 'gemini-2.0-flash';
-export const CHAT_MODEL_FALLBACK = ['gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+export const CHAT_MODEL_FALLBACK = ['gemini-2.0-flash-001', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
 
 export const VISION_MODEL_PRIMARY = 'gemini-2.0-flash';
 export const VISION_MODEL_FALLBACK = ['gemini-1.5-flash', 'gemini-1.5-pro'];
