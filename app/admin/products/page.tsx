@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { requireAdmin } from '@/lib/admin-auth';
 import { createServiceClient } from '@/lib/supabase/server';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export const dynamic = 'force-dynamic';
 
@@ -116,7 +117,7 @@ export default async function AdminProductsPage({
                     )}
                   </td>
                   <td className="adm-mono">{p.sku}</td>
-                  <td className="adm-cell-name">{p.name}</td>
+                  <td className="adm-cell-name">{stripMetalSuffix(p.name)}</td>
                   <td>{p.collection || '—'}</td>
                   <td className="adm-cap">{p.category}</td>
                   <td>{(p.images as string[])?.length ?? 0}</td>

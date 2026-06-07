@@ -348,72 +348,11 @@
 .sd-gallery { display: flex; flex-direction: column; gap: 12px; }
 .sd-main-img {
   position: relative; aspect-ratio: 1;
-  /* Transparent / page-matched so the photo's own white backdrop blends
-     seamlessly to the card's corners — no visible "boxed" gutter. */
   background: #fff; border-radius: 6px; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
-  /* 3D viewing context for the turntable spin below — tight enough that
-     the depth travel (translateZ/scale in SettingGallery) actually reads
-     as the piece swelling toward camera, not just a flat tilt. */
-  perspective: 1300px;
-  perspective-origin: 50% 46%;
-}
-.sd-main-img.is-spinnable { cursor: ew-resize; }
-.sd-main-img.is-spinnable.is-dragging { cursor: grabbing; }
-
-/* Single-image 360° "turntable" stage. A flat in-plane rotate() makes a
-   ring photo tumble through sideways/upside-down orientations — wrong for
-   a piece of jewellery, which should stay upright as you turn it. Instead
-   we spin the photo around its vertical axis in 3D (rotateY), which keeps
-   it upright the whole way round; the lone real photo stands in for both
-   the front face and — mirrored — the far side (see .is-back). The angle
-   is written straight to this element's transform via ref each frame, so
-   it stays at 60fps without round-tripping through React state.  */
-.sd-spin-stage {
-  position: absolute; inset: 0;
-  transform-style: preserve-3d;
-  transform-origin: 50% 50%;
-  will-change: transform;
-}
-.sd-spin-face {
-  position: absolute; inset: 0;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.sd-spin-face.is-back { transform: rotateY(180deg) scaleX(-1); }
-/* Soft light glint that sweeps across the photo as it turns — simulating
-   a fixed studio light catching the metal/facets on a real turntable. */
-.sd-spin-sheen {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-.sd-main-img.is-spinnable:hover .sd-spin-sheen,
-.sd-main-img.is-dragging .sd-spin-sheen {
-  opacity: 1;
 }
 .sd-img-placeholder { opacity: 0.4; }
 .sd-img-placeholder svg { width: 80px; height: 80px; }
-
-.sd-360-badge {
-  position: absolute; bottom: 14px; left: 14px;
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,0.92); border: 1px solid #e8e2db;
-  border-radius: 999px; padding: 5px 12px;
-  font-family: 'Jost', sans-serif; font-size: 12px;
-  color: #1a1410; font-weight: 500;
-  backdrop-filter: blur(4px);
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
-  pointer-events: none;
-}
-.sd-360-badge svg { transition: transform 0.18s ease; }
-.sd-360-badge.is-active {
-  background: rgba(172, 52, 56, 0.88); border-color: transparent; color: #fff8f6;
-}
-.sd-360-badge.is-active svg { animation: sd-badge-spin 1.05s linear infinite; }
-@keyframes sd-badge-spin { to { transform: rotate(360deg); } }
 
 .sd-thumbs {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -2233,10 +2172,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  /* contain (not cover) so the whole diamond is visible — cover was
-     cropping the stone so it read as too large / cut off. The Nivoda photo
-     already includes the neutral backdrop, so contain sits flush. */
-  object-fit: contain;
+  object-fit: cover;
   transition: opacity 0.18s ease;
   filter: drop-shadow(0 6px 14px rgba(60, 30, 20, 0.15));
   backface-visibility: hidden;

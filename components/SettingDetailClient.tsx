@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 interface ShapeOption { value: string; label: string; }
 
@@ -106,7 +107,7 @@ export default function SettingDetailClient({
       <div className="sd-name-row">
         <div>
           <h1 className="sd-name">
-            {product.name}
+            {stripMetalSuffix(product.name)}
             {product.sku && <span className="sd-sku"> ({product.sku})</span>}
           </h1>
           {product.collection && (

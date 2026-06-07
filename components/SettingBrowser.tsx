@@ -4,6 +4,7 @@ import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 // ─── Metal helpers ────────────────────────────────────────────────────────────
 
@@ -480,7 +481,7 @@ function SettingCard({ product: p, chosenShape }: { product: Product; chosenShap
 
       <div className="sb-card-body">
         <h3 className="sb-card-name">
-          {p.name}
+          {stripMetalSuffix(p.name)}
           {p.sku && <span className="sb-card-sku"> ({p.sku})</span>}
         </h3>
 

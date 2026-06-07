@@ -6,6 +6,7 @@ import type { LaborCategory } from '@/lib/labor';
 import { computeLabor, platinumToGoldWeightG } from '@/lib/labor';
 import { DIAMOND_SHAPES, type StoneGroup } from '@/lib/stone-math';
 import DiamondShapeIcon from '@/components/admin/DiamondShapeIcon';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 // Map a diamond-shape slug → its human label for the order readout.
 const SHAPE_LABEL: Record<string, string> = Object.fromEntries(
@@ -102,6 +103,25 @@ type QuoteLock = {
   locked_price_usd: number | null;
   breakdown: unknown;
 };
+
+function formatMetal(raw: string | null | undefined): string {
+  if (!raw) return '—';
+  // e.g. "14k_yellow" → "14K Yellow Gold", "platinum" → "Platinum"
+  const up = raw.toUpperCase().replace(/_/g, ' ');
+  const karatMatch = raw.match(/(\d+)\s*k/i);
+  const karat = karatMatch ? `${karatMatch[1]}K` : null;
+  const isRose = /rose|pink/i.test(raw);
+  const isWhite = /white/i.test(raw);
+  const isYellow = /yellow/i.test(raw);
+  const isPlatinum = /plat/i.test(raw);
+  let metalName = 'Gold';
+  if (isPlatinum) metalName = 'Platinum';
+  else if (isRose) metalName = 'Rose Gold';
+  else if (isWhite) metalName = 'White Gold';
+  else if (isYellow) metalName = 'Yellow Gold';
+  if (isPlatinum) return 'Platinum';
+  return karat ? `${karat} ${metalName}` : up;
+}
 
 const STATUSES = [
   'pending', 'deposit_paid', 'in_production', 'shipped', 'delivered', 'cancelled', 'failed',
@@ -337,13 +357,13 @@ export default function OrderDetail({
                   <table className="adm-commission-table">
                     <tbody>
                       {bundle.setting.name && (
-                        <tr><td>Name</td><td><strong>{bundle.setting.name}</strong></td></tr>
+                        <tr><td>Name</td><td><strong>{stripMetalSuffix(bundle.setting.name)}</strong></td></tr>
                       )}
                       {bundle.setting.sku && (
                         <tr><td>SKU</td><td><span className="adm-mono">{bundle.setting.sku}</span></td></tr>
                       )}
                       {bundle.setting.metal && (
-                        <tr><td>Metal</td><td>{bundle.setting.metal.replace(/_/g, ' ')}</td></tr>
+                        <tr><td>Metal</td><td><strong>{formatMetal(bundle.setting.metal)}</strong></td></tr>
                       )}
                       {bundle.setting.price_usd != null && (
                         <tr><td>Setting price</td><td><strong>${bundle.setting.price_usd.toLocaleString('en-US')}</strong></td></tr>

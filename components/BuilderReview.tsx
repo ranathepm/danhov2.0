@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import { DiamondCardMedia, type ShapeT } from '@/components/DiamondPicker';
 import { useCart } from '@/components/CartProvider';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export type ReviewDiamond = {
   offer_id: string;
@@ -108,7 +109,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         id: `bundle-${setting.slug}-${diamond.offer_id}`,
         sku: setting.sku,
         slug: setting.slug,
-        name: `${setting.name} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
+        name: `${stripMetalSuffix(setting.name)} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
         collection: setting.collection ?? null,
         metal: setting.default_metal ?? null,
         image: setting.images?.[0] ?? null,
@@ -137,7 +138,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         id: `setting-${setting.slug}-${ringSize}`,
         sku: setting.sku,
         slug: setting.slug,
-        name: setting.name,
+        name: stripMetalSuffix(setting.name),
         collection: setting.collection ?? null,
         metal: setting.default_metal ?? null,
         image: setting.images?.[0] ?? null,
@@ -221,7 +222,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
           {mode !== 'diamond' && setting && (
             <div className="builder-review-line">
               <div>
-                <h3>{setting.name}</h3>
+                <h3>{stripMetalSuffix(setting.name)}</h3>
                 <span className="builder-review-sku">Style {setting.sku}</span>
                 {setting.collection && (
                   <span className="builder-review-collection"> · {setting.collection}</span>

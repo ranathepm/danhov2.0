@@ -44,17 +44,32 @@ export async function POST(req: NextRequest) {
   }
 
   const sb = createServiceClient();
-  const { data, error } = await sb
+
+  // Support both full UUID and the 8-char uppercase reference shown on the
+  // success page (first 8 hex chars of the UUID, e.g. "FD6C0C5A").
+  const isFullUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(orderId);
+  const prefix = orderId.replace(/-/g, '').toLowerCase().slice(0, 8);
+
+  // Fetch by email; then filter client-side to match the UUID prefix.
+  // We limit to 50 to avoid full-table scans while safely handling duplicate
+  // prefix collisions (astronomically rare for UUIDs but handled correctly).
+  const { data: rows, error } = await sb
     .from('orders')
     .select('id, status, created_at, updated_at, customer_email, shipping_address, total_usd, product_name, estimated_delivery')
-    .eq('id', orderId)
     .eq('customer_email', email)
-    .maybeSingle();
+    .order('created_at', { ascending: false })
+    .limit(50);
 
   if (error) {
     console.error('track-order:', error.message);
     return NextResponse.json({ error: 'Unable to look up your order. Please try again.' }, { status: 500 });
   }
+
+  const data = (rows ?? []).find((r: { id: string }) =>
+    isFullUuid
+      ? r.id.toLowerCase() === orderId.toLowerCase()
+      : r.id.replace(/-/g, '').toLowerCase().startsWith(prefix)
+  ) ?? null;
 
   if (!data) {
     return NextResponse.json(
