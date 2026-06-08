@@ -53,11 +53,13 @@ export default function Nav() {
 
   // When already on the homepage, intercept hash-anchor clicks and smooth-scroll
   // directly to the section instead of letting Next.js navigate to "/" first.
+  // Blur the element immediately so :focus-within collapses the nav on mouse-out.
   const handleHashScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     if (href.startsWith('/#') && pathname === '/') {
       e.preventDefault();
       const id = href.slice(2);
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      (e.currentTarget as HTMLElement).blur();
     }
   };
 
