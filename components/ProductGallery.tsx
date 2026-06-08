@@ -17,14 +17,14 @@ const PLACEHOLDER = (
     aria-hidden="true"
   >
     <circle cx="40" cy="40" r="28" stroke="#AC3438" strokeWidth="1.5" />
-    <circle cx="40" cy="40" r="18" stroke="#9b6b4a" strokeWidth="1" />
+    <circle cx="40" cy="40" r="18" stroke="rgba(172,52,56,0.5)" strokeWidth="1" />
     <circle cx="40" cy="40" r="8" stroke="#AC3438" strokeWidth="0.8" />
     <ellipse
       cx="40"
       cy="40"
       rx="36"
       ry="14"
-      stroke="#9b6b4a"
+      stroke="rgba(172,52,56,0.5)"
       strokeWidth="0.6"
       opacity="0.5"
     />

@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
           <tr><td style="padding:8px 0;color:#6b5e57;">Country</td><td style="padding:8px 0;">${body.country || '—'}</td></tr>
           <tr><td style="padding:8px 0;color:#6b5e57;">Website</td><td style="padding:8px 0;">${body.website ? `<a href="${body.website}">${body.website}</a>` : '—'}</td></tr>
         </table>
-        ${body.message ? `<div style="margin-top:20px;padding:16px;background:#faf6f1;border-left:3px solid #b8923a;font-size:14px;line-height:1.6;">${body.message.replace(/\n/g, '<br>')}</div>` : ''}
+        ${body.message ? `<div style="margin-top:20px;padding:16px;background:#faf6f1;border-left:3px solid #AC3438;font-size:14px;line-height:1.6;">${body.message.replace(/\n/g, '<br>')}</div>` : ''}
       </div>
     `,
   });
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
         </p>
         <p style="font-size:15px;color:#6b5e57;line-height:1.7;">
           In the meantime, feel free to reach us directly at
-          <a href="mailto:trade@danhov.com" style="color:#b8923a;">trade@danhov.com</a>.
+          <a href="mailto:trade@danhov.com" style="color:#AC3438;">trade@danhov.com</a>.
         </p>
         <p style="font-size:13px;color:#9c8f86;margin-top:32px;">
           — The DANHOV Trade Team<br>

@@ -69,11 +69,11 @@ function shell(title: string, body: string): string {
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid rgba(172,52,56,0.10);">
         <tr><td style="padding:36px 44px 24px;text-align:center;border-bottom:1px solid rgba(172,52,56,0.08);">
           <div style="font-family:Georgia,'Cormorant Garamond',serif;font-size:24px;letter-spacing:0.4em;color:#AC3438;">DANHOV</div>
-          <div style="margin-top:6px;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#9b6b4a;">Atelier · Los Angeles · Est. 1984</div>
+          <div style="margin-top:6px;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#7a5c58;">Atelier · Los Angeles · Est. 1984</div>
         </td></tr>
         <tr><td style="padding:32px 44px;font-size:15px;line-height:1.7;color:#3d2520;">${body}</td></tr>
         <tr><td style="padding:24px 44px 32px;text-align:center;background:#fff8f6;border-top:1px solid rgba(172,52,56,0.06);font-size:11px;line-height:1.7;color:#7a5c58;letter-spacing:0.04em;">
-          <em style="font-family:Georgia,serif;font-size:13px;color:#9b6b4a;">"Waves are the ocean."</em><br/>
+          <em style="font-family:Georgia,serif;font-size:13px;color:#7a5c58;">"Waves are the ocean."</em><br/>
           Handcrafted in Los Angeles since 1984.<br/>
           <a href="mailto:care@danhov.com" style="color:#AC3438;text-decoration:none;">care@danhov.com</a> · 1 (888) DANHOV-7
         </td></tr>
@@ -184,7 +184,7 @@ export function giftCardEmail(args: {
 }): { subject: string; html: string; text: string } {
   const amount = '$' + args.amountUsd.toLocaleString('en-US');
   const msgBlock = args.message
-    ? `<div style="margin:20px 0;padding:18px 24px;background:#fdf0ed;border-left:3px solid #AC3438;font-style:italic;color:#7a5c58;">"${escape(args.message)}"<br/><span style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:#9b6b4a;">— ${escape(args.senderName)}</span></div>`
+    ? `<div style="margin:20px 0;padding:18px 24px;background:#fdf0ed;border-left:3px solid #AC3438;font-style:italic;color:#7a5c58;">"${escape(args.message)}"<br/><span style="display:block;margin-top:8px;font-style:normal;font-size:12px;color:#7a5c58;">— ${escape(args.senderName)}</span></div>`
     : '';
 
   const body = `
@@ -198,13 +198,13 @@ export function giftCardEmail(args: {
         <div style="font-size:36px;font-weight:700;color:#AC3438;margin-bottom:6px;">${amount}</div>
         <div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#7a5c58;margin-bottom:20px;">NEVER EXPIRES</div>
         <div style="font-size:15px;letter-spacing:0.22em;font-weight:700;color:#3d2520;background:#fff;padding:14px 24px;border:1px solid rgba(172,52,56,0.2);display:inline-block;border-radius:4px;">${escape(args.code)}</div>
-        <p style="margin:12px 0 0;font-size:11px;color:#9b6b4a;">Enter this code at checkout on danhov.com</p>
+        <p style="margin:12px 0 0;font-size:11px;color:#7a5c58;">Enter this code at checkout on danhov.com</p>
       </td></tr>
     </table>
     <div style="text-align:center;margin:24px 0;">
       <a href="https://danhov.com/engagement-rings" style="display:inline-block;padding:14px 36px;background:#AC3438;color:#fff8f6;text-decoration:none;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">EXPLORE THE COLLECTION</a>
     </div>
-    <p style="margin:16px 0 0;font-size:13px;color:#9b6b4a;text-align:center;">This gift card is redeemable on any engagement ring, wedding band, or fine jewelry piece — including custom commissions.</p>`;
+    <p style="margin:16px 0 0;font-size:13px;color:#7a5c58;text-align:center;">This gift card is redeemable on any engagement ring, wedding band, or fine jewelry piece — including custom commissions.</p>`;
 
   return {
     subject: `${escape(args.senderName)} sent you a DANHOV gift card — ${amount}`,
@@ -242,7 +242,7 @@ export function depositReceiptEmail(args: {
       </td></tr>
     </table>
     <p style="margin:0 0 16px;">A specialist will be in touch within one business day to confirm details (size, engraving, stone preferences). Your piece will then ship via FedEx Priority Overnight, fully insured and signature-required.</p>
-    <p style="margin:0 0 0;font-style:italic;color:#9b6b4a;">"Presence is a present." — Jack</p>`;
+    <p style="margin:0 0 0;font-style:italic;color:#7a5c58;">"Presence is a present." — Jack</p>`;
 
   return {
     subject: `Your DANHOV deposit is received — order ${ref}`,

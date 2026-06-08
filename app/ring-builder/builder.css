@@ -634,7 +634,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 13px;
-  color: var(--gold-dim);
+  color: var(--grey);
   margin-top: 2px;
 }
 .builder-stepper-item.is-current .builder-stepper-link {
@@ -728,7 +728,7 @@
   margin-top: 24px;
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  color: var(--gold);
+  color: var(--grey);
   font-size: 15px;
 }
 
@@ -954,7 +954,7 @@
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--gold-dim);
+  color: var(--grey);
 }
 .builder-ring-name {
   font-family: 'Cormorant Garamond', serif;
@@ -1152,7 +1152,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 9px;
   letter-spacing: 0.3em;
-  color: var(--gold-dim);
+  color: var(--grey);
   margin-top: 2px;
 }
 .builder-diamond-price {
@@ -1253,7 +1253,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 14px;
-  color: var(--gold);
+  color: var(--grey);
   text-align: center;
 }
 .builder-review-details {
@@ -1277,7 +1277,7 @@
   font-family: 'Jost', sans-serif;
   font-size: 11px;
   letter-spacing: 0.18em;
-  color: var(--gold-dim);
+  color: var(--grey);
 }
 .builder-review-collection {
   font-family: 'Cormorant Garamond', serif;
@@ -2583,7 +2583,7 @@
   font-family: 'Cormorant Garamond', serif;
   font-size: 32px;
   font-weight: 400;
-  color: #c9a898;
+  color: #6b5e57;
   text-align: center;
   user-select: none;
 }
@@ -2654,7 +2654,7 @@
 .be-bundle-add:hover { background: var(--logo-red-dark); }
 .be-bundle-add:active { transform: scale(0.985); }
 .be-bundle-add:disabled {
-  background: #c9a898;
+  background: #9c8f86;
   cursor: not-allowed;
 }
 .be-bundle-err {

@@ -84,7 +84,7 @@ export default async function PrivatePresentationPage({
                   <div className="presentation-card-fallback">
                     <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                       <circle cx="40" cy="40" r="28" stroke="#AC3438" strokeWidth="1.5" />
-                      <circle cx="40" cy="40" r="18" stroke="#9b6b4a" strokeWidth="1" />
+                      <circle cx="40" cy="40" r="18" stroke="rgba(172,52,56,0.5)" strokeWidth="1" />
                       <circle cx="40" cy="40" r="8" stroke="#AC3438" strokeWidth="0.8" />
                     </svg>
                   </div>

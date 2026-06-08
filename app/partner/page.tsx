@@ -13,8 +13,8 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <path d="M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z" fill="#b8923a" opacity="0.9"/>
-        <circle cx="22" cy="22" r="2" fill="#b8923a" opacity="0.5"/>
+        <path d="M14 3L15.8 9.2L22 11L15.8 12.8L14 19L12.2 12.8L6 11L12.2 9.2L14 3Z" fill="#AC3438" opacity="0.9"/>
+        <circle cx="22" cy="22" r="2" fill="#AC3438" opacity="0.5"/>
       </svg>
     ),
     title: 'Exclusive Wholesale Pricing',
@@ -23,10 +23,10 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect x="4" y="6" width="20" height="16" rx="2" stroke="#b8923a" strokeWidth="1.5" fill="none"/>
-        <path d="M4 11h20" stroke="#b8923a" strokeWidth="1.5"/>
-        <circle cx="9" cy="17" r="1.5" fill="#b8923a"/>
-        <circle cx="14" cy="17" r="1.5" fill="#b8923a" opacity="0.5"/>
+        <rect x="4" y="6" width="20" height="16" rx="2" stroke="#AC3438" strokeWidth="1.5" fill="none"/>
+        <path d="M4 11h20" stroke="#AC3438" strokeWidth="1.5"/>
+        <circle cx="9" cy="17" r="1.5" fill="#AC3438"/>
+        <circle cx="14" cy="17" r="1.5" fill="#AC3438" opacity="0.5"/>
       </svg>
     ),
     title: 'No Inventory Risk',
@@ -35,8 +35,8 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <circle cx="14" cy="14" r="10" stroke="#b8923a" strokeWidth="1.5" fill="none"/>
-        <path d="M14 9v5l3 3" stroke="#b8923a" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="14" cy="14" r="10" stroke="#AC3438" strokeWidth="1.5" fill="none"/>
+        <path d="M14 9v5l3 3" stroke="#AC3438" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
     title: '4–6 Week Fulfillment',
@@ -45,8 +45,8 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <path d="M14 4C8.48 4 4 8.48 4 14s4.48 10 10 10 10-4.48 10-10S19.52 4 14 4Z" stroke="#b8923a" strokeWidth="1.5" fill="none"/>
-        <path d="M10 14l3 3 5-5" stroke="#b8923a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M14 4C8.48 4 4 8.48 4 14s4.48 10 10 10 10-4.48 10-10S19.52 4 14 4Z" stroke="#AC3438" strokeWidth="1.5" fill="none"/>
+        <path d="M10 14l3 3 5-5" stroke="#AC3438" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
     title: 'Dedicated Trade Rep',
@@ -55,8 +55,8 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <rect x="5" y="5" width="18" height="18" rx="3" stroke="#b8923a" strokeWidth="1.5" fill="none"/>
-        <path d="M9 14h10M9 10h6M9 18h8" stroke="#b8923a" strokeWidth="1.5" strokeLinecap="round"/>
+        <rect x="5" y="5" width="18" height="18" rx="3" stroke="#AC3438" strokeWidth="1.5" fill="none"/>
+        <path d="M9 14h10M9 10h6M9 18h8" stroke="#AC3438" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     ),
     title: 'Co-branded Materials',
@@ -65,7 +65,7 @@ const BENEFITS = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-        <path d="M14 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6l2-6Z" stroke="#b8923a" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
+        <path d="M14 4l2 6h6l-5 4 2 6-5-4-5 4 2-6-5-4h6l2-6Z" stroke="#AC3438" strokeWidth="1.5" fill="none" strokeLinejoin="round"/>
       </svg>
     ),
     title: '#1 Sustainable Brand',
@@ -97,12 +97,12 @@ export default function PartnerPage() {
         .partner-hero::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(184,146,58,0.12) 0%, transparent 70%);
+          background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(172,52,56,0.08) 0%, transparent 70%);
           pointer-events: none;
         }
         .partner-eyebrow {
           font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-          color: #b8923a; margin-bottom: 20px; display: block;
+          color: #AC3438; margin-bottom: 20px; display: block;
         }
         .partner-hero h1 {
           font-family: 'Cormorant Garamond', serif;
@@ -116,12 +116,12 @@ export default function PartnerPage() {
         }
         .partner-hero-cta {
           display: inline-block;
-          background: #b8923a; color: #fff;
+          background: #AC3438; color: #fff;
           padding: 14px 40px; border-radius: 999px;
           font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
           text-decoration: none; transition: background 0.2s;
         }
-        .partner-hero-cta:hover { background: #9a7830; }
+        .partner-hero-cta:hover { background: #8B2A2D; }
 
         /* Partner types */
         .partner-types {
@@ -130,7 +130,7 @@ export default function PartnerPage() {
         .partner-types-inner { max-width: 1100px; margin: 0 auto; }
         .partner-section-label {
           text-align: center; font-size: 11px; letter-spacing: 0.18em;
-          text-transform: uppercase; color: #b8923a; margin-bottom: 12px;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 12px;
         }
         .partner-section-title {
           font-family: 'Cormorant Garamond', serif;
@@ -143,7 +143,7 @@ export default function PartnerPage() {
           gap: 24px;
         }
         .partner-type-card {
-          background: #fff; border: 1px solid rgba(184,146,58,0.18);
+          background: #fff; border: 1px solid rgba(172,52,56,0.12);
           border-radius: 8px; padding: 28px 24px;
         }
         .partner-type-label {
@@ -194,7 +194,7 @@ export default function PartnerPage() {
         }
         .partner-form-group input:focus,
         .partner-form-group select:focus,
-        .partner-form-group textarea:focus { border-color: #b8923a; }
+        .partner-form-group textarea:focus { border-color: #AC3438; }
         .partner-form-group textarea { resize: vertical; min-height: 100px; }
         .partner-submit {
           background: #1a1410; color: #faf6f1;
@@ -203,7 +203,7 @@ export default function PartnerPage() {
           letter-spacing: 0.12em; text-transform: uppercase;
           align-self: center; transition: background 0.2s;
         }
-        .partner-submit:hover { background: #b8923a; }
+        .partner-submit:hover { background: #8B2A2D; }
 
         /* Trade contact strip */
         .partner-contact {
@@ -216,11 +216,11 @@ export default function PartnerPage() {
         }
         .partner-contact p { font-size: 15px; color: #c4b8ad; margin-bottom: 28px; }
         .partner-contact a {
-          color: #b8923a; font-size: 18px; text-decoration: none;
-          border-bottom: 1px solid rgba(184,146,58,0.3);
+          color: #AC3438; font-size: 18px; text-decoration: none;
+          border-bottom: 1px solid rgba(172,52,56,0.3);
           padding-bottom: 2px; transition: border-color 0.15s;
         }
-        .partner-contact a:hover { border-color: #b8923a; }
+        .partner-contact a:hover { border-color: #AC3438; }
 
         @media (max-width: 640px) {
           .partner-form-row { grid-template-columns: 1fr; }

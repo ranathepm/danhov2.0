@@ -67,12 +67,12 @@ export default function AffiliatePage() {
         .aff-hero::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 50% 40% at 50% 65%, rgba(184,146,58,0.11) 0%, transparent 70%);
+          background: radial-gradient(ellipse 50% 40% at 50% 65%, rgba(172,52,56,0.08) 0%, transparent 70%);
           pointer-events: none;
         }
         .aff-eyebrow {
           display: block; font-size: 11px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: #b8923a; margin-bottom: 18px;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 18px;
         }
         .aff-hero h1 {
           font-family: 'Cormorant Garamond', serif;
@@ -87,7 +87,7 @@ export default function AffiliatePage() {
         }
         .aff-badge {
           display: inline-flex; align-items: center; gap: 8px;
-          font-size: 13px; color: #b8923a; letter-spacing: 0.06em;
+          font-size: 13px; color: #AC3438; letter-spacing: 0.06em;
         }
         .aff-badge::before { content: '✦'; font-size: 10px; }
 
@@ -96,7 +96,7 @@ export default function AffiliatePage() {
         .aff-how-inner { max-width: 1000px; margin: 0 auto; }
         .aff-section-label {
           font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-          color: #b8923a; margin-bottom: 12px; display: block; text-align: center;
+          color: #AC3438; margin-bottom: 12px; display: block; text-align: center;
         }
         .aff-section-title {
           font-family: 'Cormorant Garamond', serif;
@@ -111,7 +111,7 @@ export default function AffiliatePage() {
         .aff-step { text-align: center; }
         .aff-step-num {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 52px; color: rgba(184,146,58,0.2); line-height: 1;
+          font-size: 52px; color: rgba(172,52,56,0.15); line-height: 1;
           display: block; margin-bottom: 14px;
         }
         .aff-step-title {
@@ -133,12 +133,12 @@ export default function AffiliatePage() {
           border-radius: 10px; padding: 32px 28px; position: relative;
         }
         .aff-tier.highlight {
-          border-color: #b8923a; border-width: 2px;
-          box-shadow: 0 8px 32px rgba(184,146,58,0.12);
+          border-color: #AC3438; border-width: 2px;
+          box-shadow: 0 8px 32px rgba(172,52,56,0.12);
         }
         .aff-tier-badge {
           position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-          background: #b8923a; color: #fff; font-size: 10px;
+          background: #AC3438; color: #fff; font-size: 10px;
           letter-spacing: 0.12em; text-transform: uppercase;
           padding: 4px 14px; border-radius: 999px; white-space: nowrap;
         }
@@ -149,7 +149,7 @@ export default function AffiliatePage() {
         .aff-tier-threshold { font-size: 12px; color: #9c8f86; margin-bottom: 20px; }
         .aff-tier-rate {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 52px; color: #b8923a; line-height: 1;
+          font-size: 52px; color: #AC3438; line-height: 1;
           margin-bottom: 4px;
         }
         .aff-tier-rate-label { font-size: 12px; color: #8a7f76; margin-bottom: 24px; letter-spacing: 0.06em; }
@@ -157,7 +157,7 @@ export default function AffiliatePage() {
         .aff-tier-perks li {
           font-size: 13.5px; color: #6b5e57; display: flex; gap: 10px; align-items: flex-start;
         }
-        .aff-tier-perks li::before { content: '✓'; color: #b8923a; flex-shrink: 0; margin-top: 1px; }
+        .aff-tier-perks li::before { content: '✓'; color: #AC3438; flex-shrink: 0; margin-top: 1px; }
 
         /* Application */
         .aff-apply { background: #fff; padding: 80px 24px; }
@@ -181,7 +181,7 @@ export default function AffiliatePage() {
         }
         .aff-form-group input:focus,
         .aff-form-group select:focus,
-        .aff-form-group textarea:focus { border-color: #b8923a; }
+        .aff-form-group textarea:focus { border-color: #AC3438; }
         .aff-form-group textarea { resize: vertical; min-height: 90px; }
         .aff-submit {
           background: #1a1410; color: #faf6f1; border: none; border-radius: 999px;
@@ -189,7 +189,7 @@ export default function AffiliatePage() {
           letter-spacing: 0.12em; text-transform: uppercase;
           cursor: pointer; align-self: center; transition: background 0.2s;
         }
-        .aff-submit:hover { background: #b8923a; }
+        .aff-submit:hover { background: #8B2A2D; }
         .aff-submit:disabled { opacity: 0.6; cursor: not-allowed; }
         .aff-form-error {
           font-size: 13px; color: #AC3438; margin: 0; padding: 10px 14px;
@@ -197,10 +197,10 @@ export default function AffiliatePage() {
         }
         .aff-success {
           text-align: center; padding: 48px 24px;
-          background: rgba(184,146,58,0.04); border: 1px solid rgba(184,146,58,0.2);
+          background: rgba(172,52,56,0.03); border: 1px solid rgba(172,52,56,0.12);
           border-radius: 12px;
         }
-        .aff-success-icon { font-size: 32px; color: #b8923a; margin-bottom: 16px; }
+        .aff-success-icon { font-size: 32px; color: #AC3438; margin-bottom: 16px; }
         .aff-success-title {
           font-family: 'Cormorant Garamond', serif; font-size: 28px;
           color: #1a1410; margin: 0 0 12px;

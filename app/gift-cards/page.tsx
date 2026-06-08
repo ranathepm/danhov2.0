@@ -23,13 +23,13 @@ export default function GiftCardsPage() {
         .gc-hero::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 60% 50% at 70% 60%, rgba(184,146,58,0.13) 0%, transparent 70%);
+          background: radial-gradient(ellipse 60% 50% at 70% 60%, rgba(172,52,56,0.08) 0%, transparent 70%);
           pointer-events: none;
         }
         .gc-hero-text { position: relative; z-index: 1; padding: 0 24px 0 max(24px, calc((100vw - 1200px)/2)); }
         .gc-hero-eyebrow {
           display: block; font-size: 11px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: #b8923a; margin-bottom: 18px;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 18px;
         }
         .gc-hero h1 {
           font-family: 'Cormorant Garamond', serif;
@@ -59,7 +59,7 @@ export default function GiftCardsPage() {
         .gc-preview-card::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 70% 60% at 80% 20%, rgba(184,146,58,0.2) 0%, transparent 60%);
+          background: radial-gradient(ellipse 70% 60% at 80% 20%, rgba(172,52,56,0.12) 0%, transparent 60%);
           pointer-events: none;
         }
         .gc-card-logo {
@@ -74,7 +74,7 @@ export default function GiftCardsPage() {
         .gc-card-bottom { position: relative; z-index: 1; }
         .gc-card-amount {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 38px; color: #b8923a; line-height: 1; margin-bottom: 6px;
+          font-size: 38px; color: #faf6f1; line-height: 1; margin-bottom: 6px;
         }
         .gc-card-footer {
           display: flex; justify-content: space-between;
@@ -87,7 +87,7 @@ export default function GiftCardsPage() {
         .gc-cards-inner { max-width: 1040px; margin: 0 auto; }
         .gc-section-eyebrow {
           display: block; font-size: 11px; letter-spacing: 0.18em;
-          text-transform: uppercase; color: #b8923a; text-align: center; margin-bottom: 12px;
+          text-transform: uppercase; color: #AC3438; text-align: center; margin-bottom: 12px;
         }
         .gc-section-title {
           font-family: 'Cormorant Garamond', serif;
@@ -144,13 +144,13 @@ export default function GiftCardsPage() {
         .gc-perks { background: #1a1410; padding: 40px 24px; }
         .gc-perks-inner { max-width: 960px; margin: 0 auto; display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; }
         .gc-perk { text-align: center; color: #faf6f1; }
-        .gc-perk-icon { font-size: 22px; margin-bottom: 6px; color: #b8923a; }
+        .gc-perk-icon { font-size: 22px; margin-bottom: 6px; color: #AC3438; }
         .gc-perk-label { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.75; }
 
         /* ── Fine print ── */
         .gc-fine { background: #fff; padding: 40px 24px; text-align: center; }
         .gc-fine p { font-size: 13px; color: #9c8f86; line-height: 1.7; max-width: 560px; margin: 0 auto; }
-        .gc-fine a { color: #b8923a; text-decoration: none; }
+        .gc-fine a { color: #AC3438; text-decoration: none; }
 
         @media (max-width: 768px) {
           .gc-hero { grid-template-columns: 1fr; padding: 64px 20px 52px; text-align: center; }

@@ -103,7 +103,7 @@ export default function SustainabilityPage() {
           border-bottom: 1px solid #ede8e2;
           display: flex; align-items: center; gap: 8px;
         }
-        .sr-crumb a { color: #b8923a; text-decoration: none; }
+        .sr-crumb a { color: #AC3438; text-decoration: none; }
         .sr-crumb a:hover { text-decoration: underline; }
 
         /* ── Hero ── */
@@ -282,7 +282,7 @@ export default function SustainabilityPage() {
         }
         .sr-cta-label {
           display: block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-          color: rgba(184,146,58,0.8); margin-bottom: 18px; position: relative; z-index: 1;
+          color: rgba(250,246,241,0.8); margin-bottom: 18px; position: relative; z-index: 1;
         }
         .sr-cta h2 {
           font-family: 'Cormorant Garamond', serif;

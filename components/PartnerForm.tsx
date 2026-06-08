@@ -47,7 +47,7 @@ export default function PartnerForm() {
         textAlign: 'center', padding: '56px 24px',
         background: '#fff', border: '1px solid #ede8e2', borderRadius: 8,
       }}>
-        <div style={{ fontSize: 36, color: '#b8923a', marginBottom: 16 }}>◇</div>
+        <div style={{ fontSize: 36, color: '#AC3438', marginBottom: 16 }}>◇</div>
         <h3 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26, fontWeight: 400, color: '#1a1410', margin: '0 0 12px' }}>
           Application received.
         </h3>

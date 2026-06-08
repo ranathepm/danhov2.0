@@ -57,15 +57,15 @@ const HERO_SPIRAL = (
     aria-hidden="true"
   >
     <circle cx="300" cy="300" r="280" stroke="#AC3438" strokeWidth="0.6" />
-    <circle cx="300" cy="300" r="220" stroke="#9b6b4a" strokeWidth="0.5" />
+    <circle cx="300" cy="300" r="220" stroke="rgba(172,52,56,0.4)" strokeWidth="0.5" />
     <circle cx="300" cy="300" r="165" stroke="#AC3438" strokeWidth="0.5" />
-    <circle cx="300" cy="300" r="115" stroke="#9b6b4a" strokeWidth="0.4" />
+    <circle cx="300" cy="300" r="115" stroke="rgba(172,52,56,0.4)" strokeWidth="0.4" />
     <circle cx="300" cy="300" r="72" stroke="#AC3438" strokeWidth="0.4" />
-    <circle cx="300" cy="300" r="38" stroke="#9b6b4a" strokeWidth="0.3" />
+    <circle cx="300" cy="300" r="38" stroke="rgba(172,52,56,0.4)" strokeWidth="0.3" />
     <line x1="300" y1="20" x2="300" y2="580" stroke="#AC3438" strokeWidth="0.3" />
     <line x1="20" y1="300" x2="580" y2="300" stroke="#AC3438" strokeWidth="0.3" />
-    <line x1="100" y1="100" x2="500" y2="500" stroke="#9b6b4a" strokeWidth="0.25" />
-    <line x1="500" y1="100" x2="100" y2="500" stroke="#9b6b4a" strokeWidth="0.25" />
+    <line x1="100" y1="100" x2="500" y2="500" stroke="rgba(172,52,56,0.4)" strokeWidth="0.25" />
+    <line x1="500" y1="100" x2="100" y2="500" stroke="rgba(172,52,56,0.4)" strokeWidth="0.25" />
     <polygon
       points="300,28 548,164 548,436 300,572 52,436 52,164"
       stroke="#AC3438"

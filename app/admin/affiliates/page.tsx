@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: 'Affiliates · DANHOV Admin' };
 export const dynamic = 'force-dynamic';
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: '#b8923a',
+  pending: '#AC3438',
   approved: '#2a7a2a',
   rejected: '#AC3438',
 };
@@ -63,7 +63,7 @@ export default async function AdminAffiliatesPage({
           padding:9px 14px; font-size:13px; font-family:'Jost',sans-serif;
           outline:none; transition:border-color 0.15s;
         }
-        .aff-search-input:focus { border-color:#b8923a; }
+        .aff-search-input:focus { border-color:#AC3438; }
         .aff-table-wrap { overflow-x:auto; }
         .aff-table {
           width:100%; border-collapse:collapse; font-size:13px;
@@ -90,7 +90,7 @@ export default async function AdminAffiliatesPage({
         .aff-empty { padding:64px 24px; text-align:center; color:#9c8f86; font-size:14px; }
         .aff-count-badge {
           display:inline-block; margin-left:5px; padding:1px 7px; border-radius:999px;
-          background:rgba(184,146,58,0.15); color:#b8923a; font-size:10px; font-weight:700;
+          background:rgba(172,52,56,0.12); color:#AC3438; font-size:10px; font-weight:700;
         }
       `}</style>
 
@@ -158,7 +158,7 @@ export default async function AdminAffiliatesPage({
                 <tr key={app.id}>
                   <td style={{ fontWeight: 600 }}>{app.name}</td>
                   <td>
-                    <a href={`mailto:${app.email}`} style={{ color: '#b8923a', textDecoration: 'none' }}>
+                    <a href={`mailto:${app.email}`} style={{ color: '#AC3438', textDecoration: 'none' }}>
                       {app.email}
                     </a>
                   </td>
@@ -166,7 +166,7 @@ export default async function AdminAffiliatesPage({
                   <td className="aff-platform">{app.audience_size || '—'}</td>
                   <td>
                     {app.website ? (
-                      <a href={app.website} target="_blank" rel="noopener noreferrer" style={{ color: '#b8923a', textDecoration: 'none', fontSize: 12 }}>
+                      <a href={app.website} target="_blank" rel="noopener noreferrer" style={{ color: '#AC3438', textDecoration: 'none', fontSize: 12 }}>
                         Visit ↗
                       </a>
                     ) : '—'}

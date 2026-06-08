@@ -64,14 +64,14 @@ function affiliateConfirmHtml(name: string): string {
   <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid rgba(172,52,56,0.10);">
     <tr><td style="padding:36px 44px 24px;text-align:center;border-bottom:1px solid rgba(172,52,56,0.08);">
       <div style="font-family:Georgia,serif;font-size:24px;letter-spacing:0.4em;color:#AC3438;">DANHOV</div>
-      <div style="margin-top:6px;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#9b6b4a;">Atelier · Los Angeles · Est. 1984</div>
+      <div style="margin-top:6px;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#7a5c58;">Atelier · Los Angeles · Est. 1984</div>
     </td></tr>
     <tr><td style="padding:32px 44px;font-size:15px;line-height:1.7;color:#3d2520;">
       <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;color:#AC3438;">Application received.</p>
       <p style="margin:0 0 16px;">Dear ${name},</p>
       <p style="margin:0 0 16px;">Thank you for applying to the DANHOV Affiliate Program. We review every application individually — you can expect a response from our team within <strong>two business days</strong>.</p>
       <p style="margin:0 0 16px;">While you wait, feel free to explore the collection at <a href="https://danhov.com" style="color:#AC3438;text-decoration:none;">danhov.com</a>.</p>
-      <p style="margin:16px 0 0;font-style:italic;color:#9b6b4a;">"Waves are the ocean." — Jack Danhov</p>
+      <p style="margin:16px 0 0;font-style:italic;color:#7a5c58;">"Waves are the ocean." — Jack Danhov</p>
     </td></tr>
     <tr><td style="padding:20px 44px 28px;text-align:center;background:#fff8f6;border-top:1px solid rgba(172,52,56,0.06);font-size:11px;color:#7a5c58;">
       <a href="mailto:care@danhov.com" style="color:#AC3438;text-decoration:none;">care@danhov.com</a> · 1 (888) DANHOV-7

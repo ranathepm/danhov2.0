@@ -67,7 +67,7 @@ export default function AffiliateActions({ id, currentStatus, email, name }: Pro
       )}
       <a
         href={`mailto:${email}`}
-        style={{ ...btnStyle('#b8923a'), textDecoration: 'none', display: 'inline-block' }}
+        style={{ ...btnStyle('#AC3438'), textDecoration: 'none', display: 'inline-block' }}
       >
         Email
       </a>

@@ -145,7 +145,7 @@ export default function GiftCardBuyFlow() {
         .gcb-breadcrumb {
           font-size: 12px; color: #9c8f86; margin-bottom: 32px; display: flex; align-items: center; gap: 8px;
         }
-        .gcb-breadcrumb a { color: #b8923a; text-decoration: none; }
+        .gcb-breadcrumb a { color: #AC3438; text-decoration: none; }
         .gcb-breadcrumb a:hover { text-decoration: underline; }
         .gcb-progress {
           display: flex; gap: 0; margin-bottom: 40px;
@@ -228,7 +228,7 @@ export default function GiftCardBuyFlow() {
           background: #1a1410; padding: 20px 24px; display: flex; align-items: center; gap: 16px;
         }
         .gcb-review-head-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.2em; color: #faf6f1; }
-        .gcb-review-amount { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: #b8923a; margin-left: auto; }
+        .gcb-review-amount { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: #faf6f1; margin-left: auto; }
         .gcb-review-body { padding: 20px 24px; }
         .gcb-review-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #f0ece8; }
         .gcb-review-row:last-child { border-bottom: none; }

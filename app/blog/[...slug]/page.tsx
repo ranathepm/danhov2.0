@@ -113,11 +113,11 @@ export default async function BlogPostPage({ params }: Props) {
 
         .post-breadcrumb { background: #fff; border-bottom: 1px solid #ede8e2; padding: 14px 24px; font-size: 12px; color: #8a7f76; }
         .post-breadcrumb a { color: #8a7f76; text-decoration: none; transition: color 0.15s; }
-        .post-breadcrumb a:hover { color: #b8923a; }
+        .post-breadcrumb a:hover { color: #AC3438; }
         .post-breadcrumb span { margin: 0 8px; }
 
         .post-hero { background: linear-gradient(160deg, #1a1410 0%, #2c1f18 60%, #3d2a20 100%); padding: 64px 24px 56px; text-align: center; }
-        .post-hero-cat { display: inline-block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #b8923a; margin-bottom: 20px; }
+        .post-hero-cat { display: inline-block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #AC3438; margin-bottom: 20px; }
         .post-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 4.5vw, 52px); font-weight: 400; color: #faf6f1; margin: 0 0 20px; line-height: 1.18; max-width: 760px; margin-left: auto; margin-right: auto; }
         .post-hero-meta { font-size: 13px; color: #9c8f86; }
 
@@ -139,15 +139,15 @@ export default async function BlogPostPage({ params }: Props) {
         .post-content p { margin: 0 0 1.5em; }
         .post-content ul, .post-content ol { margin: 0 0 1.5em 1.5em; }
         .post-content li { margin-bottom: 0.4em; }
-        .post-content a { color: #b8923a; text-decoration: underline; text-underline-offset: 3px; }
+        .post-content a { color: #AC3438; text-decoration: underline; text-underline-offset: 3px; }
         .post-content img { max-width: 100%; height: auto; border-radius: 6px; margin: 2em 0; display: block; }
-        .post-content blockquote { border-left: 3px solid #b8923a; margin: 2em 0; padding: 0 0 0 24px; font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 23px); color: #4a3f38; }
+        .post-content blockquote { border-left: 3px solid #AC3438; margin: 2em 0; padding: 0 0 0 24px; font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 23px); color: #4a3f38; }
         .post-content strong { font-weight: 600; color: #1a1410; }
         .post-content hr { border: none; border-top: 1px solid #ede8e2; margin: 2.5em 0; }
 
         .post-fallback { background: #fff; border: 1px solid #ede8e2; border-radius: 8px; padding: 40px; text-align: center; }
         .post-fallback p { color: #6b5e57; margin-bottom: 20px; }
-        .post-fallback a { color: #b8923a; text-decoration: none; border-bottom: 1px solid rgba(184,146,58,0.35); }
+        .post-fallback a { color: #AC3438; text-decoration: none; border-bottom: 1px solid rgba(172,52,56,0.35); }
 
         .post-related { background: #fff; border-top: 1px solid #ede8e2; padding: 64px 24px; }
         .post-related-inner { max-width: 1100px; margin: 0 auto; }
@@ -157,12 +157,12 @@ export default async function BlogPostPage({ params }: Props) {
         .post-related-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
         .post-related-img { height: 160px; position: relative; background: linear-gradient(135deg, #1a1410 0%, #3d2a20 60%, #6b4d3a 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .post-related-body { padding: 20px; }
-        .post-related-cat { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #b8923a; margin-bottom: 8px; display: block; }
+        .post-related-cat { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #AC3438; margin-bottom: 8px; display: block; }
         .post-related-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; color: #1a1410; line-height: 1.3; margin: 0 0 8px; }
         .post-related-date { font-size: 11px; color: #9c8f86; }
 
         .post-back { max-width: 720px; margin: 0 auto; padding: 40px 24px 0; }
-        .post-back a { color: #b8923a; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid rgba(184,146,58,0.3); }
+        .post-back a { color: #AC3438; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid rgba(172,52,56,0.3); }
 
         @media (max-width: 640px) {
           .post-featured-img-inner { height: 240px; }
@@ -193,9 +193,9 @@ export default async function BlogPostPage({ params }: Props) {
             <Image src={post.image} alt={post.title} fill style={{ objectFit: 'cover' }} unoptimized />
           ) : (
             <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-              <circle cx="40" cy="40" r="28" stroke="#b8923a" strokeWidth="0.8"/>
-              <path d="M40 14 Q55 27 55 40 Q55 53 40 66 Q25 53 25 40 Q25 27 40 14Z" stroke="#b8923a" strokeWidth="0.5"/>
-              <circle cx="40" cy="14" r="3" fill="#b8923a"/>
+              <circle cx="40" cy="40" r="28" stroke="rgba(172,52,56,0.5)" strokeWidth="0.8"/>
+              <path d="M40 14 Q55 27 55 40 Q55 53 40 66 Q25 53 25 40 Q25 27 40 14Z" stroke="rgba(172,52,56,0.5)" strokeWidth="0.5"/>
+              <circle cx="40" cy="14" r="3" fill="rgba(172,52,56,0.5)"/>
             </svg>
           )}
         </div>
@@ -243,8 +243,8 @@ export default async function BlogPostPage({ params }: Props) {
                       <Image src={r.image} alt={r.title} fill style={{ objectFit: 'cover' }} unoptimized />
                     ) : (
                       <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-                        <circle cx="20" cy="20" r="14" stroke="#b8923a" strokeWidth="0.7"/>
-                        <circle cx="20" cy="8" r="2" fill="#b8923a"/>
+                        <circle cx="20" cy="20" r="14" stroke="rgba(172,52,56,0.5)" strokeWidth="0.7"/>
+                        <circle cx="20" cy="8" r="2" fill="rgba(172,52,56,0.5)"/>
                       </svg>
                     )}
                   </div>

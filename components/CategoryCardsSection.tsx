@@ -4,15 +4,15 @@ import { supabaseAnon } from '@/lib/supabase/anon';
 
 const LIFE_PATH_SVG = (
   <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-    <circle cx="60" cy="60" r="40" stroke="#b8923a" strokeWidth="0.5" opacity="0.3" fill="none" />
-    <line x1="60" y1="24" x2="60" y2="96" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
-    <line x1="28" y1="42" x2="92" y2="78" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
-    <line x1="92" y1="42" x2="28" y2="78" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
-    <line x1="24" y1="60" x2="96" y2="60" stroke="#b8923a" strokeWidth="0.8" opacity="0.5" />
-    <circle cx="60" cy="60" r="14" fill="rgba(184,146,58,0.08)" stroke="#b8923a" strokeWidth="1" />
-    <circle cx="60" cy="24" r="2.5" fill="#b8923a" />
-    <circle cx="92" cy="78" r="2.5" fill="#b8923a" />
-    <circle cx="28" cy="78" r="2.5" fill="#b8923a" />
+    <circle cx="60" cy="60" r="40" stroke="#AC3438" strokeWidth="0.5" opacity="0.3" fill="none" />
+    <line x1="60" y1="24" x2="60" y2="96" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
+    <line x1="28" y1="42" x2="92" y2="78" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
+    <line x1="92" y1="42" x2="28" y2="78" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
+    <line x1="24" y1="60" x2="96" y2="60" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
+    <circle cx="60" cy="60" r="14" fill="rgba(172,52,56,0.08)" stroke="#AC3438" strokeWidth="1" />
+    <circle cx="60" cy="24" r="2.5" fill="#AC3438" />
+    <circle cx="92" cy="78" r="2.5" fill="#AC3438" />
+    <circle cx="28" cy="78" r="2.5" fill="#AC3438" />
   </svg>
 );
 
@@ -170,8 +170,8 @@ export default async function CategoryCardsSection() {
                   ) : (
                     <div className="cat-photo-placeholder">
                       <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                        <circle cx="40" cy="40" r="30" stroke="#b8923a" strokeWidth="5" fill="none" />
-                        <circle cx="40" cy="26" r="5" fill="rgba(184,146,58,0.2)" stroke="#b8923a" strokeWidth="0.5" />
+                        <circle cx="40" cy="40" r="30" stroke="#AC3438" strokeWidth="5" fill="none" />
+                        <circle cx="40" cy="26" r="5" fill="rgba(172,52,56,0.12)" stroke="#AC3438" strokeWidth="0.5" />
                       </svg>
                     </div>
                   )}

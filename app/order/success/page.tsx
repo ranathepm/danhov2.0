@@ -86,7 +86,7 @@ export default async function OrderSuccessPage({
         </div>
       )}
 
-      <p style={{ marginTop: 36, fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 17, color: 'var(--gold)' }}>
+      <p style={{ marginTop: 36, fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 17, color: '#7a5c58' }}>
         &ldquo;Presence is a present.&rdquo;
       </p>
 

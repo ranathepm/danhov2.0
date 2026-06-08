@@ -78,12 +78,12 @@ export default function TrackOrderPage() {
         .track-hero::before {
           content: '';
           position: absolute; inset: 0;
-          background: radial-gradient(ellipse 50% 40% at 50% 65%, rgba(184,146,58,0.1) 0%, transparent 70%);
+          background: radial-gradient(ellipse 50% 40% at 50% 65%, rgba(172,52,56,0.08) 0%, transparent 70%);
           pointer-events: none;
         }
         .track-eyebrow {
           display: block; font-size: 11px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: #b8923a; margin-bottom: 16px;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 16px;
         }
         .track-hero h1 {
           font-family: 'Cormorant Garamond', serif;
@@ -118,7 +118,7 @@ export default function TrackOrderPage() {
           padding: 12px 14px; font-size: 14px; font-family: 'Jost', sans-serif;
           color: #1a1410; outline: none; transition: border-color 0.15s;
         }
-        .track-form-group input:focus { border-color: #b8923a; }
+        .track-form-group input:focus { border-color: #AC3438; }
         .track-form-group input::placeholder { color: #b4a89d; }
         .track-submit {
           background: #1a1410; color: #faf6f1; border: none; border-radius: 999px;
@@ -126,7 +126,7 @@ export default function TrackOrderPage() {
           letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; margin-top: 4px;
         }
-        .track-submit:hover:not(:disabled) { background: #b8923a; }
+        .track-submit:hover:not(:disabled) { background: #8B2A2D; }
         .track-submit:disabled { background: #ccc4ba; cursor: default; }
         .track-error {
           background: rgba(172,52,56,0.08); border: 1px solid rgba(172,52,56,0.2);
@@ -136,7 +136,7 @@ export default function TrackOrderPage() {
         .track-hint {
           font-size: 12px; color: #9c8f86; text-align: center; margin-top: 16px; line-height: 1.5;
         }
-        .track-hint a { color: #b8923a; text-decoration: none; }
+        .track-hint a { color: #AC3438; text-decoration: none; }
 
         /* Result */
         .track-result { max-width: 640px; margin: 0 auto; padding: 0 24px 80px; }
@@ -169,7 +169,7 @@ export default function TrackOrderPage() {
           position: absolute; top: 14px; left: 50%; right: -50%;
           height: 2px; background: #ede8e2; z-index: 0;
         }
-        .track-step.done:not(:last-child)::after { background: #b8923a; }
+        .track-step.done:not(:last-child)::after { background: #AC3438; }
         .track-step-dot {
           width: 28px; height: 28px; border-radius: 50%;
           border: 2px solid #ede8e2; background: #fff;
@@ -178,10 +178,10 @@ export default function TrackOrderPage() {
           font-size: 11px; color: #ccc4ba;
         }
         .track-step.done .track-step-dot {
-          border-color: #b8923a; background: #b8923a; color: #fff; font-size: 12px;
+          border-color: #AC3438; background: #AC3438; color: #fff; font-size: 12px;
         }
         .track-step.current .track-step-dot {
-          border-color: #b8923a; background: #fff; color: #b8923a; font-weight: 700;
+          border-color: #AC3438; background: #fff; color: #AC3438; font-weight: 700;
         }
         .track-step-label {
           font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
@@ -317,7 +317,7 @@ export default function TrackOrderPage() {
               onClick={() => { setOrder(null); setEmail(''); setOrderId(''); }}
               style={{
                 background: 'none', border: 'none', cursor: 'pointer',
-                color: '#b8923a', fontSize: 13, letterSpacing: '0.1em',
+                color: '#AC3438', fontSize: 13, letterSpacing: '0.1em',
                 textTransform: 'uppercase', textDecoration: 'underline',
                 fontFamily: 'Jost, sans-serif',
               }}
@@ -328,8 +328,8 @@ export default function TrackOrderPage() {
 
           <p style={{ textAlign: 'center', fontSize: 13, color: '#9c8f86', marginTop: 24, lineHeight: 1.6 }}>
             Questions? Our team is at{' '}
-            <a href="mailto:care@danhov.com" style={{ color: '#b8923a', textDecoration: 'none' }}>care@danhov.com</a>{' '}
-            or <a href="tel:+18883264687" style={{ color: '#b8923a', textDecoration: 'none' }}>(888) 326-4687</a>.
+            <a href="mailto:care@danhov.com" style={{ color: '#AC3438', textDecoration: 'none' }}>care@danhov.com</a>{' '}
+            or <a href="tel:+18883264687" style={{ color: '#AC3438', textDecoration: 'none' }}>(888) 326-4687</a>.
           </p>
         </div>
       )}
