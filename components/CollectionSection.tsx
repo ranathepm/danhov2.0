@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabaseAnon } from '@/lib/supabase/anon';
+import { fetchProductsByCategory, type Product } from '@/lib/products';
+import { stripMetalSuffix } from '@/lib/product-display';
+
+// ── Collection registry ───────────────────────────────────────────────────
 
 const NAME_TO_SLUG: Record<string, string> = {
   'abbraccio': 'abbraccio',
@@ -73,12 +77,12 @@ type CollectionCard = {
 
 async function fetchCollections(category: string): Promise<CollectionCard[]> {
   try {
+    // Fetch without the null filter so all products come back, then JS-filter
     const { data } = await supabaseAnon
       .from('products')
       .select('collection, images')
       .filter('categories', 'cs', JSON.stringify([category]))
-      .eq('is_active', true)
-      .not('collection', 'is', null);
+      .eq('is_active', true);
 
     const imageMap: Record<string, string> = {};
     const seen = new Set<string>();
@@ -86,7 +90,7 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
 
     for (const product of data ?? []) {
       const col = (product.collection as string | null)?.trim();
-      if (!col) continue;
+      if (!col) continue; // skip products with no collection name
       const key = col.toLowerCase();
       if (!seen.has(key)) {
         seen.add(key);
@@ -117,6 +121,47 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
   }
 }
 
+// ── Sub-component: product preview card (fallback when no collections) ────
+
+function ProductCard({ product }: { product: Product }) {
+  const img = product.images?.[0] ?? null;
+  const name = stripMetalSuffix(product.name);
+  return (
+    <Link href={`/product/${product.slug}`} className="hp-prod-card">
+      <div className="hp-prod-media">
+        {img ? (
+          <Image
+            src={img}
+            alt={name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+            style={{ objectFit: 'contain', padding: '12px', mixBlendMode: 'multiply' }}
+          />
+        ) : (
+          <div className="hp-prod-placeholder">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+              <circle cx="24" cy="24" r="16" stroke="#AC3438" strokeWidth="1.2" />
+              <circle cx="24" cy="24" r="8" stroke="#AC3438" strokeWidth="0.7" opacity="0.5" />
+              <circle cx="24" cy="24" r="3" fill="#AC3438" opacity="0.3" />
+            </svg>
+          </div>
+        )}
+      </div>
+      <div className="hp-prod-info">
+        {product.collection && (
+          <span className="hp-prod-collection">{product.collection}</span>
+        )}
+        <h3 className="hp-prod-name">{name}</h3>
+        {product.price_display && (
+          <p className="hp-prod-price">{product.price_display}</p>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+// ── Main component ────────────────────────────────────────────────────────
+
 type Props = {
   id: string;
   category: string;
@@ -138,6 +183,11 @@ export default async function CollectionSection({
 }: Props) {
   const collections = await fetchCollections(category);
 
+  // If no named collections exist for this category (e.g. men's products have
+  // collection = null), fall back to showing the first 8 products as cards.
+  const fallbackProducts =
+    collections.length === 0 ? await fetchProductsByCategory(category, 8) : [];
+
   return (
     <section id={id} className="categories-section">
       <div className="categories-inner">
@@ -148,6 +198,7 @@ export default async function CollectionSection({
         </div>
 
         {collections.length > 0 ? (
+          /* Named collections exist — show beautiful collection cards */
           <div className="categories-grid">
             {collections.map((col) => (
               <Link key={col.slug} href={`/collection/${col.slug}`} className="cat-card">
@@ -178,11 +229,14 @@ export default async function CollectionSection({
               </Link>
             ))}
           </div>
-        ) : (
-          <p className="categories-intro" style={{ textAlign: 'center', marginTop: 0 }}>
-            Explore our full collection below.
-          </p>
-        )}
+        ) : fallbackProducts.length > 0 ? (
+          /* No named collections — show product preview cards */
+          <div className="hp-shop-grid">
+            {fallbackProducts.map((product) => (
+              <ProductCard key={product.sku} product={product} />
+            ))}
+          </div>
+        ) : null}
 
         <div className="col-section-cta">
           <Link href={viewAllHref} className="btn-solid">{viewAllLabel}</Link>
