@@ -283,7 +283,7 @@ export default function OrderDetail({
               )}
               <div className="adm-detail-product-body">
                 <div className="adm-page-sub">{product.collection ?? '—'} · {product.sku}</div>
-                <h2 className="adm-h2" style={{ margin: '4px 0 12px' }}>{product.name}</h2>
+                <h2 className="adm-h2" style={{ margin: '4px 0 12px' }}>{stripMetalSuffix(product.name)}</h2>
                 <div className="adm-detail-product-meta">
                   <span>Platinum weight (orig): <b>{product.platinum_weight_g ?? '—'} g</b></span>
                   <span>Stones (orig): <b>{product.stone_count ?? 0}</b></span>

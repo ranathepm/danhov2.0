@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 type Result = {
   sku: string;
@@ -170,7 +171,7 @@ export default function SearchOverlay({
                           )}
                         </div>
                         <div className="search-result-meta">
-                          <div className="search-result-name">{r.name}</div>
+                          <div className="search-result-name">{stripMetalSuffix(r.name)}</div>
                           <div className="search-result-sub">
                             {r.collection ?? r.category} · Style {r.sku}
                           </div>

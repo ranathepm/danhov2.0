@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 type Totals = {
   revenue: number;
@@ -261,7 +262,7 @@ export default function AccountingDashboard() {
               <tbody>
                 {data.top_products.map((p) => (
                   <tr key={p.sku}>
-                    <td>{p.name} <span className="adm-page-sub">· {p.sku}</span></td>
+                    <td>{stripMetalSuffix(p.name)} <span className="adm-page-sub">· {p.sku}</span></td>
                     <td style={{ textAlign: 'right' }}>{p.count}</td>
                     <td style={{ textAlign: 'right' }}>
                       {p.accounting_cost_usd > 0

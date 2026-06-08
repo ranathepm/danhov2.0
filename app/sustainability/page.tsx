@@ -54,9 +54,10 @@ const SECTIONS = [
     num: '01',
     title: 'We Source Only Recycled Gold',
     body: 'Since our founding in 1984, DANHOV has never used newly mined gold. Every ring, band, and pendant we craft is made from 100% recycled 14K and 18K gold — metal already in the world, transformed into something worth keeping forever. We believe the earth has given enough. Our job is to work beautifully with what already exists.',
-    image: '/triad-ring.jpg',
-    alt: 'DANHOV triad ring in recycled gold',
+    image: '/phil-3.jpg',
+    alt: 'DANHOV jewelry crafted in recycled gold',
     reverse: false,
+    contain: false,
   },
   {
     num: '02',
@@ -65,6 +66,7 @@ const SECTIONS = [
     image: '/triad-galaxy.png',
     alt: 'DANHOV galaxy ring with certified stones',
     reverse: true,
+    contain: true,
   },
   {
     num: '03',
@@ -73,6 +75,7 @@ const SECTIONS = [
     image: '/phil-5.jpg',
     alt: 'DANHOV ring crafted in Los Angeles',
     reverse: false,
+    contain: false,
   },
   {
     num: '04',
@@ -81,6 +84,7 @@ const SECTIONS = [
     image: '/triad-vortex.jpg',
     alt: 'DANHOV vortex ring made to order',
     reverse: true,
+    contain: true,
   },
   {
     num: '05',
@@ -89,6 +93,7 @@ const SECTIONS = [
     image: '/phil-6.jpg',
     alt: 'DANHOV sustainable packaging',
     reverse: false,
+    contain: false,
   },
 ];
 
@@ -148,10 +153,6 @@ export default function SustainabilityPage() {
         .sr-hero-right {
           position: relative; overflow: hidden;
           background: #1a1410;
-        }
-        .sr-hero-img {
-          width: 100%; height: 100%; object-fit: cover;
-          opacity: 0.88;
         }
         .sr-hero-side-label {
           position: absolute; right: 0; top: 50%;
@@ -241,6 +242,9 @@ export default function SustainabilityPage() {
           display: grid; grid-template-columns: 1fr 1fr;
           min-height: 500px; border-bottom: 1px solid #ede8e2;
         }
+        /* Reversed: image moves to left column */
+        .sr-section.reverse .sr-section-img { order: -1; }
+
         .sr-section-text {
           padding: 72px 56px; display: flex; flex-direction: column;
           justify-content: center; gap: 20px;
@@ -261,6 +265,8 @@ export default function SustainabilityPage() {
         .sr-section-body {
           font-size: 14.5px; color: #6b5e57; line-height: 1.8; margin: 0; max-width: 420px;
         }
+
+        /* Cover images (lifestyle/phil photos) */
         .sr-section-img {
           position: relative; overflow: hidden; background: #f4f0eb;
         }
@@ -269,6 +275,17 @@ export default function SustainabilityPage() {
           transition: transform 0.6s ease;
         }
         .sr-section:hover .sr-section-img img { transform: scale(1.03); }
+
+        /* Contain images (ring/jewelry shots — keep full ring visible) */
+        .sr-section-img--contain {
+          background: #0f0d0b;
+        }
+        .sr-section-img--contain img {
+          object-fit: contain !important;
+          padding: 40px;
+          transform: none !important;
+        }
+        .sr-section:hover .sr-section-img--contain img { transform: scale(1.02) !important; }
 
         /* ── CTA ── */
         .sr-cta {
@@ -321,15 +338,17 @@ export default function SustainabilityPage() {
           .sr-hero-left { padding: 56px 24px; }
           .sr-pillars-grid { grid-template-columns: 1fr 1fr; }
           .sr-section { grid-template-columns: 1fr; }
-          .sr-section.reverse .sr-section-img { order: -1; }
+          .sr-section.reverse .sr-section-img { order: 0; }
           .sr-section-text { padding: 48px 24px; }
-          .sr-section-img { height: 300px; }
+          .sr-section-img { height: 360px; }
+          .sr-section-img--contain { height: 320px; }
           .sr-section-num { font-size: 56px; }
         }
         @media (max-width: 600px) {
           .sr-pillars-grid { grid-template-columns: 1fr; }
           .sr-journey-stats { gap: 28px; }
           .sr-cta { padding: 64px 20px; }
+          .sr-section-img--contain img { padding: 24px; }
         }
       `}</style>
 
@@ -359,7 +378,7 @@ export default function SustainabilityPage() {
             src="/triad-ring.jpg"
             alt="DANHOV handcrafted ring"
             fill
-            style={{ objectFit: 'cover', opacity: 0.88 }}
+            style={{ objectFit: 'contain', padding: '40px', background: '#1a1410' }}
             priority
           />
           <span className="sr-hero-side-label">DANHOV · SUSTAINABILITY REPORT · 2024</span>
@@ -421,20 +440,19 @@ export default function SustainabilityPage() {
           <div
             key={s.num}
             className={`sr-section${s.reverse ? ' reverse' : ''}`}
-            style={s.reverse ? { direction: 'rtl' } : {}}
           >
-            <div className="sr-section-text" style={s.reverse ? { direction: 'ltr' } : {}}>
+            <div className="sr-section-text">
               <span className="sr-section-num">{s.num}</span>
               <h3 className="sr-section-title">{s.title}</h3>
               <div className="sr-section-divider" />
               <p className="sr-section-body">{s.body}</p>
             </div>
-            <div className="sr-section-img" style={s.reverse ? { direction: 'ltr' } : {}}>
+            <div className={`sr-section-img${s.contain ? ' sr-section-img--contain' : ''}`}>
               <Image
                 src={s.image}
                 alt={s.alt}
                 fill
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: s.contain ? 'contain' : 'cover' }}
                 sizes="(max-width: 900px) 100vw, 50vw"
               />
             </div>

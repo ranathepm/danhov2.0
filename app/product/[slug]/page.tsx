@@ -41,12 +41,13 @@ export async function generateMetadata({
   const narrative = await getOrGenerateNarrative(product, occasion);
   const hero = product.images?.[0] ?? null;
 
+  const cleanName = stripMetalSuffix(product.name);
   return {
-    title: product.name,
+    title: cleanName,
     description: narrative.meta_description,
     alternates: { canonical: `/product/${product.slug}` },
     openGraph: {
-      title: product.name,
+      title: cleanName,
       description: narrative.meta_description,
       type: 'website',
       url: `/product/${product.slug}`,
@@ -54,7 +55,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: product.name,
+      title: cleanName,
       description: narrative.meta_description,
       images: hero ? [hero] : undefined,
     },
@@ -78,7 +79,7 @@ export default async function ProductPage({ params }: { params: Params }) {
   const breadcrumb = buildBreadcrumb([
     { name: 'Home', url: '/' },
     { name: catLink.label, url: catLink.href },
-    { name: product.name, url: `/product/${product.slug}` },
+    { name: displayName, url: `/product/${product.slug}` },
   ]);
   const productLd = buildProduct(product, priceForLd, narrative.meta_description);
 

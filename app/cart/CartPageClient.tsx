@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useCart, formatUsd } from '@/components/CartProvider';
 import { createClient } from '@/lib/supabase/client';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -111,7 +112,7 @@ export default function CartPageClient() {
       '',
       ...items.map(
         (it) =>
-          `• ${it.name} (Style ${it.sku})${it.metal ? ` — ${it.metal}` : ''}` +
+          `• ${stripMetalSuffix(it.name)} (Style ${it.sku})${it.metal ? ` — ${it.metal}` : ''}` +
           (it.qty > 1 ? ` × ${it.qty}` : '') +
           (it.price_display ? ` — ${it.price_display}` : '')
       ),
@@ -164,7 +165,7 @@ export default function CartPageClient() {
                       <div className="cart-row-coll">{it.collection}</div>
                     )}
                     <Link href={`/product/${it.slug}`} className="cart-row-name">
-                      {it.name}
+                      {stripMetalSuffix(it.name)}
                     </Link>
                     <div className="cart-row-meta">
                       <span>Style {it.sku}</span>

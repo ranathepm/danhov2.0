@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { requireAdmin } from '@/lib/admin-auth';
 import { createServiceClient } from '@/lib/supabase/server';
 import ProductEditor from '@/components/admin/ProductEditor';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,7 +23,7 @@ export default async function AdminProductDetailPage({
       <header className="adm-page-head">
         <div>
           <Link href="/admin/products" className="adm-back-link">← All products</Link>
-          <h1 className="adm-h1">{data.name}</h1>
+          <h1 className="adm-h1">{stripMetalSuffix(data.name)}</h1>
           <p className="adm-page-sub">Style {data.sku}</p>
         </div>
       </header>

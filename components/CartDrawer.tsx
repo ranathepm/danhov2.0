@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart, formatUsd } from '@/components/CartProvider';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export default function CartDrawer() {
   const { drawerOpen, closeDrawer, items, count, subtotal, removeItem, setQty } = useCart();
@@ -117,7 +118,7 @@ export default function CartDrawer() {
                           className="cart-line-name"
                           onClick={closeDrawer}
                         >
-                          {it.name}
+                          {stripMetalSuffix(it.name)}
                         </Link>
                         {it.metal && (
                           <div className="cart-line-meta">{it.metal}</div>

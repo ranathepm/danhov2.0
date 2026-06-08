@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 type CenterDiamond = {
   carat: number | null;
@@ -229,7 +230,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         <div className="invoice-section">
           <div className="invoice-section-title">Commission</div>
           <div style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: 22, fontStyle: 'italic', color: '#1a1410', marginBottom: 4 }}>
-            {product.name}
+            {stripMetalSuffix(product.name)}
           </div>
           <div style={{ fontFamily: 'Jost, sans-serif', fontSize: 11, letterSpacing: '0.1em', color: '#6a5f57', textTransform: 'uppercase', marginBottom: 16 }}>
             {[product.collection, `Model ${product.sku}`].filter(Boolean).join(' · ')}

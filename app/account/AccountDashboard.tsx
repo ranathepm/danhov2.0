@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { useCart, formatUsd } from '@/components/CartProvider';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export type AccountOrderRow = {
   id: string;
@@ -113,7 +114,7 @@ export default function AccountDashboard({
                   </Link>
                   <div className="acct-cart-body">
                     <Link href={`/product/${it.slug}`} className="acct-cart-name">
-                      {it.name}
+                      {stripMetalSuffix(it.name)}
                     </Link>
                     <div className="acct-cart-meta">
                       <span>Style {it.sku}</span>

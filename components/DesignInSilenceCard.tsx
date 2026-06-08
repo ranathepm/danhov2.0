@@ -1,9 +1,21 @@
 'use client';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 
 export default function DesignInSilenceCard() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  const handleBrowseCollection = (e: React.MouseEvent) => {
+    setOpen(false);
+    if (pathname === '/') {
+      e.preventDefault();
+      setTimeout(() => {
+        document.getElementById('engagement-rings')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
+  };
 
   return (
     <>
@@ -81,7 +93,7 @@ export default function DesignInSilenceCard() {
                 <Link
                   href="/#engagement-rings"
                   className="dis-panel-cta"
-                  onClick={() => setOpen(false)}
+                  onClick={handleBrowseCollection}
                 >
                   Browse All Collections &rarr;
                 </Link>
