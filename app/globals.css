@@ -8106,6 +8106,14 @@ aside {
   max-width: 1400px;
   margin: 0 auto 48px;
 }
+/* Collection card grid — same layout as .categories-grid */
+.hp-col-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto 52px;
+}
 .hp-shop-empty {
   text-align: center;
   padding: 48px 0;
@@ -8190,15 +8198,18 @@ aside {
 /* Responsive */
 @media (max-width: 1100px) {
   .hp-shop-grid { grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .hp-col-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 @media (max-width: 900px) {
   .hp-shop-section { padding: 60px 32px; }
   .hp-shop-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .hp-col-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 }
 @media (max-width: 500px) {
   .hp-shop-section { padding: 48px 20px; }
   .hp-shop-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
   .hp-prod-info { padding: 10px 12px 14px; }
+  .hp-col-grid { grid-template-columns: 1fr; gap: 14px; }
 }
 
 /* ── Wishlist Page ─────────────────────────────────────────────────── */

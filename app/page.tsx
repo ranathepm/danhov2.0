@@ -9,7 +9,6 @@ import CoCreateSection from '@/components/CoCreateSection';
 import DailySignpostSection from '@/components/DailySignpostSection';
 import InvitationsMoreSection from '@/components/InvitationsMoreSection';
 import HeritageSection from '@/components/HeritageSection';
-import { fetchProductsByCategory } from '@/lib/products';
 import {
   buildLocalBusiness,
   buildWebSite,
@@ -26,14 +25,6 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function HomePage() {
-  // Fetch a preview set for each product category (8 per section)
-  const [engagementProducts, weddingProducts, fineProducts, mensProducts] =
-    await Promise.all([
-      fetchProductsByCategory('engagement', 8),
-      fetchProductsByCategory('wedding', 8),
-      fetchProductsByCategory('fine', 8),
-      fetchProductsByCategory('mens', 8),
-    ]);
   return (
     <>
       <script
@@ -133,37 +124,37 @@ export default async function HomePage() {
       {/* ── SHOP BY CATEGORY — four product preview sections ─────── */}
       <HomepageShopSection
         id="engagement-rings"
+        category="engagement"
         eyebrow="Engagement Rings"
         title="Find your form."
         subtitle="Each design begins in silence. Sacred geometry, set in gold."
-        products={engagementProducts}
         viewAllHref="/engagement-rings"
       />
 
       <HomepageShopSection
         id="wedding-bands"
+        category="wedding"
         eyebrow="Wedding Bands"
         title="The circle that begins where it ends."
         subtitle="Worn together, written together. Two whole people choosing each other."
-        products={weddingProducts}
         viewAllHref="/wedding-bands"
       />
 
       <HomepageShopSection
         id="fine-jewelry"
+        category="fine"
         eyebrow="Fine Jewelry"
         title="Quiet pieces, for loud lives."
         subtitle="Wear it every day. Small enough to forget. Beautiful enough to remember."
-        products={fineProducts}
         viewAllHref="/fine-jewelry"
       />
 
       <HomepageShopSection
         id="mens"
+        category="mens"
         eyebrow="Men's"
         title="Strength, worn well."
         subtitle="In silence, the band was forged. A ring that carries a name."
-        products={mensProducts}
         viewAllHref="/mens"
       />
 

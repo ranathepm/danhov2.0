@@ -51,6 +51,16 @@ export default function Nav() {
     }
   }, [pathname]);
 
+  // When already on the homepage, intercept hash-anchor clicks and smooth-scroll
+  // directly to the section instead of letting Next.js navigate to "/" first.
+  const handleHashScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('/#') && pathname === '/') {
+      e.preventDefault();
+      const id = href.slice(2);
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   // Lock body scroll while drawer or search is open
   useEffect(() => {
     if (open || searchOpen) {
@@ -156,6 +166,7 @@ export default function Nav() {
                   prefetch
                   className={active ? 'is-active' : undefined}
                   aria-current={active ? 'page' : undefined}
+                  onClick={(e) => handleHashScroll(e, l.href)}
                 >
                   {l.label}
                 </Link>
@@ -178,7 +189,13 @@ export default function Nav() {
         <ul className="nav-drawer-links">
           {LINKS.map((l) => (
             <li key={l.href}>
-              <Link href={l.href} onClick={() => setOpen(false)}>
+              <Link
+                href={l.href}
+                onClick={(e) => {
+                  handleHashScroll(e, l.href);
+                  setOpen(false);
+                }}
+              >
                 {l.label}
               </Link>
             </li>
