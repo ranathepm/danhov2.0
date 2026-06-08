@@ -99,7 +99,7 @@ const COLLECTIONS = [
     value: 'life-path',
     meaning: 'Your Number, Your Sign',
     body: 'Enter the day you arrived. We calculate your life path number and your sign, then create an original design from both — a form no other birth date makes. Not your fate. A mirror.',
-    href: '/ring-builder',
+    href: '/life-path',
     customSvg: LIFE_PATH_SVG,
   },
 ];
