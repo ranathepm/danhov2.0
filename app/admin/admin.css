@@ -1268,6 +1268,19 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   color: #b8761e;
   font-style: italic;
 }
+.adm-commission-row--note {
+  align-items: flex-start;
+}
+.adm-commission-note {
+  font-size: 13px;
+  color: #1a1410;
+  line-height: 1.6;
+  background: #faf6f1;
+  border-left: 3px solid #AC3438;
+  padding: 8px 12px;
+  font-style: italic;
+  flex: 1;
+}
 .adm-commission-section { margin-top: 16px; }
 .adm-commission-section > .adm-field-label { display: block; margin-bottom: 8px; }
 .adm-commission-table {

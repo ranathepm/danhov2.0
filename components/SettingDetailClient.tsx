@@ -19,6 +19,7 @@ interface Props {
   product: ProductInfo;
   metal: string;
   onMetalChange: (m: string) => void;
+  diamondId?: string;
 }
 
 function metalColour(raw: string): string {
@@ -38,6 +39,7 @@ export default function SettingDetailClient({
   product,
   metal,
   onMetalChange,
+  diamondId,
 }: Props) {
   const router = useRouter();
   const productMetals = product.metals ?? [];
@@ -48,9 +50,16 @@ export default function SettingDetailClient({
   const visibleMetals = showMoreMetals ? productMetals : productMetals.slice(0, 5);
 
   function handleSelect() {
-    const params = new URLSearchParams({ setting: product.slug });
-    if (metal) params.set('metal', metal);
-    router.push(`/ring-builder/diamond?${params.toString()}`);
+    if (diamondId) {
+      // Diamond already chosen — go straight to review with both
+      const params = new URLSearchParams({ setting: product.slug, diamond: diamondId });
+      if (metal) params.set('metal', metal);
+      router.push(`/ring-builder/review?${params.toString()}`);
+    } else {
+      const params = new URLSearchParams({ setting: product.slug });
+      if (metal) params.set('metal', metal);
+      router.push(`/ring-builder/diamond?${params.toString()}`);
+    }
   }
 
   function handleBuySettingOnly() {
@@ -158,7 +167,7 @@ export default function SettingDetailClient({
 
       {/* CTAs */}
       <button className="sd-cta-primary" onClick={handleSelect}>
-        Select Setting → Add Diamond
+        {diamondId ? 'Complete This Ring →' : 'Select Setting → Add Diamond'}
       </button>
       <button className="sd-cta-secondary sd-cta-setting-only" onClick={handleBuySettingOnly}>
         Buy Setting Only (No Diamond)

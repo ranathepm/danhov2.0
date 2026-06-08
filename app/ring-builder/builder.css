@@ -1424,6 +1424,90 @@
 .builder-review-diamond-img--hero {
   flex: 1;
 }
+.builder-review-note {
+  margin-bottom: 20px;
+}
+.builder-review-note-label {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b5e57;
+  margin-bottom: 8px;
+}
+.builder-review-note-label span {
+  font-size: 10px;
+  color: #9c8f86;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  margin-left: 6px;
+}
+.builder-review-note-textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px 14px;
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  color: #1a1410;
+  background: #fff;
+  border: 1px solid #ddd3cc;
+  border-radius: 2px;
+  resize: vertical;
+  line-height: 1.6;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+.builder-review-note-textarea:focus {
+  outline: none;
+  border-color: var(--logo-red);
+}
+.builder-review-note-textarea::placeholder {
+  color: #b8aba3;
+}
+.builder-review-add-setting {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: #faf6f1;
+  border: 1px solid #ede8e2;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.builder-review-add-setting-text {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6b5e57;
+  line-height: 1.5;
+}
+.builder-review-add-setting-text strong {
+  display: block;
+  font-size: 13px;
+  color: #1a1410;
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+.builder-review-add-setting-btn {
+  flex-shrink: 0;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid var(--logo-red);
+  color: var(--logo-red);
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.builder-review-add-setting-btn:hover {
+  background: var(--logo-red);
+  color: #fff;
+}
 .builder-review-secured {
   margin-top: 16px;
   font-family: 'Jost', sans-serif;

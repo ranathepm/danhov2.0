@@ -18,9 +18,10 @@ interface Props {
   defaultMetal: string | null;
   images: string[];
   metalImages: Record<string, string[]>;
+  diamondId?: string;
 }
 
-export default function SettingDetailLayout({ product, defaultMetal, images, metalImages }: Props) {
+export default function SettingDetailLayout({ product, defaultMetal, images, metalImages, diamondId }: Props) {
   const [metal, setMetal] = useState(defaultMetal ?? product.metals?.[0] ?? '');
 
   // Use metal-specific images when available, fall back to default product images
@@ -36,6 +37,7 @@ export default function SettingDetailLayout({ product, defaultMetal, images, met
         product={product}
         metal={metal}
         onMetalChange={setMetal}
+        diamondId={diamondId}
       />
     </div>
   );

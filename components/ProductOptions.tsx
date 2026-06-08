@@ -53,8 +53,11 @@ export default function ProductOptions({
     router.push(`/ring-builder/diamond?${params.toString()}`);
   }
 
+  function buyRingOnly() {
+    router.push(`/ring-builder/review?setting=${encodeURIComponent(slug)}`);
+  }
+
   function onCta() {
-    // Guest-friendly: no sign-in required (client request).
     goToDiamond();
   }
 
@@ -80,6 +83,14 @@ export default function ProductOptions({
             <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           Choose Your Diamond
+        </button>
+
+        <button
+          type="button"
+          className="atb-btn atb-btn--secondary"
+          onClick={buyRingOnly}
+        >
+          Buy Ring Only
         </button>
 
         <div className="atb-trust">

@@ -40,6 +40,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
 
   const [email, setEmail] = useState('');
   const [ringSize, setRingSize] = useState('');
+  const [customerNote, setCustomerNote] = useState('');
   const [loading, setLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -75,6 +76,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         mode,
         email,
         ring_size: ringSize || undefined,
+        note: customerNote.trim() || undefined,
       };
       if (mode === 'ring' || mode === 'setting') {
         body.setting_slug = setting?.slug;
@@ -108,6 +110,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
     }
     setErr(null);
 
+    const note = customerNote.trim() || null;
     if (mode === 'ring' && setting && diamond) {
       addItem({
         id: `bundle-${setting.slug}-${diamond.offer_id}`,
@@ -120,6 +123,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         price_display: `$${total.toLocaleString('en-US')}`,
         price_num: total,
         ring_size: ringSize || null,
+        note,
         bundle: {
           setting_price_usd: settingPrice,
           diamond: {
@@ -149,6 +153,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         price_display: `$${settingPrice.toLocaleString('en-US')}`,
         price_num: settingPrice,
         ring_size: ringSize || null,
+        note,
         bundle: null,
       });
     } else if (mode === 'diamond' && diamond) {
@@ -163,6 +168,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
         price_display: `$${diamondPrice.toLocaleString('en-US')}`,
         price_num: diamondPrice,
         ring_size: null,
+        note,
         bundle: null,
       });
     }
@@ -272,13 +278,8 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
               </span>
               <strong>${total.toLocaleString('en-US')}</strong>
             </div>
-            <div className="builder-review-total-row builder-review-deposit">
-              <span>50% deposit to begin</span>
-              <strong>${deposit.toLocaleString('en-US')}</strong>
-            </div>
             <p className="builder-review-balance">
-              Balance of ${(total - deposit).toLocaleString('en-US')} due before shipping.
-              {mode !== 'diamond' && ' Production: 4–6 weeks.'} Lifetime craftsmanship warranty.
+              {mode !== 'diamond' && 'Production: 4–6 weeks. '}Lifetime craftsmanship warranty.
             </p>
           </div>
 
@@ -304,6 +305,38 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
               <p className="builder-review-ring-size-hint">
                 Not sure of your size? A specialist will confirm before production begins.
               </p>
+            </div>
+          )}
+
+          {/* Optional customer message */}
+          <div className="builder-review-note">
+            <label className="builder-review-note-label" htmlFor="rb-note">
+              Message for our team
+              <span>(Optional)</span>
+            </label>
+            <textarea
+              id="rb-note"
+              className="builder-review-note-textarea"
+              placeholder="Special requests, engraving ideas, questions for our jewelers…"
+              value={customerNote}
+              onChange={(e) => setCustomerNote(e.target.value)}
+              maxLength={500}
+            />
+          </div>
+
+          {/* Add a setting — shown in diamond-only mode */}
+          {mode === 'diamond' && diamond && (
+            <div className="builder-review-add-setting">
+              <div className="builder-review-add-setting-text">
+                <strong>Want to pair this diamond with a setting?</strong>
+                Browse our handcrafted settings — your diamond will be carried through.
+              </div>
+              <a
+                href={`/ring-builder/setting?diamond=${encodeURIComponent(diamond.offer_id)}${holdId ? `&hold=${encodeURIComponent(holdId)}` : ''}`}
+                className="builder-review-add-setting-btn"
+              >
+                Add a Setting →
+              </a>
             </div>
           )}
 

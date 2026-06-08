@@ -13,23 +13,28 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
-export default async function SelectRingPage() {
+interface PageProps {
+  searchParams: { diamond?: string };
+}
+
+export default async function SelectRingPage({ searchParams }: PageProps) {
   const products = await fetchProductsByCategory('engagement');
+  const diamondId = searchParams.diamond;
 
   return (
     <main className="builder-page">
-      <BuilderStepper current={1} hasSetting={false} hasDiamond={false} />
+      <BuilderStepper current={1} hasSetting={false} hasDiamond={!!diamondId} />
 
       <section className="builder-section-head">
-        <span className="section-eyebrow">Step 1 of 3</span>
-        <h1 className="section-title">Choose your setting</h1>
+        <span className="section-eyebrow">{diamondId ? 'Add a Setting' : 'Step 1 of 3'}</span>
+        <h1 className="section-title">{diamondId ? 'Choose a setting for your diamond' : 'Choose your setting'}</h1>
         <p className="section-body">
           Every DANHOV setting is handcrafted in Los Angeles. Select the one that speaks
-          to you, then choose your diamond.
+          to you{diamondId ? ' — your diamond will be paired automatically.' : ', then choose your diamond.'}
         </p>
       </section>
 
-      <SettingBrowser products={products} />
+      <SettingBrowser products={products} diamondId={diamondId} />
 
       <div className="builder-advisor-strip">
         <span className="builder-advisor-text">Not sure which setting is right?</span>

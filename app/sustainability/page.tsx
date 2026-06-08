@@ -57,16 +57,14 @@ const SECTIONS = [
     image: '/phil-3.jpg',
     alt: 'DANHOV jewelry crafted in recycled gold',
     reverse: false,
-    contain: false,
   },
   {
     num: '02',
     title: 'Conflict-Free Stones, Every Time',
     body: 'Every diamond and gemstone that enters our atelier is conflict-free and ethically traced from mine to setting. Natural diamonds are GIA or AGS certified. Lab-grown stones meet the same standard. We believe a ring built to mark love should carry no burden of harm — and we trace every stone to make sure it doesn\'t.',
-    image: '/triad-galaxy.png',
-    alt: 'DANHOV galaxy ring with certified stones',
+    image: '/phil-4.jpg',
+    alt: 'DANHOV atelier crafting ethically sourced jewelry',
     reverse: true,
-    contain: true,
   },
   {
     num: '03',
@@ -75,16 +73,14 @@ const SECTIONS = [
     image: '/phil-5.jpg',
     alt: 'DANHOV ring crafted in Los Angeles',
     reverse: false,
-    contain: false,
   },
   {
     num: '04',
     title: 'Made to Order — Nothing Wasted',
     body: 'We produce nothing speculatively. Every DANHOV piece is commissioned before it is made — eliminating overstock, unsold inventory, and the quiet waste that mass production treats as the cost of doing business. When you order, we begin. Not before. This is how fine jewelry has always worked, and how we intend to keep working.',
-    image: '/triad-vortex.jpg',
-    alt: 'DANHOV vortex ring made to order',
+    image: '/phil-1.png',
+    alt: 'DANHOV bespoke commission made to order',
     reverse: true,
-    contain: true,
   },
   {
     num: '05',
@@ -93,7 +89,6 @@ const SECTIONS = [
     image: '/phil-6.jpg',
     alt: 'DANHOV sustainable packaging',
     reverse: false,
-    contain: false,
   },
 ];
 
@@ -266,7 +261,7 @@ export default function SustainabilityPage() {
           font-size: 14.5px; color: #6b5e57; line-height: 1.8; margin: 0; max-width: 420px;
         }
 
-        /* Cover images (lifestyle/phil photos) */
+        /* Section images — lifestyle photos, always cover */
         .sr-section-img {
           position: relative; overflow: hidden; background: #f4f0eb;
         }
@@ -275,17 +270,6 @@ export default function SustainabilityPage() {
           transition: transform 0.6s ease;
         }
         .sr-section:hover .sr-section-img img { transform: scale(1.03); }
-
-        /* Contain images (ring/jewelry shots — keep full ring visible) */
-        .sr-section-img--contain {
-          background: #0f0d0b;
-        }
-        .sr-section-img--contain img {
-          object-fit: contain !important;
-          padding: 40px;
-          transform: none !important;
-        }
-        .sr-section:hover .sr-section-img--contain img { transform: scale(1.02) !important; }
 
         /* ── CTA ── */
         .sr-cta {
@@ -341,14 +325,12 @@ export default function SustainabilityPage() {
           .sr-section.reverse .sr-section-img { order: 0; }
           .sr-section-text { padding: 48px 24px; }
           .sr-section-img { height: 360px; }
-          .sr-section-img--contain { height: 320px; }
           .sr-section-num { font-size: 56px; }
         }
         @media (max-width: 600px) {
           .sr-pillars-grid { grid-template-columns: 1fr; }
           .sr-journey-stats { gap: 28px; }
           .sr-cta { padding: 64px 20px; }
-          .sr-section-img--contain img { padding: 24px; }
         }
       `}</style>
 
@@ -375,10 +357,10 @@ export default function SustainabilityPage() {
         </div>
         <div className="sr-hero-right">
           <Image
-            src="/triad-ring.jpg"
+            src="/phil-2.png"
             alt="DANHOV handcrafted ring"
             fill
-            style={{ objectFit: 'contain', padding: '40px', background: '#1a1410' }}
+            style={{ objectFit: 'cover', opacity: 0.88 }}
             priority
           />
           <span className="sr-hero-side-label">DANHOV · SUSTAINABILITY REPORT · 2024</span>
@@ -447,12 +429,12 @@ export default function SustainabilityPage() {
               <div className="sr-section-divider" />
               <p className="sr-section-body">{s.body}</p>
             </div>
-            <div className={`sr-section-img${s.contain ? ' sr-section-img--contain' : ''}`}>
+            <div className="sr-section-img">
               <Image
                 src={s.image}
                 alt={s.alt}
                 fill
-                style={{ objectFit: s.contain ? 'contain' : 'cover' }}
+                style={{ objectFit: 'cover' }}
                 sizes="(max-width: 900px) 100vw, 50vw"
               />
             </div>

@@ -8,7 +8,7 @@ import '../../builder.css';
 
 interface Props {
   params: { slug: string };
-  searchParams: { metal?: string };
+  searchParams: { metal?: string; diamond?: string };
 }
 
 export async function generateStaticParams() {
@@ -32,12 +32,17 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
 
   const defaultMetal = searchParams.metal ?? product.default_metal ?? (product.metals?.[0] ?? null);
   const metals = product.metals ?? [];
+  const diamondId = searchParams.diamond;
+
+  const backHref = diamondId
+    ? `/ring-builder/setting?diamond=${encodeURIComponent(diamondId)}`
+    : '/ring-builder/setting';
 
   return (
     <main className="builder-page">
-      <BuilderStepper current={1} hasSetting={false} hasDiamond={false} />
+      <BuilderStepper current={1} hasSetting={false} hasDiamond={!!diamondId} />
 
-      <Link href="/ring-builder/setting" className="sd-back">
+      <Link href={backHref} className="sd-back">
         ← Back to browse
       </Link>
 
@@ -53,6 +58,7 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
         defaultMetal={defaultMetal}
         images={product.images ?? []}
         metalImages={(product.metal_images as Record<string, string[]>) ?? {}}
+        diamondId={diamondId}
       />
     </main>
   );

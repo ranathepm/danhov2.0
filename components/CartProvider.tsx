@@ -50,6 +50,7 @@ export type CartItem = {
   // ring_size is captured separately so the studio doesn't have to parse
   // the metal string at fulfilment.
   ring_size?: string | null;
+  note?: string | null;
   bundle?: {
     setting_price_usd: number;
     diamond: CartBundleDiamond;

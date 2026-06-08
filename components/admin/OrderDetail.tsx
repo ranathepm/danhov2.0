@@ -54,6 +54,7 @@ type CustomOverrides = {
   ring_size?: string | null;
   engraving?: string | null;
   metal_override?: string | null;
+  note?: string | null;
 };
 
 type Order = {
@@ -347,6 +348,12 @@ export default function OrderDetail({
                 <div className="adm-commission-row adm-commission-row--warn">
                   <span className="adm-field-label">Ring size</span>
                   <span className="adm-commission-warn">Not yet provided — confirm with customer</span>
+                </div>
+              )}
+              {initialOrder.custom_overrides?.note && (
+                <div className="adm-commission-row adm-commission-row--note">
+                  <span className="adm-field-label">Customer note</span>
+                  <span className="adm-commission-note">{initialOrder.custom_overrides.note}</span>
                 </div>
               )}
 

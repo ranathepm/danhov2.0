@@ -5761,6 +5761,15 @@ footer {
 }
 .atb-btn:hover { background: var(--logo-red-dark); }
 .atb-btn:active { transform: scale(0.985); }
+.atb-btn--secondary {
+  background: transparent;
+  border: 1px solid var(--logo-red);
+  color: var(--logo-red);
+}
+.atb-btn--secondary:hover {
+  background: var(--logo-red);
+  color: #fff;
+}
 .atb-view-cart {
   align-self: flex-start;
   font-family: 'Jost', sans-serif;

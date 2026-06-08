@@ -34,6 +34,7 @@ const Body = z.object({
   email: z.string().email().max(254),
   ring_size: z.string().max(20).optional(),
   metal: z.string().max(60).optional(),
+  note: z.string().max(500).optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -144,6 +145,7 @@ export async function POST(req: NextRequest) {
   const balance = total - deposit;
   const customerEmail = body.email.toLowerCase();
   const ringSize = body.ring_size ?? null;
+  const customerNote = body.note?.trim() || null;
 
   // ── Stripe line item label ────────────────────────────────────────────
   let itemName: string;
@@ -223,6 +225,7 @@ export async function POST(req: NextRequest) {
       deposit_usd: String(deposit),
       setting_price_usd: String(settingPrice),
       diamond_price_usd: diamondData ? String(diamondData.price) : '',
+      customer_note: customerNote ?? '',
     },
     payment_intent_data: {
       metadata: {
@@ -253,6 +256,7 @@ export async function POST(req: NextRequest) {
     product_name: setting?.name ?? null,
     custom_overrides: {
       ring_size: ringSize ?? null,
+      note: customerNote,
     },
     milestones: [
       {
