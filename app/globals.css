@@ -1953,7 +1953,7 @@ footer {
 
 .product-detail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+  grid-template-columns: 1fr 1fr;
   max-width: 100%;
   margin: 0;
   padding: 12px 0 96px;
