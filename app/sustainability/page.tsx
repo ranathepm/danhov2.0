@@ -54,7 +54,7 @@ const SECTIONS = [
     num: '01',
     title: 'We Source Only Recycled Gold',
     body: 'Since our founding in 1984, DANHOV has never used newly mined gold. Every ring, band, and pendant we craft is made from 100% recycled 14K and 18K gold — metal already in the world, transformed into something worth keeping forever. We believe the earth has given enough. Our job is to work beautifully with what already exists.',
-    image: '/triad-ring.jpg',
+    image: '/triad-vortex.jpg',
     alt: 'DANHOV ring crafted from recycled gold',
     reverse: false,
   },
