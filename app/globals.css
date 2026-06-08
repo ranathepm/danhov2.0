@@ -8030,6 +8030,156 @@ aside {
 @media (max-width: 600px) { .invmore-section { padding: 64px 20px; } }
 
 /* ============================================================
+   DESIGN IN SILENCE — two-panel modal
+   ============================================================ */
+.dis-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 20, 16, 0.74);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.22s ease;
+}
+.dis-modal {
+  background: #fdf8f3;
+  max-width: 880px;
+  width: 100%;
+  position: relative;
+  border: 1px solid rgba(172,52,56,0.12);
+  animation: slideUp 0.28s ease;
+}
+.dis-modal-header {
+  padding: 44px 52px 32px;
+  text-align: center;
+  border-bottom: 1px solid rgba(172,52,56,0.1);
+}
+.dis-modal-sub {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #AC3438;
+  margin-bottom: 10px;
+  display: block;
+}
+.dis-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 300;
+  color: #1a1410;
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+.dis-modal-title em { font-style: italic; color: #8B2A2D; }
+.dis-modal-tagline {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  color: #7a5c58;
+  line-height: 1.65;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.dis-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.dis-panel {
+  padding: 44px 44px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dis-panel:first-child {
+  border-right: 1px solid rgba(172,52,56,0.1);
+}
+.dis-panel-icon {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  color: #AC3438;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(172,52,56,0.35);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.dis-panel-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #AC3438;
+  display: block;
+}
+.dis-panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  color: #1a1410;
+  line-height: 1.2;
+  margin: 4px 0 0;
+}
+.dis-panel-body {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.82rem;
+  color: #7a5c58;
+  line-height: 1.72;
+  flex: 1;
+  padding-top: 4px;
+}
+.dis-panel-cta {
+  display: inline-block;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #AC3438;
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(172,52,56,0.3);
+  transition: border-color 0.2s ease;
+  margin-top: 12px;
+  align-self: flex-start;
+}
+.dis-panel-cta:hover { border-color: #AC3438; }
+.dis-close {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9a8f86;
+  font-size: 1.1rem;
+  padding: 6px 10px;
+  line-height: 1;
+  transition: color 0.18s;
+}
+.dis-close:hover { color: #1a1410; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 680px) {
+  .dis-panels { grid-template-columns: 1fr; }
+  .dis-panel:first-child { border-right: none; border-bottom: 1px solid rgba(172,52,56,0.1); }
+  .dis-modal-header { padding: 36px 24px 24px; }
+  .dis-panel { padding: 32px 24px 36px; }
+}
+
+/* ============================================================
    HERITAGE SECTION
    ============================================================ */
 .heritage-section {

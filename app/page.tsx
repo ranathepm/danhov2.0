@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomepageScripts from '@/components/HomepageScripts';
+import ScrollToHash from '@/components/ScrollToHash';
 import SignatureSection from '@/components/SignatureSection';
 import InvitationMoment from '@/components/InvitationMoment';
 import FindFormSection from '@/components/FindFormSection';
@@ -37,6 +38,7 @@ export default async function HomePage() {
       />
 
       <HomepageScripts />
+      <ScrollToHash />
 
       {/* ── HERO — light centered design ─────────────────────────── */}
       <section className="hero">

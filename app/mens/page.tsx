@@ -13,12 +13,6 @@ export const metadata: Metadata = {
 
 export const revalidate = 300;
 
-const COLLECTIONS = [
-  { label: 'Rings', value: 'rings' },
-  { label: 'Bracelets', value: 'bracelets' },
-  { label: 'Necklaces & Pendants', value: 'necklaces' },
-];
-
 export default async function MensPage() {
   const products = await fetchProductsByCategory('mens');
   return (
@@ -28,7 +22,6 @@ export default async function MensPage() {
       category="mens"
       title="Men's Jewelry"
       subtitle="Strength. Refined."
-      collections={COLLECTIONS}
       showMetalFilter={false}
       aiPrompt="I'm looking at men's jewelry from DANHOV. Can you help me find something that suits me?"
       philosophyStripe={{

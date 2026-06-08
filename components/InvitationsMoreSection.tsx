@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import DesignInSilenceCard from '@/components/DesignInSilenceCard';
 
 export default function InvitationsMoreSection() {
   return (
@@ -9,15 +10,8 @@ export default function InvitationsMoreSection() {
       </div>
 
       <div className="invmore-grid">
-        <Link href="/ring-builder" className="invmore-card">
-          <div className="invmore-icon">✦</div>
-          <span className="invmore-label">AI Ring Creator</span>
-          <h3 className="invmore-name">Design in <em>Silence</em></h3>
-          <p className="invmore-body">
-            &ldquo;You can see your own design in silence. We can make it.&rdquo;
-          </p>
-          <span className="invmore-link">Begin &rarr;</span>
-        </Link>
+        {/* Opens the two-panel modal: Create Your Own + Browse Collection */}
+        <DesignInSilenceCard />
 
         <button
           type="button"
@@ -33,7 +27,8 @@ export default function InvitationsMoreSection() {
           <span className="invmore-link">Book Now &rarr;</span>
         </button>
 
-        <Link href="/engagement-rings" className="invmore-card">
+        {/* The Signposts → Philosophy page */}
+        <Link href="/philosophy" className="invmore-card">
           <div className="invmore-icon">◇</div>
           <span className="invmore-label">The Collections</span>
           <h3 className="invmore-name">The <em>Signposts</em></h3>
