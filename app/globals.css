@@ -1970,7 +1970,7 @@ footer {
 }
 .product-img-frame {
   flex: 1;
-  background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 50%, #e8cece 100%);
+  background: #f4f0eb;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -1979,7 +1979,7 @@ footer {
 }
 .product-img-frame img.product-main-img {
   width: 100%; height: 100%;
-  object-fit: cover; display: block;
+  object-fit: contain; display: block;
   transition: transform 0.5s ease;
 }
 .product-img-frame:hover img.product-main-img { transform: scale(1.04); }
@@ -3494,15 +3494,15 @@ footer {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
-  background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 50%, #e8cece 100%);
+  background: #f4f0eb;
   overflow: hidden;
 }
 .pg-img {
   width: 100% !important;
   height: 100% !important;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
-  transition: transform 0.6s ease;
+  transition: transform 0.5s ease;
 }
 .pg-cell:hover .pg-img { transform: scale(1.02); }
 .pg-placeholder {
@@ -3548,13 +3548,13 @@ footer {
     aspect-ratio: 1;
     scroll-snap-align: center;
     position: relative;
-    background: linear-gradient(135deg, #f7e4e4 0%, #f0d4d4 50%, #e8cece 100%);
+    background: #f4f0eb;
     overflow: hidden;
   }
   .pg-rail-cell .pg-img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover;
+    object-fit: contain;
   }
   .pg-rail-cell .pg-placeholder {
     width: 100%; height: 100%;
@@ -4316,6 +4316,75 @@ footer {
   margin: 8px 0 0;
   letter-spacing: 0.04em;
 }
+
+/* ── Life Path teaser card — appears as the last engagement grid card ── */
+.vc-lp-teaser {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: #1a1410;
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  text-decoration: none;
+  color: #faf6f1;
+  transition: transform 0.3s ease;
+}
+.vc-lp-teaser:hover { transform: translateY(-4px); }
+.vc-lp-teaser-bg {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.vc-lp-teaser-spiral {
+  width: 80%;
+  height: 80%;
+  opacity: 0.6;
+  transition: transform 0.6s ease, opacity 0.4s ease;
+}
+.vc-lp-teaser:hover .vc-lp-teaser-spiral { transform: rotate(15deg) scale(1.08); opacity: 0.85; }
+.vc-lp-teaser-content {
+  position: relative;
+  z-index: 1;
+  padding: 28px 24px 32px;
+  background: linear-gradient(to top, rgba(26,20,16,0.97) 0%, rgba(26,20,16,0.6) 70%, transparent 100%);
+}
+.vc-lp-teaser-eyebrow {
+  display: block;
+  font-size: 9.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #AC3438;
+  margin-bottom: 10px;
+}
+.vc-lp-teaser-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #faf6f1;
+  margin: 0 0 10px;
+  line-height: 1.1;
+}
+.vc-lp-teaser-sub {
+  font-size: 12.5px;
+  color: rgba(250, 246, 241, 0.65);
+  line-height: 1.6;
+  margin: 0 0 18px;
+}
+.vc-lp-teaser-cta {
+  display: inline-block;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #AC3438;
+  border-bottom: 1px solid rgba(172,52,56,0.4);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.vc-lp-teaser:hover .vc-lp-teaser-cta { color: #faf6f1; border-color: rgba(250,246,241,0.4); }
 
 /* Editorial spread — Van Cleef "Perlée comes to life" pattern:
    takes 2 of the 3 grid columns; the next product card fills col 3. */

@@ -261,15 +261,16 @@ export default function SustainabilityPage() {
           font-size: 14.5px; color: #6b5e57; line-height: 1.8; margin: 0; max-width: 420px;
         }
 
-        /* Section images — lifestyle photos, always cover */
+        /* Section images — contained with cream bg so full image is visible */
         .sr-section-img {
           position: relative; overflow: hidden; background: #f4f0eb;
+          padding: 24px;
         }
         .sr-section-img img {
-          width: 100%; height: 100%; object-fit: cover;
-          transition: transform 0.6s ease;
+          width: 100%; height: 100%; object-fit: contain;
+          transition: transform 0.4s ease;
         }
-        .sr-section:hover .sr-section-img img { transform: scale(1.03); }
+        .sr-section:hover .sr-section-img img { transform: scale(1.02); }
 
         /* ── CTA ── */
         .sr-cta {
@@ -434,7 +435,7 @@ export default function SustainabilityPage() {
                 src={s.image}
                 alt={s.alt}
                 fill
-                style={{ objectFit: 'cover' }}
+                style={{ objectFit: 'contain' }}
                 sizes="(max-width: 900px) 100vw, 50vw"
               />
             </div>

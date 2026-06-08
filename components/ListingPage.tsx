@@ -108,6 +108,24 @@ function metalMatches(product: { default_metal: string | null; metals: string[] 
 }
 
 /**
+ * Convert a human-readable metal label to the normalized key used in
+ * metal_images / METAL_TONES. E.g. "14K White Gold" → "14k_white".
+ */
+function metalKeyFromLabel(label: string): string | null {
+  const l = label.toLowerCase().replace(/\s+/g, '');
+  // Already normalized
+  if (/^(14k_white|18k_white|14k_yellow|18k_yellow|14k_rose|18k_rose|platinum)$/.test(l)) return l;
+  if (l.includes('18k') && l.includes('white')) return '18k_white';
+  if (l.includes('14k') && l.includes('white')) return '14k_white';
+  if (l.includes('18k') && l.includes('yellow')) return '18k_yellow';
+  if (l.includes('14k') && l.includes('yellow')) return '14k_yellow';
+  if (l.includes('18k') && l.includes('rose')) return '18k_rose';
+  if (l.includes('14k') && l.includes('rose')) return '14k_rose';
+  if (l.includes('plat')) return 'platinum';
+  return null;
+}
+
+/**
  * Base-design key for a SKU — strips the trailing metal token so every
  * metal variant of one design collapses to a single key. danhov sells each
  * metal as its own product page (…-14w, …-14y, …-18k-rose, …-pt), but the
@@ -415,7 +433,7 @@ export default function ListingPage({
               // tile picks the *next* message from EDITORIAL_COPY rather
               // than repeating the same headline down the page.
               let editorialSlot = 0;
-              return filtered.flatMap((p, idx) => {
+              const items = filtered.flatMap((p, idx) => {
                 const nodes: React.ReactNode[] = [
                   <VanCleefCard key={p.sku} product={p} placeholder={PLACEHOLDER_SVG} />,
                 ];
@@ -436,6 +454,11 @@ export default function ListingPage({
                 }
                 return nodes;
               });
+              // Life Path teaser card — last card on engagement rings listing
+              if (category === 'engagement') {
+                items.push(<LifePathTeaser key="life-path-teaser" />);
+              }
+              return items;
             })()}
           </div>
         )}
@@ -500,10 +523,16 @@ function VanCleefCard({
   const metals = product.metals ?? [];
   const metalImages = product.metal_images ?? {};
 
+  // Only show swatches for metals this product actually has images for or is sold in
+  const keysFromMetals = new Set(metals.map(metalKeyFromLabel).filter((k): k is string => k !== null));
+  const keysWithImages = new Set(ALL_METALS.filter(m => (metalImages[m]?.length ?? 0) > 0));
+  const unionKeys = new Set([...keysFromMetals, ...keysWithImages]);
+  const showMetals = ALL_METALS.filter(m => unionKeys.has(m));
+
   const defaultMetal =
-    product.default_metal && metals.includes(product.default_metal)
+    product.default_metal && (keysFromMetals.has(product.default_metal) || keysWithImages.has(product.default_metal))
       ? product.default_metal
-      : metals[0] ?? '';
+      : showMetals[0] ?? '';
 
   const [selectedMetal, setSelectedMetal] = useState(defaultMetal);
   const [cyclingIdx, setCyclingIdx] = useState(0);
@@ -581,8 +610,9 @@ function VanCleefCard({
         )}
 
         <div className="vc-card-metals">
-          {ALL_METALS.map((m) => {
+          {showMetals.map((m) => {
             const tone = METAL_TONES[m];
+            if (!tone) return null;
             return (
               <button
                 key={m}
@@ -597,6 +627,36 @@ function VanCleefCard({
         </div>
       </div>
     </div>
+  );
+}
+
+// ── Life Path teaser — dark special card shown as the last item on the
+// engagement rings grid. Clicking opens the Life Path numerology feature.
+function LifePathTeaser() {
+  return (
+    <Link href="/life-path" className="vc-card vc-lp-teaser" aria-label="Discover your Life Path ring">
+      <div className="vc-lp-teaser-bg" aria-hidden="true">
+        <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" className="vc-lp-teaser-spiral">
+          <circle cx="140" cy="140" r="118" stroke="#AC3438" strokeWidth="0.8" opacity="0.6"/>
+          <circle cx="140" cy="140" r="92" stroke="#AC3438" strokeWidth="0.5" opacity="0.4"/>
+          <circle cx="140" cy="140" r="66" stroke="#AC3438" strokeWidth="0.5" opacity="0.3"/>
+          <circle cx="140" cy="140" r="42" stroke="#AC3438" strokeWidth="0.4" opacity="0.25"/>
+          <circle cx="140" cy="140" r="22" stroke="#AC3438" strokeWidth="0.4" opacity="0.2"/>
+          <line x1="140" y1="22" x2="140" y2="258" stroke="#AC3438" strokeWidth="0.3" opacity="0.2"/>
+          <line x1="22" y1="140" x2="258" y2="140" stroke="#AC3438" strokeWidth="0.3" opacity="0.2"/>
+          <line x1="57" y1="57" x2="223" y2="223" stroke="#AC3438" strokeWidth="0.25" opacity="0.15"/>
+          <line x1="223" y1="57" x2="57" y2="223" stroke="#AC3438" strokeWidth="0.25" opacity="0.15"/>
+        </svg>
+      </div>
+      <div className="vc-lp-teaser-content">
+        <span className="vc-lp-teaser-eyebrow">DANHOV · Exclusive</span>
+        <h3 className="vc-lp-teaser-title">The Life Path</h3>
+        <p className="vc-lp-teaser-sub">
+          Your birth date holds the blueprint<br />for a ring designed only for you.
+        </p>
+        <span className="vc-lp-teaser-cta">Discover Yours →</span>
+      </div>
+    </Link>
   );
 }
 
