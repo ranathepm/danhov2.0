@@ -7810,6 +7810,12 @@ aside {
   white-space: nowrap;
 }
 
+.col-section-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 52px;
+}
+
 @media (max-width: 900px)  { .categories-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 500px) {
   .categories-section { padding: 64px 20px; }

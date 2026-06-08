@@ -4,7 +4,7 @@ import SignatureSection from '@/components/SignatureSection';
 import InvitationMoment from '@/components/InvitationMoment';
 import FindFormSection from '@/components/FindFormSection';
 import CategoryCardsSection from '@/components/CategoryCardsSection';
-import HomepageShopSection from '@/components/HomepageShopSection';
+import CollectionSection from '@/components/CollectionSection';
 import CoCreateSection from '@/components/CoCreateSection';
 import DailySignpostSection from '@/components/DailySignpostSection';
 import InvitationsMoreSection from '@/components/InvitationsMoreSection';
@@ -118,44 +118,40 @@ export default async function HomePage() {
         </div>
       </div>
 
-      {/* ── CATEGORY CARDS ───────────────────────────────────────── */}
+      {/* ── ENGAGEMENT RINGS — collection cards with Life Path ───── */}
       <CategoryCardsSection />
 
-      {/* ── SHOP BY CATEGORY — four product preview sections ─────── */}
-      <HomepageShopSection
-        id="engagement-rings"
-        category="engagement"
-        eyebrow="Engagement Rings"
-        title="Find your form."
-        subtitle="Each design begins in silence. Sacred geometry, set in gold."
-        viewAllHref="/engagement-rings"
-      />
-
-      <HomepageShopSection
+      {/* ── WEDDING BANDS — same card style, own collections ─────── */}
+      <CollectionSection
         id="wedding-bands"
         category="wedding"
         eyebrow="Wedding Bands"
         title="The circle that begins where it ends."
-        subtitle="Worn together, written together. Two whole people choosing each other."
+        intro="Two people. One unbroken form. DANHOV's bands are made with the same intention as the moment they mark."
         viewAllHref="/wedding-bands"
+        viewAllLabel="Browse All Wedding Bands"
       />
 
-      <HomepageShopSection
+      {/* ── FINE JEWELRY — same card style, own collections ──────── */}
+      <CollectionSection
         id="fine-jewelry"
         category="fine"
         eyebrow="Fine Jewelry"
         title="Quiet pieces, for loud lives."
-        subtitle="Wear it every day. Small enough to forget. Beautiful enough to remember."
+        intro="Designed to be worn every day. Small enough to forget. Beautiful enough to remember forever."
         viewAllHref="/fine-jewelry"
+        viewAllLabel="Browse All Fine Jewelry"
       />
 
-      <HomepageShopSection
+      {/* ── MEN'S — same card style, own collections ─────────────── */}
+      <CollectionSection
         id="mens"
         category="mens"
-        eyebrow="Men's"
+        eyebrow="Men's Jewelry"
         title="Strength, worn well."
-        subtitle="In silence, the band was forged. A ring that carries a name."
+        intro="A ring that carries a name. A band that asks nothing — and says everything."
         viewAllHref="/mens"
+        viewAllLabel="Browse All Men's Jewelry"
       />
 
       {/* ── CO-CREATE ────────────────────────────────────────────── */}

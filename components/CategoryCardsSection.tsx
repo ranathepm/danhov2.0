@@ -132,7 +132,7 @@ export default async function CategoryCardsSection() {
   const imageMap = await getCollectionImages();
 
   return (
-    <section className="categories-section">
+    <section id="engagement-rings" className="categories-section">
       <div className="categories-inner">
         <div className="categories-header">
           <span className="section-eyebrow">The Collections</span>
