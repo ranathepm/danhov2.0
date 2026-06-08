@@ -1952,10 +1952,9 @@ footer {
 .bc-sep { opacity: 0.4; }
 
 .product-detail {
-  min-height: calc(100vh - 81px);
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-  max-width: 1480px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  max-width: 1060px;
   margin: 0 auto;
   padding: 12px 0 96px;
   gap: 0;
@@ -1964,7 +1963,7 @@ footer {
 /* Mejuri-style: image column scrolls naturally with the page; the
    info column is what sticks. */
 .product-image-col {
-  padding: 0 24px 0 48px;
+  padding: 0 20px 0 24px;
   display: flex;
   flex-direction: column;
 }
@@ -3494,6 +3493,7 @@ footer {
   position: relative;
   width: 100%;
   aspect-ratio: 1;
+  max-height: 560px;
   background: #f4f0eb;
   overflow: hidden;
 }

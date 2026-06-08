@@ -54,15 +54,15 @@ const SECTIONS = [
     num: '01',
     title: 'We Source Only Recycled Gold',
     body: 'Since our founding in 1984, DANHOV has never used newly mined gold. Every ring, band, and pendant we craft is made from 100% recycled 14K and 18K gold — metal already in the world, transformed into something worth keeping forever. We believe the earth has given enough. Our job is to work beautifully with what already exists.',
-    image: '/phil-3.jpg',
-    alt: 'DANHOV jewelry crafted in recycled gold',
+    image: '/triad-ring.jpg',
+    alt: 'DANHOV ring crafted from recycled gold',
     reverse: false,
   },
   {
     num: '02',
     title: 'Conflict-Free Stones, Every Time',
     body: 'Every diamond and gemstone that enters our atelier is conflict-free and ethically traced from mine to setting. Natural diamonds are GIA or AGS certified. Lab-grown stones meet the same standard. We believe a ring built to mark love should carry no burden of harm — and we trace every stone to make sure it doesn\'t.',
-    image: '/phil-4.jpg',
+    image: '/phil-3.jpg',
     alt: 'DANHOV atelier crafting ethically sourced jewelry',
     reverse: true,
   },
@@ -70,15 +70,15 @@ const SECTIONS = [
     num: '03',
     title: 'Handcrafted in Los Angeles',
     body: 'Our atelier has been in Los Angeles for over four decades. Every piece is made by master jewelers who are paid living wages, receive full healthcare benefits, and have a genuine stake in the quality of what they create. No offshore production. No shortcuts. The hands that shape your ring are the same hands that have shaped DANHOV since 1984.',
-    image: '/phil-5.jpg',
-    alt: 'DANHOV ring crafted in Los Angeles',
+    image: '/triad-vortex.jpg',
+    alt: 'DANHOV ring handcrafted in Los Angeles',
     reverse: false,
   },
   {
     num: '04',
     title: 'Made to Order — Nothing Wasted',
     body: 'We produce nothing speculatively. Every DANHOV piece is commissioned before it is made — eliminating overstock, unsold inventory, and the quiet waste that mass production treats as the cost of doing business. When you order, we begin. Not before. This is how fine jewelry has always worked, and how we intend to keep working.',
-    image: '/phil-1.png',
+    image: '/phil-4.jpg',
     alt: 'DANHOV bespoke commission made to order',
     reverse: true,
   },
@@ -86,7 +86,7 @@ const SECTIONS = [
     num: '05',
     title: 'Packaging Without Plastic',
     body: 'The box your ring arrives in is made from FSC-certified, plastic-free materials — designed to be kept, not discarded. We view packaging as part of the piece, not an afterthought. No bubble wrap, no styrofoam, no unnecessary inserts. Just materials that were made thoughtfully, for something made to last.',
-    image: '/phil-6.jpg',
+    image: '/phil-5.jpg',
     alt: 'DANHOV sustainable packaging',
     reverse: false,
   },
@@ -263,8 +263,7 @@ export default function SustainabilityPage() {
 
         /* Section images — contained with cream bg so full image is visible */
         .sr-section-img {
-          position: relative; overflow: hidden; background: #f4f0eb;
-          padding: 24px;
+          position: relative; overflow: hidden; background: #faf6f1;
         }
         .sr-section-img img {
           width: 100%; height: 100%; object-fit: contain;
