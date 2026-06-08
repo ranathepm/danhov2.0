@@ -1,81 +1,38 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 
 // ── Data ────────────────────────────────────────────────────────────────────
 
 const LIFE_PATH_DATA: Record<number, { title: string; desc: string; element: string }> = {
-  1: {
-    title: 'The Leader',
-    desc: 'You are a trailblazer — independent, driven, and born to chart your own course. Your life path is one of originality and courage. You lead not by demand but by example, creating the road as you walk it.',
-    element: 'Fire',
-  },
-  2: {
-    title: 'The Peacemaker',
-    desc: 'You are the quiet force — intuitive, gentle, and deeply attuned to others. Your path is one of harmony, partnership, and the sacred art of balance. You hold space for others like no one else can.',
-    element: 'Water',
-  },
-  3: {
-    title: 'The Creator',
-    desc: 'You are expression incarnate — vibrant, imaginative, and endlessly creative. Your life path is one of joy, beauty, and the power of words. When you speak or create, something shifts.',
-    element: 'Air',
-  },
-  4: {
-    title: 'The Builder',
-    desc: 'You are the foundation — disciplined, reliable, and built for the long game. Your path is one of craft, structure, and quiet mastery. You create things that endure long after you are gone.',
-    element: 'Earth',
-  },
-  5: {
-    title: 'The Free',
-    desc: 'You are movement itself — adventurous, sensual, and endlessly curious. Your life path is one of freedom, experience, and the thrill of the unknown. You are never finished becoming.',
-    element: 'Ether',
-  },
-  6: {
-    title: 'The Nurturer',
-    desc: 'You are love in action — caring, responsible, and devoted to those you hold close. Your path is one of service, beauty, and the sacred art of home. You make everywhere feel like belonging.',
-    element: 'Earth',
-  },
-  7: {
-    title: 'The Seeker',
-    desc: 'You are the mystic — introspective, analytical, and drawn to the unseen. Your life path is one of inner truth, spiritual depth, and the questions that have no easy answers. You search beautifully.',
-    element: 'Water',
-  },
-  8: {
-    title: 'The Achiever',
-    desc: 'You are power made tangible — ambitious, magnetic, and born to succeed. Your path is one of mastery, authority, and the wisdom that comes from knowing what you are truly worth.',
-    element: 'Fire',
-  },
-  9: {
-    title: 'The Humanitarian',
-    desc: 'You are the most evolved of all the numbers — compassionate, wise, and drawn to all of humanity. Your life path is one of completion, letting go, and giving everything you have learned back to the world.',
-    element: 'Air',
-  },
-  11: {
-    title: 'The Visionary',
-    desc: 'You carry a master number — rare and luminous. Yours is a path of spiritual awakening, intuitive power, and the calling to illuminate something larger than yourself. You are here to inspire.',
-    element: 'Light',
-  },
-  22: {
-    title: 'The Master Builder',
-    desc: 'You carry the highest master number — a path of extraordinary potential. You have the vision of the 11 and the grounded power of the 4. You are here to build something that will outlast you.',
-    element: 'All',
-  },
+  1: { title: 'The Origin',          desc: 'The first. The one who begins. You carry the energy of creation — new paths, new forms. Where others wait, you start.',                                                                      element: 'Fire'  },
+  2: { title: 'The Union',           desc: 'The peacemaker. You understand that two can become one without either disappearing. You hold space. You bring together.',                                                                     element: 'Water' },
+  3: { title: 'The Voice',           desc: 'The expresser. Joy moves through you and out into the world. You were made to create, to speak, to light up a room.',                                                                        element: 'Air'   },
+  4: { title: 'The Foundation',      desc: 'The builder. Steady, grounded, real. You make things that last. The world rests on people like you.',                                                                                        element: 'Earth' },
+  5: { title: 'The Free',            desc: 'The seeker of experience. Change is your element. You cannot be contained — and you were never meant to be.',                                                                                element: 'Ether' },
+  6: { title: 'The Heart',           desc: 'The nurturer. Love is your language. You carry others, you tend, you hold. Home is wherever you are.',                                                                                       element: 'Earth' },
+  7: { title: 'The Seeker',          desc: 'The one who goes inward. You are here to understand what cannot be seen. The way out, for you, was always in.',                                                                              element: 'Water' },
+  8: { title: 'The Force',           desc: 'The one with power. You move things in the world. Strength held with intention. Build, lead, manifest.',                                                                                     element: 'Fire'  },
+  9: { title: 'The Completion',      desc: 'The old soul. You carry all the others within you. You are here to give, to release, to love without holding.',                                                                              element: 'Air'   },
+  11: { title: 'The Illuminator',    desc: 'A master number. The intuitive light. You see what others miss. You are a candle in a dark room — you make others see.',                                                                     element: 'Light' },
+  22: { title: 'The Master Builder', desc: 'A master number. You can build the impossible. Vision and foundation in one. What you imagine, you can make real.',                                                                          element: 'All'   },
+  33: { title: 'The Teacher of Love', desc: 'A master number. The rarest path. Pure compassion made form. You are here to love at a scale most never reach.',                                                                           element: 'All'   },
 };
 
 const ZODIAC_DATA = [
-  { sign: 'Capricorn', symbol: '♑', dates: 'Dec 22 – Jan 19', desc: 'Disciplined. Ambitious. Enduring.' },
-  { sign: 'Aquarius',  symbol: '♒', dates: 'Jan 20 – Feb 18', desc: 'Original. Visionary. Free.' },
-  { sign: 'Pisces',    symbol: '♓', dates: 'Feb 19 – Mar 20', desc: 'Intuitive. Compassionate. Mystical.' },
-  { sign: 'Aries',     symbol: '♈', dates: 'Mar 21 – Apr 19', desc: 'Bold. Pioneering. Fearless.' },
-  { sign: 'Taurus',    symbol: '♉', dates: 'Apr 20 – May 20', desc: 'Steadfast. Sensual. Devoted.' },
-  { sign: 'Gemini',    symbol: '♊', dates: 'May 21 – Jun 20', desc: 'Curious. Expressive. Dual-natured.' },
-  { sign: 'Cancer',    symbol: '♋', dates: 'Jun 21 – Jul 22', desc: 'Nurturing. Protective. Deeply feeling.' },
-  { sign: 'Leo',       symbol: '♌', dates: 'Jul 23 – Aug 22', desc: 'Radiant. Generous. Born to lead.' },
-  { sign: 'Virgo',     symbol: '♍', dates: 'Aug 23 – Sep 22', desc: 'Precise. Devoted. Quietly powerful.' },
-  { sign: 'Libra',     symbol: '♎', dates: 'Sep 23 – Oct 22', desc: 'Harmonious. Just. Endlessly graceful.' },
-  { sign: 'Scorpio',   symbol: '♏', dates: 'Oct 23 – Nov 21', desc: 'Intense. Transformative. Unforgettable.' },
-  { sign: 'Sagittarius', symbol: '♐', dates: 'Nov 22 – Dec 21', desc: 'Expansive. Truthful. Forever seeking.' },
+  { sign: 'Capricorn',   symbol: '♑', dates: 'Dec 22 – Jan 19', desc: 'The mountain climber. Patient, enduring, built for the long path. You reach summits others abandon.' },
+  { sign: 'Aquarius',    symbol: '♒', dates: 'Jan 20 – Feb 18', desc: 'The water bearer. You see the future before it arrives. You belong to everyone and no one.' },
+  { sign: 'Pisces',      symbol: '♓', dates: 'Feb 19 – Mar 20', desc: 'The two fish. You swim between worlds — the seen and the felt. The most intuitive of all.' },
+  { sign: 'Aries',       symbol: '♈', dates: 'Mar 21 – Apr 19', desc: 'The ram. First of the zodiac. Courage in motion. You begin what others fear to start.' },
+  { sign: 'Taurus',      symbol: '♉', dates: 'Apr 20 – May 20', desc: 'The bull. Grounded in the senses. You know the value of what is real, slow, and lasting.' },
+  { sign: 'Gemini',      symbol: '♊', dates: 'May 21 – Jun 20', desc: 'The twins. Two minds, endless curiosity. You hold both sides of every truth at once.' },
+  { sign: 'Cancer',      symbol: '♋', dates: 'Jun 21 – Jul 22', desc: 'The crab. You carry home within you. Soft inside, protected outside. You feel everything.' },
+  { sign: 'Leo',         symbol: '♌', dates: 'Jul 23 – Aug 22', desc: 'The lion. Born to shine. The warmth of the sun lives in you. You light the way for others.' },
+  { sign: 'Virgo',       symbol: '♍', dates: 'Aug 23 – Sep 22', desc: 'The maiden. The one who refines. You see what could be better and make it so. Devotion in detail.' },
+  { sign: 'Libra',       symbol: '♎', dates: 'Sep 23 – Oct 22', desc: 'The scales. The seeker of balance and beauty. You restore harmony wherever you go.' },
+  { sign: 'Scorpio',     symbol: '♏', dates: 'Oct 23 – Nov 21', desc: 'The scorpion. Depth and transformation. You are not afraid of the dark — you were forged there.' },
+  { sign: 'Sagittarius', symbol: '♐', dates: 'Nov 22 – Dec 21', desc: 'The archer. The seeker of meaning. You aim beyond the horizon and trust the arrow.' },
 ];
 
 // ── Calculations ─────────────────────────────────────────────────────────────
@@ -83,134 +40,90 @@ const ZODIAC_DATA = [
 function calcLifePath(day: number, month: number, year: number): number {
   const str = `${day}${month}${year}`;
   let sum = str.split('').reduce((acc, d) => acc + Number(d), 0);
-  while (sum > 9 && sum !== 11 && sum !== 22) {
+  while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) {
     sum = String(sum).split('').reduce((acc, d) => acc + Number(d), 0);
   }
   return sum;
 }
 
-function getZodiac(day: number, month: number) {
+function getZodiac(day: number, month: number): { zodiac: (typeof ZODIAC_DATA)[number]; index: number } {
   const n = month * 100 + day;
-  if (n >= 1222 || n <= 119) return ZODIAC_DATA[0];  // Capricorn
-  if (n <= 218) return ZODIAC_DATA[1];  // Aquarius
-  if (n <= 320) return ZODIAC_DATA[2];  // Pisces
-  if (n <= 419) return ZODIAC_DATA[3];  // Aries
-  if (n <= 520) return ZODIAC_DATA[4];  // Taurus
-  if (n <= 620) return ZODIAC_DATA[5];  // Gemini
-  if (n <= 722) return ZODIAC_DATA[6];  // Cancer
-  if (n <= 822) return ZODIAC_DATA[7];  // Leo
-  if (n <= 922) return ZODIAC_DATA[8];  // Virgo
-  if (n <= 1022) return ZODIAC_DATA[9]; // Libra
-  if (n <= 1121) return ZODIAC_DATA[10]; // Scorpio
-  return ZODIAC_DATA[11]; // Sagittarius
+  let i = 11;
+  if (n >= 1222 || n <= 119) i = 0;
+  else if (n <= 218)  i = 1;
+  else if (n <= 320)  i = 2;
+  else if (n <= 419)  i = 3;
+  else if (n <= 520)  i = 4;
+  else if (n <= 620)  i = 5;
+  else if (n <= 722)  i = 6;
+  else if (n <= 822)  i = 7;
+  else if (n <= 922)  i = 8;
+  else if (n <= 1022) i = 9;
+  else if (n <= 1121) i = 10;
+  return { zodiac: ZODIAC_DATA[i], index: i };
+}
+
+function generateStory(lpTitle: string, zodiacSign: string): string {
+  const inward = ['The Seeker', 'The Illuminator', 'The Foundation', 'The Union', 'The Completion'];
+  const direction = inward.includes(lpTitle) ? 'turns inward' : 'opens outward';
+  return `You are ${lpTitle} walking the path of ${zodiacSign}. A spiral that ${direction}, holding a single stone where the two energies meet. This form is yours alone — no other birth date makes it.`;
 }
 
 // ── Geometric design SVG ─────────────────────────────────────────────────────
 
-function LifePathDesign({ num }: { num: number }) {
-  const cx = 140, cy = 140;
+function LifePathDesign({ num, zodiacIndex, day }: { num: number; zodiacIndex: number; day: number }) {
+  const cx = 140, cy = 140, outerR = 100;
 
-  const pts = (count: number, r: number, startAngle = -Math.PI / 2) =>
-    Array.from({ length: count }, (_, i) => {
-      const a = startAngle + (2 * Math.PI * i / count);
-      return { x: cx + r * Math.cos(a), y: cy + r * Math.sin(a) };
-    });
+  // Clamp master numbers to geometric ranges
+  const geoNum = num === 33 ? 6 : num === 22 ? 5 : num === 11 ? 4 : num;
+  const innerR = 28 + geoNum * 4;          // 32–64 — always < outerR
+  const petals = (geoNum % 8) + 4;         // 4–11 petals, unique per number
+  const rotationDeg = zodiacIndex * 30;    // each zodiac sign rotates 30°
+  const rings = (day % 4) + 2;             // 2–5 concentric rings based on birthday
+  const centerR = Math.min(8 + geoNum, 18); // center stone 9–18px
 
-  const polyStr = (count: number, r: number, startAngle = -Math.PI / 2) =>
-    pts(count, r, startAngle).map(p => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
-
-  // Generate all star polygon paths (handles even n by producing 2 triangles etc.)
-  function starPaths(count: number, r: number, skip = 2): string[] {
-    const v = pts(count, r);
-    const paths: string[] = [];
-    const visited = new Set<number>();
-    for (let start = 0; start < count; start++) {
-      if (visited.has(start)) continue;
-      const chain: number[] = [];
-      let cur = start;
-      do {
-        chain.push(cur);
-        visited.add(cur);
-        cur = (cur + skip) % count;
-      } while (cur !== start);
-      paths.push(
-        'M ' + chain.map(i => `${v[i].x.toFixed(2)} ${v[i].y.toFixed(2)}`).join(' L ') + ' Z'
-      );
-    }
-    return paths;
-  }
-
-  const n = num === 22 ? 4 : num === 11 ? 11 : Math.max(1, Math.min(num, 9));
-  const spokePts = pts(n === 1 ? 4 : n, 88);
+  const spokes = Array.from({ length: petals }, (_, i) => {
+    const rad = ((i / petals) * 360 + rotationDeg) * (Math.PI / 180);
+    return {
+      x1: (cx + Math.cos(rad) * innerR).toFixed(2),
+      y1: (cy + Math.sin(rad) * innerR).toFixed(2),
+      x2: (cx + Math.cos(rad) * outerR).toFixed(2),
+      y2: (cy + Math.sin(rad) * outerR).toFixed(2),
+    };
+  });
 
   return (
     <svg viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      {/* Outer ring band */}
-      <circle cx={cx} cy={cy} r={118} stroke="#AC3438" strokeWidth="1.8"/>
-      <circle cx={cx} cy={cy} r={93}  stroke="#AC3438" strokeWidth="1"   opacity="0.5"/>
+      {/* Outer boundary */}
+      <circle cx={cx} cy={cy} r={120} stroke="#AC3438" strokeWidth="0.5" opacity="0.2"/>
 
-      {/* Radial spokes */}
-      {spokePts.map((p, i) => (
-        <line key={i}
-          x1={cx} y1={cy}
-          x2={p.x.toFixed(2)} y2={p.y.toFixed(2)}
-          stroke="#AC3438" strokeWidth="0.7" opacity="0.3"
-        />
+      {/* Concentric rings — count driven by birth day */}
+      {Array.from({ length: rings }, (_, i) => {
+        const r = (innerR + (i * (outerR - innerR)) / rings).toFixed(2);
+        const op = (0.35 - i * 0.06).toFixed(2);
+        return <circle key={i} cx={cx} cy={cy} r={r} stroke="#AC3438" strokeWidth="0.6" fill="none" opacity={op}/>;
+      })}
+
+      {/* Radial spokes — count driven by life path number */}
+      {spokes.map((p, i) => (
+        <g key={i}>
+          <line x1={p.x1} y1={p.y1} x2={p.x2} y2={p.y2} stroke="#AC3438" strokeWidth="1" opacity="0.55"/>
+          <circle cx={p.x2} cy={p.y2} r="3" fill="#AC3438" opacity="0.65"/>
+        </g>
       ))}
-
-      {/* Main polygon — skip for 1 and 2 which use special designs */}
-      {n >= 3 && (
-        <polygon
-          points={polyStr(n, 58)}
-          stroke="#AC3438" strokeWidth="1.3" fill="none" opacity="0.75"
-        />
-      )}
-
-      {/* Star polygon for n >= 5 */}
-      {n >= 5 && starPaths(n, 72, 2).map((d, i) => (
-        <path key={i} d={d} stroke="#AC3438" strokeWidth="1" fill="none" opacity="0.45"/>
-      ))}
-
-      {/* Number 22: double square (rotated 45°) */}
-      {num === 22 && (
-        <polygon
-          points={polyStr(4, 58, -Math.PI / 4)}
-          stroke="#AC3438" strokeWidth="1" fill="none" opacity="0.5"
-        />
-      )}
-
-      {/* Number 2: vesica piscis */}
-      {num === 2 && (
-        <>
-          <circle cx={cx - 20} cy={cy} r={34} stroke="#AC3438" strokeWidth="1.2" opacity="0.7"/>
-          <circle cx={cx + 20} cy={cy} r={34} stroke="#AC3438" strokeWidth="1.2" opacity="0.7"/>
-        </>
-      )}
-
-      {/* Number 1: simple cross + emphasis circle */}
-      {num === 1 && (
-        <>
-          <circle cx={cx} cy={cy} r={48} stroke="#AC3438" strokeWidth="1.2" opacity="0.5"/>
-          <line x1={cx} y1={cy - 93} x2={cx} y2={cy + 93} stroke="#AC3438" strokeWidth="0.7" opacity="0.3"/>
-          <line x1={cx - 93} y1={cy} x2={cx + 93} y2={cy} stroke="#AC3438" strokeWidth="0.7" opacity="0.3"/>
-        </>
-      )}
-
-      {/* Inner concentric accent */}
-      <circle cx={cx} cy={cy} r={28} stroke="#AC3438" strokeWidth="0.8" opacity="0.4"/>
 
       {/* Center stone */}
-      <circle cx={cx} cy={cy} r={16} stroke="#AC3438" strokeWidth="1.5"/>
-      <circle cx={cx} cy={cy} r={6}  fill="#AC3438" opacity="0.3"/>
+      <circle cx={cx} cy={cy} r={centerR} fill="#AC3438" opacity="0.18"/>
+      <circle cx={cx} cy={cy} r={centerR} stroke="#AC3438" strokeWidth="1.5" fill="none"/>
 
       {/* Life path number */}
       <text
-        x={cx} y={cy + 5}
+        x={cx} y={cy + 6}
         textAnchor="middle"
         fontFamily="'Cormorant Garamond', serif"
-        fontSize="14"
-        fill="#AC3438"
-        opacity="0.5"
+        fontSize="18"
+        fill="#faf6f1"
+        opacity="0.85"
       >
         {num}
       </text>
@@ -220,12 +133,14 @@ function LifePathDesign({ num }: { num: number }) {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 
-type Screen = 'landing' | 'input' | 'results';
+type Screen = 'landing' | 'input' | 'results' | 'commission' | 'success';
 
 interface ResultData {
   lifePathNum: number;
   zodiac: (typeof ZODIAC_DATA)[number];
+  zodiacIndex: number;
   birthDate: string;
+  day: number;
 }
 
 export default function LifePathClient() {
@@ -235,6 +150,11 @@ export default function LifePathClient() {
   const [year, setYear] = useState('');
   const [error, setError] = useState('');
   const [result, setResult] = useState<ResultData | null>(null);
+  const [commName, setCommName] = useState('');
+  const [commEmail, setCommEmail] = useState('');
+  const [commMessage, setCommMessage] = useState('');
+  const [commError, setCommError] = useState('');
+  const [commSubmitting, setCommSubmitting] = useState(false);
 
   const lpData = result ? (LIFE_PATH_DATA[result.lifePathNum] ?? LIFE_PATH_DATA[9]) : null;
 
@@ -250,8 +170,8 @@ export default function LifePathClient() {
     setError('');
 
     const num = calcLifePath(d, m, y);
-    const zodiac = getZodiac(d, m);
-    setResult({ lifePathNum: num, zodiac, birthDate: `${d}/${m}/${y}` });
+    const { zodiac, index: zodiacIndex } = getZodiac(d, m);
+    setResult({ lifePathNum: num, zodiac, zodiacIndex, birthDate: `${d}/${m}/${y}`, day: d });
     setScreen('results');
   }
 
@@ -260,6 +180,34 @@ export default function LifePathClient() {
     setResult(null);
     setError('');
     setScreen('input');
+  }
+
+  async function handleCommissionSubmit() {
+    if (!commName.trim()) { setCommError('Please enter your name.'); return; }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(commEmail.trim())) { setCommError('Please enter a valid email address.'); return; }
+    setCommError('');
+    setCommSubmitting(true);
+    const lpInfo = result && lpData
+      ? `Life Path ${result.lifePathNum} — ${lpData.title} · ${result.zodiac.sign} · Born ${result.birthDate}`
+      : '';
+    try {
+      const res = await fetch('/api/consultation/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customer_name: commName.trim(),
+          customer_email: commEmail.trim().toLowerCase(),
+          notes: [lpInfo, commMessage.trim()].filter(Boolean).join('\n\n'),
+        }),
+      });
+      if (!res.ok) throw new Error('Request failed');
+      setScreen('success');
+    } catch {
+      setCommError('Something went wrong. Please try again.');
+    } finally {
+      setCommSubmitting(false);
+    }
   }
 
   return (
@@ -523,6 +471,39 @@ export default function LifePathClient() {
         }
         .lp-design-svg-wrap svg { width: 100%; height: 100%; }
 
+        /* Design story + note */
+        .lp-design-story {
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: 15px;
+          color: #6b5e57;
+          line-height: 1.75;
+          text-align: center;
+          margin: 20px 0 10px;
+        }
+        .lp-design-note {
+          font-size: 11px;
+          color: #b0a49c;
+          letter-spacing: 0.08em;
+          line-height: 1.6;
+          text-align: center;
+          font-style: italic;
+        }
+
+        /* Disclaimer */
+        .lp-disclaimer {
+          max-width: 600px;
+          margin: 48px auto 0;
+          padding-top: 32px;
+          border-top: 1px solid #ede8e2;
+          font-family: 'Cormorant Garamond', serif;
+          font-style: italic;
+          font-size: 14px;
+          color: #9c8f86;
+          line-height: 1.75;
+          text-align: center;
+        }
+
         .lp-results-right { padding-top: 12px; }
         .lp-number-eyebrow {
           display: block;
@@ -670,6 +651,203 @@ export default function LifePathClient() {
         }
         .lp-cta-secondary:hover { border-color: #1a1410; }
 
+        /* ── Commission screen ── */
+        .lp-commission {
+          min-height: 100vh;
+          background: #faf6f1;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 80px 24px 60px;
+          position: relative;
+        }
+        .lp-commission-back {
+          position: absolute;
+          top: 24px;
+          left: 24px;
+          font-size: 11px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: #9c8f86;
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: color 0.2s;
+          font-family: 'Jost', sans-serif;
+        }
+        .lp-commission-back:hover { color: #1a1410; }
+        .lp-commission-inner { max-width: 480px; width: 100%; }
+        .lp-commission-eyebrow {
+          display: block;
+          font-size: 10px;
+          letter-spacing: 0.26em;
+          text-transform: uppercase;
+          color: #AC3438;
+          margin-bottom: 12px;
+        }
+        .lp-commission-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(26px, 4vw, 38px);
+          font-weight: 400;
+          color: #1a1410;
+          margin: 0 0 8px;
+          line-height: 1.1;
+        }
+        .lp-commission-sub {
+          font-size: 13.5px;
+          color: #8a7f76;
+          margin: 0 0 32px;
+          line-height: 1.65;
+        }
+        .lp-commission-context {
+          background: #1a1410;
+          padding: 16px 20px;
+          margin-bottom: 28px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+        }
+        .lp-commission-context-num {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 36px;
+          color: #AC3438;
+          line-height: 1;
+          flex-shrink: 0;
+        }
+        .lp-commission-context-info {}
+        .lp-commission-context-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: 18px;
+          color: #faf6f1;
+          display: block;
+        }
+        .lp-commission-context-zodiac {
+          font-size: 11px;
+          color: rgba(250,246,241,0.5);
+          letter-spacing: 0.08em;
+        }
+        .lp-form-field {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin-bottom: 16px;
+        }
+        .lp-form-label {
+          font-size: 10px;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: #9c8f86;
+        }
+        .lp-form-input, .lp-form-textarea {
+          width: 100%;
+          padding: 13px 14px;
+          background: #fff;
+          border: 1px solid #ede8e2;
+          font-size: 14px;
+          font-family: 'Jost', sans-serif;
+          color: #1a1410;
+          outline: none;
+          transition: border-color 0.2s;
+          box-sizing: border-box;
+        }
+        .lp-form-input:focus, .lp-form-textarea:focus { border-color: #AC3438; }
+        .lp-form-input::placeholder, .lp-form-textarea::placeholder { color: #c0b5ac; }
+        .lp-form-textarea { resize: vertical; min-height: 96px; }
+        .lp-form-error {
+          font-size: 12px;
+          color: #AC3438;
+          margin: 8px 0 0;
+          min-height: 18px;
+        }
+        .lp-submit-btn {
+          width: 100%;
+          margin-top: 24px;
+          padding: 16px;
+          background: #AC3438;
+          color: #faf6f1;
+          font-family: 'Jost', sans-serif;
+          font-size: 11px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          border: none;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .lp-submit-btn:hover:not(:disabled) { background: #8f2b2e; }
+        .lp-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── Success screen ── */
+        .lp-success {
+          min-height: 100vh;
+          background: #1a1410;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 60px 24px;
+          text-align: center;
+        }
+        .lp-success-inner { max-width: 480px; }
+        .lp-success-icon {
+          width: 56px;
+          height: 56px;
+          border: 1px solid #AC3438;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 28px;
+          color: #AC3438;
+          font-size: 22px;
+        }
+        .lp-success-eyebrow {
+          display: block;
+          font-size: 10px;
+          letter-spacing: 0.26em;
+          text-transform: uppercase;
+          color: #AC3438;
+          margin-bottom: 14px;
+        }
+        .lp-success-title {
+          font-family: 'Cormorant Garamond', serif;
+          font-size: clamp(30px, 5vw, 48px);
+          font-weight: 300;
+          color: #faf6f1;
+          margin: 0 0 16px;
+          line-height: 1.1;
+        }
+        .lp-success-divider {
+          width: 40px;
+          height: 1px;
+          background: #AC3438;
+          margin: 0 auto 20px;
+        }
+        .lp-success-sub {
+          font-size: 14px;
+          color: rgba(250,246,241,0.6);
+          line-height: 1.75;
+          margin: 0 0 40px;
+          font-style: italic;
+          font-family: 'Cormorant Garamond', serif;
+        }
+        .lp-success-back {
+          display: inline-block;
+          padding: 14px 48px;
+          border: 1px solid rgba(250,246,241,0.25);
+          color: rgba(250,246,241,0.7);
+          font-family: 'Jost', sans-serif;
+          font-size: 11px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          text-decoration: none;
+          transition: border-color 0.2s, color 0.2s;
+        }
+        .lp-success-back:hover { border-color: #faf6f1; color: #faf6f1; }
+
         /* ── Responsive ── */
         @media (max-width: 720px) {
           .lp-results { padding: 60px 20px 40px; }
@@ -709,7 +887,8 @@ export default function LifePathClient() {
             <div className="lp-landing-divider"/>
             <p className="lp-landing-sub">
               Your birth date holds a number.<br />
-              That number holds a ring.
+              Your number holds a meaning.<br />
+              Not your fate — a mirror.
             </p>
             <button className="lp-landing-btn" onClick={() => setScreen('input')}>
               Begin
@@ -789,8 +968,14 @@ export default function LifePathClient() {
             <div className="lp-results-left">
               <span className="lp-design-label">Your Original Design</span>
               <div className="lp-design-svg-wrap">
-                <LifePathDesign num={result.lifePathNum} />
+                <LifePathDesign num={result.lifePathNum} zodiacIndex={result.zodiacIndex} day={result.day} />
               </div>
+              <p className="lp-design-story">
+                &ldquo;{generateStory(lpData.title, result.zodiac.sign)}&rdquo;
+              </p>
+              <p className="lp-design-note">
+                A unique form, generated from your number and sign. When you commission your piece, our jeweler will refine it by hand — in silence.
+              </p>
             </div>
 
             {/* Right: life path info */}
@@ -820,17 +1005,110 @@ export default function LifePathClient() {
 
               {/* CTAs */}
               <div className="lp-ctas">
-                <Link
-                  href={`/ring-builder/setting?lifePath=${result.lifePathNum}`}
-                  className="lp-cta-primary"
-                >
+                <button type="button" className="lp-cta-primary" onClick={() => setScreen('commission')}>
                   Commission This Design
-                </Link>
+                </button>
                 <button type="button" className="lp-cta-secondary" onClick={handleReset}>
                   Calculate Another
                 </button>
               </div>
             </div>
+          </div>
+
+          <p className="lp-disclaimer">
+            Your number and your sign are not your fate. They are doorways — ways of looking at yourself you may not have tried. Take what resonates. Leave the rest. You remain a mystery to be discovered.
+          </p>
+        </div>
+      )}
+
+      {/* ── COMMISSION ── */}
+      {screen === 'commission' && result && lpData && (
+        <div className="lp-commission">
+          <button className="lp-commission-back" onClick={() => setScreen('results')}>
+            ← Back
+          </button>
+          <div className="lp-commission-inner">
+            <span className="lp-commission-eyebrow">Private Commission</span>
+            <h2 className="lp-commission-title">Commission Your<br/>Life Path Ring</h2>
+            <p className="lp-commission-sub">
+              Our atelier will handcraft a ring designed around your unique number.
+              Leave your details and a DANHOV jeweler will reach out to begin.
+            </p>
+
+            <div className="lp-commission-context">
+              <span className="lp-commission-context-num">{result.lifePathNum}</span>
+              <div className="lp-commission-context-info">
+                <span className="lp-commission-context-title">{lpData.title}</span>
+                <span className="lp-commission-context-zodiac">
+                  {result.zodiac.symbol} {result.zodiac.sign} · Element: {lpData.element}
+                </span>
+              </div>
+            </div>
+
+            <div className="lp-form-field">
+              <label className="lp-form-label" htmlFor="comm-name">Your Name</label>
+              <input
+                id="comm-name"
+                type="text"
+                className="lp-form-input"
+                placeholder="Full name"
+                value={commName}
+                onChange={e => setCommName(e.target.value)}
+                autoComplete="name"
+              />
+            </div>
+            <div className="lp-form-field">
+              <label className="lp-form-label" htmlFor="comm-email">Email Address</label>
+              <input
+                id="comm-email"
+                type="email"
+                className="lp-form-input"
+                placeholder="you@example.com"
+                value={commEmail}
+                onChange={e => setCommEmail(e.target.value)}
+                autoComplete="email"
+              />
+            </div>
+            <div className="lp-form-field">
+              <label className="lp-form-label" htmlFor="comm-message">Message (optional)</label>
+              <textarea
+                id="comm-message"
+                className="lp-form-textarea"
+                placeholder="Any thoughts, preferences, or questions for our jeweler…"
+                value={commMessage}
+                onChange={e => setCommMessage(e.target.value)}
+              />
+            </div>
+
+            {commError && <p className="lp-form-error">{commError}</p>}
+
+            <button
+              type="button"
+              className="lp-submit-btn"
+              disabled={commSubmitting}
+              onClick={handleCommissionSubmit}
+            >
+              {commSubmitting ? 'Sending…' : 'Send Commission Request'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── SUCCESS ── */}
+      {screen === 'success' && (
+        <div className="lp-success">
+          <div className="lp-success-inner">
+            <div className="lp-success-icon">✓</div>
+            <span className="lp-success-eyebrow">Request Received</span>
+            <h2 className="lp-success-title">Your commission<br/>is on its way.</h2>
+            <div className="lp-success-divider"/>
+            <p className="lp-success-sub">
+              A DANHOV jeweler will be in touch shortly to begin crafting your
+              Life Path ring — made only for you.
+            </p>
+            <Link href="/engagement-rings" className="lp-success-back">
+              Return to Rings
+            </Link>
           </div>
         </div>
       )}

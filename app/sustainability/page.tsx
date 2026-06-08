@@ -70,7 +70,7 @@ const SECTIONS = [
     num: '03',
     title: 'Handcrafted in Los Angeles',
     body: 'Our atelier has been in Los Angeles for over four decades. Every piece is made by master jewelers who are paid living wages, receive full healthcare benefits, and have a genuine stake in the quality of what they create. No offshore production. No shortcuts. The hands that shape your ring are the same hands that have shaped DANHOV since 1984.',
-    image: '/triad-vortex.jpg',
+    image: '/triad-galaxy.png',
     alt: 'DANHOV ring handcrafted in Los Angeles',
     reverse: false,
   },
@@ -263,7 +263,7 @@ export default function SustainabilityPage() {
 
         /* Section images — contained with cream bg so full image is visible */
         .sr-section-img {
-          position: relative; overflow: hidden; background: #faf6f1;
+          position: relative; overflow: hidden; background: #fff;
         }
         .sr-section-img img {
           width: 100%; height: 100%; object-fit: contain;
