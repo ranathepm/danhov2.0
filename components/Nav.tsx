@@ -16,6 +16,7 @@ const LINKS_ROW = [
   { href: '/fine-jewelry', label: 'Fine Jewelry' },
   { href: '/mens', label: "Men's" },
   { href: '/ring-builder', label: 'Ring Builder' },
+  { href: '/philosophy', label: 'Philosophy' },
   { href: '/story', label: 'Story' },
 ];
 

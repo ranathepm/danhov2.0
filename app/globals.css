@@ -578,6 +578,35 @@ p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, td, th {
 .featured-logo svg { display: block; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
+/* PHILOSOPHY PAGE HERO */
+.phil-page-hero {
+  background: #fdf8f3;
+  padding: 148px 48px 88px;
+  text-align: center;
+  border-bottom: 1px solid rgba(172,52,56,0.08);
+}
+.phil-page-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.8rem, 6vw, 5.2rem);
+  font-weight: 300;
+  color: #1a1410;
+  line-height: 1.1;
+  margin: 16px 0 28px;
+}
+.phil-page-title em { font-style: normal; color: var(--logo-red); }
+.phil-page-sub {
+  font-family: 'Jost', sans-serif;
+  font-size: 1rem;
+  color: #7a5c58;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.75;
+  letter-spacing: 0.03em;
+}
+@media (max-width: 600px) {
+  .phil-page-hero { padding: 120px 24px 64px; }
+}
+
 /* SPIRITUAL MESSAGES */
 .phil-section { padding: 80px 0 100px; position: relative; background: #f7ebe8; overflow: hidden; }
 .phil-header { text-align: center; padding: 0 48px 64px; }
