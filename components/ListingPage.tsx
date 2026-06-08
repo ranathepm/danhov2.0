@@ -243,7 +243,15 @@ export default function ListingPage({
               Our advisor can help you find the perfect style, metal, and fit — in seconds.
             </span>
           </div>
-          <button className="dnh-trigger dnh-trigger--listing" data-dnh={aiPrompt} type="button">
+          <button
+            className="dnh-trigger dnh-trigger--listing"
+            data-dnh={
+              collectionFilter !== 'all' && COLLECTION_AI_PROMPTS[collectionFilter]
+                ? COLLECTION_AI_PROMPTS[collectionFilter]
+                : aiPrompt
+            }
+            type="button"
+          >
             <svg width="22" height="22" viewBox="0 0 14 14" fill="none" aria-hidden="true">
               <path
                 d="M7 1L8 5.5L12.5 7L8 8.5L7 13L6 8.5L1.5 7L6 5.5L7 1Z"
@@ -663,9 +671,31 @@ const EDITORIAL_QUOTES: Record<string, EditorialQuote[]> = {
     { text: 'A ring that carries a name.' },
     { text: 'Weight, worn well.' },
   ],
+  collection: [
+    { text: 'A name given with intention. A piece made with purpose.' },
+    { text: 'Every piece in this collection carries the same DNA.' },
+    { text: 'In silence, the design arrived.' },
+    { text: 'DANHOV — Los Angeles, since 1984.' },
+  ],
   default: [
     { text: 'Handcrafted in Los Angeles since 1984.' },
     { text: 'Sacred geometry, set in gold.' },
     { text: 'Presence is a present.' },
   ],
+};
+
+// Per-collection AI advisor opening messages — used when a collection
+// chip is active to give the advisor precise context about the piece.
+const COLLECTION_AI_PROMPTS: Record<string, string> = {
+  abbraccio:  "I'm exploring the Abbraccio collection — DANHOV's iconic swirl embrace settings. Help me find the right piece.",
+  voltaggio:  "I'm drawn to Voltaggio tension-set rings where the stone floats in the ring's energy. What should I know?",
+  classico:   "I love the Classico collection's timeless solitaires. Help me find my ideal setting.",
+  norme:      "I'm looking at Norme de Danhov — the foundational forms. What sets these apart from other collections?",
+  carezza:    "The Carezza collection's delicate pavé work caught my eye. Help me understand my customization options.",
+  'per-lei':  "I'm exploring Per Lei — the floral and feminine U Collection designs. Help me find the right piece.",
+  petalo:     "The Petalo petal forms are beautiful. Help me choose the right size, metal, and setting.",
+  solo:       "Solo Filo's single continuous thread speaks to me. What options are available?",
+  eleganza:   "I want refined simplicity from the Eleganza collection. Help me find a timeless piece.",
+  couture:    "I'm looking for a statement piece from Couture. What makes these designs different?",
+  unito:      "The Unito collection — two forms joined as one — speaks to me. What are my options?",
 };

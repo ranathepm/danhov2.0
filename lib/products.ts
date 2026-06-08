@@ -38,17 +38,57 @@ export async function fetchAllActiveProducts(): Promise<Product[]> {
   return (data ?? []) as Product[];
 }
 
-export async function fetchProductsByCategory(category: string): Promise<Product[]> {
+export async function fetchProductsByCategory(category: string, limit?: number): Promise<Product[]> {
   // JSONB array contains — use explicit `cs` filter with a JSON-stringified value
-  const { data, error } = await supabaseAnon
+  let query = supabaseAnon
     .from('products')
     .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
     .filter('categories', 'cs', JSON.stringify([category]))
     .eq('is_active', true)
     .order('sku', { ascending: true });
 
+  if (limit) query = query.limit(limit);
+
+  const { data, error } = await query;
+
   if (error) {
     console.error('fetchProductsByCategory error:', error);
+    return [];
+  }
+  return (data ?? []) as Product[];
+}
+
+// Collection slug → database display name
+const COLLECTION_SLUG_TO_NAME: Record<string, string> = {
+  abbraccio:  'Abbraccio',
+  voltaggio:  'Voltaggio',
+  classico:   'Classico',
+  norme:      'Norme de Danhov',
+  carezza:    'Carezza',
+  'per-lei':  'Per Lei',
+  petalo:     'Petalo',
+  solo:       'Solo Filo',
+  eleganza:   'Eleganza',
+  couture:    'Couture',
+  unito:      'Unito',
+};
+
+/**
+ * Fetch ALL active products that belong to a given collection, across
+ * every category (engagement, wedding, fine, mens, etc.).
+ */
+export async function fetchProductsByCollection(collectionSlug: string): Promise<Product[]> {
+  const collectionName = COLLECTION_SLUG_TO_NAME[collectionSlug] ?? collectionSlug;
+
+  const { data, error } = await supabaseAnon
+    .from('products')
+    .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
+    .ilike('collection', collectionName)
+    .eq('is_active', true)
+    .order('sku', { ascending: true });
+
+  if (error) {
+    console.error('fetchProductsByCollection error:', error);
     return [];
   }
   return (data ?? []) as Product[];

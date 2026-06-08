@@ -4,10 +4,12 @@ import SignatureSection from '@/components/SignatureSection';
 import InvitationMoment from '@/components/InvitationMoment';
 import FindFormSection from '@/components/FindFormSection';
 import CategoryCardsSection from '@/components/CategoryCardsSection';
+import HomepageShopSection from '@/components/HomepageShopSection';
 import CoCreateSection from '@/components/CoCreateSection';
 import DailySignpostSection from '@/components/DailySignpostSection';
 import InvitationsMoreSection from '@/components/InvitationsMoreSection';
 import HeritageSection from '@/components/HeritageSection';
+import { fetchProductsByCategory } from '@/lib/products';
 import {
   buildLocalBusiness,
   buildWebSite,
@@ -21,7 +23,17 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 };
 
-export default function HomePage() {
+export const revalidate = 300;
+
+export default async function HomePage() {
+  // Fetch a preview set for each product category (8 per section)
+  const [engagementProducts, weddingProducts, fineProducts, mensProducts] =
+    await Promise.all([
+      fetchProductsByCategory('engagement', 8),
+      fetchProductsByCategory('wedding', 8),
+      fetchProductsByCategory('fine', 8),
+      fetchProductsByCategory('mens', 8),
+    ]);
   return (
     <>
       <script
@@ -117,6 +129,43 @@ export default function HomePage() {
 
       {/* ── CATEGORY CARDS ───────────────────────────────────────── */}
       <CategoryCardsSection />
+
+      {/* ── SHOP BY CATEGORY — four product preview sections ─────── */}
+      <HomepageShopSection
+        id="engagement-rings"
+        eyebrow="Engagement Rings"
+        title="Find your form."
+        subtitle="Each design begins in silence. Sacred geometry, set in gold."
+        products={engagementProducts}
+        viewAllHref="/engagement-rings"
+      />
+
+      <HomepageShopSection
+        id="wedding-bands"
+        eyebrow="Wedding Bands"
+        title="The circle that begins where it ends."
+        subtitle="Worn together, written together. Two whole people choosing each other."
+        products={weddingProducts}
+        viewAllHref="/wedding-bands"
+      />
+
+      <HomepageShopSection
+        id="fine-jewelry"
+        eyebrow="Fine Jewelry"
+        title="Quiet pieces, for loud lives."
+        subtitle="Wear it every day. Small enough to forget. Beautiful enough to remember."
+        products={fineProducts}
+        viewAllHref="/fine-jewelry"
+      />
+
+      <HomepageShopSection
+        id="mens"
+        eyebrow="Men's"
+        title="Strength, worn well."
+        subtitle="In silence, the band was forged. A ring that carries a name."
+        products={mensProducts}
+        viewAllHref="/mens"
+      />
 
       {/* ── CO-CREATE ────────────────────────────────────────────── */}
       <CoCreateSection />

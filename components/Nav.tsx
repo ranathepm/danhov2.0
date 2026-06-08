@@ -9,12 +9,14 @@ import { useCart } from '@/components/CartProvider';
 import { useWishlist } from '@/components/WishlistProvider';
 
 // Single row of links rendered below the centred DANHOV logo.
+// Product-category links use homepage hash anchors so the nav scrolls
+// directly to the embedded product sections instead of navigating away.
 const LINKS_ROW = [
   { href: '/', label: 'Home' },
-  { href: '/engagement-rings', label: 'Engagement Rings' },
-  { href: '/wedding-bands', label: 'Wedding Bands' },
-  { href: '/fine-jewelry', label: 'Fine Jewelry' },
-  { href: '/mens', label: "Men's" },
+  { href: '/#engagement-rings', label: 'Engagement Rings' },
+  { href: '/#wedding-bands', label: 'Wedding Bands' },
+  { href: '/#fine-jewelry', label: 'Fine Jewelry' },
+  { href: '/#mens', label: "Men's" },
   { href: '/ring-builder', label: 'Ring Builder' },
   { href: '/philosophy', label: 'Philosophy' },
   { href: '/story', label: 'Story' },
