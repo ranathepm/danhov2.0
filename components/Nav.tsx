@@ -39,10 +39,14 @@ export default function Nav() {
 
   const phoneTel = process.env.NEXT_PUBLIC_PHONE_TEL || '+18883264687';
 
-  // Close drawer on route change
+  // Close drawer on route change; also blur any focused nav element so
+  // the hover-reveal collapses when the cursor leaves after navigation.
   useEffect(() => {
     setOpen(false);
     setSearchOpen(false);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
   }, [pathname]);
 
   // Lock body scroll while drawer or search is open
