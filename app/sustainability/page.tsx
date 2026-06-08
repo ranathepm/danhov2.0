@@ -147,7 +147,7 @@ export default function SustainabilityPage() {
 
         .sr-hero-right {
           position: relative; overflow: hidden;
-          background: #1a1410;
+          background: #faf6f1;
         }
         .sr-hero-side-label {
           position: absolute; right: 0; top: 50%;
@@ -357,13 +357,13 @@ export default function SustainabilityPage() {
         </div>
         <div className="sr-hero-right">
           <Image
-            src="/phil-2.png"
+            src="/triad-galaxy-cut.png"
             alt="DANHOV handcrafted ring"
             fill
-            style={{ objectFit: 'cover', opacity: 0.88 }}
+            style={{ objectFit: 'contain' }}
             priority
           />
-          <span className="sr-hero-side-label">DANHOV · SUSTAINABILITY REPORT · 2024</span>
+          <span className="sr-hero-side-label" style={{ color: 'rgba(26,20,16,0.3)' }}>DANHOV · SUSTAINABILITY REPORT · 2024</span>
         </div>
       </section>
 
