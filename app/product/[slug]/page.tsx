@@ -17,6 +17,7 @@ import {
   occasionForCategory,
 } from '@/lib/narratives';
 import { stripMetalSuffix } from '@/lib/product-display';
+import RelatedProducts from '@/components/RelatedProducts';
 
 type Params = { slug: string };
 
@@ -216,6 +217,12 @@ export default async function ProductPage({ params }: { params: Params }) {
         </div>
       </div>
       </MetalProvider>
+
+      <RelatedProducts
+        currentSlug={product.slug}
+        collection={product.collection}
+        category={primaryCategory}
+      />
     </>
   );
 }

@@ -8074,6 +8074,97 @@ aside {
 }
 
 /* ============================================================
+   RELATED PRODUCTS SECTION
+   ============================================================ */
+.related-section {
+  padding: 72px 0 80px;
+  background: #faf6f1;
+  border-top: 1px solid rgba(172,52,56,0.08);
+}
+.related-header {
+  text-align: center;
+  padding: 0 24px 40px;
+}
+.related-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 400;
+  color: #1a1410;
+  margin: 8px 0 0;
+}
+.related-track {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  padding: 0 40px 24px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.related-track::-webkit-scrollbar { display: none; }
+.related-card {
+  flex: 0 0 calc(16.666% - 1px);
+  min-width: 200px;
+  scroll-snap-align: start;
+  text-decoration: none;
+  color: inherit;
+  padding: 0 1px;
+  transition: opacity 0.2s;
+}
+.related-card:hover { opacity: 0.82; }
+.related-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: #fff;
+  overflow: hidden;
+}
+.related-card-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.related-card-info {
+  padding: 14px 12px 18px;
+}
+.related-card-collection {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #AC3438;
+  margin-bottom: 5px;
+}
+.related-card-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.98rem;
+  font-weight: 400;
+  color: #1a1410;
+  line-height: 1.35;
+  margin: 0 0 6px;
+}
+.related-card-price {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #5a4a3a;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .related-card { flex: 0 0 calc(25% - 1px); min-width: 180px; }
+}
+@media (max-width: 640px) {
+  .related-track { padding: 0 16px 20px; gap: 0; }
+  .related-card { flex: 0 0 44vw; min-width: 160px; }
+  .related-section { padding: 56px 0 64px; }
+}
+
+/* ============================================================
    INVITATIONS MORE SECTION
    ============================================================ */
 .invmore-section {

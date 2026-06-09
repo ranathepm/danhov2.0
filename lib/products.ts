@@ -143,6 +143,50 @@ export async function fetchProductWithPricingBySlug(
 }
 
 /**
+ * Fetch related products for a product detail page.
+ * Priority: same collection first, then same category to fill remaining slots.
+ */
+export async function fetchRelatedProducts(
+  currentSlug: string,
+  collection: string | null,
+  category: string,
+  limit = 6
+): Promise<Product[]> {
+  const results: Product[] = [];
+  const seen = new Set([currentSlug]);
+
+  if (collection) {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
+      .ilike('collection', collection)
+      .eq('is_active', true)
+      .neq('slug', currentSlug)
+      .limit(limit);
+
+    for (const p of (data ?? []) as Product[]) {
+      if (!seen.has(p.slug)) { seen.add(p.slug); results.push(p); }
+    }
+  }
+
+  if (results.length < limit) {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
+      .filter('categories', 'cs', JSON.stringify([category]))
+      .eq('is_active', true)
+      .neq('slug', currentSlug)
+      .limit(limit * 2);
+
+    for (const p of (data ?? []) as Product[]) {
+      if (!seen.has(p.slug) && results.length < limit) { seen.add(p.slug); results.push(p); }
+    }
+  }
+
+  return results.slice(0, limit);
+}
+
+/**
  * Derive a filter slug from the display collection name using the
  * page's collections list (e.g. "Norme de Danhov" → "norme").
  */
