@@ -106,19 +106,26 @@ const COLLECTIONS = [
 
 const CDN = 'https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62';
 
-// Authoritative hero images per collection, keyed by collection value.
-// These are the specific DANHOV catalog product photos the client requested.
-const COLLECTION_HERO_IMAGES: Record<string, string> = {
-  abbraccio: `${CDN}/a/e/ae520uq_r1_1_wg.jpg`,   // AE520
-  couture:   `${CDN}/r/1/r1_wg.jpg`,               // CE500
-  voltaggio: `${CDN}/t/e/tension_rush_2_v122_v2_wg_1.jpg`, // VE508
-  classico:  `${CDN}/r/i/ring_2__25.png`,          // WE534
+// Exact SKUs for the hero product shown on each collection card.
+// When the DB has images for these SKUs those take priority; CDN URLs below are fallbacks.
+const PINNED_SKUS: Record<string, string> = {
+  abbraccio: 'AE520UQ-18W',  // Danhov Abbraccio Swirl Diamond Ring, 18k White Gold
+  couture:   'CE500VQ-18W',  // Danhov Couture Engagement Ring, 18k White Gold
+  voltaggio: 'VE508VH-14W',  // Danhov Tension Engagement Ring, 14k White Gold
+  classico:  'WE534UH-14W',  // Danhov Classico Ring, 14k White Gold
+};
+
+// CDN fallbacks — used when the exact DB product has no images stored.
+const CDN_FALLBACKS: Record<string, string> = {
+  abbraccio: `${CDN}/a/e/ae520uq_r1_1_wg_1.jpg`,
+  couture:   `${CDN}/r/1/r1_wg.jpg`,
+  voltaggio: `${CDN}/t/e/tension_rush_2_v122_v2_wg_1.jpg`,
+  classico:  `${CDN}/r/i/ring_2__25.png`,
 };
 
 async function getCollectionImages(): Promise<Record<string, string>> {
   try {
-    // Pull first product image for each collection from the DB as a fallback
-    // for collections not covered by COLLECTION_HERO_IMAGES.
+    // Step 1 — Pull first image per collection for non-pinned collections.
     const { data } = await supabaseAnon
       .from('products')
       .select('sku, collection, images')
@@ -136,14 +143,33 @@ async function getCollectionImages(): Promise<Record<string, string>> {
       }
     }
 
-    // Client-specified hero images always take priority over DB images.
-    for (const [col, url] of Object.entries(COLLECTION_HERO_IMAGES)) {
-      map[col] = url;
+    // Step 2 — Exact SKU lookup for pinned products.
+    const { data: pinned } = await supabaseAnon
+      .from('products')
+      .select('sku, images')
+      .in('sku', Object.values(PINNED_SKUS))
+      .eq('is_active', true);
+
+    const pinnedBySkuLower = new Map<string, string[]>();
+    for (const p of (pinned ?? [])) {
+      if (Array.isArray(p.images) && p.images.length > 0) {
+        pinnedBySkuLower.set((p.sku as string).toLowerCase(), p.images as string[]);
+      }
+    }
+
+    // Step 3 — Override map with pinned image (DB first, CDN fallback second).
+    for (const [colKey, sku] of Object.entries(PINNED_SKUS)) {
+      const dbImages = pinnedBySkuLower.get(sku.toLowerCase());
+      if (dbImages && dbImages.length > 0) {
+        map[colKey] = dbImages[0];
+      } else {
+        map[colKey] = CDN_FALLBACKS[colKey] ?? map[colKey];
+      }
     }
 
     return map;
   } catch {
-    return { ...COLLECTION_HERO_IMAGES };
+    return { ...CDN_FALLBACKS };
   }
 }
 
