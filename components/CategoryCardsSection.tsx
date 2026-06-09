@@ -104,16 +104,21 @@ const COLLECTIONS = [
   },
 ];
 
-// Pinned SKUs — these specific products are shown as the hero image for their collection card
-const PINNED_COLLECTION_SKUS: Record<string, string> = {
-  couture:   'ce500',
-  voltaggio: 've508',
-  classico:  'we534',
+const CDN = 'https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62';
+
+// Authoritative hero images per collection, keyed by collection value.
+// These are the specific DANHOV catalog product photos the client requested.
+const COLLECTION_HERO_IMAGES: Record<string, string> = {
+  abbraccio: `${CDN}/a/e/ae520uq_r1_1_wg.jpg`,   // AE520
+  couture:   `${CDN}/r/1/r1_wg.jpg`,               // CE500
+  voltaggio: `${CDN}/t/e/tension_rush_2_v122_v2_wg_1.jpg`, // VE508
+  classico:  `${CDN}/r/i/ring_2__25.png`,          // WE534
 };
 
 async function getCollectionImages(): Promise<Record<string, string>> {
   try {
-    // Fetch all engagement products for the default imageMap
+    // Pull first product image for each collection from the DB as a fallback
+    // for collections not covered by COLLECTION_HERO_IMAGES.
     const { data } = await supabaseAnon
       .from('products')
       .select('sku, collection, images')
@@ -122,41 +127,23 @@ async function getCollectionImages(): Promise<Record<string, string>> {
       .not('collection', 'is', null);
 
     const map: Record<string, string> = {};
-    if (!data) return map;
-
-    for (const product of data) {
-      const col = (product.collection as string | null)?.toLowerCase().trim();
-      if (col && Array.isArray(product.images) && product.images.length > 0 && !map[col]) {
-        map[col] = product.images[0];
+    if (data) {
+      for (const product of data) {
+        const col = (product.collection as string | null)?.toLowerCase().trim();
+        if (col && Array.isArray(product.images) && product.images.length > 0 && !map[col]) {
+          map[col] = product.images[0];
+        }
       }
     }
 
-    // Override with pinned SKUs — fetch those specific products and replace the image
-    // Use ilike with wildcards — DB stores full SKUs like CE500VQ-14w, not bare prefixes
-    const pinnedFilter = Object.values(PINNED_COLLECTION_SKUS)
-      .map((s) => `sku.ilike.${s}%`)
-      .join(',');
-    const { data: pinned } = await supabaseAnon
-      .from('products')
-      .select('sku, collection, images')
-      .or(pinnedFilter)
-      .eq('is_active', true);
-
-    for (const product of (pinned ?? [])) {
-      const sku = (product.sku as string)?.toLowerCase();
-      const col = (product.collection as string | null)?.toLowerCase().trim();
-      const pinnedEntry = Object.entries(PINNED_COLLECTION_SKUS).find(
-        ([, s]) => s.toLowerCase() === sku
-      );
-      const colKey = pinnedEntry?.[0] ?? col ?? null;
-      if (colKey && Array.isArray(product.images) && product.images.length > 0) {
-        map[colKey] = product.images[0];
-      }
+    // Client-specified hero images always take priority over DB images.
+    for (const [col, url] of Object.entries(COLLECTION_HERO_IMAGES)) {
+      map[col] = url;
     }
 
     return map;
   } catch {
-    return {};
+    return { ...COLLECTION_HERO_IMAGES };
   }
 }
 
