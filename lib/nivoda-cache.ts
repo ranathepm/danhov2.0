@@ -32,7 +32,7 @@ import {
 
 const SEARCH_TTL_MS = 10 * 60 * 1000;    // 10 minutes (real Nivoda data)
 const FALLBACK_TTL_MS = 2 * 60 * 1000;   // 2 minutes (synthetic fallback data — retry Nivoda often)
-const STONE_TTL_MS = 60 * 1000;          // 60 seconds
+const STONE_TTL_MS = 30 * 60 * 1000;     // 30 minutes
 const STALE_BUDGET_MS = 60 * 60 * 1000;  // serve up to 1h stale on Nivoda outage
 
 /**

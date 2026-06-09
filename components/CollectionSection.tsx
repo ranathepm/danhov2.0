@@ -103,16 +103,17 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
 
     return ordered
       .map((name): CollectionCard | null => {
-        const slug = NAME_TO_SLUG[name.toLowerCase()];
-        if (!slug) return null;
-        const info = COLLECTION_INFO[slug];
-        if (!info) return null;
+        const key = name.toLowerCase();
+        const img = imageMap[key] ?? null;
+        if (!img) return null; // skip collections with no product image
+        const slug = NAME_TO_SLUG[key] ?? key.replace(/[^a-z0-9]+/g, '-');
+        const info = COLLECTION_INFO[slug] ?? COLLECTION_INFO[key] ?? null;
         return {
           name,
           slug,
-          image: imageMap[name.toLowerCase()] ?? null,
-          meaning: info.meaning,
-          body: info.body,
+          image: img,
+          meaning: info?.meaning ?? '',
+          body: info?.body ?? '',
         };
       })
       .filter((c): c is CollectionCard => c !== null);

@@ -457,6 +457,14 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
     setHolding(d.id);
     setErr(null);
 
+    // Pre-warm the stone detail cache so the review page loads instantly
+    // instead of making a fresh Nivoda API call. Fire-and-forget.
+    fetch('/api/nivoda/warm-stone', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ offer_id: d.id, stone: d }),
+    }).catch(() => {});
+
     let holdId: string | null = null;
     try {
       const holdRes = await fetch('/api/nivoda/hold', {
