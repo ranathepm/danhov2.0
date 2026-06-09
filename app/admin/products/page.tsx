@@ -140,7 +140,7 @@ export default async function AdminProductsPage({
                 <tr key={p.sku}>
                   <td className="adm-cell-thumb">
                     {hero ? (
-                      <Image src={hero} alt={p.name} width={56} height={56} />
+                      <Image src={hero} alt={p.name} width={80} height={80} />
                     ) : (
                       <span className="adm-thumb-empty">—</span>
                     )}

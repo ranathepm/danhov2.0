@@ -218,7 +218,7 @@ export default function SustainabilityPage() {
         }
         .sr-pillar-title {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 20px; color: #1a1410;
+          font-size: 20px; color: #1a1410; text-align: center;
         }
         .sr-pillar-bullets {
           list-style: none; padding: 0; margin: 0;

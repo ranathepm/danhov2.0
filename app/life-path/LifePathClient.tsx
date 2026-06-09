@@ -222,7 +222,7 @@ export default function LifePathClient() {
         /* ── Landing ── */
         .lp-landing {
           min-height: 100vh;
-          background: #1a1410;
+          background: #faf6f1;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -249,7 +249,7 @@ export default function LifePathClient() {
           font-size: 11px;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(250,246,241,0.5);
+          color: #9c8f86;
           text-decoration: none;
           display: flex;
           align-items: center;
@@ -257,7 +257,7 @@ export default function LifePathClient() {
           transition: color 0.2s;
           z-index: 2;
         }
-        .lp-landing-nav:hover { color: #faf6f1; }
+        .lp-landing-nav:hover { color: #1a1410; }
         .lp-landing-inner {
           position: relative;
           z-index: 1;
@@ -275,7 +275,7 @@ export default function LifePathClient() {
           font-family: 'Cormorant Garamond', serif;
           font-size: clamp(42px, 7vw, 72px);
           font-weight: 300;
-          color: #faf6f1;
+          color: #1a1410;
           margin: 0 0 20px;
           line-height: 1.05;
           letter-spacing: 0.04em;
@@ -288,7 +288,7 @@ export default function LifePathClient() {
         }
         .lp-landing-sub {
           font-size: 15px;
-          color: rgba(250,246,241,0.6);
+          color: #7a5c58;
           line-height: 1.7;
           margin: 0 0 44px;
           font-style: italic;
@@ -405,7 +405,7 @@ export default function LifePathClient() {
           width: 100%;
           margin-top: 28px;
           padding: 16px;
-          background: #1a1410;
+          background: #AC3438;
           color: #faf6f1;
           font-family: 'Jost', sans-serif;
           font-size: 11px;
@@ -415,7 +415,7 @@ export default function LifePathClient() {
           cursor: pointer;
           transition: background 0.2s;
         }
-        .lp-reveal-btn:hover { background: #AC3438; }
+        .lp-reveal-btn:hover { background: #8B2A2D; }
 
         /* ── Results screen ── */
         .lp-results {
@@ -568,7 +568,8 @@ export default function LifePathClient() {
 
         /* Zodiac card */
         .lp-zodiac-card {
-          background: #1a1410;
+          background: #fff;
+          border: 1px solid #ede8e2;
           padding: 24px 28px;
           display: flex;
           align-items: center;
@@ -577,7 +578,7 @@ export default function LifePathClient() {
         }
         .lp-zodiac-symbol {
           font-size: 36px;
-          color: #faf6f1;
+          color: #AC3438;
           line-height: 1;
           flex-shrink: 0;
           font-family: 'Cormorant Garamond', serif;
@@ -588,26 +589,26 @@ export default function LifePathClient() {
           font-size: 9px;
           letter-spacing: 0.22em;
           text-transform: uppercase;
-          color: rgba(250,246,241,0.5);
+          color: #9c8f86;
           margin-bottom: 4px;
         }
         .lp-zodiac-sign {
           font-family: 'Cormorant Garamond', serif;
           font-size: 22px;
-          color: #faf6f1;
+          color: #1a1410;
           display: block;
           line-height: 1;
           margin-bottom: 4px;
         }
         .lp-zodiac-dates {
           font-size: 11px;
-          color: rgba(250,246,241,0.45);
+          color: #9c8f86;
           display: block;
           margin-bottom: 6px;
         }
         .lp-zodiac-desc {
           font-size: 12px;
-          color: rgba(250,246,241,0.65);
+          color: #6b5e57;
           font-style: italic;
           font-family: 'Cormorant Garamond', serif;
         }
@@ -704,7 +705,8 @@ export default function LifePathClient() {
           line-height: 1.65;
         }
         .lp-commission-context {
-          background: #1a1410;
+          background: #fff;
+          border: 1px solid #ede8e2;
           padding: 16px 20px;
           margin-bottom: 28px;
           display: flex;
@@ -722,12 +724,12 @@ export default function LifePathClient() {
         .lp-commission-context-title {
           font-family: 'Cormorant Garamond', serif;
           font-size: 18px;
-          color: #faf6f1;
+          color: #1a1410;
           display: block;
         }
         .lp-commission-context-zodiac {
           font-size: 11px;
-          color: rgba(250,246,241,0.5);
+          color: #9c8f86;
           letter-spacing: 0.08em;
         }
         .lp-form-field {
@@ -783,7 +785,7 @@ export default function LifePathClient() {
         /* ── Success screen ── */
         .lp-success {
           min-height: 100vh;
-          background: #1a1410;
+          background: #faf6f1;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -816,7 +818,7 @@ export default function LifePathClient() {
           font-family: 'Cormorant Garamond', serif;
           font-size: clamp(30px, 5vw, 48px);
           font-weight: 300;
-          color: #faf6f1;
+          color: #1a1410;
           margin: 0 0 16px;
           line-height: 1.1;
         }
@@ -828,7 +830,7 @@ export default function LifePathClient() {
         }
         .lp-success-sub {
           font-size: 14px;
-          color: rgba(250,246,241,0.6);
+          color: #7a5c58;
           line-height: 1.75;
           margin: 0 0 40px;
           font-style: italic;
@@ -837,8 +839,8 @@ export default function LifePathClient() {
         .lp-success-back {
           display: inline-block;
           padding: 14px 48px;
-          border: 1px solid rgba(250,246,241,0.25);
-          color: rgba(250,246,241,0.7);
+          border: 1px solid #ede8e2;
+          color: #1a1410;
           font-family: 'Jost', sans-serif;
           font-size: 11px;
           letter-spacing: 0.2em;
@@ -846,7 +848,7 @@ export default function LifePathClient() {
           text-decoration: none;
           transition: border-color 0.2s, color 0.2s;
         }
-        .lp-success-back:hover { border-color: #faf6f1; color: #faf6f1; }
+        .lp-success-back:hover { border-color: #1a1410; color: #1a1410; }
 
         /* ── Responsive ── */
         @media (max-width: 720px) {

@@ -231,9 +231,10 @@ body:has(.admin-root) {
 .adm-thumb-empty { display: inline-flex; width: 80px; height: 80px; align-items: center; justify-content: center; background: #f0e8e2; border-radius: 4px; color: var(--adm-mute); }
 .adm-cell-name { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* Products table: tighter row padding + compact SKU column */
+.adm-table--products { table-layout: fixed; }
 .adm-table--products td, .adm-table--products th { padding: 8px 10px; }
-.adm-table--products td.adm-cell-thumb { padding: 6px 10px; }
-.adm-table--products .adm-mono { width: 130px; font-size: 12px; }
+.adm-table--products td.adm-cell-thumb { padding: 6px 10px; width: 100px; }
+.adm-table--products .adm-mono { width: 110px; font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .adm-cell-actions {
   text-align: right;
   white-space: nowrap;
