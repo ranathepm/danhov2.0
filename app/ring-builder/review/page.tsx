@@ -63,12 +63,21 @@ export default async function CompleteRingPage({
   if (mode === 'ring' || mode === 'setting') {
     setting = await fetchProductWithPricingBySlug(settingSlug!);
     if (!setting) redirect('/ring-builder/setting');
-    try {
-      const breakdown = await priceProduct(setting, chosenMetal ?? setting.default_metal);
-      settingPrice = breakdown.total_usd;
-    } catch {
-      const m = setting.price_display?.match(/[\d,]+/);
-      settingPrice = m ? Number(m[0].replace(/,/g, '')) : 0;
+
+    // price_display is the catalog price the customer saw on the product page —
+    // always use it as the source of truth. Only fall back to the live pricing
+    // engine if price_display is absent AND gold_weight_g is properly configured
+    // (otherwise the engine returns $0 or a wildly wrong number).
+    const catalogPrice = parsePriceDisplay(setting.price_display);
+    if (catalogPrice > 0) {
+      settingPrice = catalogPrice;
+    } else if (setting.gold_weight_g && setting.gold_weight_g > 0) {
+      try {
+        const breakdown = await priceProduct(setting, chosenMetal ?? setting.default_metal);
+        settingPrice = breakdown.total_usd;
+      } catch {
+        settingPrice = 0;
+      }
     }
   }
 
@@ -163,4 +172,12 @@ export default async function CompleteRingPage({
       </div>
     </main>
   );
+}
+
+// Parses catalog price_display ("$5,700", "$5,700 – $7,200", etc.) → first number found
+function parsePriceDisplay(display: string | null | undefined): number {
+  if (!display) return 0;
+  const m = display.match(/[\d,]+(?:\.\d+)?/);
+  if (!m) return 0;
+  return Number(m[0].replace(/,/g, ''));
 }
