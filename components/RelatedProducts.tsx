@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default async function RelatedProducts({ currentSlug, collection, category }: Props) {
-  const products = await fetchRelatedProducts(currentSlug, collection, category, 6);
+  const products = await fetchRelatedProducts(currentSlug, collection, category, 4);
   if (products.length === 0) return null;
 
   return (
