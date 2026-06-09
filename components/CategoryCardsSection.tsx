@@ -132,11 +132,14 @@ async function getCollectionImages(): Promise<Record<string, string>> {
     }
 
     // Override with pinned SKUs — fetch those specific products and replace the image
-    const pinnedSkus = Object.values(PINNED_COLLECTION_SKUS);
+    // Use ilike with wildcards — DB stores full SKUs like CE500VQ-14w, not bare prefixes
+    const pinnedFilter = Object.values(PINNED_COLLECTION_SKUS)
+      .map((s) => `sku.ilike.${s}%`)
+      .join(',');
     const { data: pinned } = await supabaseAnon
       .from('products')
       .select('sku, collection, images')
-      .in('sku', pinnedSkus)
+      .or(pinnedFilter)
       .eq('is_active', true);
 
     for (const product of (pinned ?? [])) {

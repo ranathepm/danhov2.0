@@ -8,7 +8,7 @@ async function getSwirlRing(): Promise<{ slug: string | null; image: string | nu
     const { data } = await supabaseAnon
       .from('products')
       .select('slug, images')
-      .ilike('sku', 'ae520')
+      .ilike('sku', 'ae520%')
       .eq('is_active', true)
       .maybeSingle();
     if (data && Array.isArray(data.images) && data.images.length > 0) {
