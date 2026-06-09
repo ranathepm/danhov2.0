@@ -71,15 +71,23 @@ export default async function ProductPage({ params }: { params: Params }) {
   // Compute live prices per metal variant so the detail page can update
   // the displayed price when the customer switches metal swatches.
   let pricemap: Record<string, number> = {};
+  // Gold weight is mandatory — without it the formula collapses to just
+  // the stored labour cost (e.g. $800) for every metal, overriding the
+  // correct price_display. Markup must also be set so the gold component
+  // is meaningful.
   const hasPricingData =
-    (product.gold_weight_g ?? 0) > 0 ||
-    (product.stones_value_usd ?? 0) > 0 ||
-    (product.base_labor_usd ?? 0) > 0;
+    (product.gold_weight_g ?? 0) > 0 &&
+    (product.markup_multiplier ?? 0) > 0;
   if (hasPricingData) {
     try {
       const breakdowns = await priceAllOptions(product, product.metals);
       for (const b of breakdowns) {
-        if (b.total_usd > 0) pricemap[b.metal_used] = b.total_usd;
+        // Belt-and-suspenders: only store prices where gold actually
+        // contributed (metal_cost_usd > 0). Discards labour-only totals
+        // that would otherwise override a correct price_display.
+        if (b.total_usd > 0 && b.metal_cost_usd > 0) {
+          pricemap[b.metal_used] = b.total_usd;
+        }
       }
     } catch {
       // GoldAPI unavailable — ProductOptions will fall back to price_display
