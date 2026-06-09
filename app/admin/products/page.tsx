@@ -57,33 +57,62 @@ export default async function AdminProductsPage({
         </Link>
       </header>
 
+      {/* Category filter pills */}
+      <div className="adm-filter-pills">
+        {[
+          { key: '',           label: 'All'            },
+          { key: 'engagement', label: 'Engagement'     },
+          { key: 'wedding',    label: 'Wedding bands'  },
+          { key: 'fine',       label: 'Fine jewelry'   },
+          { key: 'mens',       label: "Men's"          },
+        ].map(({ key, label }) => {
+          const p = new URLSearchParams();
+          if (key) p.set('category', key);
+          if (searchParams.q) p.set('q', searchParams.q);
+          if (searchParams.only) p.set('only', searchParams.only);
+          const href = `/admin/products${p.toString() ? `?${p.toString()}` : ''}`;
+          const active = (!searchParams.category && key === '') || searchParams.category === key;
+          return (
+            <a key={key} href={href} className={`adm-filter-pill${active ? ' is-active' : ''}`}>
+              {label}
+            </a>
+          );
+        })}
+        <span style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
+          {[
+            { key: '',         label: 'Active & inactive' },
+            { key: 'inactive', label: 'Inactive only'     },
+          ].map(({ key, label }) => {
+            const p = new URLSearchParams();
+            if (searchParams.category) p.set('category', searchParams.category);
+            if (searchParams.q) p.set('q', searchParams.q);
+            if (key) p.set('only', key);
+            const href = `/admin/products${p.toString() ? `?${p.toString()}` : ''}`;
+            const active = (!searchParams.only && key === '') || searchParams.only === key;
+            return (
+              <a key={key} href={href} className={`adm-filter-pill${active ? ' is-active' : ''}`}>
+                {label}
+              </a>
+            );
+          })}
+        </span>
+      </div>
+
+      {/* Search toolbar */}
       <form className="adm-toolbar" method="get" action="/admin/products">
+        {searchParams.category && (
+          <input type="hidden" name="category" value={searchParams.category} />
+        )}
+        {searchParams.only && (
+          <input type="hidden" name="only" value={searchParams.only} />
+        )}
         <input
           name="q"
           defaultValue={searchParams.q ?? ''}
           placeholder="Search SKU, name, collection…"
           className="adm-input adm-toolbar-search"
         />
-        <select
-          name="category"
-          defaultValue={searchParams.category ?? ''}
-          className="adm-select"
-        >
-          <option value="">All categories</option>
-          <option value="engagement">Engagement rings</option>
-          <option value="wedding">Wedding bands</option>
-          <option value="fine">Fine jewelry</option>
-          <option value="mens">Men&apos;s</option>
-        </select>
-        <select
-          name="only"
-          defaultValue={searchParams.only ?? ''}
-          className="adm-select"
-        >
-          <option value="">Active &amp; inactive</option>
-          <option value="inactive">Inactive only</option>
-        </select>
-        <button type="submit" className="adm-btn">Filter</button>
+        <button type="submit" className="adm-btn adm-btn-primary">Search</button>
         {(searchParams.q || searchParams.category || searchParams.only) && (
           <Link href="/admin/products" className="adm-link">Reset</Link>
         )}

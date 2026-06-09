@@ -26,6 +26,8 @@ export default async function AdminOrdersPage({
   if (searchParams.q) q = q.ilike('customer_email', `%${searchParams.q}%`);
   const { data: orders } = await q.limit(500);
 
+  const q = searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : '';
+
   return (
     <div className="adm-page">
       <header className="adm-page-head">
@@ -33,18 +35,40 @@ export default async function AdminOrdersPage({
         <p className="adm-page-sub">{(orders ?? []).length} shown</p>
       </header>
 
+      {/* Status filter pills */}
+      <div className="adm-filter-pills">
+        <a
+          href={`/admin/orders${searchParams.q ? `?q=${encodeURIComponent(searchParams.q)}` : ''}`}
+          className={`adm-filter-pill${!searchParams.status ? ' is-active' : ''}`}
+        >
+          All
+        </a>
+        {STATUSES.map((s) => (
+          <a
+            key={s}
+            href={`/admin/orders?status=${s}${q}`}
+            className={`adm-filter-pill${searchParams.status === s ? ' is-active' : ''}`}
+          >
+            {s.replace(/_/g, ' ')}
+          </a>
+        ))}
+      </div>
+
+      {/* Search toolbar */}
       <form className="adm-toolbar" method="get" action="/admin/orders">
+        {searchParams.status && (
+          <input type="hidden" name="status" value={searchParams.status} />
+        )}
         <input
           name="q"
           defaultValue={searchParams.q ?? ''}
           placeholder="Search by email…"
           className="adm-input adm-toolbar-search"
         />
-        <select name="status" defaultValue={searchParams.status ?? ''} className="adm-select">
-          <option value="">Any status</option>
-          {STATUSES.map((s) => <option key={s} value={s}>{s.replace(/_/g, ' ')}</option>)}
-        </select>
-        <button type="submit" className="adm-btn">Filter</button>
+        <button type="submit" className="adm-btn adm-btn-primary">Search</button>
+        {(searchParams.q || searchParams.status) && (
+          <a href="/admin/orders" className="adm-link">Reset</a>
+        )}
       </form>
 
       <OrdersTable orders={orders ?? []} statuses={STATUSES} />

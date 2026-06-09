@@ -77,11 +77,17 @@ export default async function AdminDashboard() {
   await requireAdmin();
   const { stats, recentOrders, upcomingConsultations } = await loadStats();
 
+  const today = new Date().toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric', year: 'numeric',
+  });
+
   return (
     <div className="adm-page">
-      <header className="adm-page-head">
-        <h1 className="adm-h1">Dashboard</h1>
-        <p className="adm-page-sub">A quiet look across the atelier today.</p>
+      <header className="adm-page-head adm-page-head--with-actions">
+        <div>
+          <h1 className="adm-h1">Dashboard</h1>
+          <p className="adm-page-sub">{today}</p>
+        </div>
       </header>
 
       <section className="adm-stat-grid">

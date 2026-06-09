@@ -1477,3 +1477,145 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   white-space: nowrap;
 }
 .adm-commission-table tr + tr td { border-top: 1px solid #f0ebe4; }
+
+
+/* ─────────────────────────────────────────────────────────────────────────
+   ERP GLOBAL REFINEMENTS — information density, consistency, professionalism
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Tighter table rows */
+.adm-table th,
+.adm-table td { padding: 9px 14px; }
+
+/* Stat cards — left accent border + coloured numbers */
+.adm-stat-card { border-left: 3px solid var(--adm-line); }
+.adm-stat-card--link:hover { border-left-color: var(--adm-accent); }
+.adm-stat-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1;
+  margin-top: 8px;
+  color: var(--adm-accent);
+}
+
+/* Auto-width selects for toolbars */
+.adm-select--auto { width: auto; flex: none; min-width: 0; }
+
+/* Extra status pills */
+.adm-pill--approved { background: #d5ecd9; color: #1b6b2c; }
+.adm-pill--rejected { background: #f7d7d4; color: #8b2a1f; }
+
+/* ── Filter pill tabs ────────────────────────────────────────────────────── */
+.adm-filter-pills {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-line);
+  border-radius: 6px;
+  padding: 9px 12px;
+}
+.adm-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 13px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--adm-mute);
+  border: 1px solid transparent;
+  background: transparent;
+  text-decoration: none !important;
+  transition: background 0.14s, color 0.14s;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.adm-filter-pill:hover {
+  background: rgba(172,52,56,0.06);
+  color: var(--adm-accent);
+  text-decoration: none;
+}
+.adm-filter-pill.is-active {
+  background: var(--adm-accent);
+  color: #fff !important;
+}
+.adm-filter-pill.is-active:hover { opacity: 0.9; }
+.adm-filter-pill-count {
+  background: rgba(0,0,0,0.10);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.55;
+  display: inline-block;
+}
+.adm-filter-pill.is-active .adm-filter-pill-count {
+  background: rgba(255,255,255,0.22);
+}
+
+/* ── Compact inline action buttons (table rows) ──────────────────────────── */
+.adm-action-btns {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+.adm-action-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 11px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Jost', sans-serif;
+  text-decoration: none !important;
+  transition: opacity 0.14s;
+  line-height: 1.6;
+}
+.adm-action-btn:hover:not(:disabled) { opacity: 0.80; text-decoration: none; }
+.adm-action-btn:disabled { opacity: 0.40; cursor: not-allowed; }
+.adm-action-btn--approve { background: #2a7a2a; color: #fff; }
+.adm-action-btn--reject  { background: var(--adm-accent); color: #fff; }
+.adm-action-btn--email   {
+  background: rgba(172,52,56,0.08);
+  color: var(--adm-accent);
+  border-color: rgba(172,52,56,0.15);
+}
+.adm-action-btn--delete  { background: #f0e8e2; color: var(--adm-mute); }
+.adm-action-btn--delete:hover:not(:disabled) {
+  background: var(--adm-danger);
+  color: #fff;
+  opacity: 1;
+}
+
+/* ── Skeleton loading shimmer (for loading.tsx) ─────────────────────────── */
+.adm-skeleton { display: flex; flex-direction: column; gap: 10px; }
+.adm-skeleton-line {
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--adm-line) 25%, rgba(255,255,255,0.6) 50%, var(--adm-line) 75%);
+  background-size: 200% 100%;
+  animation: adm-shimmer 1.4s ease-in-out infinite;
+}
+.adm-skeleton-line--title { width: 180px; height: 26px; }
+.adm-skeleton-line--sub   { width: 260px; height: 11px; margin-top: 4px; }
+.adm-skeleton-block {
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--adm-line) 25%, rgba(255,255,255,0.6) 50%, var(--adm-line) 75%);
+  background-size: 200% 100%;
+  animation: adm-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes adm-shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}

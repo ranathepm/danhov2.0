@@ -45,10 +45,13 @@ export default async function AdminCustomersPage({
         <input
           name="q"
           defaultValue={searchParams.q ?? ''}
-          placeholder="Search by email…"
+          placeholder="Search by email or name…"
           className="adm-input adm-toolbar-search"
         />
-        <button type="submit" className="adm-btn">Filter</button>
+        <button type="submit" className="adm-btn adm-btn-primary">Search</button>
+        {searchParams.q && (
+          <a href="/admin/customers" className="adm-link">Reset</a>
+        )}
       </form>
 
       <div className="adm-card adm-card--flush">

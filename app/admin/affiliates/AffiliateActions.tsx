@@ -44,12 +44,12 @@ export default function AffiliateActions({ id, currentStatus, email, name }: Pro
   }
 
   return (
-    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+    <div className="adm-action-btns">
       {currentStatus !== 'approved' && (
         <button
           onClick={() => updateStatus('approved')}
           disabled={busy}
-          style={btnStyle('#2a7a2a')}
+          className="adm-action-btn adm-action-btn--approve"
           title={`Approve ${name}`}
         >
           Approve
@@ -59,42 +59,23 @@ export default function AffiliateActions({ id, currentStatus, email, name }: Pro
         <button
           onClick={() => updateStatus('rejected')}
           disabled={busy}
-          style={btnStyle('#AC3438')}
+          className="adm-action-btn adm-action-btn--reject"
           title={`Reject ${name}`}
         >
           Reject
         </button>
       )}
-      <a
-        href={`mailto:${email}`}
-        style={{ ...btnStyle('#AC3438'), textDecoration: 'none', display: 'inline-block' }}
-      >
+      <a href={`mailto:${email}`} className="adm-action-btn adm-action-btn--email">
         Email
       </a>
       <button
         onClick={deleteRow}
         disabled={busy}
-        style={btnStyle('#6b5e57')}
+        className="adm-action-btn adm-action-btn--delete"
         title={`Delete application from ${name}`}
       >
         Delete
       </button>
     </div>
   );
-}
-
-function btnStyle(bg: string): React.CSSProperties {
-  return {
-    padding: '4px 12px',
-    background: bg,
-    color: '#fff',
-    border: 'none',
-    borderRadius: 6,
-    fontSize: 11,
-    fontFamily: "'Jost', sans-serif",
-    letterSpacing: '0.06em',
-    textTransform: 'uppercase',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-  };
 }

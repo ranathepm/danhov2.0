@@ -14,15 +14,36 @@ type ConsultationRow = {
   created_at: string;
 };
 
-export default async function AdminConsultationsPage() {
+export default async function AdminConsultationsPage({
+  searchParams,
+}: {
+  searchParams: { status?: string; q?: string };
+}) {
   await requireAdmin();
   const sb = createServiceClient();
-  const { data } = await sb
+
+  let query = sb
     .from('consultations')
     .select('id, customer_email, customer_name, scheduled_at, status, zoom_link, notes, created_at')
-    .order('scheduled_at', { ascending: true, nullsFirst: false })
-    .limit(500);
+    .order('scheduled_at', { ascending: true, nullsFirst: false });
+
+  if (searchParams.status) query = query.eq('status', searchParams.status);
+  if (searchParams.q) {
+    query = query.or(
+      `customer_email.ilike.%${searchParams.q}%,customer_name.ilike.%${searchParams.q}%`
+    );
+  }
+
+  const { data } = await query.limit(500);
   const rows: ConsultationRow[] = (data as ConsultationRow[]) ?? [];
+
+  const STATUS_TABS = [
+    { key: '',          label: 'All'       },
+    { key: 'scheduled', label: 'Scheduled' },
+    { key: 'completed', label: 'Completed' },
+    { key: 'no_show',   label: 'No-show'   },
+    { key: 'cancelled', label: 'Cancelled' },
+  ];
 
   return (
     <div className="adm-page">
@@ -30,6 +51,39 @@ export default async function AdminConsultationsPage() {
         <h1 className="adm-h1">Consultations</h1>
         <p className="adm-page-sub">{rows.length} bookings</p>
       </header>
+
+      {/* Status filter pills */}
+      <div className="adm-filter-pills">
+        {STATUS_TABS.map(({ key, label }) => {
+          const q = searchParams.q ? `q=${encodeURIComponent(searchParams.q)}` : '';
+          const href = key
+            ? `/admin/consultations?status=${key}${q ? `&${q}` : ''}`
+            : `/admin/consultations${q ? `?${q}` : ''}`;
+          const active = (!searchParams.status && key === '') || searchParams.status === key;
+          return (
+            <a key={key || 'all'} href={href} className={`adm-filter-pill${active ? ' is-active' : ''}`}>
+              {label}
+            </a>
+          );
+        })}
+      </div>
+
+      {/* Search toolbar */}
+      <form className="adm-toolbar" method="get" action="/admin/consultations">
+        {searchParams.status && (
+          <input type="hidden" name="status" value={searchParams.status} />
+        )}
+        <input
+          name="q"
+          defaultValue={searchParams.q ?? ''}
+          placeholder="Search by name or email…"
+          className="adm-input adm-toolbar-search"
+        />
+        <button type="submit" className="adm-btn adm-btn-primary">Search</button>
+        {(searchParams.q || searchParams.status) && (
+          <a href="/admin/consultations" className="adm-link">Reset</a>
+        )}
+      </form>
 
       <div className="adm-card adm-card--flush">
         {rows.length === 0 ? (
