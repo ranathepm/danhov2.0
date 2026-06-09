@@ -214,7 +214,7 @@ export default function SustainabilityPage() {
         .sr-pillar-icon {
           width: 52px; height: 52px; border-radius: 50%;
           background: #AC3438; display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
+          flex-shrink: 0; align-self: center;
         }
         .sr-pillar-title {
           font-family: 'Cormorant Garamond', serif;

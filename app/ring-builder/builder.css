@@ -1491,22 +1491,22 @@
 }
 .builder-review-add-setting-btn {
   flex-shrink: 0;
-  padding: 10px 20px;
-  background: transparent;
+  padding: 10px 22px;
+  background: var(--logo-red);
   border: 1px solid var(--logo-red);
-  color: var(--logo-red);
+  color: #fff;
   font-family: 'Jost', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s;
   white-space: nowrap;
 }
 .builder-review-add-setting-btn:hover {
-  background: var(--logo-red);
-  color: #fff;
+  background: #8B2A2D;
+  border-color: #8B2A2D;
 }
 .builder-review-secured {
   margin-top: 16px;

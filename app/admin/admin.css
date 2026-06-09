@@ -144,8 +144,8 @@ body:has(.admin-root) {
 .adm-page { display: flex; flex-direction: column; gap: 24px; }
 .adm-page-head { display: flex; flex-direction: column; gap: 4px; }
 .adm-page-head--with-actions { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
-.adm-h1 { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); }
-.adm-h2 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; margin: 0; color: var(--adm-text); }
+.adm-h1 { font-family: 'Jost', sans-serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); letter-spacing: 0.01em; }
+.adm-h2 { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; margin: 0; color: var(--adm-text); letter-spacing: 0.02em; }
 .adm-page-sub { font-size: 13px; color: var(--adm-mute); margin: 0; }
 .adm-back-link { display: inline-block; font-size: 12px; color: var(--adm-mute) !important; letter-spacing: 0.05em; margin-bottom: 6px; }
 .adm-mono { font-family: monospace; font-size: 12.5px; }
@@ -226,10 +226,14 @@ body:has(.admin-root) {
 }
 .adm-table tr:last-child td { border-bottom: none; }
 .adm-table tr:hover td { background: rgba(172,52,56,0.02); }
-.adm-cell-thumb { padding-left: 22px; width: 64px; }
-.adm-cell-thumb img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; }
-.adm-thumb-empty { display: inline-flex; width: 56px; height: 56px; align-items: center; justify-content: center; background: #f0e8e2; border-radius: 4px; color: var(--adm-mute); }
-.adm-cell-name { max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-cell-thumb { padding: 8px 12px; width: 96px; }
+.adm-cell-thumb img { width: 80px; height: 80px; object-fit: contain; border-radius: 4px; background: #f7f3ee; display: block; }
+.adm-thumb-empty { display: inline-flex; width: 80px; height: 80px; align-items: center; justify-content: center; background: #f0e8e2; border-radius: 4px; color: var(--adm-mute); }
+.adm-cell-name { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Products table: tighter row padding + compact SKU column */
+.adm-table--products td, .adm-table--products th { padding: 8px 10px; }
+.adm-table--products td.adm-cell-thumb { padding: 6px 10px; }
+.adm-table--products .adm-mono { width: 130px; font-size: 12px; }
 .adm-cell-actions {
   text-align: right;
   white-space: nowrap;
@@ -589,6 +593,27 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 }
 .adm-thumb-item:hover .adm-thumb-actions { opacity: 1; }
 .adm-thumb-actions .adm-icon-btn { flex: 1; font-size: 11px; padding: 2px 0; }
+
+/* ── Dollar-prefix input wrapper ────────────────────────────────────── */
+.adm-dollar-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.adm-dollar-wrap::before {
+  content: '$';
+  position: absolute;
+  left: 12px;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--adm-mute);
+  pointer-events: none;
+  z-index: 1;
+}
+.adm-dollar-wrap .adm-input {
+  padding-left: 26px;
+  width: 100%;
+}
 
 /* ── Labour fields (stacked, no grid) ──────────────────────────────── */
 .adm-labour-split {
@@ -1233,16 +1258,17 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .admin-root .adm-btn-full { width: 100%; justify-content: center; }
 
 .admin-root .adm-h2 {
-  font-family: 'Cormorant Garamond', 'Cormorant Garamond', serif;
-  font-size: 22px;
-  font-weight: 500;
+  font-family: 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   color: var(--adm-text);
   margin: 0;
 }
 .admin-root .adm-h3 {
-  font-family: 'Cormorant Garamond', 'Cormorant Garamond', serif;
-  font-size: 17px;
-  font-weight: 500;
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--adm-text);
   margin: 0 0 8px;
 }

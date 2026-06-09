@@ -831,25 +831,29 @@ export default function ProductEditor({
               <div className="adm-fields" style={{ marginTop: 16 }}>
                 <label className="adm-field adm-field--full">
                   <span className="adm-field-label">Stone Value Override (leave blank to use auto)</span>
-                  <input
-                    type="number" step="50" className="adm-input"
-                    value={form.stones_value_usd ?? ''}
-                    onChange={(e) => set('stones_value_usd', e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder={
-                      productTotal.total_stone_price_usd > 0
-                        ? `Auto: ${Math.round(productTotal.total_stone_price_usd)}`
-                        : 'Override stone cost here'
-                    }
-                  />
+                  <div className="adm-dollar-wrap">
+                    <input
+                      type="number" step="50" className="adm-input"
+                      value={form.stones_value_usd ?? ''}
+                      onChange={(e) => set('stones_value_usd', e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder={
+                        productTotal.total_stone_price_usd > 0
+                          ? `Auto: ${Math.round(productTotal.total_stone_price_usd)}`
+                          : '0'
+                      }
+                    />
+                  </div>
                 </label>
                 <label className="adm-field adm-field--full">
                   <span className="adm-field-label">Accounting Cost (USD)</span>
-                  <input
-                    type="number" step="10" className="adm-input"
-                    value={form.accounting_cost_usd ?? ''}
-                    onChange={(e) => set('accounting_cost_usd', e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder="Internal cost — flows to Accounting dashboard"
-                  />
+                  <div className="adm-dollar-wrap">
+                    <input
+                      type="number" step="10" className="adm-input"
+                      value={form.accounting_cost_usd ?? ''}
+                      onChange={(e) => set('accounting_cost_usd', e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder="Internal cost"
+                    />
+                  </div>
                 </label>
               </div>
             </section>
@@ -925,12 +929,14 @@ function LabourField({
           </button>
         ))}
       </div>
-      <input
-        type="number" step="1" min="0" className="adm-input"
-        value={value ?? ''}
-        onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
-        placeholder="Custom amount"
-      />
+      <div className="adm-dollar-wrap">
+        <input
+          type="number" step="1" min="0" className="adm-input"
+          value={value ?? ''}
+          onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
+          placeholder="0"
+        />
+      </div>
     </div>
   );
 }

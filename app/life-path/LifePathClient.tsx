@@ -910,18 +910,6 @@ export default function LifePathClient() {
 
             <div className="lp-date-row">
               <div className="lp-date-field">
-                <label className="lp-date-label" htmlFor="lp-day">Day</label>
-                <input
-                  id="lp-day"
-                  type="number"
-                  className="lp-date-input"
-                  placeholder="DD"
-                  min={1} max={31}
-                  value={day}
-                  onChange={e => setDay(e.target.value)}
-                />
-              </div>
-              <div className="lp-date-field">
                 <label className="lp-date-label" htmlFor="lp-month">Month</label>
                 <input
                   id="lp-month"
@@ -931,6 +919,18 @@ export default function LifePathClient() {
                   min={1} max={12}
                   value={month}
                   onChange={e => setMonth(e.target.value)}
+                />
+              </div>
+              <div className="lp-date-field">
+                <label className="lp-date-label" htmlFor="lp-day">Day</label>
+                <input
+                  id="lp-day"
+                  type="number"
+                  className="lp-date-input"
+                  placeholder="DD"
+                  min={1} max={31}
+                  value={day}
+                  onChange={e => setDay(e.target.value)}
                 />
               </div>
               <div className="lp-date-field">
