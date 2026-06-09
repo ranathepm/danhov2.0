@@ -8005,16 +8005,73 @@ aside {
   margin: 0 0 28px;
   min-height: 1.5em;
 }
+.signpost-category {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #AC3438;
+  margin-bottom: 20px;
+}
 .signpost-date {
   font-family: 'Jost', sans-serif;
   font-size: 0.75rem;
   letter-spacing: 0.12em;
   color: rgba(255,255,255,0.3);
   text-transform: uppercase;
-  margin: 0;
+  margin: 0 0 40px;
+}
+.signpost-attribution {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  margin: 0 0 10px;
+}
+.signpost-ctas {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.signpost-cta {
+  font-family: 'Jost', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 32px;
+  border-radius: 0;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.signpost-cta--primary {
+  background: #AC3438;
+  color: #fff;
+  border: 1px solid #AC3438;
+}
+.signpost-cta--primary:hover {
+  background: #8B2A2D;
+  border-color: #8B2A2D;
+}
+.signpost-cta--secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+.signpost-cta--secondary:hover {
+  border-color: rgba(255,255,255,0.6);
+  color: #fff;
 }
 
-@media (max-width: 600px) { .signpost-section { padding: 72px 24px; } }
+@media (max-width: 600px) {
+  .signpost-section { padding: 72px 24px; }
+  .signpost-ctas { flex-direction: column; gap: 12px; }
+  .signpost-cta { width: 100%; text-align: center; }
+}
 
 /* ============================================================
    INVITATIONS MORE SECTION
