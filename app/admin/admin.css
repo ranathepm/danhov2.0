@@ -460,7 +460,175 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .adm-order-stone-spec { margin-left: auto; color: var(--adm-mute); }
 .adm-order-stone-spec b { color: var(--adm-text); }
 
-/* ── Product editor — drop zone, uploads, gallery, sticky bar ──────── */
+/* ── Product editor — tabbed redesign ──────────────────────────────── */
+.adm-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 80px;
+}
+
+/* Tab bar */
+.adm-editor-tabs {
+  display: flex;
+  gap: 0;
+  background: var(--adm-surface);
+  border: 1px solid var(--adm-line);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  padding: 0 8px;
+  position: sticky;
+  top: 56px;
+  z-index: 8;
+}
+.adm-editor-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 22px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--adm-mute);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+  font-family: inherit;
+}
+.adm-editor-tab:hover { color: var(--adm-accent); }
+.adm-editor-tab.is-active {
+  color: var(--adm-accent);
+  border-bottom-color: var(--adm-accent);
+}
+.adm-tab-count {
+  background: var(--adm-accent);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* Tab content area */
+.adm-editor-body {
+  background: var(--adm-bg);
+  border: 1px solid var(--adm-line);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 3 and 4 column field grids */
+.adm-fields--3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px 18px;
+}
+.adm-fields--4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px 18px;
+}
+
+/* ── Compact upload bar (replaces the tall drop zone in image tab) ─── */
+.adm-drop--bar {
+  flex-direction: row;
+  padding: 12px 18px;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  min-height: 0;
+}
+.adm-drop--bar span { font-size: 13.5px; }
+.adm-drop-hint { font-size: 11px; color: var(--adm-mute); margin-left: auto; }
+
+/* ── Compact thumbnail strip ────────────────────────────────────────── */
+.adm-thumb-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--adm-line) transparent;
+}
+.adm-thumb-strip::-webkit-scrollbar { height: 4px; }
+.adm-thumb-strip::-webkit-scrollbar-track { background: transparent; }
+.adm-thumb-strip::-webkit-scrollbar-thumb { background: var(--adm-line); border-radius: 2px; }
+
+.adm-thumb-item {
+  position: relative;
+  flex: 0 0 88px;
+  width: 88px;
+  height: 88px;
+  background: #f0e8e2;
+  border: 1px solid var(--adm-line);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: default;
+}
+.adm-thumb-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.adm-thumb-actions {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: flex;
+  gap: 1px;
+  padding: 3px;
+  background: linear-gradient(to top, rgba(0,0,0,0.65), transparent);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.adm-thumb-item:hover .adm-thumb-actions { opacity: 1; }
+.adm-thumb-actions .adm-icon-btn { flex: 1; font-size: 11px; padding: 2px 0; }
+
+/* ── Labour fields (stacked, no grid) ──────────────────────────────── */
+.adm-labour-split {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.adm-labour-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/* ── Pricing breakdown table ────────────────────────────────────────── */
+.adm-pricing-breakdown {
+  border: 1px solid var(--adm-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.adm-pricing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--adm-line);
+  font-size: 13px;
+}
+.adm-pricing-row span { color: var(--adm-mute); }
+.adm-pricing-row strong { color: var(--adm-text); font-weight: 600; }
+.adm-pricing-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--adm-accent);
+}
+.adm-pricing-total span { color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
+.adm-pricing-total strong { color: #fff; font-size: 20px; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
+
+/* ── Legacy .adm-edit kept for any remaining references ─────────────── */
 .adm-edit { display: flex; flex-direction: column; gap: 16px; padding-bottom: 84px; }
 .adm-edit-grid {
   display: grid;
@@ -652,8 +820,18 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   .adm-stat-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .adm-page-head--with-actions { flex-direction: column; align-items: flex-start; }
   .adm-fields { grid-template-columns: 1fr; }
+  .adm-fields--3 { grid-template-columns: repeat(2, 1fr); }
+  .adm-fields--4 { grid-template-columns: repeat(2, 1fr); }
   .adm-sticky-bar { left: 0; padding: 12px 16px; }
   .adm-table th, .adm-table td { padding: 10px 14px; }
+  .adm-editor-tab { padding: 12px 14px; font-size: 12px; }
+  .adm-drop--bar { flex-wrap: wrap; }
+  .adm-drop-hint { margin-left: 0; }
+}
+
+@media (max-width: 600px) {
+  .adm-fields--3, .adm-fields--4 { grid-template-columns: 1fr; }
+  .adm-editor-tab { padding: 10px 10px; font-size: 11.5px; }
 }
 
 
