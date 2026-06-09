@@ -67,6 +67,16 @@ const COLLECTION_INFO: Record<string, { meaning: string; body: string }> = {
   },
 };
 
+// Per-category fallback bodies for collections not in COLLECTION_INFO
+const CATEGORY_FALLBACK: Record<string, (name: string) => string> = {
+  wedding: (name) =>
+    `${name} wedding bands — handcrafted in 14k and 18k gold in Los Angeles to be worn every day, for life.`,
+  fine: (name) =>
+    `${name} fine jewelry — gold and diamond pieces built for daily wear and lasting beauty, made to order in Los Angeles.`,
+  mens: (name) =>
+    `${name} men's collection — bold, precise forms in 14k and 18k gold. Made in Los Angeles for the man who wears with intention.`,
+};
+
 type CollectionCard = {
   name: string;
   slug: string;
@@ -101,6 +111,7 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
       }
     }
 
+    const fallbackBody = CATEGORY_FALLBACK[category];
     return ordered
       .map((name): CollectionCard | null => {
         const key = name.toLowerCase();
@@ -113,7 +124,7 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
           slug,
           image: img,
           meaning: info?.meaning ?? '',
-          body: info?.body ?? '',
+          body: info?.body ?? (fallbackBody ? fallbackBody(name) : ''),
         };
       })
       .filter((c): c is CollectionCard => c !== null);
