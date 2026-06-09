@@ -26,7 +26,7 @@ export default async function AdminOrdersPage({
   if (searchParams.q) q = q.ilike('customer_email', `%${searchParams.q}%`);
   const { data: orders } = await q.limit(500);
 
-  const q = searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : '';
+  const qStr = searchParams.q ? `&q=${encodeURIComponent(searchParams.q)}` : '';
 
   return (
     <div className="adm-page">
@@ -46,7 +46,7 @@ export default async function AdminOrdersPage({
         {STATUSES.map((s) => (
           <a
             key={s}
-            href={`/admin/orders?status=${s}${q}`}
+            href={`/admin/orders?status=${s}${qStr}`}
             className={`adm-filter-pill${searchParams.status === s ? ' is-active' : ''}`}
           >
             {s.replace(/_/g, ' ')}
