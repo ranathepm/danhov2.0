@@ -4,7 +4,18 @@ import { supabaseAnon } from '@/lib/supabase/anon';
 
 async function getSwirlRing(): Promise<{ slug: string | null; image: string | null }> {
   try {
+    // Pinned to SKU ae520 — the Swirl Love Ring signature product
     const { data } = await supabaseAnon
+      .from('products')
+      .select('slug, images')
+      .ilike('sku', 'ae520')
+      .eq('is_active', true)
+      .maybeSingle();
+    if (data && Array.isArray(data.images) && data.images.length > 0) {
+      return { slug: data.slug ?? null, image: data.images[0] };
+    }
+    // Fallback: name search
+    const { data: fallback } = await supabaseAnon
       .from('products')
       .select('slug, images')
       .or('name.ilike.%swirl%,name.ilike.%love ring%')
@@ -12,8 +23,8 @@ async function getSwirlRing(): Promise<{ slug: string | null; image: string | nu
       .limit(1)
       .maybeSingle();
     return {
-      slug: data?.slug ?? null,
-      image: Array.isArray(data?.images) && data.images.length > 0 ? data.images[0] : null,
+      slug: fallback?.slug ?? null,
+      image: Array.isArray(fallback?.images) && fallback.images.length > 0 ? fallback.images[0] : null,
     };
   } catch {
     return { slug: null, image: null };

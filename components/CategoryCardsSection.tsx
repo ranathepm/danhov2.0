@@ -104,11 +104,19 @@ const COLLECTIONS = [
   },
 ];
 
+// Pinned SKUs — these specific products are shown as the hero image for their collection card
+const PINNED_COLLECTION_SKUS: Record<string, string> = {
+  couture:   'ce500',
+  voltaggio: 've508',
+  classico:  'we534',
+};
+
 async function getCollectionImages(): Promise<Record<string, string>> {
   try {
+    // Fetch all engagement products for the default imageMap
     const { data } = await supabaseAnon
       .from('products')
-      .select('collection, images')
+      .select('sku, collection, images')
       .filter('categories', 'cs', JSON.stringify(['engagement']))
       .eq('is_active', true)
       .not('collection', 'is', null);
@@ -122,6 +130,27 @@ async function getCollectionImages(): Promise<Record<string, string>> {
         map[col] = product.images[0];
       }
     }
+
+    // Override with pinned SKUs — fetch those specific products and replace the image
+    const pinnedSkus = Object.values(PINNED_COLLECTION_SKUS);
+    const { data: pinned } = await supabaseAnon
+      .from('products')
+      .select('sku, collection, images')
+      .in('sku', pinnedSkus)
+      .eq('is_active', true);
+
+    for (const product of (pinned ?? [])) {
+      const sku = (product.sku as string)?.toLowerCase();
+      const col = (product.collection as string | null)?.toLowerCase().trim();
+      const pinnedEntry = Object.entries(PINNED_COLLECTION_SKUS).find(
+        ([, s]) => s.toLowerCase() === sku
+      );
+      const colKey = pinnedEntry?.[0] ?? col ?? null;
+      if (colKey && Array.isArray(product.images) && product.images.length > 0) {
+        map[colKey] = product.images[0];
+      }
+    }
+
     return map;
   } catch {
     return {};
