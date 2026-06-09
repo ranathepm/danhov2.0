@@ -70,6 +70,9 @@ export default async function HomePage() {
       {/* ── SIGNATURE RING ───────────────────────────────────────── */}
       <SignatureSection />
 
+      {/* ── DAILY SIGNPOST (Babig's Wisdom) ──────────────────────── */}
+      <DailySignpostSection />
+
       {/* ── INVITATION MOMENT ────────────────────────────────────── */}
       <InvitationMoment />
 
@@ -158,9 +161,6 @@ export default async function HomePage() {
 
       {/* ── CO-CREATE ────────────────────────────────────────────── */}
       <CoCreateSection />
-
-      {/* ── DAILY SIGNPOST ───────────────────────────────────────── */}
-      <DailySignpostSection />
 
       {/* ── INVITATIONS MORE ─────────────────────────────────────── */}
       <InvitationsMoreSection />
