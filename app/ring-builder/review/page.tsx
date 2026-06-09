@@ -64,14 +64,27 @@ export default async function CompleteRingPage({
     setting = await fetchProductWithPricingBySlug(settingSlug!);
     if (!setting) redirect('/ring-builder/setting');
 
-    // price_display is the catalog price the customer saw on the product page —
-    // always use it as the source of truth. Only fall back to the live pricing
-    // engine if price_display is absent AND gold_weight_g is properly configured
-    // (otherwise the engine returns $0 or a wildly wrong number).
+    // If the customer has chosen a specific metal, compute the live price for
+    // that metal — 18k costs ~28% more than 14k due to purity difference.
+    // Fall back to price_display only when the chosen metal matches the default
+    // (that's what price_display represents) or when pricing data is missing.
     const catalogPrice = parsePriceDisplay(setting.price_display);
-    if (catalogPrice > 0) {
+    const metalMatchesDefault =
+      !chosenMetal || chosenMetal === setting.default_metal;
+    const canComputeLive =
+      (setting.gold_weight_g ?? 0) > 0 || (setting.stones_value_usd ?? 0) > 0;
+
+    if (!metalMatchesDefault && canComputeLive) {
+      // Different metal — must compute live for accuracy
+      try {
+        const breakdown = await priceProduct(setting, chosenMetal);
+        settingPrice = breakdown.total_usd;
+      } catch {
+        settingPrice = catalogPrice;
+      }
+    } else if (catalogPrice > 0) {
       settingPrice = catalogPrice;
-    } else if (setting.gold_weight_g && setting.gold_weight_g > 0) {
+    } else if (canComputeLive) {
       try {
         const breakdown = await priceProduct(setting, chosenMetal ?? setting.default_metal);
         settingPrice = breakdown.total_usd;

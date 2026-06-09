@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { fetchProductBySlug } from '@/lib/products';
+import { fetchProductWithPricingBySlug } from '@/lib/products';
+import { priceAllOptions } from '@/lib/pricing';
 import NarrativeBox from '@/components/NarrativeBox';
 import WishlistHeart from '@/components/WishlistHeart';
 import ProductGalleryMetal from '@/components/ProductGalleryMetal';
@@ -35,7 +36,7 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const product = await fetchProductBySlug(params.slug);
+  const product = await fetchProductWithPricingBySlug(params.slug);
   if (!product) return { title: 'Product not found' };
 
   const occasion = occasionForCategory(product.category);
@@ -64,8 +65,26 @@ export async function generateMetadata({
 }
 
 export default async function ProductPage({ params }: { params: Params }) {
-  const product = await fetchProductBySlug(params.slug);
+  const product = await fetchProductWithPricingBySlug(params.slug);
   if (!product) notFound();
+
+  // Compute live prices per metal variant so the detail page can update
+  // the displayed price when the customer switches metal swatches.
+  let pricemap: Record<string, number> = {};
+  const hasPricingData =
+    (product.gold_weight_g ?? 0) > 0 ||
+    (product.stones_value_usd ?? 0) > 0 ||
+    (product.base_labor_usd ?? 0) > 0;
+  if (hasPricingData) {
+    try {
+      const breakdowns = await priceAllOptions(product, product.metals);
+      for (const b of breakdowns) {
+        if (b.total_usd > 0) pricemap[b.metal_used] = b.total_usd;
+      }
+    } catch {
+      // GoldAPI unavailable — ProductOptions will fall back to price_display
+    }
+  }
 
   const primaryCategory = product.categories[0] ?? product.category;
   const catLink = CATEGORY_HREF[primaryCategory] ?? CATEGORY_HREF.engagement;
@@ -146,6 +165,7 @@ export default async function ProductPage({ params }: { params: Params }) {
             defaultMetal={product.default_metal}
             images={product.images}
             price_display={product.price_display}
+            pricemap={pricemap}
           />
 
           {product.metals.length > 1 && (
