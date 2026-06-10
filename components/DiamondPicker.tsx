@@ -359,13 +359,15 @@ type Props = {
   /** Server-prefetched diamonds so the grid renders on first paint with no client fetch. */
   initialItems?: Diamond[];
   initialTotalCount?: number;
-  /** Offer ID already in cart — shows "In Cart" badge on that card. */
+  /** Offer ID already in cart (Add Another Diamond flow) — shows "In Cart" badge. */
   existingOfferId?: string;
+  /** Offer ID currently reserved in a pending order (Change Diamond flow) — shows "In Your Order" badge + un-reserve option. */
+  inOrderOfferId?: string;
 };
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount, existingOfferId }: Props) {
+export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount, existingOfferId, inOrderOfferId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -397,6 +399,8 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
   const skipNextFetch = useRef<boolean>(hasServerData);
   const [selected, setSelected] = useState<string | null>(initialOfferId ?? null);
   const [holding, setHolding] = useState<string | null>(null);
+  // IDs the user has explicitly "un-reserved" — removes In Your Order lock so they can pick a different stone
+  const [unreservedIds, setUnreservedIds] = useState<Set<string>>(new Set());
 
   const sessionId = useMemo(() => ensureSessionId(), []);
   const PAGE_SIZE = 24;
@@ -713,15 +717,29 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               const price = d.markup_price ?? d.price ?? 0;
               const isSelected = selected === d.id;
               const isHolding = holding === d.id;
-              const isInCart = !!(existingOfferId && d.id === existingOfferId);
+              const isUnreserved = unreservedIds.has(d.id);
+              const isInCart = !!(existingOfferId && d.id === existingOfferId && !isUnreserved);
+              const isInOrder = !!(inOrderOfferId && d.id === inOrderOfferId && !isUnreserved);
+              const isDisabled = !!holding || isInCart || isInOrder;
+
+              let btnText: string;
+              if (isInOrder) btnText = '✓ In Your Order';
+              else if (isInCart) btnText = '✓ Already in Cart';
+              else if (isHolding) btnText = 'Reserving…';
+              else if (isSelected) btnText = '✓ Selected';
+              else btnText = 'Select this diamond';
+
               return (
                 <div
                   key={d.id}
-                  className={`be-card${isSelected ? ' is-selected' : ''}${isInCart ? ' be-card--in-cart' : ''}`}
+                  className={`be-card${isSelected ? ' is-selected' : ''}${isInCart ? ' be-card--in-cart' : ''}${isInOrder ? ' be-card--in-order' : ''}`}
                 >
                   <div className="be-card-media">
                     {isInCart && (
                       <span className="be-card-in-cart-badge">In Cart</span>
+                    )}
+                    {isInOrder && (
+                      <span className="be-card-in-order-badge">In Your Order</span>
                     )}
                     <div className="be-card-media-inner">
                       <DiamondCardMedia
@@ -763,16 +781,28 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
                     <div className="be-card-price">${Number(price).toLocaleString('en-US')}</div>
                     <button
                       type="button"
-                      className={`be-card-cta${isSelected ? ' is-selected' : ''}${isInCart ? ' is-in-cart' : ''}`}
-                      disabled={!!holding || isInCart}
+                      className={`be-card-cta${isSelected ? ' is-selected' : ''}${isInCart ? ' is-in-cart' : ''}${isInOrder ? ' is-in-order' : ''}`}
+                      disabled={isDisabled}
                       onClick={(e) => {
-                        if (isInCart) return;
+                        if (isInCart || isInOrder) return;
                         e.stopPropagation();
                         selectStone(d);
                       }}
                     >
-                      {isInCart ? '✓ Already in Cart' : isHolding ? 'Reserving…' : isSelected ? '✓ Selected' : 'Select this diamond'}
+                      {btnText}
                     </button>
+                    {isInOrder && (
+                      <button
+                        type="button"
+                        className="be-card-unreserve"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setUnreservedIds(prev => new Set([...prev, d.id]));
+                        }}
+                      >
+                        Un-reserve · Select Different →
+                      </button>
+                    )}
                   </div>
                 </div>
               );

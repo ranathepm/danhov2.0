@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import { DiamondCardMedia, type ShapeT } from '@/components/DiamondPicker';
@@ -37,6 +38,7 @@ const US_RING_SIZES = [
 
 export default function BuilderReview({ mode, setting, diamond, settingPrice, holdId, metal }: Props) {
   const { addItem } = useCart();
+  const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [ringSize, setRingSize] = useState('');
@@ -44,6 +46,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
+  const [addingAnother, setAddingAnother] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   const needsRingSize = mode === 'ring' || mode === 'setting';
@@ -184,6 +187,27 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
 
     setCartAdded(true);
     setTimeout(() => setCartAdded(false), 2500);
+  }
+
+  function addAnotherDiamond() {
+    if (!diamond) return;
+    setAddingAnother(true);
+    // Save current diamond to cart so it isn't lost when browsing for a second stone
+    addItem({
+      id: `diamond-${diamond.offer_id}`,
+      sku: diamond.offer_id.slice(0, 20),
+      slug: 'loose-diamond',
+      name: `${diamond.carat.toFixed(2)} ct ${diamond.shape} Diamond`,
+      collection: `${diamond.lab}${diamond.cert_number ? ` · ${diamond.cert_number}` : ''}`,
+      metal: null,
+      image: diamond.image,
+      price_display: `$${diamond.price_usd.toLocaleString('en-US')}`,
+      price_num: diamond.price_usd,
+      ring_size: null,
+      note: null,
+      bundle: null,
+    });
+    router.push(`/ring-builder/diamond?existing=${encodeURIComponent(diamond.offer_id)}`);
   }
 
   const heroImage = setting?.images?.[0] ?? null;
@@ -373,14 +397,16 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
               <div className="builder-review-add-diamond">
                 <div className="builder-review-add-diamond-text">
                   <strong>Add another diamond?</strong>
-                  Select a second stone — the one above stays in your cart.
+                  Select a second stone — the one above is saved to your cart automatically.
                 </div>
-                <a
-                  href={`/ring-builder/diamond?existing=${encodeURIComponent(diamond.offer_id)}`}
+                <button
+                  type="button"
                   className="builder-review-add-diamond-btn"
+                  disabled={addingAnother}
+                  onClick={addAnotherDiamond}
                 >
-                  Browse Diamonds →
-                </a>
+                  {addingAnother ? 'Saving to cart…' : 'Browse Diamonds →'}
+                </button>
               </div>
             </>
           )}

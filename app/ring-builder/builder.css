@@ -1598,6 +1598,50 @@
   z-index: 2;
 }
 
+/* ── "In Your Order" state (Change Diamond flow) ── */
+.be-card--in-order { border-color: rgba(139,42,45,0.6) !important; background: #fdf9f7; }
+.be-card-in-order-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #8B2A2D;
+  color: #fff;
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 2px;
+  z-index: 2;
+}
+.be-card-cta.is-in-order {
+  background: #ede8e2 !important;
+  color: #9c8f86 !important;
+  border-color: #ede8e2 !important;
+  cursor: default !important;
+  opacity: 1 !important;
+}
+.be-card-unreserve {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 0;
+  background: transparent;
+  border: none;
+  color: var(--logo-red);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  border-top: 1px solid #e8e2db;
+  transition: color 0.15s;
+}
+.be-card-unreserve:hover { color: #8B2A2D; }
+
 .builder-review-add-setting {
   margin-bottom: 20px;
   padding: 16px 20px;

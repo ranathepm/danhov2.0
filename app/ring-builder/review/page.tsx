@@ -189,6 +189,7 @@ export default async function CompleteRingPage({
           if (settingSlug) p.set('setting', settingSlug);
           if (offerId) p.set('diamond', offerId);
           if (holdId) p.set('hold', holdId);
+          if (offerId) p.set('inorder', offerId);
           const qs = p.toString();
           return (
             <Link href={`/ring-builder/diamond${qs ? `?${qs}` : ''}`}>

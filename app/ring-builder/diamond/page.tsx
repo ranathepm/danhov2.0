@@ -22,6 +22,7 @@ type Search = {
   metal?: string;
   shape?: string;
   existing?: string;
+  inorder?: string;
 };
 
 const VALID_SHAPES = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
@@ -69,6 +70,7 @@ async function PrefetchedPicker({ searchParams }: { searchParams: Search }) {
       metal={searchParams.metal}
       initialOfferId={searchParams.diamond}
       existingOfferId={searchParams.existing}
+      inOrderOfferId={searchParams.inorder}
       initialItems={initialItems}
       initialTotalCount={initialTotalCount}
     />
