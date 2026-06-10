@@ -18,9 +18,6 @@ export default function CartPageClient() {
   const [checkoutPending, setCheckoutPending] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  // Guest checkout: no sign-in required. If the visitor happens to be
-  // signed in we prefill their email as a convenience, but anyone can
-  // check out by entering an email below — the cart lives in localStorage.
   useEffect(() => {
     const supabase = createClient();
     let active = true;
@@ -74,7 +71,6 @@ export default function CartPageClient() {
         setCheckoutPending(false);
         return;
       }
-      // Redirect into Stripe Checkout
       window.location.href = payload.url;
     } catch {
       setCheckoutError('We couldn’t reach the checkout server. Please try again.');
@@ -139,61 +135,156 @@ export default function CartPageClient() {
 
       <div className="cart-grid">
         <section className="cart-items" aria-label="Cart items">
-          {items.map((it) => (
-            <article key={it.id} className="cart-row">
-              <Link href={`/product/${it.slug}`} className="cart-row-media">
-                {it.image ? (
-                  <Image
-                    src={it.image}
-                    alt={it.name}
-                    width={160}
-                    height={160}
-                    sizes="160px"
-                  />
-                ) : (
-                  <div className="cart-row-media-fallback">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M6 9l6-6 6 6-6 12L6 9z" stroke="currentColor" strokeWidth="1" />
-                    </svg>
-                  </div>
-                )}
-              </Link>
-              <div className="cart-row-body">
-                <div className="cart-row-top">
-                  <div>
-                    {it.collection && (
-                      <div className="cart-row-coll">{it.collection}</div>
-                    )}
-                    <Link href={`/product/${it.slug}`} className="cart-row-name">
-                      {stripMetalSuffix(it.name)}
+          {items.map((it) => {
+            const isLooseDiamond = it.slug === 'loose-diamond';
+            const bundleDiamond = it.bundle?.diamond ?? null;
+
+            // Shared media content
+            const settingImg = it.image ? (
+              <Image
+                src={it.image}
+                alt={it.name}
+                width={160}
+                height={160}
+                sizes="160px"
+              />
+            ) : (
+              <div className="cart-row-media-fallback">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M6 9l6-6 6 6-6 12L6 9z" stroke="currentColor" strokeWidth="1" />
+                </svg>
+              </div>
+            );
+
+            return (
+              <article key={it.id} className="cart-row">
+                {/* Media */}
+                <div className="cart-row-media-wrap">
+                  {isLooseDiamond ? (
+                    <div className="cart-row-media">
+                      {it.image ? (
+                        <Image
+                          src={it.image}
+                          alt={it.name}
+                          width={160}
+                          height={160}
+                          sizes="160px"
+                        />
+                      ) : (
+                        <div className="cart-row-media-fallback cart-row-media-diamond">
+                          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M6 9l6-6 6 6-6 12L6 9z" stroke="currentColor" strokeWidth="1.2" />
+                            <line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" strokeWidth="1.2" />
+                          </svg>
+                          <span className="cart-row-media-diamond-label">Diamond</span>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link href={`/product/${it.slug}`} className="cart-row-media">
+                      {settingImg}
                     </Link>
-                    <div className="cart-row-meta">
-                      <span>Style {it.sku}</span>
-                      {it.metal && <span>· {it.metal}</span>}
+                  )}
+
+                  {/* Diamond thumbnail overlay for bundle items */}
+                  {bundleDiamond?.image && (
+                    <div className="cart-row-diamond-thumb" aria-label="Diamond included">
+                      <Image
+                        src={bundleDiamond.image}
+                        alt={`${bundleDiamond.carat.toFixed(2)}ct ${bundleDiamond.shape} diamond`}
+                        width={52}
+                        height={52}
+                        sizes="52px"
+                      />
+                      <span className="cart-row-diamond-thumb-badge">Diamond</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Body */}
+                <div className="cart-row-body">
+                  <div className="cart-row-top">
+                    <div className="cart-row-info">
+                      {it.collection && (
+                        <div className="cart-row-coll">{it.collection}</div>
+                      )}
+
+                      {isLooseDiamond ? (
+                        <div className="cart-row-name">{it.name}</div>
+                      ) : (
+                        <Link href={`/product/${it.slug}`} className="cart-row-name">
+                          {stripMetalSuffix(it.name)}
+                        </Link>
+                      )}
+
+                      {/* Style · Metal · Ring size */}
+                      <div className="cart-row-meta">
+                        {!isLooseDiamond && <span>Style {it.sku}</span>}
+                        {it.metal && <span>· {it.metal}</span>}
+                        {it.ring_size && (
+                          <span className="cart-row-size-badge">· Size {it.ring_size}</span>
+                        )}
+                      </div>
+
+                      {/* Bundle diamond detail */}
+                      {bundleDiamond && (
+                        <div className="cart-row-bundle-detail">
+                          <span className="cart-row-bundle-label">Diamond</span>
+                          <span>
+                            {bundleDiamond.carat.toFixed(2)} ct {bundleDiamond.shape}
+                            {' '}· {bundleDiamond.color} / {bundleDiamond.clarity}
+                            {bundleDiamond.lab ? ` · ${bundleDiamond.lab}` : ''}
+                            {bundleDiamond.cert_number ? ` ${bundleDiamond.cert_number}` : ''}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Bundle price breakdown */}
+                      {bundleDiamond && it.bundle && (
+                        <div className="cart-row-bundle-breakdown">
+                          <span>Setting ${it.bundle.setting_price_usd.toLocaleString('en-US')}</span>
+                          <span>+ Diamond ${bundleDiamond.price_usd.toLocaleString('en-US')}</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      className="cart-row-remove"
+                      onClick={() => removeItem(it.id)}
+                      aria-label={`Remove ${it.name}`}
+                    >
+                      Remove
+                    </button>
+                  </div>
+
+                  <div className="cart-row-bottom">
+                    <div className="cart-row-qty">
+                      <button
+                        type="button"
+                        onClick={() => setQty(it.id, it.qty - 1)}
+                        aria-label="Decrease quantity"
+                        disabled={it.qty <= 1}
+                      >
+                        −
+                      </button>
+                      <span aria-live="polite">{it.qty}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQty(it.id, it.qty + 1)}
+                        aria-label="Increase quantity"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className="cart-row-price">
+                      {it.price_num > 0 ? formatUsd(it.price_num * it.qty) : 'Price on inquiry'}
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className="cart-row-remove"
-                    onClick={() => removeItem(it.id)}
-                    aria-label={`Remove ${it.name}`}
-                  >
-                    Remove
-                  </button>
                 </div>
-                <div className="cart-row-bottom">
-                  <div className="cart-row-qty">
-                    <button type="button" onClick={() => setQty(it.id, it.qty - 1)} aria-label="Decrease">−</button>
-                    <span aria-live="polite">{it.qty}</span>
-                    <button type="button" onClick={() => setQty(it.id, it.qty + 1)} aria-label="Increase">+</button>
-                  </div>
-                  <div className="cart-row-price">
-                    {it.price_num > 0 ? formatUsd(it.price_num * it.qty) : 'Price on inquiry'}
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
+              </article>
+            );
+          })}
 
           <button type="button" className="cart-clear" onClick={clear}>
             Clear cart
@@ -221,11 +312,6 @@ export default function CartPageClient() {
               <span>{subtotal > 0 ? formatUsd(subtotal) : 'Inquire'}</span>
             </div>
 
-
-
-            {/* Guest checkout — just an email, no account required. The
-                confirmation + specialist follow-up go to this address; Stripe
-                also collects it on the payment page. */}
             <label className="cart-summary-email">
               <span>Email for your order confirmation</span>
               <input

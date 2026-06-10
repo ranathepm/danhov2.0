@@ -5557,6 +5557,128 @@ footer {
   margin-top: 18px;
 }
 
+/* Disabled minus button */
+.cart-row-qty button:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+.cart-row-qty button:disabled:hover {
+  background: transparent;
+  color: var(--cream);
+}
+
+/* Media wrap — allows diamond thumb overlay */
+.cart-row-media-wrap {
+  position: relative;
+  flex-shrink: 0;
+  width: 160px;
+  height: 160px;
+}
+.cart-row-media-wrap .cart-row-media {
+  width: 100%;
+  height: 100%;
+}
+
+/* Diamond-only fallback */
+.cart-row-media-diamond {
+  flex-direction: column;
+  gap: 6px;
+  color: var(--logo-red);
+}
+.cart-row-media-diamond-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--grey);
+}
+
+/* Small diamond thumbnail pinned to bottom-right of media wrap */
+.cart-row-diamond-thumb {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 52px;
+  height: 52px;
+  border: 2px solid #fff8f6;
+  border-radius: 3px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(26, 20, 16, 0.18);
+  background: #faf6f1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.cart-row-diamond-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.cart-row-diamond-thumb-badge {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(26, 20, 16, 0.62);
+  color: #fff8f6;
+  font-family: 'Jost', sans-serif;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 2px 0;
+}
+
+/* Cart row info column */
+.cart-row-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+/* Ring size badge inline in meta */
+.cart-row-size-badge {
+  color: var(--logo-red);
+  font-weight: 600;
+}
+
+/* Bundle diamond detail row */
+.cart-row-bundle-detail {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11.5px;
+  color: #5a4f47;
+  line-height: 1.5;
+}
+.cart-row-bundle-label {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  background: rgba(172, 52, 56, 0.07);
+  padding: 1px 6px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Setting + diamond price breakdown */
+.cart-row-bundle-breakdown {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  color: var(--grey);
+}
+
 .cart-empty-card {
   max-width: 620px;
   margin: 80px auto;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import type { Product } from '@/lib/products';
@@ -41,14 +41,26 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
   const router = useRouter();
 
   const [email, setEmail] = useState('');
-  const [ringSize, setRingSize] = useState('');
   const [customerNote, setCustomerNote] = useState('');
   const [settingQty, setSettingQty] = useState(1);
+  // Per-unit ring sizes — one slot per setting unit
+  const [ringSizes, setRingSizes] = useState<string[]>(['']);
+  // Per-diamond quantity — keep in sync with diamonds array length
   const [diamondQtys, setDiamondQtys] = useState<number[]>(() => diamonds.map(() => 1));
   const [loading, setLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
   const [addingAnother, setAddingAnother] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  // Sync diamondQtys when diamonds array changes (e.g. second diamond added via URL change)
+  useEffect(() => {
+    setDiamondQtys(prev => diamonds.map((_, i) => prev[i] ?? 1));
+  }, [diamonds.length]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Sync ringSizes array length when setting quantity changes
+  useEffect(() => {
+    setRingSizes(prev => Array.from({ length: settingQty }, (_, i) => prev[i] ?? ''));
+  }, [settingQty]);
 
   const needsRingSize = mode === 'ring' || mode === 'setting';
 
@@ -59,7 +71,20 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
     (mode !== 'setting' ? diamondSubtotals.reduce((a, b) => a + b, 0) : 0);
 
   function setDiamondQty(i: number, v: number) {
-    setDiamondQtys(prev => prev.map((q, j) => (j === i ? v : q)));
+    setDiamondQtys(prev => {
+      const next = [...prev];
+      next[i] = v;
+      return next;
+    });
+  }
+
+  function setRingSize(i: number, v: string) {
+    setRingSizes(prev => {
+      const next = [...prev];
+      next[i] = v;
+      return next;
+    });
+    setErr(null);
   }
 
   function removeDiamond(offerId: string) {
@@ -94,9 +119,16 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
       setErr('Please enter a valid email address.');
       return false;
     }
-    if (needsRingSize && !ringSize) {
-      setErr('Please select a ring size before continuing.');
-      return false;
+    if (needsRingSize) {
+      const missing = ringSizes.slice(0, settingQty).findIndex(s => !s);
+      if (missing !== -1) {
+        setErr(
+          settingQty > 1
+            ? `Please select a ring size for Ring ${missing + 1} before continuing.`
+            : 'Please select a ring size before continuing.'
+        );
+        return false;
+      }
     }
     return true;
   }
@@ -108,13 +140,18 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
       const body: Record<string, unknown> = {
         mode,
         email,
-        ring_size: ringSize || undefined,
         note: customerNote.trim() || undefined,
       };
       if (mode === 'ring' || mode === 'setting') {
         body.setting_slug = setting?.slug;
         body.setting_quantity = settingQty;
         if (metal) body.metal = metal;
+        if (settingQty === 1) {
+          body.ring_size = ringSizes[0] || undefined;
+        } else {
+          body.ring_sizes = ringSizes.slice(0, settingQty);
+          body.ring_size = ringSizes[0] || undefined; // legacy compat
+        }
       }
       if (mode !== 'setting' && diamonds.length > 0) {
         body.diamonds = diamonds.map((d, i) => ({
@@ -122,7 +159,6 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
           quantity: diamondQtys[i] ?? 1,
           hold_id: d.hold_id ?? null,
         }));
-        // Legacy compat for single diamond
         body.diamond_offer_id = diamonds[0].offer_id;
         body.hold_id = diamonds[0].hold_id ?? undefined;
         body.quantity = diamondQtys[0] ?? 1;
@@ -143,9 +179,16 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
   }
 
   function addToCart() {
-    if (needsRingSize && !ringSize) {
-      setErr('Please select a ring size before adding to cart.');
-      return;
+    if (needsRingSize) {
+      const missing = ringSizes.slice(0, settingQty).findIndex(s => !s);
+      if (missing !== -1) {
+        setErr(
+          settingQty > 1
+            ? `Please select a ring size for Ring ${missing + 1} before adding to cart.`
+            : 'Please select a ring size before adding to cart.'
+        );
+        return;
+      }
     }
     setErr(null);
     const note = customerNote.trim() || null;
@@ -153,6 +196,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
     if (mode === 'ring' && setting) {
       for (const [i, diamond] of diamonds.entries()) {
         const qty = diamondQtys[i] ?? 1;
+        const size = ringSizes[0] || null;
         for (let q = 0; q < qty; q++) {
           addItem({
             id: `bundle-${setting.slug}-${diamond.offer_id}${qty > 1 ? `-${q}` : ''}`,
@@ -160,11 +204,11 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
             slug: setting.slug,
             name: `${stripMetalSuffix(setting.name)} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
             collection: setting.collection ?? null,
-            metal: setting.default_metal ?? null,
+            metal: metal ?? setting.default_metal ?? null,
             image: setting.images?.[0] ?? null,
             price_display: `$${(settingPrice + diamond.price_usd).toLocaleString('en-US')}`,
             price_num: settingPrice + diamond.price_usd,
-            ring_size: ringSize || null,
+            ring_size: size,
             note,
             bundle: {
               setting_price_usd: settingPrice,
@@ -187,17 +231,18 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
       }
     } else if (mode === 'setting' && setting) {
       for (let i = 0; i < settingQty; i++) {
+        const size = ringSizes[i] || null;
         addItem({
-          id: `setting-${setting.slug}-${ringSize}${settingQty > 1 ? `-${i}` : ''}`,
+          id: `setting-${setting.slug}-${size ?? 'nosize'}-${i}`,
           sku: setting.sku,
           slug: setting.slug,
           name: stripMetalSuffix(setting.name),
           collection: setting.collection ?? null,
-          metal: setting.default_metal ?? null,
+          metal: metal ?? setting.default_metal ?? null,
           image: setting.images?.[0] ?? null,
           price_display: `$${settingPrice.toLocaleString('en-US')}`,
           price_num: settingPrice,
-          ring_size: ringSize || null,
+          ring_size: size,
           note,
           bundle: null,
         });
@@ -231,6 +276,18 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
   const heroImage = setting?.images?.[0] ?? null;
   const firstDiamond = diamonds[0] ?? null;
 
+  // "Add a Setting" URL — pass all diamond IDs so none are lost
+  const addSettingHref = (() => {
+    const p = new URLSearchParams();
+    if (diamonds.length > 1) {
+      p.set('diamonds', diamonds.map(d => d.offer_id).join('|'));
+    } else if (firstDiamond) {
+      p.set('diamond', firstDiamond.offer_id);
+      if (firstDiamond.hold_id) p.set('hold', firstDiamond.hold_id);
+    }
+    return `/ring-builder/setting?${p.toString()}`;
+  })();
+
   return (
     <div className="builder-review">
       <div className="builder-review-top">
@@ -249,6 +306,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
               )}
             </div>
           )}
+          {/* All diamond cards — autoPlay=true so every card loads immediately */}
           {mode !== 'setting' && diamonds.map((d, i) => {
             if (!d.image && !d.video) return null;
             return (
@@ -262,7 +320,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
                     video={d.video}
                     shape={d.shape.toUpperCase() as ShapeT}
                     carat={d.carat}
-                    autoPlay={i === 0}
+                    autoPlay={true}
                   />
                 </div>
                 <span className="builder-review-diamond-caption">
@@ -401,7 +459,6 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
 
           {/* Totals */}
           <div className="builder-review-totals">
-            {/* Sub-line breakdown when there are multiple items or qty > 1 */}
             {(settingQty > 1 || diamonds.length > 1 || diamondQtys.some(q => q > 1)) && (
               <>
                 {mode !== 'diamond' && setting && (
@@ -432,28 +489,63 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
             </p>
           </div>
 
-          {/* Ring size */}
+          {/* Ring size — one selector per setting unit */}
           {needsRingSize && (
             <div className="builder-review-ring-size">
-              <label className="builder-review-ring-size-label" htmlFor="rb-ring-size">
-                Ring Size <span className="builder-review-ring-size-us">(US sizing)</span>
-                <span className="builder-review-ring-size-req">Required</span>
-              </label>
-              <select
-                id="rb-ring-size"
-                className="builder-review-ring-size-select"
-                value={ringSize}
-                onChange={(e) => { setRingSize(e.target.value); setErr(null); }}
-              >
-                <option value="">— Select your size —</option>
-                {US_RING_SIZES.map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-                <option value="other">Other / International — I&apos;ll note in email</option>
-              </select>
-              <p className="builder-review-ring-size-hint">
-                Not sure of your size? A specialist will confirm before production begins.
-              </p>
+              {settingQty === 1 ? (
+                <>
+                  <label className="builder-review-ring-size-label" htmlFor="rb-ring-size-0">
+                    Ring Size <span className="builder-review-ring-size-us">(US sizing)</span>
+                    <span className="builder-review-ring-size-req">Required</span>
+                  </label>
+                  <select
+                    id="rb-ring-size-0"
+                    className="builder-review-ring-size-select"
+                    value={ringSizes[0] ?? ''}
+                    onChange={(e) => setRingSize(0, e.target.value)}
+                  >
+                    <option value="">— Select your size —</option>
+                    {US_RING_SIZES.map((s) => (
+                      <option key={s} value={s}>{s}</option>
+                    ))}
+                    <option value="other">Other / International — I&apos;ll note in email</option>
+                  </select>
+                  <p className="builder-review-ring-size-hint">
+                    Not sure of your size? A specialist will confirm before production begins.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="builder-review-ring-size-label">
+                    Ring Sizes <span className="builder-review-ring-size-us">(US sizing)</span>
+                    <span className="builder-review-ring-size-req">Required — one per ring</span>
+                  </div>
+                  <div className="builder-review-ring-sizes-multi">
+                    {Array.from({ length: settingQty }, (_, i) => (
+                      <div key={i} className="builder-review-ring-size-row">
+                        <label className="builder-review-ring-size-unit-label" htmlFor={`rb-ring-size-${i}`}>
+                          Ring {i + 1}
+                        </label>
+                        <select
+                          id={`rb-ring-size-${i}`}
+                          className="builder-review-ring-size-select"
+                          value={ringSizes[i] ?? ''}
+                          onChange={(e) => setRingSize(i, e.target.value)}
+                        >
+                          <option value="">— Select size —</option>
+                          {US_RING_SIZES.map((s) => (
+                            <option key={s} value={s}>{s}</option>
+                          ))}
+                          <option value="other">Other — I&apos;ll note in email</option>
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="builder-review-ring-size-hint">
+                    Not sure of a size? A specialist will confirm each before production begins.
+                  </p>
+                </>
+              )}
             </div>
           )}
 
@@ -478,13 +570,10 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
             <>
               <div className="builder-review-add-setting">
                 <div className="builder-review-add-setting-text">
-                  <strong>Want to pair this diamond with a setting?</strong>
-                  Browse our handcrafted settings — your diamond will be carried through.
+                  <strong>Want to pair {diamonds.length > 1 ? 'these diamonds' : 'this diamond'} with a setting?</strong>
+                  Browse our handcrafted settings — {diamonds.length > 1 ? 'all your diamonds' : 'your diamond'} will be carried through.
                 </div>
-                <a
-                  href={`/ring-builder/setting?diamond=${encodeURIComponent(firstDiamond.offer_id)}${firstDiamond.hold_id ? `&hold=${encodeURIComponent(firstDiamond.hold_id)}` : ''}`}
-                  className="builder-review-add-setting-btn"
-                >
+                <a href={addSettingHref} className="builder-review-add-setting-btn">
                   Add a Setting →
                 </a>
               </div>

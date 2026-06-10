@@ -40,6 +40,7 @@ const Body = z.object({
   quantity: z.number().int().min(1).max(10).default(1),
   email: z.string().email().max(254),
   ring_size: z.string().max(20).optional(),
+  ring_sizes: z.array(z.string().max(20)).max(10).optional(),
   metal: z.string().max(60).optional(),
   note: z.string().max(500).optional(),
 });
@@ -178,7 +179,7 @@ export async function POST(req: NextRequest) {
   const deposit = Math.round(total * DEPOSIT_PERCENT);
   const balance = total - deposit;
   const customerEmail = body.email.toLowerCase();
-  const ringSize = body.ring_size ?? null;
+  const ringSize = body.ring_size ?? body.ring_sizes?.[0] ?? null;
   const customerNote = body.note?.trim() || null;
 
   // ── Build Stripe line items ───────────────────────────────────────────
@@ -325,6 +326,7 @@ export async function POST(req: NextRequest) {
     product_name: setting?.name ?? null,
     custom_overrides: {
       ring_size: ringSize ?? null,
+      ring_sizes: body.ring_sizes ?? null,
       note: customerNote,
     },
     milestones: [

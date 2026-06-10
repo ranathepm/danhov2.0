@@ -156,11 +156,12 @@ function StyleRingIcon() {
 interface Props {
   products: Product[];
   diamondId?: string;
+  diamondsParam?: string | null;
 }
 
 // ─── Main component ────────────────────────────────────────────────────────
 
-export default function SettingBrowser({ products, diamondId }: Props) {
+export default function SettingBrowser({ products, diamondId, diamondsParam }: Props) {
   const allCollections = useMemo(() => {
     const seen = new Set<string>();
     const out: string[] = [];
@@ -457,7 +458,7 @@ export default function SettingBrowser({ products, diamondId }: Props) {
           </div>
         ) : (
           filteredGroups.map((g) => (
-            <SettingGroupCard key={g.key} group={g} diamondId={diamondId} />
+            <SettingGroupCard key={g.key} group={g} diamondId={diamondId} diamondsParam={diamondsParam} />
           ))
         )}
       </div>
@@ -467,7 +468,7 @@ export default function SettingBrowser({ products, diamondId }: Props) {
 
 // ─── Group card ────────────────────────────────────────────────────────────
 
-function SettingGroupCard({ group, diamondId }: { group: ProductGroup; diamondId?: string }) {
+function SettingGroupCard({ group, diamondId, diamondsParam }: { group: ProductGroup; diamondId?: string; diamondsParam?: string | null }) {
   const cardRef = useRef<HTMLDivElement>(null);
   const p = group.canonical;
 
@@ -489,7 +490,11 @@ function SettingGroupCard({ group, diamondId }: { group: ProductGroup; diamondId
   }
 
   const heroImage = p.images?.[0] ?? null;
-  const dSuffix = diamondId ? `?diamond=${encodeURIComponent(diamondId)}` : '';
+  const dSuffix = diamondsParam
+    ? `?diamonds=${encodeURIComponent(diamondsParam)}`
+    : diamondId
+    ? `?diamond=${encodeURIComponent(diamondId)}`
+    : '';
   const canonicalHref = `/ring-builder/setting/${p.slug}${dSuffix}`;
   const baseSku = p.sku ? displayBaseSku(p.sku) : null;
 

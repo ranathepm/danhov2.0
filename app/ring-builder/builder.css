@@ -1453,6 +1453,28 @@
   color: var(--grey);
   line-height: 1.5;
 }
+
+/* Multi-unit ring size selectors (when settingQty > 1) */
+.builder-review-ring-sizes-multi {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 4px;
+}
+.builder-review-ring-size-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.builder-review-ring-size-unit-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+}
+
 .builder-review-form {
   display: flex;
   gap: 10px;

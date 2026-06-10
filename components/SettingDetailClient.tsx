@@ -20,6 +20,7 @@ interface Props {
   metal: string;
   onMetalChange: (m: string) => void;
   diamondId?: string;
+  diamondsParam?: string | null;
 }
 
 function metalColour(raw: string): string {
@@ -40,6 +41,7 @@ export default function SettingDetailClient({
   metal,
   onMetalChange,
   diamondId,
+  diamondsParam,
 }: Props) {
   const router = useRouter();
   const productMetals = product.metals ?? [];
@@ -50,10 +52,15 @@ export default function SettingDetailClient({
   const visibleMetals = showMoreMetals ? productMetals : productMetals.slice(0, 5);
 
   function handleSelect() {
-    if (diamondId) {
-      // Diamond already chosen — go straight to review with both
-      const params = new URLSearchParams({ setting: product.slug, diamond: diamondId });
+    if (diamondsParam || diamondId) {
+      // One or more diamonds already chosen — go straight to review with all
+      const params = new URLSearchParams({ setting: product.slug });
       if (metal) params.set('metal', metal);
+      if (diamondsParam) {
+        params.set('diamonds', diamondsParam);
+      } else if (diamondId) {
+        params.set('diamond', diamondId);
+      }
       router.push(`/ring-builder/review?${params.toString()}`);
     } else {
       const params = new URLSearchParams({ setting: product.slug });
