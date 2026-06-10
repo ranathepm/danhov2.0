@@ -87,6 +87,19 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
     setErr(null);
   }
 
+  function removeSetting() {
+    const qs = new URLSearchParams();
+    const d0 = diamonds[0] ?? null;
+    if (diamonds.length > 1) {
+      qs.set('diamonds', diamonds.map(d => d.offer_id).join('|'));
+    } else if (d0) {
+      qs.set('diamond', d0.offer_id);
+      if (d0.hold_id) qs.set('hold', d0.hold_id);
+    }
+    if (metal) qs.set('metal', metal);
+    router.push(`/ring-builder/review?${qs.toString()}`);
+  }
+
   function removeDiamond(offerId: string) {
     const remaining = diamonds.filter(d => d.offer_id !== offerId);
     const qs = new URLSearchParams();
@@ -384,6 +397,21 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
                   <span className="builder-review-line-subtotal">
                     ${settingSubtotal.toLocaleString('en-US')}
                   </span>
+                )}
+                {mode === 'ring' && (
+                  <div className="builder-review-setting-actions">
+                    <a href={addSettingHref} className="builder-review-change-setting">
+                      Change
+                    </a>
+                    <button
+                      type="button"
+                      className="builder-review-remove-setting"
+                      onClick={removeSetting}
+                      aria-label="Remove setting"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 )}
               </div>
             </div>

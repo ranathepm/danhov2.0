@@ -8220,26 +8220,42 @@ aside {
   text-transform: uppercase;
   text-decoration: none;
   padding: 14px 32px;
-  border-radius: 0;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  border-radius: 999px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .signpost-cta--primary {
   background: #AC3438;
   color: #fff;
   border: 1px solid #AC3438;
+  box-shadow:
+    0 0 0 1px rgba(172,52,56,0.2),
+    0 0 12px rgba(172,52,56,0.3),
+    0 0 24px rgba(172,52,56,0.15),
+    0 2px 8px rgba(172,52,56,0.2);
 }
 .signpost-cta--primary:hover {
   background: #8B2A2D;
   border-color: #8B2A2D;
+  box-shadow:
+    0 0 0 1px rgba(172,52,56,0.3),
+    0 0 18px rgba(172,52,56,0.45),
+    0 0 36px rgba(172,52,56,0.2),
+    0 2px 10px rgba(172,52,56,0.3);
 }
 .signpost-cta--secondary {
   background: transparent;
   color: #1a1410;
   border: 1px solid rgba(26,20,16,0.3);
+  box-shadow:
+    0 0 0 1px rgba(172,52,56,0.06),
+    0 0 10px rgba(172,52,56,0.07);
 }
 .signpost-cta--secondary:hover {
-  border-color: #1a1410;
+  border-color: rgba(172,52,56,0.5);
   color: #1a1410;
+  box-shadow:
+    0 0 0 1px rgba(172,52,56,0.15),
+    0 0 14px rgba(172,52,56,0.12);
 }
 
 @media (max-width: 600px) {
