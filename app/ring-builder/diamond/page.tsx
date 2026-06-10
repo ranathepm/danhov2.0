@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import BuilderStepper from '@/components/BuilderStepper';
-import DiamondPicker from '@/components/DiamondPicker';
+import DiamondPicker, { type Diamond } from '@/components/DiamondPicker';
+import { cachedSearchDiamonds } from '@/lib/nivoda-cache';
 import '../builder.css';
 
 export const metadata: Metadata = {
@@ -17,13 +18,45 @@ type Search = {
   diamond?: string;
   hold?: string;
   metal?: string;
+  shape?: string;
 };
+
+const VALID_SHAPES = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
 export default async function SelectDiamondPage({
   searchParams,
 }: {
   searchParams: Search;
 }) {
+  // Prefetch the default diamond grid on the server so DiamondPicker renders
+  // items immediately on first paint — no client-side fetch waterfall.
+  const initialShape = (
+    VALID_SHAPES.includes(searchParams.shape?.toUpperCase() ?? '')
+      ? searchParams.shape!.toUpperCase()
+      : 'ROUND'
+  );
+  let initialItems: Diamond[] = [];
+  let initialTotalCount = 0;
+  try {
+    const result = await cachedSearchDiamonds(
+      {
+        shapes: [initialShape],
+        labgrown: false,
+        sizes: { from: 0.5, to: 2.5 },
+        color: ['D', 'E', 'F', 'G', 'H'],
+        clarity: ['VS1', 'VS2', 'SI1'],
+        cut: ['EX', 'ID'],
+        availability: 'AVAILABLE',
+        has_image: true,
+      },
+      { limit: 24, offset: 0, order: { type: 'price', direction: 'ASC' } }
+    );
+    initialItems = (result.result.items ?? []) as Diamond[];
+    initialTotalCount = result.result.total_count ?? 0;
+  } catch {
+    // Nivoda unavailable — DiamondPicker falls back to its own client fetch
+  }
+
   return (
     <main className="builder-page">
       <BuilderStepper
@@ -34,20 +67,17 @@ export default async function SelectDiamondPage({
         diamondId={searchParams.diamond}
       />
 
-      <section className="builder-section-head">
+      <section className="builder-section-head builder-section-head--compact">
         <span className="section-eyebrow">Step 2 of 3</span>
         <h1 className="section-title">Select your <em>diamond</em></h1>
-        <p className="section-body">
-          Live inventory from our certified diamond network. Every stone is GIA- or IGI-graded,
-          conflict-free, and ethically traced. Filter by shape, carat, colour, clarity, and cut to
-          find your centre stone.
-        </p>
       </section>
 
       <DiamondPicker
         settingSlug={searchParams.setting}
         metal={searchParams.metal}
         initialOfferId={searchParams.diamond}
+        initialItems={initialItems}
+        initialTotalCount={initialTotalCount}
       />
     </main>
   );

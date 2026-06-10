@@ -171,7 +171,7 @@ const CUTS: { value: Cut; label: string }[] = [
   { value: 'G', label: 'Good' },
 ];
 
-type Diamond = {
+export type Diamond = {
   id: string;                 // offer id
   price: number | null;
   markup_price: number | null;
@@ -343,11 +343,14 @@ type Props = {
   onSelected?: (offerId: string, holdId: string) => void;
   /** If a stone is already selected (e.g. coming back to /diamond from /review). */
   initialOfferId?: string;
+  /** Server-prefetched diamonds so the grid renders on first paint with no client fetch. */
+  initialItems?: Diamond[];
+  initialTotalCount?: number;
 };
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId }: Props) {
+export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -367,11 +370,16 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
   const [sortField, setSortField] = useState<SortField>('price');
   const [sortDir, setSortDir] = useState<'ASC' | 'DESC'>('ASC');
 
-  const [items, setItems] = useState<Diamond[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
+  const hasServerData = !!(initialItems && initialItems.length > 0);
+  const [items, setItems] = useState<Diamond[]>(initialItems ?? []);
+  const [totalCount, setTotalCount] = useState(hasServerData ? (initialTotalCount ?? 0) : 0);
   const [offset, setOffset] = useState(0);
-  const [loading, setLoading] = useState(false);
+  // Start non-loading when we have server-prefetched items; first useEffect
+  // will skip the fetch and flip this back only on actual filter changes.
+  const [loading, setLoading] = useState(!hasServerData);
   const [err, setErr] = useState<string | null>(null);
+  // Skip the mount-time fetch when server already provided initial data.
+  const skipNextFetch = useRef<boolean>(hasServerData);
   const [selected, setSelected] = useState<string | null>(initialOfferId ?? null);
   const [holding, setHolding] = useState<string | null>(null);
 
@@ -394,6 +402,12 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
   // Fetch results when filters or offset change
   const lastReq = useRef(0);
   useEffect(() => {
+    // If the server already provided the initial page, skip the redundant
+    // mount-time fetch. Subsequent filter/offset changes always fetch.
+    if (skipNextFetch.current) {
+      skipNextFetch.current = false;
+      return;
+    }
     const reqId = ++lastReq.current;
     setLoading(true);
     setErr(null);

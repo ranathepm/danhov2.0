@@ -659,6 +659,15 @@
   text-align: center;
   margin-bottom: 56px;
 }
+/* Compact variant — no description text, minimal vertical space so the
+   grid is visible above the fold as soon as the page loads */
+.builder-section-head--compact {
+  margin-bottom: 20px;
+}
+.builder-section-head--compact .section-title {
+  font-size: clamp(28px, 4vw, 44px);
+  margin-bottom: 0;
+}
 /* Top continue bar on the setting step — lets the customer jump to the
    diamond step without scrolling to the sticky bottom bar. */
 .builder-top-continue {

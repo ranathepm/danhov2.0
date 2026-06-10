@@ -4,11 +4,11 @@ import { supabaseAnon } from '@/lib/supabase/anon';
 
 async function getSwirlRing(): Promise<{ slug: string | null; image: string | null }> {
   try {
-    // Pinned to SKU ae520 — the Swirl Love Ring signature product
+    // Pinned to AE520UQ-18w — Abbraccio Swirl Diamond Ring in 18k White Gold
     const { data } = await supabaseAnon
       .from('products')
       .select('slug, images')
-      .ilike('sku', 'ae520%')
+      .ilike('sku', 'ae520uq-18w')
       .eq('is_active', true)
       .maybeSingle();
     if (data && Array.isArray(data.images) && data.images.length > 0) {
