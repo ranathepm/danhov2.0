@@ -1,23 +1,24 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { supabaseAnon } from '@/lib/supabase/anon';
+import { stripMetalSuffix } from '@/lib/product-display';
 
-async function getSwirlRing(): Promise<{ slug: string | null; image: string | null }> {
+async function getSwirlRing(): Promise<{ slug: string | null; image: string | null; name: string | null }> {
   try {
     // Pinned to AE520UQ-18w — Abbraccio Swirl Diamond Ring in 18k White Gold
     const { data } = await supabaseAnon
       .from('products')
-      .select('slug, images')
+      .select('slug, name, images')
       .ilike('sku', 'ae520uq-18w')
       .eq('is_active', true)
       .maybeSingle();
     if (data && Array.isArray(data.images) && data.images.length > 0) {
-      return { slug: data.slug ?? null, image: data.images[0] };
+      return { slug: data.slug ?? null, image: data.images[0], name: data.name ?? null };
     }
     // Fallback: name search
     const { data: fallback } = await supabaseAnon
       .from('products')
-      .select('slug, images')
+      .select('slug, name, images')
       .or('name.ilike.%swirl%,name.ilike.%love ring%')
       .eq('is_active', true)
       .limit(1)
@@ -25,24 +26,26 @@ async function getSwirlRing(): Promise<{ slug: string | null; image: string | nu
     return {
       slug: fallback?.slug ?? null,
       image: Array.isArray(fallback?.images) && fallback.images.length > 0 ? fallback.images[0] : null,
+      name: fallback?.name ?? null,
     };
   } catch {
-    return { slug: null, image: null };
+    return { slug: null, image: null, name: null };
   }
 }
 
 export default async function SignatureSection() {
-  const { slug, image } = await getSwirlRing();
+  const { slug, image, name } = await getSwirlRing();
   const href = slug ? `/product/${slug}` : '/engagement-rings';
+  const displayTitle = name ? stripMetalSuffix(name) : 'The Swirl Love Ring';
 
   return (
     <section className="sig-section">
       <div className="sig-inner">
-        <Link href={href} className="sig-img-wrap" aria-label="View The Swirl Love Ring">
+        <Link href={href} className="sig-img-wrap" aria-label={`View ${displayTitle}`}>
           {image ? (
             <Image
               src={image}
-              alt="The Swirl Love Ring — DANHOV Signature"
+              alt={`${displayTitle} — DANHOV Signature`}
               fill
               sizes="(max-width: 880px) 100vw, 50vw"
               style={{ objectFit: 'contain', padding: '32px', mixBlendMode: 'multiply' }}
@@ -60,7 +63,7 @@ export default async function SignatureSection() {
 
         <div className="sig-text">
           <span className="sig-eyebrow">The Signature</span>
-          <h2 className="sig-title">The Swirl Love Ring</h2>
+          <h2 className="sig-title">{displayTitle}</h2>
           <div className="sig-rule" />
           <p className="sig-body">
             &ldquo;In silence, the universe revealed its shape. A spiral with no beginning,

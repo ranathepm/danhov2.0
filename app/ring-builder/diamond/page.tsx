@@ -59,7 +59,7 @@ export default async function SelectDiamondPage({
   }
 
   return (
-    <main className="builder-page">
+    <main className="builder-page builder-page--diamond">
       <BuilderStepper
         current={2}
         hasSetting={!!searchParams.setting}
