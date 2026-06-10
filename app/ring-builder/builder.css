@@ -221,9 +221,17 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.22);
 }
 .sb-price-inputs { display: flex; align-items: center; gap: 10px; }
+.sb-price-input-wrap {
+  flex: 1; position: relative; display: flex; align-items: center;
+}
+.sb-price-dollar {
+  position: absolute; left: 10px;
+  font-family: 'Jost', sans-serif; font-size: 13px;
+  color: #9a8f86; pointer-events: none; line-height: 1;
+}
 .sb-price-input {
-  flex: 1; border: 1px solid #e8e2db; border-radius: 4px;
-  padding: 8px 12px; font-family: 'Jost', sans-serif;
+  flex: 1; width: 100%; border: 1px solid #e8e2db; border-radius: 4px;
+  padding: 8px 12px 8px 22px; font-family: 'Jost', sans-serif;
   font-size: 14px; text-align: center; color: #1a1410;
   outline: none; background: #fff;
   transition: border-color 0.15s;

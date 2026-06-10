@@ -387,41 +387,47 @@ export default function SettingBrowser({ products, diamondId, diamondsParam }: P
                   />
                 </div>
                 <div className="sb-price-inputs">
-                  <input
-                    type="number"
-                    className="sb-price-input"
-                    value={inputMin}
-                    min={globalMin}
-                    max={globalMax}
-                    step={100}
-                    onChange={(e) => setInputMin(e.target.value)}
-                    onBlur={() => {
-                      const v = Math.max(globalMin, Math.min(globalMax, Number(inputMin) || globalMin));
-                      const clamped = Math.min(v, priceMax > globalMin ? priceMax : globalMax);
-                      setPriceMin(clamped);
-                      setInputMin(String(clamped));
-                    }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-                    aria-label="Minimum price"
-                  />
+                  <div className="sb-price-input-wrap">
+                    <span className="sb-price-dollar">$</span>
+                    <input
+                      type="number"
+                      className="sb-price-input"
+                      value={inputMin}
+                      min={globalMin}
+                      max={globalMax}
+                      step={100}
+                      onChange={(e) => setInputMin(e.target.value)}
+                      onBlur={() => {
+                        const v = Math.max(globalMin, Math.min(globalMax, Number(inputMin) || globalMin));
+                        const clamped = Math.min(v, priceMax > globalMin ? priceMax : globalMax);
+                        setPriceMin(clamped);
+                        setInputMin(String(clamped));
+                      }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+                      aria-label="Minimum price"
+                    />
+                  </div>
                   <span className="sb-price-dash">—</span>
-                  <input
-                    type="number"
-                    className="sb-price-input"
-                    value={inputMax}
-                    min={globalMin}
-                    max={globalMax}
-                    step={100}
-                    onChange={(e) => setInputMax(e.target.value)}
-                    onBlur={() => {
-                      const v = Math.max(globalMin, Math.min(globalMax, Number(inputMax) || globalMin));
-                      const clamped = Math.max(v, priceMin);
-                      setPriceMax(clamped);
-                      setInputMax(String(clamped));
-                    }}
-                    onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-                    aria-label="Maximum price"
-                  />
+                  <div className="sb-price-input-wrap">
+                    <span className="sb-price-dollar">$</span>
+                    <input
+                      type="number"
+                      className="sb-price-input"
+                      value={inputMax}
+                      min={globalMin}
+                      max={globalMax}
+                      step={100}
+                      onChange={(e) => setInputMax(e.target.value)}
+                      onBlur={() => {
+                        const v = Math.max(globalMin, Math.min(globalMax, Number(inputMax) || globalMin));
+                        const clamped = Math.max(v, priceMin);
+                        setPriceMax(clamped);
+                        setInputMax(String(clamped));
+                      }}
+                      onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+                      aria-label="Maximum price"
+                    />
+                  </div>
                 </div>
               </div>
             </div>

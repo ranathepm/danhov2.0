@@ -596,33 +596,37 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
             />
           </div>
 
-          {/* Diamond-only extras */}
+          {/* Add a Setting — only when no setting is chosen yet */}
           {mode === 'diamond' && firstDiamond && (
-            <>
-              <div className="builder-review-add-setting">
-                <div className="builder-review-add-setting-text">
-                  <strong>Want to pair {diamonds.length > 1 ? 'these diamonds' : 'this diamond'} with a setting?</strong>
-                  Browse our handcrafted settings — {diamonds.length > 1 ? 'all your diamonds' : 'your diamond'} will be carried through.
-                </div>
-                <a href={addSettingHref} className="builder-review-add-setting-btn">
-                  Add a Setting →
-                </a>
+            <div className="builder-review-add-setting">
+              <div className="builder-review-add-setting-text">
+                <strong>Want to pair {diamonds.length > 1 ? 'these diamonds' : 'this diamond'} with a setting?</strong>
+                Browse our handcrafted settings — {diamonds.length > 1 ? 'all your diamonds' : 'your diamond'} will be carried through.
               </div>
-              <div className="builder-review-add-diamond">
-                <div className="builder-review-add-diamond-text">
-                  <strong>Add another diamond?</strong>
-                  Select a second stone — it appears as a separate line item in this order.
-                </div>
-                <button
-                  type="button"
-                  className="builder-review-add-diamond-btn"
-                  disabled={addingAnother}
-                  onClick={addAnotherDiamond}
-                >
-                  {addingAnother ? 'Loading picker…' : 'Browse Diamonds →'}
-                </button>
+              <a href={addSettingHref} className="builder-review-add-setting-btn">
+                Add a Setting →
+              </a>
+            </div>
+          )}
+
+          {/* Add another diamond — available in both diamond-only and ring modes */}
+          {(mode === 'diamond' || mode === 'ring') && firstDiamond && (
+            <div className="builder-review-add-diamond">
+              <div className="builder-review-add-diamond-text">
+                <strong>Add another diamond?</strong>
+                {mode === 'ring'
+                  ? 'Select an additional stone to include in this ring.'
+                  : 'Select a second stone — it appears as a separate line item in this order.'}
               </div>
-            </>
+              <button
+                type="button"
+                className="builder-review-add-diamond-btn"
+                disabled={addingAnother}
+                onClick={addAnotherDiamond}
+              >
+                {addingAnother ? 'Loading picker…' : 'Browse Diamonds →'}
+              </button>
+            </div>
           )}
 
           {/* Email + action buttons */}
