@@ -141,6 +141,7 @@ export default function SustainabilityPage() {
           background: #AC3438; color: #faf6f1;
           font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
           text-decoration: none; align-self: flex-start;
+          border-radius: 999px;
           transition: background 0.2s;
         }
         .sr-hero-cta:hover { background: #8f2b2e; }
@@ -304,14 +305,14 @@ export default function SustainabilityPage() {
           display: inline-block; padding: 15px 44px;
           background: #AC3438; color: #fff;
           font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-          text-decoration: none; transition: background 0.2s;
+          text-decoration: none; border-radius: 999px; transition: background 0.2s;
         }
         .sr-cta-btn-primary:hover { background: #8f2b2e; }
         .sr-cta-btn-outline {
           display: inline-block; padding: 15px 44px;
           border: 1px solid rgba(250,246,241,0.35); color: rgba(250,246,241,0.8);
           font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
-          text-decoration: none; transition: all 0.2s;
+          text-decoration: none; border-radius: 999px; transition: all 0.2s;
         }
         .sr-cta-btn-outline:hover { border-color: #faf6f1; color: #faf6f1; }
 

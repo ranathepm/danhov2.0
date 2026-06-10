@@ -1328,13 +1328,13 @@ footer {
 .footer-links a {
   font-family: 'Jost', sans-serif;
   font-size: 13px;
-  color: #5a3a34;
+  color: #AC3438;
   text-decoration: none;
   letter-spacing: 0.02em;
   font-weight: 400;
   transition: color 0.22s;
 }
-.footer-links a:hover { color: var(--logo-red); }
+.footer-links a:hover { color: #8B2A2D; }
 .footer-bottom {
   display: flex;
   justify-content: space-between;
@@ -5998,6 +5998,7 @@ footer {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   padding: 14px 24px;
+  border-radius: 999px;
   transition: background 0.3s, transform 0.15s;
   width: 100%;
 }
@@ -6007,6 +6008,7 @@ footer {
   background: transparent;
   border: 1px solid var(--logo-red);
   color: var(--logo-red);
+  border-radius: 999px;
 }
 .atb-btn--secondary:hover {
   background: var(--logo-red);

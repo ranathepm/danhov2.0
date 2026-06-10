@@ -305,6 +305,7 @@ export default function LifePathClient() {
           border: none;
           cursor: pointer;
           font-family: 'Jost', sans-serif;
+          border-radius: 999px;
           transition: background 0.2s;
         }
         .lp-landing-btn:hover { background: #8f2b2e; }
@@ -413,6 +414,7 @@ export default function LifePathClient() {
           text-transform: uppercase;
           border: none;
           cursor: pointer;
+          border-radius: 999px;
           transition: background 0.2s;
         }
         .lp-reveal-btn:hover { background: #8B2A2D; }
@@ -632,6 +634,7 @@ export default function LifePathClient() {
           text-decoration: none;
           text-align: center;
           border: none;
+          border-radius: 999px;
           transition: background 0.2s;
         }
         .lp-cta-primary:hover { background: #8f2b2e; }
@@ -646,11 +649,12 @@ export default function LifePathClient() {
           letter-spacing: 0.2em;
           text-transform: uppercase;
           text-align: center;
-          border: 1px solid #ede8e2;
+          border: 1px solid rgba(172,52,56,0.25);
           cursor: pointer;
+          border-radius: 999px;
           transition: border-color 0.2s, color 0.2s;
         }
-        .lp-cta-secondary:hover { border-color: #1a1410; }
+        .lp-cta-secondary:hover { border-color: #AC3438; color: #AC3438; }
 
         /* ── Commission screen ── */
         .lp-commission {
@@ -777,6 +781,7 @@ export default function LifePathClient() {
           text-transform: uppercase;
           border: none;
           cursor: pointer;
+          border-radius: 999px;
           transition: background 0.2s;
         }
         .lp-submit-btn:hover:not(:disabled) { background: #8f2b2e; }

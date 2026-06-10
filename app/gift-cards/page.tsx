@@ -43,7 +43,7 @@ export default function GiftCardsPage() {
           display: inline-block; padding: 16px 44px;
           background: #AC3438; color: #fff;
           font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-          text-decoration: none; border-radius: 2px;
+          text-decoration: none; border-radius: 999px;
           transition: background 0.2s;
         }
         .gc-hero-cta:hover { background: #8f2b2e; }
@@ -118,14 +118,14 @@ export default function GiftCardsPage() {
         }
         .gc-service-desc { font-size: 13.5px; color: #6b5e57; line-height: 1.65; flex: 1; }
         .gc-service-link {
-          display: inline-block; padding: 11px 28px; border-radius: 2px;
+          display: inline-block; padding: 11px 28px; border-radius: 999px;
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           text-decoration: none; align-self: flex-start; transition: all 0.2s;
-          background: #1a1410; color: #fff; border: 1px solid #1a1410;
+          background: #AC3438; color: #fff; border: 1px solid #AC3438;
         }
-        .gc-service-link:hover { background: #AC3438; border-color: #AC3438; }
-        .gc-service-link.outline { background: transparent; color: #1a1410; }
-        .gc-service-link.outline:hover { background: #1a1410; color: #fff; }
+        .gc-service-link:hover { background: #8B2A2D; border-color: #8B2A2D; }
+        .gc-service-link.outline { background: transparent; color: #AC3438; border-color: rgba(172,52,56,0.4); }
+        .gc-service-link.outline:hover { background: #AC3438; color: #fff; border-color: #AC3438; }
 
         /* ── How it works ── */
         .gc-how { background: #faf6f1; padding: 72px 24px; }
