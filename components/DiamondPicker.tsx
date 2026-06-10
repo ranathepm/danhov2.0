@@ -22,17 +22,21 @@ export function DiamondCardMedia({
   video,
   shape,
   carat,
+  autoPlay = false,
 }: {
   image: string | null;
   video: string | null;
   shape: ShapeT;
   carat: number;
+  /** When true, mount the 360° iframe immediately and show it once ready — no hover needed. */
+  autoPlay?: boolean;
 }) {
   const [imgStatus, setImgStatus] = useState<'loading' | 'ok' | 'error'>(
     image ? 'loading' : 'error'
   );
   const [hovering, setHovering] = useState(false);
-  const [spinMounted, setSpinMounted] = useState(false);
+  // autoPlay: mount the iframe on render so it loads without user interaction
+  const [spinMounted, setSpinMounted] = useState(autoPlay);
   const [spinReady, setSpinReady] = useState(false);
   const [spinScale, setSpinScale] = useState(1);
   const mediaRef = useRef<HTMLDivElement>(null);
@@ -41,9 +45,9 @@ export function DiamondCardMedia({
     setImgStatus(image ? 'loading' : 'error');
   }, [image]);
   useEffect(() => {
-    setSpinMounted(false);
+    setSpinMounted(autoPlay);
     setSpinReady(false);
-  }, [video]);
+  }, [video, autoPlay]);
 
   // Measure the card and compute the scale needed to fit the loupe360 viewer.
   useEffect(() => {
@@ -60,9 +64,12 @@ export function DiamondCardMedia({
   const hasSpin = !!video;
   const hasImage = !!image && imgStatus !== 'error';
 
+  // autoPlay: spin is visible as soon as it loads; hover not required
+  const spinVisible = autoPlay ? spinReady : (hovering && spinReady);
+
   const onEnter = () => {
     setHovering(true);
-    if (hasSpin) setSpinMounted(true);
+    if (hasSpin && !autoPlay) setSpinMounted(true);
   };
   const onLeave = () => setHovering(false);
 
@@ -77,7 +84,7 @@ export function DiamondCardMedia({
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
     >
-      {imgStatus === 'loading' && <div className="dpicker-skel" aria-hidden="true" />}
+      {imgStatus === 'loading' && !spinVisible && <div className="dpicker-skel" aria-hidden="true" />}
 
       {hasImage && (
         // eslint-disable-next-line @next/next/no-img-element
@@ -91,7 +98,7 @@ export function DiamondCardMedia({
           onError={() => setImgStatus('error')}
           className="dpicker-media-img"
           style={{
-            opacity: imgStatus === 'ok' && !(hovering && hasSpin && spinReady) ? 1 : 0,
+            opacity: imgStatus === 'ok' && !(hasSpin && spinVisible) ? 1 : 0,
           }}
         />
       )}
@@ -101,7 +108,7 @@ export function DiamondCardMedia({
           viewport zoom (where 280px iframe shows only the centre of a 500px
           canvas, making the diamond look cropped/zoomed). */}
       {hasSpin && spinMounted && (
-        <div className="dpicker-spin-frame" style={{ opacity: hovering && spinReady ? 1 : 0 }}>
+        <div className="dpicker-spin-frame" style={{ opacity: spinVisible ? 1 : 0 }}>
           <iframe
             src={video!}
             title="360° diamond view"
@@ -119,13 +126,13 @@ export function DiamondCardMedia({
         </div>
       )}
 
-      {hasSpin && hovering && spinMounted && !spinReady && (
+      {hasSpin && !spinReady && (autoPlay || hovering) && spinMounted && (
         <span className="dpicker-loading" aria-label="Loading 360° view">
           <span className="dpicker-loading-ring" />
         </span>
       )}
 
-      {hasSpin && !hovering && (
+      {hasSpin && !hovering && !autoPlay && (
         <span className="dpicker-spin" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none">
             <path d="M21 12a9 9 0 1 1-2.64-6.36" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />

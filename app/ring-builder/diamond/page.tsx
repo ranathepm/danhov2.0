@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import BuilderStepper from '@/components/BuilderStepper';
 import DiamondPicker, { type Diamond } from '@/components/DiamondPicker';
 import { cachedSearchDiamonds } from '@/lib/nivoda-cache';
@@ -24,24 +25,19 @@ type Search = {
 
 const VALID_SHAPES = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default async function SelectDiamondPage({
-  searchParams,
-}: {
-  searchParams: Search;
-}) {
-  // Prefetch the default diamond grid on the server so DiamondPicker renders
-  // items immediately on first paint — no client-side fetch waterfall.
+// ── Async data layer — wrapped in Suspense so the shell streams first ──────
+// Fetches prefetched diamonds server-side (warm cache = instant, cold cache
+// times out in 2.5 s and lets the client fetch take over).
+async function PrefetchedPicker({ searchParams }: { searchParams: Search }) {
   const initialShape = (
     VALID_SHAPES.includes(searchParams.shape?.toUpperCase() ?? '')
       ? searchParams.shape!.toUpperCase()
       : 'ROUND'
   ) as NivodaShape;
+
   let initialItems: Diamond[] = [];
   let initialTotalCount = 0;
   try {
-    // Race against a 2.5s timeout — if the Nivoda cache is cold the API call
-    // can block for 10 s+. We'd rather render skeleton cards immediately and
-    // let the client fetch complete in the background than blank the page.
     const result = await Promise.race([
       cachedSearchDiamonds(
         {
@@ -63,10 +59,69 @@ export default async function SelectDiamondPage({
     initialItems = (result.result.items ?? []) as Diamond[];
     initialTotalCount = result.result.total_count ?? 0;
   } catch {
-    // Timeout or Nivoda unavailable — DiamondPicker renders skeletons and
-    // fires its own client-side fetch immediately on mount.
+    // Timeout or Nivoda unavailable — DiamondPicker fires client fetch
   }
 
+  return (
+    <DiamondPicker
+      settingSlug={searchParams.setting}
+      metal={searchParams.metal}
+      initialOfferId={searchParams.diamond}
+      initialItems={initialItems}
+      initialTotalCount={initialTotalCount}
+    />
+  );
+}
+
+// ── Static skeleton shown while PrefetchedPicker resolves ─────────────────
+function DiamondPickerSkeleton() {
+  return (
+    <div className="be-picker">
+      <div className="be-toolbar">
+        <div className="be-toolbar-count">
+          <span className="be-skel-line" style={{ width: 130, height: 14, display: 'inline-block' }} />
+        </div>
+      </div>
+      <div className="be-layout">
+        <aside className="be-sidebar">
+          {[80, 60, 100, 70, 90].map((w, i) => (
+            <div key={i} className="be-facet" style={{ marginBottom: 24 }}>
+              <div className="be-skel-line" style={{ width: w, marginBottom: 12 }} />
+              <div className="be-skel-line" style={{ width: '90%' }} />
+            </div>
+          ))}
+        </aside>
+        <section className="be-results">
+          <div className="be-grid">
+            {Array.from({ length: 12 }).map((_, i) => (
+              <div key={i} className="be-card be-card--skel" aria-hidden="true">
+                <div className="be-card-media">
+                  <div className="be-card-media-inner be-skel-block" />
+                </div>
+                <div className="be-card-body">
+                  <div className="be-skel-line" style={{ width: '72%', marginBottom: 10 }} />
+                  <div className="be-skel-line" style={{ width: '54%', marginBottom: 10 }} />
+                  <div className="be-skel-line" style={{ width: '38%', marginBottom: 20 }} />
+                  <div className="be-skel-line" style={{ width: '100%', height: 38 }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ── Page shell — NOT async, renders instantly ─────────────────────────────
+// The shell (nav, stepper, heading) streams to the browser immediately.
+// The Suspense boundary shows DiamondPickerSkeleton while PrefetchedPicker
+// resolves, then swaps in real diamonds — zero blank screen.
+export default function SelectDiamondPage({
+  searchParams,
+}: {
+  searchParams: Search;
+}) {
   return (
     <main className="builder-page builder-page--diamond">
       <BuilderStepper
@@ -82,13 +137,9 @@ export default async function SelectDiamondPage({
         <h1 className="section-title">Select your <em>diamond</em></h1>
       </section>
 
-      <DiamondPicker
-        settingSlug={searchParams.setting}
-        metal={searchParams.metal}
-        initialOfferId={searchParams.diamond}
-        initialItems={initialItems}
-        initialTotalCount={initialTotalCount}
-      />
+      <Suspense fallback={<DiamondPickerSkeleton />}>
+        <PrefetchedPicker searchParams={searchParams} />
+      </Suspense>
     </main>
   );
 }

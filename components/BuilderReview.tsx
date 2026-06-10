@@ -210,10 +210,11 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
                   video={diamond.video}
                   shape={diamond.shape.toUpperCase() as ShapeT}
                   carat={diamond.carat}
+                  autoPlay={true}
                 />
               </div>
               <span className="builder-review-diamond-caption">
-                Your stone{diamond.video ? ' · hover to spin 360°' : ''}
+                Your stone{diamond.video ? ' · 360° view' : ''}
               </span>
             </div>
           )}
