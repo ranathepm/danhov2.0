@@ -28,6 +28,7 @@ export default function CollectionCardClient({
 
   function startCycle() {
     if (images.length <= 1) return;
+    setActiveIdx(1); // advance immediately so the first switch is instant
     intervalRef.current = setInterval(() => {
       setActiveIdx((i) => (i + 1) % images.length);
     }, 1100);

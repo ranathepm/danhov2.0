@@ -1398,15 +1398,18 @@
 }
 .builder-review-remove-diamond:hover { color: var(--logo-red); }
 
-/* Setting change / remove actions (mode=ring) */
-.builder-review-setting-actions {
+/* Setting + diamond change / remove actions */
+.builder-review-setting-actions,
+.builder-review-diamond-actions {
   display: flex;
   gap: 10px;
   align-items: center;
   margin-top: 2px;
 }
 .builder-review-change-setting,
-.builder-review-remove-setting {
+.builder-review-remove-setting,
+.builder-review-change-diamond,
+.builder-review-remove-diamond {
   background: none;
   border: none;
   cursor: pointer;
@@ -1419,12 +1422,10 @@
   text-underline-offset: 2px;
   transition: color 0.15s;
 }
-.builder-review-change-setting {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.builder-review-change-setting:hover { color: var(--logo-red); }
-.builder-review-remove-setting:hover { color: var(--logo-red); }
+.builder-review-change-setting:hover,
+.builder-review-remove-setting:hover,
+.builder-review-change-diamond:hover,
+.builder-review-remove-diamond:hover { color: var(--logo-red); }
 
 .builder-review-total-row--sub {
   font-size: 12px;

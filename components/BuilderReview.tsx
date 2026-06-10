@@ -100,6 +100,15 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
     router.push(`/ring-builder/review?${qs.toString()}`);
   }
 
+  function changeDiamond(offerId: string) {
+    const qs = new URLSearchParams();
+    if (setting?.slug) qs.set('setting', setting.slug);
+    if (metal) qs.set('metal', metal);
+    const otherIds = diamonds.filter(d => d.offer_id !== offerId).map(d => d.offer_id);
+    if (otherIds.length > 0) qs.set('orderdiamond', otherIds.join('|'));
+    router.push(`/ring-builder/diamond?${qs.toString()}`);
+  }
+
   function removeDiamond(offerId: string) {
     const remaining = diamonds.filter(d => d.offer_id !== offerId);
     const qs = new URLSearchParams();
@@ -470,7 +479,15 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
                         Subtotal ${subtotal.toLocaleString('en-US')}
                       </span>
                     )}
-                    {diamonds.length > 1 && (
+                    <div className="builder-review-diamond-actions">
+                      <button
+                        type="button"
+                        className="builder-review-change-diamond"
+                        onClick={() => changeDiamond(diamond.offer_id)}
+                        aria-label={`Change diamond ${i + 1}`}
+                      >
+                        Change
+                      </button>
                       <button
                         type="button"
                         className="builder-review-remove-diamond"
@@ -479,7 +496,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
                       >
                         Remove
                       </button>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
