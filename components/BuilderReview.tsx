@@ -194,41 +194,44 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
     const note = customerNote.trim() || null;
 
     if (mode === 'ring' && setting) {
-      for (const [i, diamond] of diamonds.entries()) {
-        const qty = diamondQtys[i] ?? 1;
-        const size = ringSizes[0] || null;
-        for (let q = 0; q < qty; q++) {
-          addItem({
-            id: `bundle-${setting.slug}-${diamond.offer_id}${qty > 1 ? `-${q}` : ''}`,
-            sku: setting.sku,
-            slug: setting.slug,
-            name: `${stripMetalSuffix(setting.name)} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
-            collection: setting.collection ?? null,
-            metal: metal ?? setting.default_metal ?? null,
-            image: setting.images?.[0] ?? null,
-            price_display: `$${(settingPrice + diamond.price_usd).toLocaleString('en-US')}`,
-            price_num: settingPrice + diamond.price_usd,
-            ring_size: size,
-            note,
-            bundle: {
-              setting_price_usd: settingPrice,
-              diamond: {
-                offer_id: diamond.offer_id,
-                hold_id: diamond.hold_id ?? null,
-                shape: diamond.shape,
-                carat: diamond.carat,
-                color: diamond.color,
-                clarity: diamond.clarity,
-                cut: diamond.cut,
-                lab: diamond.lab,
-                cert_number: diamond.cert_number,
-                price_usd: diamond.price_usd,
-                image: diamond.image,
-              },
-            },
-          });
-        }
-      }
+      // Always one cart item for the complete ring — setting + ALL diamonds
+      const size = ringSizes[0] || null;
+      const bundleDiamonds = diamonds.map((d) => ({
+        offer_id: d.offer_id,
+        hold_id: d.hold_id ?? null,
+        shape: d.shape,
+        carat: d.carat,
+        color: d.color,
+        clarity: d.clarity,
+        cut: d.cut,
+        lab: d.lab,
+        cert_number: d.cert_number,
+        price_usd: d.price_usd,
+        image: d.image,
+      }));
+      const totalDiamondPrice = diamonds.reduce((sum, d) => sum + d.price_usd, 0);
+      const bundleName =
+        diamonds.length === 1
+          ? `${stripMetalSuffix(setting.name)} + ${diamonds[0].carat.toFixed(2)}ct ${diamonds[0].shape}`
+          : `${stripMetalSuffix(setting.name)} + ${diamonds.length} Diamonds`;
+      addItem({
+        id: `bundle-${setting.slug}-${diamonds.map((d) => d.offer_id).join('+')}`,
+        sku: setting.sku,
+        slug: setting.slug,
+        name: bundleName,
+        collection: setting.collection ?? null,
+        metal: metal ?? setting.default_metal ?? null,
+        image: setting.images?.[0] ?? null,
+        price_display: `$${(settingPrice + totalDiamondPrice).toLocaleString('en-US')}`,
+        price_num: settingPrice + totalDiamondPrice,
+        ring_size: size,
+        note,
+        bundle: {
+          setting_price_usd: settingPrice,
+          diamond: bundleDiamonds[0],
+          diamonds: bundleDiamonds,
+        },
+      });
     } else if (mode === 'setting' && setting) {
       for (let i = 0; i < settingQty; i++) {
         const size = ringSizes[i] || null;

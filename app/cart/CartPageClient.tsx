@@ -137,7 +137,13 @@ export default function CartPageClient() {
         <section className="cart-items" aria-label="Cart items">
           {items.map((it) => {
             const isLooseDiamond = it.slug === 'loose-diamond';
-            const bundleDiamond = it.bundle?.diamond ?? null;
+            // Multi-diamond bundles use diamonds[], single-diamond uses diamond
+            const bundleDiamonds = it.bundle
+              ? (it.bundle.diamonds && it.bundle.diamonds.length > 0
+                  ? it.bundle.diamonds
+                  : [it.bundle.diamond])
+              : null;
+            const firstBundleDiamond = bundleDiamonds?.[0] ?? null;
 
             // Shared media content
             const settingImg = it.image ? (
@@ -186,17 +192,19 @@ export default function CartPageClient() {
                     </Link>
                   )}
 
-                  {/* Diamond thumbnail overlay for bundle items */}
-                  {bundleDiamond?.image && (
+                  {/* Diamond thumbnail overlay — show first diamond image */}
+                  {firstBundleDiamond?.image && (
                     <div className="cart-row-diamond-thumb" aria-label="Diamond included">
                       <Image
-                        src={bundleDiamond.image}
-                        alt={`${bundleDiamond.carat.toFixed(2)}ct ${bundleDiamond.shape} diamond`}
+                        src={firstBundleDiamond.image}
+                        alt={`${firstBundleDiamond.carat.toFixed(2)}ct ${firstBundleDiamond.shape} diamond`}
                         width={52}
                         height={52}
                         sizes="52px"
                       />
-                      <span className="cart-row-diamond-thumb-badge">Diamond</span>
+                      <span className="cart-row-diamond-thumb-badge">
+                        {bundleDiamonds && bundleDiamonds.length > 1 ? `${bundleDiamonds.length} Diamonds` : 'Diamond'}
+                      </span>
                     </div>
                   )}
                 </div>
@@ -226,24 +234,30 @@ export default function CartPageClient() {
                         )}
                       </div>
 
-                      {/* Bundle diamond detail */}
-                      {bundleDiamond && (
-                        <div className="cart-row-bundle-detail">
-                          <span className="cart-row-bundle-label">Diamond</span>
+                      {/* Bundle diamond details — one row per diamond */}
+                      {bundleDiamonds && bundleDiamonds.map((d, di) => (
+                        <div key={d.offer_id} className="cart-row-bundle-detail">
+                          <span className="cart-row-bundle-label">
+                            {bundleDiamonds.length > 1 ? `Diamond ${di + 1}` : 'Diamond'}
+                          </span>
                           <span>
-                            {bundleDiamond.carat.toFixed(2)} ct {bundleDiamond.shape}
-                            {' '}· {bundleDiamond.color} / {bundleDiamond.clarity}
-                            {bundleDiamond.lab ? ` · ${bundleDiamond.lab}` : ''}
-                            {bundleDiamond.cert_number ? ` ${bundleDiamond.cert_number}` : ''}
+                            {d.carat.toFixed(2)} ct {d.shape}
+                            {' '}· {d.color} / {d.clarity}
+                            {d.lab ? ` · ${d.lab}` : ''}
+                            {d.cert_number ? ` ${d.cert_number}` : ''}
                           </span>
                         </div>
-                      )}
+                      ))}
 
                       {/* Bundle price breakdown */}
-                      {bundleDiamond && it.bundle && (
+                      {bundleDiamonds && it.bundle && (
                         <div className="cart-row-bundle-breakdown">
                           <span>Setting ${it.bundle.setting_price_usd.toLocaleString('en-US')}</span>
-                          <span>+ Diamond ${bundleDiamond.price_usd.toLocaleString('en-US')}</span>
+                          {bundleDiamonds.map((d, di) => (
+                            <span key={d.offer_id}>
+                              + {bundleDiamonds.length > 1 ? `Diamond ${di + 1}` : 'Diamond'} ${d.price_usd.toLocaleString('en-US')}
+                            </span>
+                          ))}
                         </div>
                       )}
                     </div>

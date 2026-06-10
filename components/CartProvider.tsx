@@ -53,7 +53,8 @@ export type CartItem = {
   note?: string | null;
   bundle?: {
     setting_price_usd: number;
-    diamond: CartBundleDiamond;
+    diamond: CartBundleDiamond;       // first / only diamond (backward compat)
+    diamonds?: CartBundleDiamond[];   // all diamonds for multi-diamond bundles
   } | null;
   giftCard?: CartGiftCard | null;
 };

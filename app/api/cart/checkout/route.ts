@@ -43,6 +43,19 @@ const Item = z.object({
         price_usd: z.number().nonnegative(),
         image: z.string().nullable(),
       }),
+      diamonds: z.array(z.object({
+        offer_id: z.string().min(1),
+        hold_id: z.string().nullable(),
+        shape: z.string(),
+        carat: z.number().nonnegative(),
+        color: z.string(),
+        clarity: z.string(),
+        cut: z.string(),
+        lab: z.string().nullable(),
+        cert_number: z.string().nullable(),
+        price_usd: z.number().nonnegative(),
+        image: z.string().nullable(),
+      })).optional(),
     })
     .nullable()
     .optional(),
@@ -110,7 +123,11 @@ export async function POST(req: NextRequest) {
       // Bundle row — use the stored prices for both halves. They were
       // computed at the moment the customer selected the diamond, so
       // they reflect the price the customer agreed to lock.
-      unitPrice = it.bundle.setting_price_usd + it.bundle.diamond.price_usd;
+      const allDiamonds = it.bundle.diamonds && it.bundle.diamonds.length > 0
+        ? it.bundle.diamonds
+        : [it.bundle.diamond];
+      const diamondTotal = allDiamonds.reduce((sum, d) => sum + d.price_usd, 0);
+      unitPrice = it.bundle.setting_price_usd + diamondTotal;
     } else {
       try {
         const breakdown = await priceProduct(product, metal);
@@ -154,8 +171,11 @@ export async function POST(req: NextRequest) {
   // Build Stripe line items — one per cart piece
   const lineItems = priced.map((p) => {
     const unitAmount = Math.round(p.unit_price_usd * DEPOSIT_PERCENT);
-    const diamondSummary = p.bundle
-      ? ` + ${p.bundle.diamond.carat.toFixed(2)}ct ${p.bundle.diamond.shape.toLowerCase()} ${p.bundle.diamond.color}/${p.bundle.diamond.clarity}`
+    const allBundleDiamonds = p.bundle
+      ? (p.bundle.diamonds && p.bundle.diamonds.length > 0 ? p.bundle.diamonds : [p.bundle.diamond])
+      : null;
+    const diamondSummary = allBundleDiamonds
+      ? allBundleDiamonds.map((d) => ` + ${d.carat.toFixed(2)}ct ${d.shape.toLowerCase()} ${d.color}/${d.clarity}`).join('')
       : '';
     const sizeSuffix = p.ring_size ? ` · Size ${p.ring_size}` : '';
     return {
