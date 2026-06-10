@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DANHOV Homepage — UX/CRO Audit Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: #faf6f1;
+    color: #1a1410;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* ── Cover Page ── */
+  .cover {
+    background: linear-gradient(160deg, #1a1410 0%, #2c1f18 55%, #3d2a20 100%);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 40px;
+    page-break-after: always;
+    position: relative;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(184,146,58,0.12) 0%, transparent 70%);
+  }
+  .cover-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #b8923a;
+    margin-bottom: 48px;
+    position: relative;
+  }
+  .cover-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 400;
+    color: #faf6f1;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    max-width: 700px;
+    position: relative;
+  }
+  .cover-title em { color: #b8923a; font-style: italic; }
+  .cover-rule {
+    width: 60px; height: 1px;
+    background: #b8923a;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .cover-sub {
+    font-size: 13px;
+    color: #c4b8ad;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    position: relative;
+  }
+  .cover-meta {
+    margin-top: 60px;
+    display: flex;
+    gap: 48px;
+    justify-content: center;
+    position: relative;
+  }
+  .cover-meta-item { text-align: center; }
+  .cover-meta-label {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: #6b5e57;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .cover-meta-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    color: #faf6f1;
+  }
+
+  /* ── Content ── */
+  .content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 48px;
+  }
+
+  /* ── Section headers ── */
+  .section-block {
+    margin-bottom: 60px;
+    page-break-inside: avoid;
+  }
+  .section-num {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #b8923a;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: #1a1410;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(184,146,58,0.25);
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+  thead tr {
+    background: #1a1410;
+    color: #faf6f1;
+  }
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  tbody tr:nth-child(odd) { background: rgba(184,146,58,0.04); }
+  tbody tr:nth-child(even) { background: #fff; }
+  tbody td {
+    padding: 10px 14px;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(184,146,58,0.1);
+    color: #1a1410;
+  }
+  tbody td:first-child { font-weight: 600; white-space: nowrap; }
+
+  /* ── Badge highlights ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .badge-red { background: rgba(172,52,56,0.12); color: #AC3438; }
+  .badge-gold { background: rgba(184,146,58,0.15); color: #8a6f20; }
+  .badge-green { background: rgba(52,120,72,0.12); color: #2d6b40; }
+  .badge-grey { background: rgba(107,94,87,0.12); color: #6b5e57; }
+
+  /* ── Call-out boxes ── */
+  .callout {
+    padding: 20px 24px;
+    border-radius: 6px;
+    margin: 20px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .callout-red {
+    background: rgba(172,52,56,0.06);
+    border-left: 3px solid #AC3438;
+  }
+  .callout-gold {
+    background: rgba(184,146,58,0.07);
+    border-left: 3px solid #b8923a;
+  }
+  .callout-dark {
+    background: #f0ebe4;
+    border-left: 3px solid #1a1410;
+  }
+  .callout strong { color: #1a1410; }
+
+  /* ── Paragraph + list styles ── */
+  p { margin-bottom: 14px; color: #3a2e28; }
+  ul, ol { padding-left: 20px; margin: 12px 0 16px; }
+  li { margin-bottom: 8px; color: #3a2e28; }
+  strong { color: #1a1410; }
+  em { color: #8a6f20; font-style: italic; }
+
+  /* ── Score grid ── */
+  .score-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .score-card {
+    background: #fff;
+    border: 1px solid rgba(184,146,58,0.2);
+    border-radius: 8px;
+    padding: 20px 18px;
+    text-align: center;
+  }
+  .score-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 38px;
+    color: #AC3438;
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .score-num.ok { color: #b8923a; }
+  .score-num.bad { color: #AC3438; }
+  .score-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b5e57;
+  }
+
+  /* ── Section recommendation cards ── */
+  .rec-card {
+    background: #fff;
+    border: 1px solid rgba(184,146,58,0.18);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 20px;
+    page-break-inside: avoid;
+  }
+  .rec-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .rec-pos {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: rgba(184,146,58,0.4);
+    line-height: 1;
+    min-width: 36px;
+  }
+  .rec-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    color: #1a1410;
+    margin-bottom: 4px;
+  }
+  .rec-decision { }
+  .rec-body { font-size: 13px; color: #3a2e28; line-height: 1.65; }
+  .rec-fix {
+    background: rgba(184,146,58,0.06);
+    border-left: 2px solid #b8923a;
+    padding: 10px 14px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: #1a1410;
+    border-radius: 0 4px 4px 0;
+  }
+  .rec-fix strong { color: #8a6f20; }
+
+  /* ── Priority table ── */
+  .priority-table { }
+  .priority-row {
+    display: grid;
+    grid-template-columns: 44px 1fr 120px 80px;
+    gap: 16px;
+    align-items: start;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(184,146,58,0.12);
+  }
+  .priority-row:last-child { border-bottom: none; }
+  .priority-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: rgba(172,52,56,0.3);
+    line-height: 1;
+    text-align: center;
+  }
+  .priority-title { font-weight: 600; font-size: 13px; color: #1a1410; margin-bottom: 4px; }
+  .priority-body { font-size: 12px; color: #6b5e57; line-height: 1.5; }
+  .priority-impact, .priority-effort { text-align: center; }
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .pill-red { background: rgba(172,52,56,0.1); color: #AC3438; }
+  .pill-gold { background: rgba(184,146,58,0.12); color: #7a6010; }
+  .pill-green { background: rgba(52,140,72,0.1); color: #2d6b40; }
+
+  /* ── Final flow list ── */
+  .flow-list { list-style: none; padding: 0; }
+  .flow-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(184,146,58,0.1);
+  }
+  .flow-item:last-child { border-bottom: none; }
+  .flow-n {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: rgba(184,146,58,0.5);
+    min-width: 28px;
+    line-height: 1.1;
+  }
+  .flow-name { font-weight: 600; font-size: 14px; color: #1a1410; }
+  .flow-note { font-size: 12px; color: #6b5e57; margin-top: 2px; }
+  .flow-new {
+    display: inline-block;
+    font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+    background: rgba(172,52,56,0.1); color: #AC3438;
+    padding: 1px 7px; border-radius: 999px; margin-left: 8px;
+    vertical-align: middle;
+  }
+  .flow-remove { text-decoration: line-through; opacity: 0.5; }
+
+  /* ── Journey table ── */
+  .journey-table td { font-size: 13px; }
+  .journey-table td:nth-child(3) { font-weight: 600; color: #AC3438; }
+
+  /* ── Divider ── */
+  .divider {
+    border: none;
+    border-top: 1px solid rgba(184,146,58,0.2);
+    margin: 48px 0;
+  }
+
+  /* ── Footer ── */
+  .report-footer {
+    background: #1a1410;
+    color: #6b5e57;
+    text-align: center;
+    padding: 40px;
+    font-size: 12px;
+    margin-top: 60px;
+  }
+  .report-footer strong { color: #b8923a; }
+
+  /* ── Print ── */
+  @media print {
+    body { background: #fff; }
+    .cover { min-height: auto; padding: 60px 40px; }
+    .section-block { page-break-inside: avoid; }
+    .rec-card { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════════════ -->
+<div class="cover">
+  <span class="cover-logo">DANHOV · Los Angeles · Est. 1984</span>
+  <h1 class="cover-title">Homepage<br /><em>UX / CRO Audit</em></h1>
+  <div class="cover-rule"></div>
+  <p class="cover-sub">User Experience · Conversion Rate Optimization · Jewelry Buyer Psychology</p>
+  <p class="cover-sub">First Page Only — Section Analysis, Reorder Recommendations &amp; Action Plan</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Date</span>
+      <span class="cover-meta-value">June 7, 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Sections Audited</span>
+      <span class="cover-meta-value">15</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Priority Actions</span>
+      <span class="cover-meta-value">10</span>
+    </div>
+    <div class="cover-meta-item">
+      <span class="cover-meta-label">Focus</span>
+      <span class="cover-meta-value">Homepage</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CONTENT
+════════════════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- ── 1. Current Section Order ── -->
+  <div class="section-block">
+    <span class="section-num">Section 01</span>
+    <h2 class="section-title">Current Homepage Section Order — Top to Bottom</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Section Name</th>
+          <th>Component</th>
+          <th>What It Does</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Hero</td>
+          <td>page.tsx (inline)</td>
+          <td>Cinematic text animation: "In Silence / I realized / the oneness of the universe." + founder attribution. No product image, no price, no shop button.</td>
+          <td><span class="badge badge-gold">Improve</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Signature Ring</td>
+          <td>SignatureSection</td>
+          <td>The Swirl Love Ring — image + founder quote + "See the Ring" CTA. First real product touchpoint.</td>
+          <td><span class="badge badge-green">Keep</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Invitation Moment</td>
+          <td>InvitationMoment</td>
+          <td>"What do you see?" + "Design in Silence" CTA → ring-builder. Purely philosophical.</td>
+          <td><span class="badge badge-gold">Move Down</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Find Your Form</td>
+          <td>FindFormSection</td>
+          <td>10 diamond shape cards (Round, Oval, Pear…) with philosophical meanings. Links to ring builder.</td>
+          <td><span class="badge badge-green">Keep / Move</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>As Seen In</td>
+          <td>page.tsx (inline)</td>
+          <td>Vogue, Harper's Bazaar, WWD, Brides, Who What Wear, Town &amp; Country logo marquee.</td>
+          <td><span class="badge badge-red">Move to #2</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Philosophy Slider</td>
+          <td>PhilosophySlider</td>
+          <td>6 auto-rotating philosophical quotes + ring images at 2.8s per slide.</td>
+          <td><span class="badge badge-gold">Move Down</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>12 Inches Moment</td>
+          <td>TwelveInches</td>
+          <td>Animated brain-to-heart diagram. "12 inches. The longest journey." No CTA.</td>
+          <td><span class="badge badge-gold">Move to #14</span></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Bruce Lee Marquee</td>
+          <td>page.tsx (inline)</td>
+          <td>Scrolling quote: "Be like water, my friend…" Unattributed, off-brand.</td>
+          <td><span class="badge badge-red">Remove</span></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>Ring Showcase</td>
+          <td>page.tsx (inline)</td>
+          <td>Galaxy ring + stats (42+ years, #1 sustainable, ∞) + TWO buttons both going to /engagement-rings.</td>
+          <td><span class="badge badge-gold">Fix CTAs</span></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>Collections Slider</td>
+          <td>CollectionsSlider</td>
+          <td>10 horizontal scrollable collection cards + "LET US GUIDE YOU" AI button.</td>
+          <td><span class="badge badge-red">Move to #4</span></td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Category Cards</td>
+          <td>CategoryCardsSection</td>
+          <td>12 Italian-named sub-collections (Abbraccio, Voltaggio, Classico…) with descriptions and images.</td>
+          <td><span class="badge badge-gold">Move to #12</span></td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Co-Create</td>
+          <td>CoCreateSection</td>
+          <td>"Don't pick a ring. Receive one." 4-step custom process + CTA. Strongest commercial differentiator.</td>
+          <td><span class="badge badge-red">Move to #8</span></td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>Daily Signpost</td>
+          <td>DailySignpostSection</td>
+          <td>Today's daily philosophical teaching from Jack. Changes daily. No CTA — dead end.</td>
+          <td><span class="badge badge-gold">Move / Add CTA</span></td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>Invitations More</td>
+          <td>InvitationsMoreSection</td>
+          <td>3 cards: AI Ring Creator, Virtual Consultation, The Collections.</td>
+          <td><span class="badge badge-gold">Move to #10</span></td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Heritage</td>
+          <td>HeritageSection</td>
+          <td>Founded 1984, 40+ years, LA Handcrafted. Key trust anchor — currently dead last.</td>
+          <td><span class="badge badge-red">Move to #6</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 2. First Impression ── -->
+  <div class="section-block">
+    <span class="section-num">Section 02</span>
+    <h2 class="section-title">First Impression Analysis — The First 5 Seconds</h2>
+
+    <p>What the visitor sees when the page loads: a dark or light screen with fading-in poetic text — <strong>"In Silence / I realized / the oneness of the universe."</strong> Then a scroll indicator. There is no product visible, no price, no button to click.</p>
+
+    <table>
+      <thead><tr><th>Question every buyer asks</th><th>Answer from current hero</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>What do you sell?</td><td>Not clear yet. No ring shown.</td><td><span class="badge badge-red">Fail</span></td></tr>
+        <tr><td>Is this trustworthy?</td><td>Unknown. No trust signals.</td><td><span class="badge badge-red">Fail</span></td></tr>
+        <tr><td>Is it beautiful?</td><td>Possibly — the aesthetic is premium.</td><td><span class="badge badge-gold">Partial</span></td></tr>
+        <tr><td>Can I shop now?</td><td>No. There is no button to click.</td><td><span class="badge badge-red">Fail</span></td></tr>
+        <tr><td>Why should I care?</td><td>Unclear. The quote is poetic but unanchored.</td><td><span class="badge badge-red">Fail</span></td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-red">
+      <strong>Critical finding:</strong> The hero communicates <em>mood</em> but not <em>purpose</em>. For a brand that sells $3,000–$15,000 engagement rings, a visitor landing here for the first time has no signal that this is a jewelry store. Competitors like Brilliant Earth, Tiffany, and Stephanie Gottlieb show a ring image and a "Shop Now" button above the fold. DANHOV shows a poem.<br /><br />
+      <strong>The hero is beautiful. It is not yet commercially functional.</strong>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 3. Buyer Journey ── -->
+  <div class="section-block">
+    <span class="section-num">Section 03</span>
+    <h2 class="section-title">Jewelry Buyer Journey Analysis</h2>
+
+    <p>Think like a couple who just got engaged and is searching for luxury engagement ring designers in LA. They land on DANHOV. Here is what they need vs. what they experience:</p>
+
+    <table class="journey-table">
+      <thead><tr><th>What buyers are asking</th><th>What they need to see</th><th>Current position</th><th>Problem</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"What is this brand?"</td>
+          <td>Founder story, heritage, founded year</td>
+          <td>Section 15 — Heritage</td>
+          <td>Dead last. Almost no one reaches it.</td>
+        </tr>
+        <tr>
+          <td>"Can I trust them?"</td>
+          <td>Press mentions, reviews, years in business</td>
+          <td>Section 5 — As Seen In</td>
+          <td>Buried after 4 philosophy sections.</td>
+        </tr>
+        <tr>
+          <td>"Are the designs beautiful?"</td>
+          <td>Ring photos, product imagery</td>
+          <td>Section 2 — Signature Ring</td>
+          <td>OK — first product at position 2.</td>
+        </tr>
+        <tr>
+          <td>"Can I browse collections?"</td>
+          <td>Collection grid or slider</td>
+          <td>Section 10 — Collections Slider</td>
+          <td>Way too late. Position 10 of 15.</td>
+        </tr>
+        <tr>
+          <td>"Is this high quality?"</td>
+          <td>Craftsmanship, LA-made, 14k/18k</td>
+          <td>Sections 9 + 15</td>
+          <td>Scattered and late.</td>
+        </tr>
+        <tr>
+          <td>"Good for engagement?"</td>
+          <td>Engagement ring category clearly visible</td>
+          <td>Sections 10–11</td>
+          <td>Too far down the page.</td>
+        </tr>
+        <tr>
+          <td>"What proof do I have?"</td>
+          <td>Reviews, testimonials, real buyers</td>
+          <td><strong>Nowhere on homepage</strong></td>
+          <td><strong>Completely missing.</strong></td>
+        </tr>
+        <tr>
+          <td>"Why buy now?"</td>
+          <td>Urgency, consultation CTA, limited craft</td>
+          <td>Sections 12–14</td>
+          <td>Lost deep in philosophy sections.</td>
+        </tr>
+        <tr>
+          <td>"What does it cost?"</td>
+          <td>Price range or starting price</td>
+          <td><strong>Nowhere on homepage</strong></td>
+          <td><strong>Completely missing.</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-dark">
+      <strong>Core diagnosis:</strong> The buyer journey is inverted. DANHOV builds emotional depth before commercial trust. For a $5,000 ring, buyers need to <em>trust before they feel</em>. The philosophy works as a brand differentiator — but only after the buyer has already decided they are in the right store.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 4. Sales & Conversion ── -->
+  <div class="section-block">
+    <span class="section-num">Section 04</span>
+    <h2 class="section-title">Sales &amp; Conversion Analysis</h2>
+
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:#1a1410; margin:20px 0 12px;">What is guiding visitors toward a purchase?</h3>
+
+    <p><strong>Positive signals:</strong></p>
+    <ul>
+      <li>The Signature Ring (Section 2) has a "See the Ring" CTA — first real product link</li>
+      <li>Find Your Form (Section 4) links to ring builder — good engagement tool</li>
+      <li>AI guide button "LET US GUIDE YOU" in Collections Slider — excellent, but buried at Section 10</li>
+      <li>Co-Create section (12) is genuinely unique and commercially powerful</li>
+      <li>Press logos (Section 5) add real credibility once reached</li>
+    </ul>
+
+    <p><strong>Critical negatives:</strong></p>
+    <ul>
+      <li><strong>6 purely philosophical sections</strong> with no buy path: Hero, Invitation Moment, Philosophy Slider, 12 Inches, Bruce Lee Marquee, Daily Signpost</li>
+      <li><strong>Ring Showcase has two CTA buttons both going to the exact same URL</strong> (/engagement-rings). Duplicate, wasted CTA slot.</li>
+      <li><strong>Collections Slider appears after 9 sections.</strong> Most mobile users have left before reaching it.</li>
+      <li><strong>No reviews or testimonials anywhere</strong> on the homepage. For luxury jewelry at $5k+, this is a serious conversion blocker.</li>
+      <li><strong>No price anchoring anywhere.</strong> Buyers don't know if this is $500 or $50,000.</li>
+      <li><strong>No shipping/returns/warranty confidence block.</strong> Buyers are scared to spend this much without knowing the safety net.</li>
+      <li><strong>Heritage ("Founded 1984, Los Angeles") is dead last.</strong> One of the most powerful trust signals on the site, unreachable by most visitors.</li>
+    </ul>
+
+    <h3 style="font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:#1a1410; margin:24px 0 16px;">Conversion Scorecard</h3>
+
+    <div class="score-grid">
+      <div class="score-card"><span class="score-num bad">2/10</span><span class="score-label">Hero Commercial Clarity</span></div>
+      <div class="score-card"><span class="score-num bad">3/10</span><span class="score-label">Trust Building Speed</span></div>
+      <div class="score-card"><span class="score-num bad">4/10</span><span class="score-label">Product Discovery Ease</span></div>
+      <div class="score-card"><span class="score-num ok">5/10</span><span class="score-label">CTA Quality</span></div>
+      <div class="score-card"><span class="score-num bad">1/10</span><span class="score-label">Social Proof / Reviews</span></div>
+      <div class="score-card"><span class="score-num bad">3/10</span><span class="score-label">Philosophy:Commerce Balance</span></div>
+    </div>
+
+    <div class="callout callout-red">
+      <strong>The ratio problem:</strong> The homepage currently has 6 philosophy/spiritual sections and 3 product/commerce sections. For a commercial jewelry website, even a luxury one, this ratio needs to be inverted or at minimum balanced. Tiffany &amp; Co and Cartier both tell brand stories — but products appear within the first two scrolls.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 5. Recommended Order ── -->
+  <div class="section-block">
+    <span class="section-num">Section 05</span>
+    <h2 class="section-title">Recommended Homepage Section Order</h2>
+
+    <table>
+      <thead><tr><th>#</th><th>Section</th><th>Why Here</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Hero</strong> (improved)</td>
+          <td>Brand opening — keep the poetry but add a visible ring image and one shop CTA button above the fold</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>As Seen In</strong> ↑ moved from #5</td>
+          <td>Immediate credibility. Vogue + Harper's Bazaar right after the hero = instant trust anchor</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Signature Ring</strong></td>
+          <td>First product showcase. Emotionally anchored, commercially clear. Perfect here.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Collections Slider</strong> ↑ moved from #10</td>
+          <td>Product browsing must happen early. After the first ring, show the full range.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Find Your Form</strong> (Diamond Shapes)</td>
+          <td>Now that they've seen products, help them find their stone shape. Natural progression.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Heritage</strong> ↑ moved from #15</td>
+          <td>Founded 1984, LA, 40 years of craft. This is a trust anchor, not decoration. Place it early.</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Reviews / Testimonials</strong> ★ new</td>
+          <td>Social proof before they go deep. 3–4 buyer quotes with star ratings. Currently missing entirely.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><strong>Co-Create</strong> ↑ moved from #12</td>
+          <td>Custom jewelry = highest engagement, highest ticket. It deserves to be seen, not buried.</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><strong>Philosophy Slider</strong> ↓ moved from #6</td>
+          <td>Now the philosophy works. They know the brand, they've seen products, they trust you. Earned.</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><strong>Invitations More</strong> ↑ moved from #14</td>
+          <td>3-card navigation: Builder, Consultation, Collections. Mid-page buyer pathway guide.</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><strong>Invitation Moment</strong> ↓ moved from #3</td>
+          <td>"What do you see?" — contemplative closer. Works better once brand is established.</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><strong>Category Cards</strong></td>
+          <td>Deep-dive for serious researchers. 12 Italian collection names — research-depth content.</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td><strong>Daily Signpost</strong></td>
+          <td>Unique brand personality element. Ambient — no CTA needed here.</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td><strong>12 Inches Moment</strong> ↓ moved from #7</td>
+          <td>Beautiful artistic moment. Fine near the end for those who scroll this far.</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td><strong>Trust / Confidence Block</strong> ★ new</td>
+          <td>Shipping · Warranty · Returns · Secure checkout. Final objection handler before footer.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-gold">
+      <strong>Removed:</strong> The Bruce Lee marquee quote ("Be like water, my friend…") — unattributed, off-brand, and one of six philosophy sections already on the page. Remove or replace with a Jack Hovsepian teaching from the existing DailySignpost data.<br /><br />
+      <strong>Fixed:</strong> Ring Showcase duplicate CTAs — "Explore the Ring" and "Build Yours" currently both link to /engagement-rings. Fix so one → /engagement-rings and one → /ring-builder.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 6. Section Recommendations ── -->
+  <div class="section-block">
+    <span class="section-num">Section 06</span>
+    <h2 class="section-title">Section-by-Section Recommendations</h2>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">01</div>
+        <div>
+          <div class="rec-title">Hero — Cinematic Text Animation</div>
+          <span class="badge badge-gold">Keep + Improve</span>
+          &nbsp;<span class="badge badge-green">Position: 1 (unchanged)</span>
+        </div>
+      </div>
+      <p class="rec-body">The cinematic text animation is unique, memorable, and luxury-coded. It is a genuine brand differentiator — no other jewelry brand opens like this. The mood is right. What is broken: no product image visible above the fold, no CTA button. A visitor cannot take any action.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Add the Galaxy/Swirl Love Ring image (low opacity or as background) and one clear CTA button: <em>"Explore Engagement Rings →"</em>. The poetry stays. Add commerce alongside it.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">02</div>
+        <div>
+          <div class="rec-title">Signature Section — The Swirl Love Ring</div>
+          <span class="badge badge-green">Keep</span>
+          &nbsp;<span class="badge badge-green">Position: 3 (minor move)</span>
+        </div>
+      </div>
+      <p class="rec-body">First real product touchpoint. The founder quote + ring image is emotionally powerful and commercially clear. This is one of the best sections on the page — it just needs a slightly stronger CTA.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Change "See the Ring" to <em>"Build This Ring →"</em> or <em>"View The Swirl Love Ring — From $X"</em>. Add a micro-line: "Made in Los Angeles · 18k Gold" below the image.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">03</div>
+        <div>
+          <div class="rec-title">Invitation Moment — "What do you see?"</div>
+          <span class="badge badge-gold">Move Down</span>
+          &nbsp;<span class="badge badge-red">Current position: 3 — Wrong</span>
+        </div>
+      </div>
+      <p class="rec-body">This appears at position 3, before the visitor has seen any collections. It asks them to "design in silence" when they haven't even browsed yet. This is a premature CTA for a highly non-standard purchase path. It also partially duplicates the Co-Create section (position 12).</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 11. As a contemplative closer, it works beautifully once the brand and products are established in the buyer's mind.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">04</div>
+        <div>
+          <div class="rec-title">Find Your Form — Diamond Shapes Grid</div>
+          <span class="badge badge-green">Keep</span>
+          &nbsp;<span class="badge badge-gold">Position: 5 (minor move after Collections Slider)</span>
+        </div>
+      </div>
+      <p class="rec-body">Diamond shapes are a real decision tool. Very useful for engagement ring buyers who know their partner's style preference. 10 shape options with philosophical meanings is a genuinely useful feature.</p>
+      <div class="rec-fix"><strong>Fix:</strong> The headline "Light enters from the cracks of the darkness" is too abstract for a functional tool section. Change to: <em>"Find Your Diamond Shape"</em> with the sub-note "Each shape lets light in differently." Keep philosophy in the card descriptions, not the main heading.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">05</div>
+        <div>
+          <div class="rec-title">As Seen In — Press Logos</div>
+          <span class="badge badge-red">Move Up Urgently</span>
+          &nbsp;<span class="badge badge-red">Must be Position: 2</span>
+        </div>
+      </div>
+      <p class="rec-body">This is the single most underutilized trust asset on the page. Vogue, Harper's Bazaar, Brides, WWD, Who What Wear, Town &amp; Country — this is luxury validation at the highest level. Currently buried at position 5, meaning most mobile visitors never see it. This is the fastest ROI move on this entire list: one line of code changes in page.tsx.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move immediately below the hero. Keep it as a slim scrolling logo bar. Add one line above: <em>"As seen in"</em> in the existing eyebrow style.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">06</div>
+        <div>
+          <div class="rec-title">Philosophy Slider — "Truths We Live By"</div>
+          <span class="badge badge-gold">Move Down</span>
+          &nbsp;<span class="badge badge-gold">Position: 9</span>
+        </div>
+      </div>
+      <p class="rec-body">The slider auto-advances every 2.8 seconds. This is too fast for philosophy. A buyer who is trying to decide whether to spend $6,000 cannot also be a passive audience for a 6-slide philosophical slideshow. This section needs the buyer's emotional trust first — it shouldn't be building it.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 9, after Heritage and Co-Create. At that point, the buyer trusts the brand, has seen products, and the philosophy lands as a brand depth signal. Also add manual dot navigation controls so it doesn't auto-advance.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">07</div>
+        <div>
+          <div class="rec-title">12 Inches Moment — Brain-to-Heart Diagram</div>
+          <span class="badge badge-gold">Move to Near End</span>
+          &nbsp;<span class="badge badge-gold">Position: 14</span>
+        </div>
+      </div>
+      <p class="rec-body">At position 7, this is a beautiful but abstract animated piece that stops the buyer's scroll and delivers no commerce path. A buyer in product discovery mode is disrupted. Near the end, this same section works as a beautiful brand signature for people who have already decided they love DANHOV.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 14. No copy changes needed — the section itself is excellent.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">08</div>
+        <div>
+          <div class="rec-title">Bruce Lee Marquee Quote</div>
+          <span class="badge badge-red">Remove</span>
+        </div>
+      </div>
+      <p class="rec-body">"Be like water, my friend." This is a famous Bruce Lee quote that is unattributed on the page. More critically, this is one of six philosophy/quote sections on the homepage. It is also the weakest — it doesn't connect to DANHOV's brand story, diamonds, rings, love, or Los Angeles. It is borrowed philosophy from another source, while DANHOV has Jack Hovsepian's own rich teachings available.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Remove. If a scrolling text strip is desired as a visual divider, replace with one of Jack's own teachings from the DailySignpost data source — which already contains 37 original teachings. For example: <em>"You can see your own design in silence. We can make it."</em></div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">09</div>
+        <div>
+          <div class="rec-title">Ring Showcase — Galaxy Ring + Stats</div>
+          <span class="badge badge-gold">Fix + Keep</span>
+        </div>
+      </div>
+      <p class="rec-body">The stats (42+ years, #1 sustainable, ∞ The Circle) are good trust anchors. But this section and SignatureSection both feature essentially the same ring with similar content — they partially duplicate each other. More critically, it has two CTA buttons that both route to /engagement-rings.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Give the two buttons different destinations: <em>"View All Engagement Rings →"</em> (→ /engagement-rings) and <em>"Build Your Own →"</em> (→ /ring-builder). Consider merging this section with SignatureSection if the content overlap is too high.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">10</div>
+        <div>
+          <div class="rec-title">Collections Slider — 10 Collection Cards</div>
+          <span class="badge badge-red">Move Up Urgently</span>
+          &nbsp;<span class="badge badge-red">Must be Position: 4</span>
+        </div>
+      </div>
+      <p class="rec-body">This is your primary product navigation. 10 collection cards with ring images and category names (Engagement Rings, Wedding Bands, Fine Jewelry, Men's). This is what buyers want to see. It currently sits at position 10, behind 9 sections of content. On mobile, the majority of visitors have already left before reaching it.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 4, immediately after the Signature Ring section. Keep the AI guide button — it is excellent. Add a brief intro line above: <em>"Engagement rings · Wedding bands · Fine jewelry · Men's — all made to order in Los Angeles."</em></div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">11</div>
+        <div>
+          <div class="rec-title">Category Cards — 12 Italian Named Collections</div>
+          <span class="badge badge-gold">Move to #12</span>
+        </div>
+      </div>
+      <p class="rec-body">Twelve Italian collection names (Abbraccio, Voltaggio, Classico, Norme de Danhov…) is deep-dive content for buyers who already know they want DANHOV and are choosing between sub-collections. A first-time visitor seeing this early in the page gets overwhelmed before they've formed a desire to buy.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move near bottom as a reference section. On mobile, show only 6 cards initially with a "See all 12 collections" expand to reduce scroll fatigue. Headline can stay as-is — "Each name is a signpost" is strong.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">12</div>
+        <div>
+          <div class="rec-title">Co-Create — "Don't pick a ring. Receive one."</div>
+          <span class="badge badge-red">Move Up Significantly</span>
+          &nbsp;<span class="badge badge-red">Should be Position: 8</span>
+        </div>
+      </div>
+      <p class="rec-body">Custom jewelry is the highest-value purchase path and one of DANHOV's strongest differentiators. The 4-step process (Be Still → See It → Describe It → We Make It) is commercially compelling and completely unique in the jewelry industry. At position 12, buried after 11 other sections, it is invisible to most visitors.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 8. Change the section eyebrow from "A Different Way to Buy a Ring" to <em>"Custom Engagement Rings"</em>. Add a timeline line: <em>"Handcrafted in Los Angeles · Ready in 4–6 weeks."</em> This sets buyer expectations and removes uncertainty.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">13</div>
+        <div>
+          <div class="rec-title">Daily Signpost — Today's Teaching</div>
+          <span class="badge badge-green">Keep</span>
+          &nbsp;<span class="badge badge-gold">Add CTA</span>
+        </div>
+      </div>
+      <p class="rec-body">A unique, brand-specific element that creates a reason to return to the site daily. No other jewelry brand has a "today's teaching" section. Keep it — it's an authentic expression of Jack's philosophy. Currently a dead-end with no next action.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Add a small link below the daily quote: <em>"Explore all teachings →"</em> linking to an About or Philosophy page. Also add share-to-social capability so quotes spread organically.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">14</div>
+        <div>
+          <div class="rec-title">Invitations More — 3-Card Navigation</div>
+          <span class="badge badge-green">Keep</span>
+          &nbsp;<span class="badge badge-gold">Move to #10</span>
+        </div>
+      </div>
+      <p class="rec-body">The three cards (AI Ring Creator, Virtual Consultation, The Collections) are clear buyer pathways that work as a mid-page navigation summary. They help buyers who are undecided about what to do next. Currently too far down to serve their purpose.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 10. Consider adding a 4th card: <em>"Wedding Bands"</em> or <em>"Gift Cards"</em> to serve non-engagement buyers who arrive on the homepage and don't see their category addressed.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">15</div>
+        <div>
+          <div class="rec-title">Heritage — "Founded 1984 · Los Angeles"</div>
+          <span class="badge badge-red">Move Up Urgently</span>
+          &nbsp;<span class="badge badge-red">Should be Position: 6</span>
+        </div>
+      </div>
+      <p class="rec-body">"For four decades, every piece has come from one workshop. One pair of hands. One philosophy." This is one of the most powerful trust statements on the entire website. Founded 1984 in Los Angeles, 40+ years of craft — this is exactly what a luxury buyer needs to hear during due diligence. Currently at dead last position. Almost no visitor reaches it.</p>
+      <div class="rec-fix"><strong>Fix:</strong> Move to position 6, right after the Collections Slider and Diamond Shapes. Add a CTA: <em>"Learn Our Story →"</em> linking to the About page. Consider adding a photograph of the Los Angeles workshop or of Jack Hovsepian at work.</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 7. Missing Elements ── -->
+  <div class="section-block">
+    <span class="section-num">Section 07</span>
+    <h2 class="section-title">Missing Trust &amp; Sales Elements</h2>
+    <p>These are genuine gaps that are hurting conversions, ranked by impact:</p>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">★</div>
+        <div>
+          <div class="rec-title">Customer Reviews / Testimonials</div>
+          <span class="badge badge-red">Critical — Completely Missing</span>
+        </div>
+      </div>
+      <p class="rec-body">No jewelry buyer at the $3,000–$15,000 level commits without social proof. A single row of 3–4 buyer quotes with star ratings and first names would dramatically reduce hesitation. Even simple quotes like: <em>"The most beautiful ring I've ever seen. My fiancée cried." — Sarah M., Los Angeles</em> are enough to shift buyer confidence.</p>
+      <div class="rec-fix"><strong>Add:</strong> A reviews strip between Heritage (position 6) and Co-Create (position 8) in the recommended order. Pull from Google reviews, Yelp, or hand-selected customer emails.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">★</div>
+        <div>
+          <div class="rec-title">Purchase Confidence Block</div>
+          <span class="badge badge-red">High Impact — Missing</span>
+        </div>
+      </div>
+      <p class="rec-body">Buyers spending this much need explicit assurance. Four facts that must appear somewhere on the homepage: Free shipping (or threshold), Lifetime craftsmanship warranty, Return/exchange policy, Secure payment. These are standard on every successful luxury e-commerce site from Tiffany to James Allen.</p>
+      <div class="rec-fix"><strong>Add:</strong> A slim 4-icon strip near the bottom of the homepage (position 15 in recommended order). Format: 🚚 Free Shipping · ⚒ Lifetime Warranty · 🔄 Easy Returns · 🔒 Secure Checkout</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">★</div>
+        <div>
+          <div class="rec-title">Price Anchoring</div>
+          <span class="badge badge-gold">Moderate Impact — Missing</span>
+        </div>
+      </div>
+      <p class="rec-body">First-time visitors don't know if DANHOV is $500 or $50,000. A subtle "Starting from $1,800" or "14k gold rings from $2,400" line pre-qualifies buyers. It reduces bounce from people who are qualified but assume the price is beyond them, and filters unqualified browsers early.</p>
+      <div class="rec-fix"><strong>Add:</strong> One line of copy in the Collections Slider header or in the Hero sub-copy: <em>"Handcrafted engagement rings · 14k &amp; 18k gold · Made to order"</em> with a price anchor.</div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-card-header">
+        <div class="rec-pos">★</div>
+        <div>
+          <div class="rec-title">Category Navigation Strip</div>
+          <span class="badge badge-gold">Moderate Impact — Missing</span>
+        </div>
+      </div>
+      <p class="rec-body">The homepage is heavily engagement-ring-focused, but DANHOV also sells wedding bands, men's jewelry, and fine jewelry. Buyers who arrive for a different category than engagement rings have no clear signal that their category exists.</p>
+      <div class="rec-fix"><strong>Add:</strong> A 4-category strip early on the page (between press logos and Signature Ring): Engagement Rings · Wedding Bands · Fine Jewelry · Men's. Simple horizontal tabs or icon cards.</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 8. Final Flow ── -->
+  <div class="section-block">
+    <span class="section-num">Section 08</span>
+    <h2 class="section-title">Final Recommended Homepage Flow</h2>
+
+    <ul class="flow-list">
+      <li class="flow-item">
+        <span class="flow-n">1</span>
+        <div>
+          <div class="flow-name">Hero <span class="badge badge-gold" style="font-size:10px;">Improve</span></div>
+          <div class="flow-note">Cinematic text animation — add ring image background + one "Explore Engagement Rings →" CTA button</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">2</span>
+        <div>
+          <div class="flow-name">As Seen In <span class="badge badge-red" style="font-size:10px;">Moved from #5</span></div>
+          <div class="flow-note">Slim press logo bar immediately after hero — Vogue, Harper's Bazaar, Brides, WWD, Town &amp; Country</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">3</span>
+        <div>
+          <div class="flow-name">Signature Ring — The Swirl Love Ring</div>
+          <div class="flow-note">First product showcase. Improve CTA from "See the Ring" to "Build This Ring →"</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">4</span>
+        <div>
+          <div class="flow-name">Collections Slider <span class="badge badge-red" style="font-size:10px;">Moved from #10</span></div>
+          <div class="flow-note">10 collection cards — product browsing must happen by position 4, not position 10</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">5</span>
+        <div>
+          <div class="flow-name">Find Your Form — Diamond Shapes</div>
+          <div class="flow-note">Simplify headline from abstract poetry to "Find Your Diamond Shape". Keep shape meanings.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">6</span>
+        <div>
+          <div class="flow-name">Heritage <span class="badge badge-red" style="font-size:10px;">Moved from #15</span></div>
+          <div class="flow-note">Founded 1984 · Los Angeles · 40 years of craft. Trust anchor — must not be dead last.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">7</span>
+        <div>
+          <div class="flow-name">Reviews / Testimonials <span class="flow-new">NEW</span></div>
+          <div class="flow-note">3–4 buyer quotes with star ratings. Currently absent — most critical missing element.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">8</span>
+        <div>
+          <div class="flow-name">Co-Create — Custom Ring Process <span class="badge badge-red" style="font-size:10px;">Moved from #12</span></div>
+          <div class="flow-note">"Don't pick a ring. Receive one." Add timeline: "Handcrafted in LA · Ready in 4–6 weeks"</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">9</span>
+        <div>
+          <div class="flow-name">Philosophy Slider <span class="badge badge-gold" style="font-size:10px;">Moved from #6</span></div>
+          <div class="flow-note">"Truths We Live By" — now earned, not assumed. Add manual navigation controls.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">10</span>
+        <div>
+          <div class="flow-name">Invitations More — 3-Card Navigation <span class="badge badge-gold" style="font-size:10px;">Moved from #14</span></div>
+          <div class="flow-note">AI Builder · Virtual Consultation · Collections. Consider adding 4th card for Wedding Bands or Gifting.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">11</span>
+        <div>
+          <div class="flow-name">Invitation Moment — "What do you see?" <span class="badge badge-gold" style="font-size:10px;">Moved from #3</span></div>
+          <div class="flow-note">Contemplative closer. Works once brand is established — not as third section on the page.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">12</span>
+        <div>
+          <div class="flow-name">Category Cards — 12 Named Collections</div>
+          <div class="flow-note">Deep-dive for researchers. Show 6 initially on mobile, expand to all 12 on tap.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">13</span>
+        <div>
+          <div class="flow-name">Daily Signpost — Today's Teaching</div>
+          <div class="flow-note">Unique brand personality. Add "Explore teachings →" CTA link and social share.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">14</span>
+        <div>
+          <div class="flow-name">12 Inches Moment <span class="badge badge-gold" style="font-size:10px;">Moved from #7</span></div>
+          <div class="flow-note">Beautiful brand signature. Perfect near the end for those who have fully engaged.</div>
+        </div>
+      </li>
+      <li class="flow-item">
+        <span class="flow-n">15</span>
+        <div>
+          <div class="flow-name">Trust / Confidence Block <span class="flow-new">NEW</span></div>
+          <div class="flow-note">Free Shipping · Lifetime Warranty · Easy Returns · Secure Checkout — final objection handler</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="callout callout-red" style="margin-top:24px;">
+      <strong>Removed:</strong> Bruce Lee marquee quote ("Be like water, my friend…") — off-brand, unattributed, and one of six philosophy sections. Replace with a Jack Hovsepian teaching from existing data or remove entirely.
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── 9. Priority Actions ── -->
+  <div class="section-block">
+    <span class="section-num">Section 09</span>
+    <h2 class="section-title">Priority Action List — Top 10 by Sales Impact</h2>
+
+    <div class="priority-table">
+
+      <div class="priority-row">
+        <div class="priority-num">1</div>
+        <div>
+          <div class="priority-title">Move "As Seen In" to position 2 — immediately after the hero</div>
+          <div class="priority-body">Vogue + Harper's Bazaar + Brides is the single fastest trust signal on the site. Currently buried at position 5. Move requires changing ~15 lines in page.tsx.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">Very High</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">2</div>
+        <div>
+          <div class="priority-title">Move Heritage section to position 6 — from dead last</div>
+          <div class="priority-body">"Founded 1984, Los Angeles, 40 years of craft" is credibility that buyers need in the first minute, not the last section. Move component call only.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">Very High</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">3</div>
+        <div>
+          <div class="priority-title">Move Collections Slider to position 4 — from position 10</div>
+          <div class="priority-body">Product browsing is the primary reason buyers visit. The main collection navigator must appear by the 4th scroll, not the 10th. Move component call only.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">Very High</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">4</div>
+        <div>
+          <div class="priority-title">Add a Reviews / Testimonials section</div>
+          <div class="priority-body">No luxury jewelry buyer commits $5,000+ without social proof. Even 3 real buyer quotes with star ratings would measurably increase conversions. Most critical missing element.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">High</span></div>
+        <div class="priority-effort"><span class="pill pill-gold">Medium</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">5</div>
+        <div>
+          <div class="priority-title">Add a CTA button to the Hero section</div>
+          <div class="priority-body">The hero is the most viewed area of the entire site. Currently there is nothing to click. Adding "Explore Engagement Rings →" above the fold is the simplest revenue action available.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">High</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">6</div>
+        <div>
+          <div class="priority-title">Move Co-Create to position 8 — from position 12</div>
+          <div class="priority-body">Custom jewelry = highest ticket + strongest differentiator. "Don't pick a ring. Receive one." should be seen by the majority of visitors, not a minority who scroll 12 sections deep.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-red">High</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">7</div>
+        <div>
+          <div class="priority-title">Fix duplicate CTAs on Ring Showcase</div>
+          <div class="priority-body">"Explore the Ring" and "Build Yours" both route to /engagement-rings. Fix so one → /engagement-rings and one → /ring-builder. One href change.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-gold">Medium</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">8</div>
+        <div>
+          <div class="priority-title">Remove or replace Bruce Lee marquee quote</div>
+          <div class="priority-body">Unattributed, off-brand, and redundant (one of six philosophy sections). Replace with a Jack Hovsepian teaching from existing data, or remove entirely.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-gold">Medium</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">9</div>
+        <div>
+          <div class="priority-title">Add Trust / Confidence Block near the bottom</div>
+          <div class="priority-body">Free Shipping · Lifetime Warranty · Easy Returns · Secure Checkout. Buyers need to see the safety net before they convert. Standard on all luxury e-commerce.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-gold">Medium</span></div>
+        <div class="priority-effort"><span class="pill pill-gold">Low-Medium</span></div>
+      </div>
+
+      <div class="priority-row">
+        <div class="priority-num">10</div>
+        <div>
+          <div class="priority-title">Add price anchoring to Collections Slider or Hero</div>
+          <div class="priority-body">"Starting from $1,800 · 14k gold · Made to order" pre-qualifies buyers and prevents qualified buyers from bouncing because they assume it's out of budget. One line of copy.</div>
+        </div>
+        <div class="priority-impact"><span class="pill pill-gold">Medium</span></div>
+        <div class="priority-effort"><span class="pill pill-green">Very Low</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ── Final Summary ── -->
+  <div class="section-block">
+    <span class="section-num">Summary</span>
+    <h2 class="section-title">One-Sentence Verdict</h2>
+    <div class="callout callout-dark" style="font-size:15px; line-height:1.8;">
+      DANHOV's homepage is currently built for someone who already loves the brand — it needs to lead someone who has never heard of it from <em>curiosity → trust → desire → action</em>, which is the real jewelry buying sequence, and most of the changes required are simple reorderings of what already exists.
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="report-footer">
+  <strong>DANHOV</strong> · Homepage UX/CRO Audit · June 7, 2026<br />
+  <span style="font-size:11px; margin-top:6px; display:block;">Prepared for internal use · danhov.com · Los Angeles, California · Est. 1984</span>
+</div>
+
+</body>
+</html>

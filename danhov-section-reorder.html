@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DANHOV — Homepage Section Reorder Map</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500;600;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: #f5f0ea;
+  color: #1a1410;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* ── Header ── */
+.page-header {
+  background: linear-gradient(135deg, #1a1410 0%, #2c1f18 100%);
+  padding: 36px 48px 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.header-brand {
+  font-size: 10px;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: #b8923a;
+  display: block;
+  margin-bottom: 8px;
+}
+.header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: #faf6f1;
+}
+.header-title em { color: #b8923a; }
+.header-meta {
+  text-align: right;
+  font-size: 12px;
+  color: #6b5e57;
+  line-height: 1.8;
+}
+.header-meta strong { color: #c4b8ad; }
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding: 18px 48px;
+  background: #fff;
+  border-bottom: 1px solid rgba(184,146,58,0.15);
+}
+.legend-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9c8f86;
+  margin-right: 8px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #3a2e28;
+}
+.legend-swatch {
+  width: 28px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── Main map wrapper ── */
+.map-outer {
+  padding: 36px 24px 0;
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.col-headers {
+  display: grid;
+  grid-template-columns: 340px 1fr 340px;
+  gap: 0;
+  margin-bottom: 10px;
+  padding: 0 0;
+}
+.col-header {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #6b5e57;
+  padding: 10px 0 8px;
+  border-bottom: 1px solid rgba(184,146,58,0.2);
+}
+.col-header span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: #1a1410;
+  display: block;
+  margin-bottom: 2px;
+}
+.col-header-mid { /* middle spacer */ }
+
+/* ── Map wrapper (relative for SVG overlay) ── */
+.map-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: 340px 1fr 340px;
+  align-items: start;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Cards ── */
+.card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border-radius: 6px;
+  padding: 0 12px;
+  height: 50px;
+  border: 1px solid rgba(184,146,58,0.12);
+  position: relative;
+  cursor: default;
+  transition: box-shadow 0.15s;
+  border-left-width: 3px;
+}
+.card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+
+.card-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  color: rgba(184,146,58,0.5);
+  min-width: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.card-body { flex: 1; min-width: 0; }
+.card-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1a1410;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-note {
+  font-size: 10.5px;
+  color: #9c8f86;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+.card-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Card border + badge colors by type */
+.card-urgent  { border-left-color: #AC3438; }
+.card-move    { border-left-color: #b8923a; }
+.card-keep    { border-left-color: #2d7a4a; }
+.card-remove  { border-left-color: #9c8f86; background: #f9f7f5; }
+.card-merge   { border-left-color: #6b5e57; }
+.card-new     { border-left-color: #3b6ea5; background: rgba(59,110,165,0.04); }
+
+.badge-urgent { background: rgba(172,52,56,0.1);  color: #AC3438; }
+.badge-move   { background: rgba(184,146,58,0.12); color: #7a6010; }
+.badge-keep   { background: rgba(45,122,74,0.1);  color: #2d7a4a; }
+.badge-remove { background: rgba(156,143,134,0.15); color: #6b5e57; text-decoration: line-through; }
+.badge-merge  { background: rgba(107,94,87,0.1);  color: #6b5e57; }
+.badge-new    { background: rgba(59,110,165,0.12); color: #3b6ea5; }
+
+/* Removed card text */
+.card-remove .card-name { text-decoration: line-through; opacity: 0.6; }
+.card-remove .card-note { opacity: 0.5; }
+
+/* Right column position badge */
+.card-shift {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+.shift-up   { background: rgba(172,52,56,0.1); color: #AC3438; }
+.shift-down { background: rgba(184,146,58,0.12); color: #7a6010; }
+.shift-same { background: rgba(45,122,74,0.1); color: #2d7a4a; }
+
+/* ── SVG Connector overlay ── */
+.connector-area {
+  position: relative;
+}
+#connector-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* ── Stats bar ── */
+.stats-bar {
+  max-width: 1140px;
+  margin: 28px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+.stat-card {
+  background: #fff;
+  border: 1px solid rgba(184,146,58,0.15);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6b5e57;
+}
+.stat-urgent { color: #AC3438; }
+.stat-gold   { color: #b8923a; }
+.stat-green  { color: #2d7a4a; }
+.stat-blue   { color: #3b6ea5; }
+.stat-grey   { color: #9c8f86; }
+
+/* ── Footer note ── */
+.footer-note {
+  max-width: 1140px;
+  margin: 20px auto 0;
+  padding: 16px 24px;
+  background: rgba(172,52,56,0.04);
+  border-left: 3px solid #AC3438;
+  border-radius: 0 6px 6px 0;
+  font-size: 12.5px;
+  color: #3a2e28;
+  line-height: 1.7;
+}
+.footer-note strong { color: #AC3438; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="page-header">
+  <div>
+    <span class="header-brand">DANHOV · Los Angeles · Est. 1984</span>
+    <h1 class="header-title">Homepage Section <em>Reorder Map</em></h1>
+  </div>
+  <div class="header-meta">
+    <strong>15 sections audited</strong><br />
+    5 urgent moves · 2 new sections · 1 removal<br />
+    June 7, 2026
+  </div>
+</header>
+
+<!-- ── Legend ── -->
+<div class="legend">
+  <span class="legend-label">Legend</span>
+  <span class="legend-item">
+    <span class="legend-swatch" style="background:#AC3438;"></span>
+    Urgent — move 5+ positions (critical for sales)
+  </span>
+  <span class="legend-item">
+    <span class="legend-swatch" style="background:#b8923a;"></span>
+    Move — 2–4 positions (improve flow)
+  </span>
+  <span class="legend-item">
+    <span class="legend-swatch" style="background:#2d7a4a;"></span>
+    Keep / minor shift (working well)
+  </span>
+  <span class="legend-item">
+    <span class="legend-swatch" style="background:#3b6ea5;"></span>
+    New section (add to homepage)
+  </span>
+  <span class="legend-item">
+    <span class="legend-swatch" style="background:#9c8f86; height:2px; border-top:1px dashed #9c8f86;"></span>
+    Remove / consolidate
+  </span>
+</div>
+
+<!-- ── Map ── -->
+<div class="map-outer">
+
+  <div class="col-headers">
+    <div class="col-header"><span>Before</span>Current Order</div>
+    <div class="col-header-mid"></div>
+    <div class="col-header"><span>After</span>Recommended Order</div>
+  </div>
+
+  <div class="map-wrapper">
+
+    <!-- ══════ LEFT COLUMN — BEFORE ══════ -->
+    <div class="column" id="col-before">
+
+      <div class="card card-keep" id="old-1">
+        <div class="card-num">1</div>
+        <div class="card-body">
+          <div class="card-name">Hero</div>
+          <div class="card-note">Cinematic text · no product · no CTA</div>
+        </div>
+        <span class="card-badge badge-keep">Improve</span>
+      </div>
+
+      <div class="card card-keep" id="old-2">
+        <div class="card-num">2</div>
+        <div class="card-body">
+          <div class="card-name">Signature Ring</div>
+          <div class="card-note">Swirl Love Ring · first product</div>
+        </div>
+        <span class="card-badge badge-keep">Keep</span>
+      </div>
+
+      <div class="card card-move" id="old-3">
+        <div class="card-num">3</div>
+        <div class="card-body">
+          <div class="card-name">Invitation Moment</div>
+          <div class="card-note">"What do you see?" → ring-builder</div>
+        </div>
+        <span class="card-badge badge-move">↓ Move</span>
+      </div>
+
+      <div class="card card-keep" id="old-4">
+        <div class="card-num">4</div>
+        <div class="card-body">
+          <div class="card-name">Find Your Form</div>
+          <div class="card-note">10 diamond shape cards</div>
+        </div>
+        <span class="card-badge badge-keep">Minor</span>
+      </div>
+
+      <div class="card card-urgent" id="old-5">
+        <div class="card-num">5</div>
+        <div class="card-body">
+          <div class="card-name">As Seen In</div>
+          <div class="card-note">Vogue · Bazaar · Brides · WWD</div>
+        </div>
+        <span class="card-badge badge-urgent">↑ Urgent</span>
+      </div>
+
+      <div class="card card-move" id="old-6">
+        <div class="card-num">6</div>
+        <div class="card-body">
+          <div class="card-name">Philosophy Slider</div>
+          <div class="card-note">6 quotes · 2.8s auto-advance</div>
+        </div>
+        <span class="card-badge badge-move">↓ Move</span>
+      </div>
+
+      <div class="card card-move" id="old-7">
+        <div class="card-num">7</div>
+        <div class="card-body">
+          <div class="card-name">12 Inches Moment</div>
+          <div class="card-note">Brain-to-heart animated diagram</div>
+        </div>
+        <span class="card-badge badge-move">↓ Move</span>
+      </div>
+
+      <div class="card card-remove" id="old-8">
+        <div class="card-num">8</div>
+        <div class="card-body">
+          <div class="card-name">Bruce Lee Marquee</div>
+          <div class="card-note">"Be like water" · off-brand</div>
+        </div>
+        <span class="card-badge badge-remove">Remove</span>
+      </div>
+
+      <div class="card card-merge" id="old-9">
+        <div class="card-num">9</div>
+        <div class="card-body">
+          <div class="card-name">Ring Showcase</div>
+          <div class="card-note">Galaxy ring · duplicate CTAs</div>
+        </div>
+        <span class="card-badge badge-merge">Fix CTAs</span>
+      </div>
+
+      <div class="card card-urgent" id="old-10">
+        <div class="card-num">10</div>
+        <div class="card-body">
+          <div class="card-name">Collections Slider</div>
+          <div class="card-note">10 collection cards · product nav</div>
+        </div>
+        <span class="card-badge badge-urgent">↑ Urgent</span>
+      </div>
+
+      <div class="card card-keep" id="old-11">
+        <div class="card-num">11</div>
+        <div class="card-body">
+          <div class="card-name">Category Cards</div>
+          <div class="card-note">12 Italian collection names</div>
+        </div>
+        <span class="card-badge badge-keep">Minor</span>
+      </div>
+
+      <div class="card card-urgent" id="old-12">
+        <div class="card-num">12</div>
+        <div class="card-body">
+          <div class="card-name">Co-Create</div>
+          <div class="card-note">"Don't pick a ring. Receive one."</div>
+        </div>
+        <span class="card-badge badge-urgent">↑ Urgent</span>
+      </div>
+
+      <div class="card card-keep" id="old-13">
+        <div class="card-num">13</div>
+        <div class="card-body">
+          <div class="card-name">Daily Signpost</div>
+          <div class="card-note">Today's teaching · no CTA</div>
+        </div>
+        <span class="card-badge badge-keep">Keep</span>
+      </div>
+
+      <div class="card card-urgent" id="old-14">
+        <div class="card-num">14</div>
+        <div class="card-body">
+          <div class="card-name">Invitations More</div>
+          <div class="card-note">3-card nav · builder · consultation</div>
+        </div>
+        <span class="card-badge badge-urgent">↑ Urgent</span>
+      </div>
+
+      <div class="card card-urgent" id="old-15">
+        <div class="card-num">15</div>
+        <div class="card-body">
+          <div class="card-name">Heritage</div>
+          <div class="card-note">Founded 1984 · Los Angeles · dead last</div>
+        </div>
+        <span class="card-badge badge-urgent">↑ Urgent</span>
+      </div>
+
+    </div>
+
+    <!-- ══════ CONNECTOR (SVG drawn by JS) ══════ -->
+    <div class="connector-area" id="connector-area">
+      <svg id="connector-svg" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <!-- Arrowheads for each color -->
+          <marker id="arr-urgent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <polygon points="0 0.5, 8 3, 0 5.5" fill="#AC3438"/>
+          </marker>
+          <marker id="arr-move" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <polygon points="0 0.5, 8 3, 0 5.5" fill="#b8923a"/>
+          </marker>
+          <marker id="arr-keep" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <polygon points="0 0.5, 8 3, 0 5.5" fill="#2d7a4a"/>
+          </marker>
+          <marker id="arr-merge" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+            <polygon points="0 0.5, 8 3, 0 5.5" fill="#6b5e57"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+
+    <!-- ══════ RIGHT COLUMN — AFTER ══════ -->
+    <div class="column" id="col-after">
+
+      <div class="card card-keep" id="new-1">
+        <div class="card-num">1</div>
+        <div class="card-body">
+          <div class="card-name">Hero</div>
+          <div class="card-note">Add ring image + "Shop" CTA button</div>
+        </div>
+        <span class="card-shift shift-same">±0</span>
+      </div>
+
+      <div class="card card-urgent" id="new-2">
+        <div class="card-num">2</div>
+        <div class="card-body">
+          <div class="card-name">As Seen In</div>
+          <div class="card-note">Vogue · Bazaar · Brides · instant trust</div>
+        </div>
+        <span class="card-shift shift-up">↑ +3</span>
+      </div>
+
+      <div class="card card-keep" id="new-3">
+        <div class="card-num">3</div>
+        <div class="card-body">
+          <div class="card-name">Signature Ring</div>
+          <div class="card-note">Strengthen CTA → "Build This Ring"</div>
+        </div>
+        <span class="card-shift shift-down">↓ −1</span>
+      </div>
+
+      <div class="card card-urgent" id="new-4">
+        <div class="card-num">4</div>
+        <div class="card-body">
+          <div class="card-name">Collections Slider</div>
+          <div class="card-note">Product browsing must happen early</div>
+        </div>
+        <span class="card-shift shift-up">↑ +6</span>
+      </div>
+
+      <div class="card card-keep" id="new-5">
+        <div class="card-num">5</div>
+        <div class="card-body">
+          <div class="card-name">Find Your Form</div>
+          <div class="card-note">Simplify headline — keep shape meanings</div>
+        </div>
+        <span class="card-shift shift-down">↓ −1</span>
+      </div>
+
+      <div class="card card-urgent" id="new-6">
+        <div class="card-num">6</div>
+        <div class="card-body">
+          <div class="card-name">Heritage</div>
+          <div class="card-note">Founded 1984 · 40 years · LA trust anchor</div>
+        </div>
+        <span class="card-shift shift-up">↑ +9</span>
+      </div>
+
+      <div class="card card-new" id="new-7">
+        <div class="card-num">7</div>
+        <div class="card-body">
+          <div class="card-name">Reviews / Testimonials</div>
+          <div class="card-note">3–4 buyer quotes · star ratings · ★ ADD NEW</div>
+        </div>
+        <span class="card-badge badge-new">★ New</span>
+      </div>
+
+      <div class="card card-urgent" id="new-8">
+        <div class="card-num">8</div>
+        <div class="card-body">
+          <div class="card-name">Co-Create</div>
+          <div class="card-note">Custom ring · add "4–6 weeks" timeline</div>
+        </div>
+        <span class="card-shift shift-up">↑ +4</span>
+      </div>
+
+      <div class="card card-move" id="new-9">
+        <div class="card-num">9</div>
+        <div class="card-body">
+          <div class="card-name">Philosophy Slider</div>
+          <div class="card-note">Now earned — add manual nav controls</div>
+        </div>
+        <span class="card-shift shift-down">↓ −3</span>
+      </div>
+
+      <div class="card card-urgent" id="new-10">
+        <div class="card-num">10</div>
+        <div class="card-body">
+          <div class="card-name">Invitations More</div>
+          <div class="card-note">Builder · Consultation · Collections nav</div>
+        </div>
+        <span class="card-shift shift-up">↑ +4</span>
+      </div>
+
+      <div class="card card-move" id="new-11">
+        <div class="card-num">11</div>
+        <div class="card-body">
+          <div class="card-name">Invitation Moment</div>
+          <div class="card-note">"What do you see?" — contemplative closer</div>
+        </div>
+        <span class="card-shift shift-down">↓ −8</span>
+      </div>
+
+      <div class="card card-keep" id="new-12">
+        <div class="card-num">12</div>
+        <div class="card-body">
+          <div class="card-name">Category Cards</div>
+          <div class="card-note">12 named collections · research depth</div>
+        </div>
+        <span class="card-shift shift-down">↓ −1</span>
+      </div>
+
+      <div class="card card-keep" id="new-13">
+        <div class="card-num">13</div>
+        <div class="card-body">
+          <div class="card-name">Daily Signpost</div>
+          <div class="card-note">Add "Explore teachings →" CTA link</div>
+        </div>
+        <span class="card-shift shift-same">±0</span>
+      </div>
+
+      <div class="card card-move" id="new-14">
+        <div class="card-num">14</div>
+        <div class="card-body">
+          <div class="card-name">12 Inches Moment</div>
+          <div class="card-note">Brand signature — beautiful near the end</div>
+        </div>
+        <span class="card-shift shift-down">↓ −7</span>
+      </div>
+
+      <div class="card card-new" id="new-15">
+        <div class="card-num">15</div>
+        <div class="card-body">
+          <div class="card-name">Trust / Confidence Block</div>
+          <div class="card-note">Shipping · Warranty · Returns · ★ ADD NEW</div>
+        </div>
+        <span class="card-badge badge-new">★ New</span>
+      </div>
+
+    </div><!-- /col-after -->
+
+  </div><!-- /map-wrapper -->
+</div><!-- /map-outer -->
+
+<!-- ── Stats bar ── -->
+<div class="stats-bar">
+  <div class="stat-card">
+    <span class="stat-num stat-urgent">5</span>
+    <span class="stat-label">Urgent Moves<br/>(5+ positions)</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num stat-gold">3</span>
+    <span class="stat-label">Standard Moves<br/>(2–4 positions)</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num stat-green">4</span>
+    <span class="stat-label">Keep / Minor<br/>(0–1 positions)</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num stat-blue">2</span>
+    <span class="stat-label">New Sections<br/>to Add</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-num stat-grey">1</span>
+    <span class="stat-label">Remove<br/>Bruce Lee Quote</span>
+  </div>
+</div>
+
+<!-- ── Footer note ── -->
+<div class="footer-note" style="margin-left:auto;margin-right:auto;max-width:1140px;margin-top:16px;margin-bottom:0;padding:14px 24px;">
+  <strong>Ring Showcase (old #9)</strong> — consolidate with Signature Ring (#3). Fix both CTA buttons: one → /engagement-rings and one → /ring-builder (currently both link to the same page). &nbsp;|&nbsp;
+  <strong>Bruce Lee marquee (old #8)</strong> — remove. Replace with a Jack Hovsepian teaching from the existing DailySignpost data source if a scrolling text strip is still wanted.
+</div>
+
+<script>
+// ── Connection map ──────────────────────────────────────────────
+// Each entry: [fromId, toId, type]
+// type: 'urgent' | 'move' | 'keep' | 'merge' | 'remove'
+const CONNECTIONS = [
+  ['old-1',  'new-1',  'keep'],     // Hero → Hero (same)
+  ['old-2',  'new-3',  'keep'],     // Signature → #3
+  ['old-3',  'new-11', 'move'],     // Invitation → #11
+  ['old-4',  'new-5',  'keep'],     // Find Form → #5
+  ['old-5',  'new-2',  'urgent'],   // As Seen In → #2 (urgent up)
+  ['old-6',  'new-9',  'move'],     // Philosophy → #9
+  ['old-7',  'new-14', 'move'],     // 12 Inches → #14
+  ['old-8',  null,     'remove'],   // Bruce Lee → REMOVED
+  ['old-9',  'new-3',  'merge'],    // Ring Showcase → consolidate with #3
+  ['old-10', 'new-4',  'urgent'],   // Collections → #4 (urgent up)
+  ['old-11', 'new-12', 'keep'],     // Category Cards → #12
+  ['old-12', 'new-8',  'urgent'],   // Co-Create → #8 (urgent up)
+  ['old-13', 'new-13', 'keep'],     // Daily Signpost → #13 (same)
+  ['old-14', 'new-10', 'urgent'],   // Invitations → #10 (urgent up)
+  ['old-15', 'new-6',  'urgent'],   // Heritage → #6 (urgent up)
+];
+
+const COLORS = {
+  urgent: '#AC3438',
+  move:   '#b8923a',
+  keep:   '#2d7a4a',
+  merge:  '#6b5e57',
+  remove: '#c4b8ad',
+};
+
+const STROKE_WIDTH = {
+  urgent: 2,
+  move:   1.8,
+  keep:   1.5,
+  merge:  1.5,
+  remove: 1,
+};
+
+function drawConnectors() {
+  const svg     = document.getElementById('connector-svg');
+  const area    = document.getElementById('connector-area');
+  const wrapper = document.querySelector('.map-wrapper');
+
+  // Clear existing paths (for resize)
+  Array.from(svg.querySelectorAll('path, line')).forEach(el => el.remove());
+
+  const wRect = wrapper.getBoundingClientRect();
+  const aRect = area.getBoundingClientRect();
+
+  // Size the SVG to the connector area
+  svg.setAttribute('width',  aRect.width);
+  svg.setAttribute('height', wRect.height);
+  svg.style.height = wRect.height + 'px';
+
+  const aOffsetX = aRect.left - wRect.left;
+
+  CONNECTIONS.forEach(([fromId, toId, type]) => {
+    const fromEl = document.getElementById(fromId);
+    if (!fromEl) return;
+
+    const fromRect = fromEl.getBoundingClientRect();
+    // Right edge of left card, relative to wrapper
+    const x1 = fromRect.right  - wRect.left - aOffsetX;
+    const y1 = fromRect.top    - wRect.top  + fromRect.height / 2;
+
+    const color  = COLORS[type]        || '#999';
+    const sw     = STROKE_WIDTH[type]  || 1.5;
+    const dashed = (type === 'merge')  ? '5 3' : null;
+    const arrowId = (type === 'keep' || type === 'keep') ? 'keep'
+                  : (type === 'merge') ? 'merge'
+                  : type;
+
+    if (!toId) {
+      // Removed — draw a short line with X
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x1 + 24);
+      line.setAttribute('y2', y1);
+      line.setAttribute('stroke', color);
+      line.setAttribute('stroke-width', sw);
+      line.setAttribute('stroke-dasharray', '3 2');
+      svg.appendChild(line);
+
+      // X mark
+      const size = 5;
+      const cx = x1 + 32;
+      const cy = y1;
+      const makeX = (id) => {
+        const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        l.setAttribute('stroke', color);
+        l.setAttribute('stroke-width', '2');
+        l.setAttribute('stroke-linecap', 'round');
+        return l;
+      };
+      const l1 = makeX();
+      l1.setAttribute('x1', cx - size); l1.setAttribute('y1', cy - size);
+      l1.setAttribute('x2', cx + size); l1.setAttribute('y2', cy + size);
+      const l2 = makeX();
+      l2.setAttribute('x1', cx + size); l2.setAttribute('y1', cy - size);
+      l2.setAttribute('x2', cx - size); l2.setAttribute('y2', cy + size);
+      svg.appendChild(l1);
+      svg.appendChild(l2);
+      return;
+    }
+
+    const toEl = document.getElementById(toId);
+    if (!toEl) return;
+
+    const toRect = toEl.getBoundingClientRect();
+    // Left edge of right card, relative to wrapper → then relative to connector area
+    const x2 = toRect.left - wRect.left - aOffsetX;
+    const y2 = toRect.top  - wRect.top  + toRect.height / 2;
+
+    // Cubic bezier: horizontal tangents at both ends
+    const cx1 = x1 + (x2 - x1) * 0.45;
+    const cy1 = y1;
+    const cx2 = x2 - (x2 - x1) * 0.45;
+    const cy2 = y2;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}`);
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', sw);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('opacity', type === 'keep' ? '0.65' : '0.85');
+    if (dashed) path.setAttribute('stroke-dasharray', dashed);
+
+    // Arrowhead marker
+    const markerId = 'arr-' + (type === 'keep' || type === 'keep' ? 'keep' : type === 'merge' ? 'merge' : type === 'urgent' ? 'urgent' : 'move');
+    path.setAttribute('marker-end', `url(#${markerId})`);
+
+    svg.appendChild(path);
+  });
+}
+
+// Run on load and on resize
+window.addEventListener('load', () => {
+  // tiny delay to ensure layout is painted
+  setTimeout(drawConnectors, 80);
+});
+window.addEventListener('resize', () => {
+  clearTimeout(window._resizeTimer);
+  window._resizeTimer = setTimeout(drawConnectors, 120);
+});
+</script>
+</body>
+</html>

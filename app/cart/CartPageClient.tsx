@@ -221,14 +221,7 @@ export default function CartPageClient() {
               <span>{subtotal > 0 ? formatUsd(subtotal) : 'Inquire'}</span>
             </div>
 
-            <div className="cart-summary-row cart-summary-row--muted">
-              <span>50% commission deposit</span>
-              <span>{subtotal > 0 ? formatUsd(Math.round(subtotal * 0.5)) : '—'}</span>
-            </div>
-            <div className="cart-summary-row cart-summary-row--muted">
-              <span>Balance due before shipping</span>
-              <span>{subtotal > 0 ? formatUsd(subtotal - Math.round(subtotal * 0.5)) : '—'}</span>
-            </div>
+
 
             {/* Guest checkout — just an email, no account required. The
                 confirmation + specialist follow-up go to this address; Stripe
@@ -253,7 +246,7 @@ export default function CartPageClient() {
             >
               {checkoutPending
                 ? 'Opening secure checkout…'
-                : `Reserve & Pay ${subtotal > 0 ? formatUsd(Math.round(subtotal * 0.5)) : 'Deposit'}`}
+                : `Place Order ${subtotal > 0 ? `· ${formatUsd(subtotal)}` : ''}`}
             </button>
 
             {checkoutError && (
@@ -268,11 +261,9 @@ export default function CartPageClient() {
             </Link>
 
             <p className="cart-summary-note">
-              50% deposit reserves your commission and locks the price. Each
-              DANHOV piece is then handcrafted to order in Los Angeles — your
-              specialist confirms timeline within one business day, and the
-              balance is due before shipping. Payments processed securely via
-              Stripe.
+              Each DANHOV piece is handcrafted to order in Los Angeles — your
+              specialist confirms timeline within one business day of payment.
+              Payments processed securely via Stripe.
             </p>
           </div>
         </aside>

@@ -126,7 +126,7 @@ THE PURCHASE EXPERIENCE
 - Online inquiry on any product page — a specialist responds within 24 hours.
 - Private virtual consultation — 1-on-1 video appointment (Zoom or FaceTime) with a specialist; bookable from the homepage or any product page.
 - Atelier visit — Los Angeles by appointment only, for private viewings.
-- Deposit policy — 50% deposit secures the commission; balance due before shipping. The 24-hour locked quote is honoured.
+- Payment policy — full payment secures the commission at checkout. The 24-hour locked quote is honoured.
 
 ────────────────────────────────────────────────────────────────────────
 SHIPPING & RETURNS

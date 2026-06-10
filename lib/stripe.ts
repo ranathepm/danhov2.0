@@ -17,4 +17,4 @@ export function getStripe(): Stripe {
   return cached;
 }
 
-export const DEPOSIT_PERCENT = 0.5; // 50% deposit on every commission
+export const DEPOSIT_PERCENT = 1; // Full payment charged at checkout

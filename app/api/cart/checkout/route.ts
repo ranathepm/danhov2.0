@@ -151,9 +151,9 @@ export async function POST(req: NextRequest) {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL || 'https://danhov-web.vercel.app';
 
-  // Build Stripe line items — one per cart piece, at 50% deposit
+  // Build Stripe line items — one per cart piece
   const lineItems = priced.map((p) => {
-    const unitDeposit = Math.round(p.unit_price_usd * DEPOSIT_PERCENT);
+    const unitAmount = Math.round(p.unit_price_usd * DEPOSIT_PERCENT);
     const diamondSummary = p.bundle
       ? ` + ${p.bundle.diamond.carat.toFixed(2)}ct ${p.bundle.diamond.shape.toLowerCase()} ${p.bundle.diamond.color}/${p.bundle.diamond.clarity}`
       : '';
@@ -162,10 +162,10 @@ export async function POST(req: NextRequest) {
       quantity: p.qty,
       price_data: {
         currency: 'usd' as const,
-        unit_amount: unitDeposit * 100,
+        unit_amount: unitAmount * 100,
         product_data: {
-          name: `${p.name}${diamondSummary} — 50% commission deposit${p.metal ? ` · ${p.metal}` : ''}${sizeSuffix}`,
-          description: `Style ${p.sku}. Locked at $${p.unit_price_usd.toLocaleString('en-US')} per piece. Balance due before shipping.`,
+          name: `${p.name}${diamondSummary}${p.metal ? ` · ${p.metal}` : ''}${sizeSuffix}`,
+          description: `Style ${p.sku}`,
           images: p.image ? [p.image] : undefined,
           metadata: { sku: p.sku, slug: p.slug, metal: p.metal ?? '' },
         },

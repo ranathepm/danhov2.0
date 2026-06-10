@@ -39,7 +39,7 @@ export default async function OrderSuccessPage({
         Your <em>journey</em> has begun.
       </h1>
       <p className="section-body" style={{ marginTop: 28, maxWidth: 580 }}>
-        Thank you. Your deposit secures the craftsmanship of {productName ? <em>{productName}</em> : 'your piece'}.
+        Thank you. Your order secures the craftsmanship of {productName ? <em>{productName}</em> : 'your piece'}.
         A DANHOV specialist will be in touch within one business day to confirm every detail.
       </p>
 
@@ -80,7 +80,7 @@ export default async function OrderSuccessPage({
           </div>
           {depositUsd && (
             <div style={{ fontSize: 13, color: 'var(--grey)', marginTop: 4 }}>
-              Deposit received · ${depositUsd.toLocaleString('en-US')}
+              Amount paid · ${depositUsd.toLocaleString('en-US')}
             </div>
           )}
         </div>

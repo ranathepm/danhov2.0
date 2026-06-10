@@ -57,7 +57,6 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
   const total =
     (mode !== 'diamond' ? settingSubtotal : 0) +
     (mode !== 'setting' ? diamondSubtotals.reduce((a, b) => a + b, 0) : 0);
-  const deposit = Math.round(total * 0.5);
 
   function setDiamondQty(i: number, v: number) {
     setDiamondQtys(prev => prev.map((q, j) => (j === i ? v : q)));
@@ -421,10 +420,6 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
               </span>
               <strong>${total.toLocaleString('en-US')}</strong>
             </div>
-            <div className="builder-review-total-row builder-review-deposit">
-              <span>50% deposit due today</span>
-              <strong>${deposit.toLocaleString('en-US')}</strong>
-            </div>
             <p className="builder-review-balance">
               {mode !== 'diamond' && 'Production: 4–6 weeks. '}Lifetime craftsmanship warranty.
             </p>
@@ -535,9 +530,8 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
           {err && <p className="quote-lock-err" style={{ marginTop: 8 }}>{err}</p>}
 
           <p className="builder-review-secured">
-            Secured by Stripe · Your card is charged only when you confirm. We will email
-            you the order reference and a specialist will reach out within one business
-            day to confirm {needsRingSize ? 'size, engraving, and stone' : 'shipping and order'} details.
+            Secured by Stripe · We will email you the order reference and a specialist
+            will reach out within one business day to confirm {needsRingSize ? 'size, engraving, and stone' : 'shipping and order'} details.
           </p>
         </div>
       </div>

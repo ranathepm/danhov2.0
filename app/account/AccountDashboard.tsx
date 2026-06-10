@@ -22,7 +22,7 @@ export type AccountOrderRow = {
 
 const STATUS_LABEL: Record<string, string> = {
   pending: 'Awaiting payment',
-  deposit_paid: 'Deposit received',
+  deposit_paid: 'Order confirmed',
   in_production: 'In production',
   shipped: 'Shipped',
   delivered: 'Delivered',
@@ -162,13 +162,12 @@ export default function AccountDashboard({
 
           {orders.length === 0 ? (
             <div className="acct-empty">
-              <p>Your past commissions and deposits will appear here.</p>
+              <p>Your past commissions will appear here.</p>
             </div>
           ) : (
             <ul className="acct-orders">
               {orders.map((o) => {
                 const ref = o.id.slice(0, 8).toUpperCase();
-                const balance = Math.max(0, o.total_usd - o.deposit_usd);
                 return (
                   <li key={o.id} className="acct-order">
                     <div className="acct-order-media">
@@ -193,9 +192,6 @@ export default function AccountDashboard({
                         {formatDate(o.created_at)}
                         {' · '}
                         Total {formatUsd(o.total_usd)}
-                        {balance > 0 && o.status !== 'cancelled' && o.status !== 'failed' && (
-                          <> · Balance due {formatUsd(balance)}</>
-                        )}
                       </div>
                     </div>
                   </li>

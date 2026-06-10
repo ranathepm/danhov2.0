@@ -19,7 +19,7 @@ export async function generateMetadata({
     return {
       title: 'Complete Your Ring · Ring Builder',
       description:
-        'Review your DANHOV ring commission — chosen setting, chosen diamond, total, and 50% deposit. Begin your made-to-order piece in Los Angeles.',
+        'Review your DANHOV ring commission — chosen setting, chosen diamond, and total. Begin your made-to-order piece in Los Angeles.',
       alternates: { canonical: '/ring-builder/review' },
     };
   if (hasSetting)
@@ -161,8 +161,8 @@ export default async function CompleteRingPage({
         {mode !== 'diamond' && (
           <p className="section-body">
             {mode === 'ring'
-              ? "Review your pairing below. When you're ready, the 50% deposit secures your commission and your piece begins in our Los Angeles atelier."
-              : "Review your chosen setting. A 50% deposit secures your commission — your piece will be handcrafted to order in Los Angeles in 4–6 weeks."}
+              ? "Review your pairing below. When you're ready, place your order and your piece begins in our Los Angeles atelier."
+              : "Review your chosen setting. Your piece will be handcrafted to order in Los Angeles in 4–6 weeks."}
           </p>
         )}
       </section>

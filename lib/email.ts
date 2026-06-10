@@ -130,7 +130,7 @@ export function quoteLockEmail(args: {
         </div>
       </td></tr>
     </table>
-    <p style="margin:0 0 6px;">When you're ready, reply to this email or contact us by phone. Mention your reference code and we'll guide you through the next step — a private consultation, a 50% deposit, or any questions you have first.</p>`;
+    <p style="margin:0 0 6px;">When you're ready, reply to this email or contact us by phone. Mention your reference code and we'll guide you through — a private consultation or any questions you have first.</p>`;
 
   return {
     subject: `Your DANHOV quote is locked — ${reference}`,
@@ -221,13 +221,11 @@ export function depositReceiptEmail(args: {
   orderId: string;
 }): { subject: string; html: string; text: string } {
   const ref = args.orderId.slice(0, 8).toUpperCase();
-  const dep = '$' + args.depositUsd.toLocaleString('en-US');
-  const total = '$' + args.totalUsd.toLocaleString('en-US');
-  const balance = '$' + (args.totalUsd - args.depositUsd).toLocaleString('en-US');
+  const paid = '$' + args.depositUsd.toLocaleString('en-US');
 
   const body = `
     <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;color:#AC3438;">Your commission has begun.</p>
-    <p style="margin:0 0 16px;">Thank you. Your deposit secures the craftsmanship of the <strong>${escape(args.productName)}</strong> — and the next four to six weeks of master-jeweler hands turning gold into your piece.</p>
+    <p style="margin:0 0 16px;">Thank you. Your order secures the craftsmanship of the <strong>${escape(args.productName)}</strong> — and the next four to six weeks of master-jeweler hands turning gold into your piece.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background:#fdf0ed;border:1px solid rgba(172,52,56,0.18);">
       <tr><td style="padding:24px;">
         <div style="font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:#AC3438;font-weight:700;">Order Reference</div>
@@ -235,9 +233,7 @@ export function depositReceiptEmail(args: {
         <hr style="border:none;border-top:1px solid rgba(172,52,56,0.10);margin:18px 0;"/>
         <div style="font-size:13px;color:#7a5c58;line-height:1.9;">
           Style: <strong>${escape(args.sku)}</strong><br/>
-          Deposit paid: <strong>${dep}</strong><br/>
-          Total: ${total}<br/>
-          Balance due before shipping: <strong>${balance}</strong>
+          Amount paid: <strong>${paid}</strong>
         </div>
       </td></tr>
     </table>
@@ -245,8 +241,8 @@ export function depositReceiptEmail(args: {
     <p style="margin:0 0 0;font-style:italic;color:#7a5c58;">"Presence is a present." — Jack</p>`;
 
   return {
-    subject: `Your DANHOV deposit is received — order ${ref}`,
-    html: shell('Deposit received', body),
-    text: `Your DANHOV deposit of ${dep} for ${args.productName} (Style ${args.sku}) has been received.\n\nOrder reference: ${ref}\nTotal: ${total}\nBalance due before shipping: ${balance}\n\nA specialist will be in touch within one business day.\n\nWith love,\nDANHOV Atelier`,
+    subject: `Your DANHOV order is confirmed — ${ref}`,
+    html: shell('Order confirmed', body),
+    text: `Your DANHOV order for ${args.productName} (Style ${args.sku}) has been confirmed.\n\nOrder reference: ${ref}\nAmount paid: ${paid}\n\nA specialist will be in touch within one business day.\n\nWith love,\nDANHOV Atelier`,
   };
 }

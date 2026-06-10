@@ -201,7 +201,7 @@ export async function POST(req: NextRequest) {
         currency: 'usd',
         unit_amount: settingDepositPerUnit * 100,
         product_data: {
-          name: `${setting.name}${metalLabel ? ` (${metalLabel})` : ''} — 50% deposit per piece`,
+          name: `${setting.name}${metalLabel ? ` (${metalLabel})` : ''}`,
           description: [
             `SKU: ${setting.sku}`,
             ringSize ? `Ring size: ${ringSize}` : '',
@@ -223,7 +223,7 @@ export async function POST(req: NextRequest) {
         currency: 'usd',
         unit_amount: diamondDepositPerUnit * 100,
         product_data: {
-          name: `${d.carat.toFixed(2)} ct ${d.shape} Diamond${label} — 50% deposit per stone`,
+          name: `${d.carat.toFixed(2)} ct ${d.shape} Diamond${label}`,
           description: [
             `${d.lab}${d.certNumber ? ` ${d.certNumber}` : ''}`,
             `${d.color} / ${d.clarity} / ${d.cut}`,
