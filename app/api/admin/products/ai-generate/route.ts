@@ -34,7 +34,7 @@ import {
   platinumToGoldWeightG,
 } from '@/lib/labor';
 import { fetchLaborCategories } from '@/lib/labor-server';
-import { computePrice, getGoldSpot } from '@/lib/pricing';
+import { computePrice, getAllSpots } from '@/lib/pricing';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -286,18 +286,17 @@ If anything is unreadable, make your best DANHOV-aligned guess. Never refuse. JS
   let priceBreakdown = null;
   let totalUsd = 0;
   try {
-    const spot = await getGoldSpot();
+    const spots = await getAllSpots();
     priceBreakdown = computePrice(
       {
-        default_metal: g.default_metal,
-        gold_weight_g: goldWeightG,
+        default_metal:     g.default_metal,
+        gold_weight_g:     goldWeightG,
         markup_multiplier: g.markup_multiplier_suggestion,
-        base_labor_usd: baseLaborUsd,
-        stones_value_usd: g.stone_value_usd_estimate,
+        base_labor_usd:    baseLaborUsd,
+        stones_value_usd:  g.stone_value_usd_estimate,
       },
-      spot.price_per_gram_usd,
-      spot.fetched_at,
-      g.default_metal
+      spots,
+      g.default_metal,
     );
     totalUsd = priceBreakdown.total_usd;
   } catch (e) {

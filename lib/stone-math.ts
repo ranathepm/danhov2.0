@@ -163,38 +163,73 @@ export function computeStoneGroupsBreakdown(
 }
 
 /**
- * USD per gram of the finished metal — current-market estimates for the
- * metals DANHOV works in. Used to turn the studio's "weight in platinum"
- * input into a metal-cost component on the total price auto-fill.
+ * Density ratios: alloy_density / platinum_density (21.45 g/cm³).
+ * The studio specs weight in platinum; multiply by this ratio to get the
+ * actual weight of the same piece cast in the chosen alloy.
  *
- * Numbers are conservative wholesale-with-fabrication baselines; the
- * studio can override the final total via the regular `price_display`
- * field on the editor.
+ * Reference densities (g/cm³):
+ *   Platinum 950 : 21.45  → ratio 1.0000
+ *   18k Yellow   : 15.50  → ratio 0.7228
+ *   18k White    : 14.70  → ratio 0.6853
+ *   18k Rose     : 15.20  → ratio 0.7088
+ *   14k Yellow   : 13.10  → ratio 0.6108
+ *   14k White    : 12.90  → ratio 0.6014
+ *   14k Rose     : 13.10  → ratio 0.6108
+ *
+ * Exported so the admin editor can compute live per-metal weights without
+ * importing the server-only pricing.ts module.
  */
-const METAL_PRICE_PER_G_USD: Record<string, number> = {
-  platinum: 38,
-  '18k_yellow': 62,
-  '18k_white': 62,
-  '18k_rose': 62,
-  '14k_yellow': 48,
-  '14k_white': 48,
-  '14k_rose': 48,
+export const DENSITY_RATIO: Record<string, number> = {
+  platinum:     1.0000,
+  '18k_yellow': 0.7228,
+  '18k_white':  0.6853,
+  '18k_rose':   0.7088,
+  '14k_yellow': 0.6108,
+  '14k_white':  0.6014,
+  '14k_rose':   0.6108,
+};
+
+/** Rhodium plating uplift for white-gold variants (mirrors pricing.ts, used in admin UI). */
+export const RHODIUM_UPLIFT_DISPLAY: Record<string, number> = {
+  '14k_white': 60,
+  '18k_white': 80,
+};
+
+/** Human-readable metal labels (mirrors pricing.ts, used in admin UI). */
+export const METAL_LABEL_DISPLAY: Record<string, string> = {
+  platinum:     'Platinum',
+  '14k_yellow': '14k Yellow Gold',
+  '14k_white':  '14k White Gold',
+  '14k_rose':   '14k Rose Gold',
+  '18k_yellow': '18k Yellow Gold',
+  '18k_white':  '18k White Gold',
+  '18k_rose':   '18k Rose Gold',
+};
+
+/**
+ * Fallback static USD per gram used only when live prices haven't loaded yet.
+ * Based on typical US wholesale rates; replaced by live GoldAPI rates once
+ * the /api/metal-prices endpoint responds in the admin editor.
+ */
+export const STATIC_METAL_PRICE_PER_G_USD: Record<string, number> = {
+  platinum:     31,
+  '18k_yellow': 76,
+  '18k_white':  76,
+  '18k_rose':   76,
+  '14k_yellow': 60,
+  '14k_white':  60,
+  '14k_rose':   60,
 };
 
 export function metalPricePerGram(metal: string | null | undefined): number {
-  if (!metal) return METAL_PRICE_PER_G_USD.platinum;
-  return METAL_PRICE_PER_G_USD[metal] ?? METAL_PRICE_PER_G_USD.platinum;
+  if (!metal) return STATIC_METAL_PRICE_PER_G_USD.platinum;
+  return STATIC_METAL_PRICE_PER_G_USD[metal] ?? STATIC_METAL_PRICE_PER_G_USD.platinum;
 }
 
-/**
- * Weight conversion when the studio specs in platinum but the piece is
- * finished in gold. Platinum is ~10% denser than 14k/18k gold, so a
- * platinum spec weighs ~10% more than the gold equivalent of the same
- * piece. Inverse direction: gold weight = platinum weight / 1.10.
- */
+/** Physical weight of the piece in the chosen metal given its platinum spec weight. */
 function weightInChosenMetal(platinumWeightG: number, metal: string | null | undefined): number {
-  if (!metal || metal === 'platinum') return platinumWeightG;
-  return platinumWeightG / 1.10;
+  if (!metal) return platinumWeightG;
+  return platinumWeightG * (DENSITY_RATIO[metal] ?? 1.0);
 }
 
 export type ProductTotalBreakdown = {

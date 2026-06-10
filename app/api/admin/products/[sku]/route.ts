@@ -10,6 +10,7 @@ const ALLOWED_FIELDS = [
   'metals', 'images', 'metal_images', 'price_display', 'description', 'default_metal',
   'gold_weight_g', 'markup_multiplier', 'base_labor_usd', 'diamond_labor_usd',
   'stones_value_usd', 'stone_count_input', 'stone_size_mm', 'stone_groups',
+  'setting_multiplier', 'centre_diamond_group', 'centre_multiplier', 'commission_rate',
   'accounting_cost_usd', 'is_active', 'sub_categories',
 ] as const;
 

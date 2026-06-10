@@ -75,9 +75,9 @@ export default async function ProductPage({ params }: { params: Params }) {
   // the stored labour cost (e.g. $800) for every metal, overriding the
   // correct price_display. Markup must also be set so the gold component
   // is meaningful.
-  const hasPricingData =
-    (product.gold_weight_g ?? 0) > 0 &&
-    (product.markup_multiplier ?? 0) > 0;
+  // Weight alone is sufficient — commission_rate defaults to 0 and labour/stones
+  // are already computed and stored; no longer gated on markup_multiplier.
+  const hasPricingData = (product.gold_weight_g ?? 0) > 0;
   if (hasPricingData) {
     try {
       const breakdowns = await priceAllOptions(product, product.metals);

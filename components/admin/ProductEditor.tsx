@@ -1,15 +1,20 @@
 'use client';
 
-import { useMemo, useState, useRef } from 'react';
+import { useEffect, useMemo, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import {
   computeProductTotal,
   computeStoneBreakdown,
   DIAMOND_SHAPES,
+  DENSITY_RATIO,
+  RHODIUM_UPLIFT_DISPLAY,
+  METAL_LABEL_DISPLAY,
   type StoneGroup,
 } from '@/lib/stone-math';
 import DiamondShapeIcon from '@/components/admin/DiamondShapeIcon';
+
+// ── Types ────────────────────────────────────────────────────────────────────
 
 type Product = {
   sku: string;
@@ -32,10 +37,24 @@ type Product = {
   stone_count_input: number | null;
   stone_size_mm: number | null;
   stone_groups: StoneGroup[] | null;
+  // New multiplier-based labour + commission fields
+  setting_multiplier: number | null;
+  centre_diamond_group: StoneGroup | null;
+  centre_multiplier: number | null;
+  commission_rate: number | null;
   accounting_cost_usd: number | null;
   is_active: boolean;
   sub_categories: string[] | null;
 };
+
+type LivePrices = {
+  gold_per_gram_24k: number;
+  platinum_per_gram_spot: number;
+  fetched_at: string;
+  cost_per_gram: Record<string, number>;
+};
+
+// ── Constants ────────────────────────────────────────────────────────────────
 
 const METAL_OPTIONS = [
   'platinum',
@@ -43,7 +62,8 @@ const METAL_OPTIONS = [
   '18k_yellow', '18k_white', '18k_rose',
 ];
 
-const LABOUR_PRESETS = [4, 50, 100, 200];
+const SETTING_MULTIPLIER_PRESETS = [4, 6, 8, 10];
+const CENTRE_MULTIPLIER_PRESETS  = [25, 50, 75, 100];
 
 type Tab = 'identity' | 'images' | 'metals' | 'pricing';
 
@@ -53,6 +73,8 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'metals',   label: 'Metals'   },
   { id: 'pricing',  label: 'Pricing'  },
 ];
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
 
 function blankStoneGroup(): StoneGroup {
   return { count: null, size_mm: null, length_mm: null, width_mm: null, shape: 'round' };
@@ -102,6 +124,8 @@ type Upload = {
   error?: string;
 };
 
+// ── Main component ────────────────────────────────────────────────────────────
+
 export default function ProductEditor({
   product,
   isNew = false,
@@ -113,34 +137,66 @@ export default function ProductEditor({
   const [activeTab, setActiveTab] = useState<Tab>('identity');
   const [form, setForm] = useState<Product>({
     ...product,
-    categories: product.categories ?? [product.category],
-    metals: product.metals ?? [],
-    images: product.images ?? [],
-    metal_images: product.metal_images ?? {},
-    sub_categories: product.sub_categories ?? [],
-    stone_count_input: product.stone_count_input ?? null,
-    stone_size_mm: product.stone_size_mm ?? null,
-    stone_groups: initialStoneGroups(product),
-    diamond_labor_usd: product.diamond_labor_usd ?? null,
-    accounting_cost_usd: product.accounting_cost_usd ?? null,
+    categories:           product.categories ?? [product.category],
+    metals:               product.metals ?? [],
+    images:               product.images ?? [],
+    metal_images:         product.metal_images ?? {},
+    sub_categories:       product.sub_categories ?? [],
+    stone_count_input:    product.stone_count_input ?? null,
+    stone_size_mm:        product.stone_size_mm ?? null,
+    stone_groups:         initialStoneGroups(product),
+    diamond_labor_usd:    product.diamond_labor_usd ?? null,
+    accounting_cost_usd:  product.accounting_cost_usd ?? null,
+    setting_multiplier:   product.setting_multiplier ?? 4,
+    centre_diamond_group: product.centre_diamond_group ?? blankStoneGroup(),
+    centre_multiplier:    product.centre_multiplier ?? 50,
+    commission_rate:      product.commission_rate ?? 0,
   });
 
+  // Live metal prices fetched from /api/metal-prices
+  const [livePrices, setLivePrices] = useState<LivePrices | null>(null);
+
+  useEffect(() => {
+    if (activeTab !== 'pricing') return;
+    let cancelled = false;
+    fetch('/api/metal-prices')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (!cancelled && d) setLivePrices(d); })
+      .catch(() => {});
+    return () => { cancelled = true; };
+  }, [activeTab]);
+
+  // Stone / labour derived values
   const productTotal = useMemo(
     () =>
       computeProductTotal({
-        stoneGroups: form.stone_groups,
-        weightInPlatinumG: form.gold_weight_g,
+        stoneGroups:        form.stone_groups,
+        weightInPlatinumG:  form.gold_weight_g,
         jewelleryLabourUsd: form.base_labor_usd,
-        diamondLabourUsd: form.diamond_labor_usd,
-        defaultMetal: form.default_metal,
+        diamondLabourUsd:   form.diamond_labor_usd,
+        defaultMetal:       form.default_metal,
       }),
     [form.stone_groups, form.gold_weight_g, form.base_labor_usd, form.diamond_labor_usd, form.default_metal],
   );
 
-  const [saving, setSaving] = useState(false);
+  const totalStoneCount = useMemo(
+    () => (form.stone_groups ?? []).reduce((s, g) => s + (g.count ?? 0), 0),
+    [form.stone_groups],
+  );
+
+  const settingLabour = useMemo(
+    () => totalStoneCount * (form.setting_multiplier ?? 4),
+    [totalStoneCount, form.setting_multiplier],
+  );
+
+  const centreCount  = form.centre_diamond_group?.count ?? 0;
+  const centreLabour = centreCount * (form.centre_multiplier ?? 50);
+  const totalLabour  = settingLabour + centreLabour;
+
+  const [saving,   setSaving]   = useState(false);
   const [deleting, setDeleting] = useState(false);
-  const [toast, setToast] = useState<{ kind: 'ok' | 'err'; msg: string } | null>(null);
-  const [uploads, setUploads] = useState<Upload[]>([]);
+  const [toast,    setToast]    = useState<{ kind: 'ok' | 'err'; msg: string } | null>(null);
+  const [uploads,  setUploads]  = useState<Upload[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -166,6 +222,13 @@ export default function ProductEditor({
     });
   }
 
+  function updateCentreGroup(patch: Partial<StoneGroup>) {
+    setForm((f) => ({
+      ...f,
+      centre_diamond_group: { ...(f.centre_diamond_group ?? blankStoneGroup()), ...patch },
+    }));
+  }
+
   function flashToast(kind: 'ok' | 'err', msg: string) {
     setToast({ kind, msg });
     setTimeout(() => setToast(null), 3500);
@@ -174,17 +237,30 @@ export default function ProductEditor({
   async function save() {
     setSaving(true);
     try {
-      const url = isNew ? '/api/admin/products' : `/api/admin/products/${encodeURIComponent(product.sku)}`;
+      const url    = isNew ? '/api/admin/products' : `/api/admin/products/${encodeURIComponent(product.sku)}`;
       const method = isNew ? 'POST' : 'PATCH';
       const cleanGroups = (form.stone_groups ?? [])
         .filter((g) => g.count != null || g.length_mm != null || g.width_mm != null || g.size_mm != null)
         .map((g) => ({ ...g, size_mm: groupEffectiveSize(g) }));
       const first = cleanGroups[0];
+      // Clean centre diamond group
+      const centreGroup = form.centre_diamond_group;
+      const cleanCentre = (centreGroup?.count ?? 0) > 0
+        ? { ...centreGroup, size_mm: groupEffectiveSize(centreGroup!) }
+        : null;
       const payload = {
         ...form,
-        stone_groups: cleanGroups,
-        stone_count_input: first?.count ?? null,
-        stone_size_mm: first?.size_mm ?? null,
+        stone_groups:         cleanGroups,
+        stone_count_input:    first?.count ?? null,
+        stone_size_mm:        first?.size_mm ?? null,
+        // Store computed labour so the pricing engine can use them directly
+        base_labor_usd:       settingLabour,
+        diamond_labor_usd:    centreLabour,
+        // New fields
+        setting_multiplier:   form.setting_multiplier,
+        centre_diamond_group: cleanCentre,
+        centre_multiplier:    form.centre_multiplier,
+        commission_rate:      form.commission_rate ?? 0,
       };
       const res = await fetch(url, {
         method,
@@ -245,7 +321,7 @@ export default function ProductEditor({
         setForm((f) => ({ ...f, images: [...(f.images ?? []), url] }));
       } catch (e) {
         setUploads((prev) => prev.map((u) =>
-          u.id === item.id ? { ...u, status: 'error', error: e instanceof Error ? e.message : 'failed' } : u
+          u.id === item.id ? { ...u, status: 'error', error: e instanceof Error ? e.message : 'failed' } : u,
         ));
       }
     }
@@ -316,7 +392,7 @@ export default function ProductEditor({
         });
       } catch (e) {
         setUploads((prev) => prev.map((u) =>
-          u.id === item.id ? { ...u, status: 'error', error: e instanceof Error ? e.message : 'failed' } : u
+          u.id === item.id ? { ...u, status: 'error', error: e instanceof Error ? e.message : 'failed' } : u,
         ));
       }
     }
@@ -325,8 +401,8 @@ export default function ProductEditor({
 
   function removeMetalImage(metal: string, idx: number) {
     setForm((f) => {
-      const map = { ...(f.metal_images ?? {}) };
-      const arr = (map[metal] ?? []).filter((_, i) => i !== idx);
+      const map  = { ...(f.metal_images ?? {}) };
+      const arr  = (map[metal] ?? []).filter((_, i) => i !== idx);
       if (arr.length === 0) delete map[metal]; else map[metal] = arr;
       return { ...f, metal_images: map };
     });
@@ -336,7 +412,7 @@ export default function ProductEditor({
     setForm((f) => {
       const map = { ...(f.metal_images ?? {}) };
       const arr = map[metal] ? [...map[metal]] : [];
-      const j = idx + dir;
+      const j   = idx + dir;
       if (j < 0 || j >= arr.length) return f;
       [arr[idx], arr[j]] = [arr[j], arr[idx]];
       map[metal] = arr;
@@ -361,13 +437,14 @@ export default function ProductEditor({
   }
 
   const imageCount = (form.images ?? []).length;
-  const totalLabour = (form.base_labor_usd ?? 0) + (form.diamond_labor_usd ?? 0);
+
+  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="adm-editor">
       {toast && <div className={`adm-toast adm-toast--${toast.kind}`}>{toast.msg}</div>}
 
-      {/* ── Tab bar ───────────────────────────────────────────────────── */}
+      {/* Tab bar */}
       <div className="adm-editor-tabs">
         {TABS.map((t) => (
           <button
@@ -384,10 +461,9 @@ export default function ProductEditor({
         ))}
       </div>
 
-      {/* ── Tab content ───────────────────────────────────────────────── */}
       <div className="adm-editor-body">
 
-        {/* ══ IDENTITY TAB ══════════════════════════════════════════════ */}
+        {/* ══ IDENTITY TAB ════════════════════════════════════════════════ */}
         {activeTab === 'identity' && (
           <section className="adm-card">
             <header className="adm-card-head">
@@ -397,7 +473,6 @@ export default function ProductEditor({
               </span>
             </header>
 
-            {/* Row 1: SKU · Slug · Collection */}
             <div className="adm-fields adm-fields--3">
               <label className="adm-field">
                 <span className="adm-field-label">SKU *</span>
@@ -429,7 +504,6 @@ export default function ProductEditor({
               </label>
             </div>
 
-            {/* Row 2: Name (full width) */}
             <div className="adm-fields">
               <label className="adm-field adm-field--full">
                 <span className="adm-field-label">Ring Name *</span>
@@ -442,7 +516,7 @@ export default function ProductEditor({
               </label>
             </div>
 
-            {/* Row 3: Category · Display Price */}
+            {/* Category only — Display Price removed (live pricing from engine) */}
             <div className="adm-fields">
               <label className="adm-field">
                 <span className="adm-field-label">Primary Category *</span>
@@ -457,18 +531,8 @@ export default function ProductEditor({
                   <option value="mens">Men&apos;s</option>
                 </select>
               </label>
-              <label className="adm-field">
-                <span className="adm-field-label">Display Price</span>
-                <input
-                  className="adm-input"
-                  value={form.price_display ?? ''}
-                  onChange={(e) => set('price_display', e.target.value || null)}
-                  placeholder="From $5,390"
-                />
-              </label>
             </div>
 
-            {/* Row 4: Also appears in (chips) */}
             <div className="adm-field">
               <span className="adm-field-label">Also Appears In</span>
               <div className="adm-chips" style={{ marginTop: 8 }}>
@@ -485,7 +549,6 @@ export default function ProductEditor({
               </div>
             </div>
 
-            {/* Row 5: Description */}
             <label className="adm-field">
               <span className="adm-field-label">Description (internal note)</span>
               <textarea
@@ -496,7 +559,6 @@ export default function ProductEditor({
               />
             </label>
 
-            {/* Row 6: Active toggle */}
             <div className="adm-field">
               <label className="adm-checkbox">
                 <input
@@ -510,7 +572,7 @@ export default function ProductEditor({
           </section>
         )}
 
-        {/* ══ IMAGES TAB ════════════════════════════════════════════════ */}
+        {/* ══ IMAGES TAB ══════════════════════════════════════════════════ */}
         {activeTab === 'images' && (
           <>
             <section className="adm-card">
@@ -521,7 +583,6 @@ export default function ProductEditor({
                 </span>
               </header>
 
-              {/* Compact horizontal drop bar */}
               <div
                 className={`adm-drop adm-drop--bar${dragOver ? ' is-over' : ''}`}
                 onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
@@ -549,7 +610,6 @@ export default function ProductEditor({
                 />
               </div>
 
-              {/* Upload progress */}
               {uploads.length > 0 && (
                 <ul className="adm-uploads">
                   {uploads.map((u) => (
@@ -568,7 +628,6 @@ export default function ProductEditor({
                 </ul>
               )}
 
-              {/* Compact thumbnail strip */}
               {imageCount > 0 && (
                 <div className="adm-thumb-strip">
                   {(form.images ?? []).map((src, i) => (
@@ -587,7 +646,6 @@ export default function ProductEditor({
               )}
             </section>
 
-            {/* Per-metal galleries */}
             {(form.metals ?? []).length > 0 && (
               <section className="adm-card">
                 <header className="adm-card-head">
@@ -620,7 +678,7 @@ export default function ProductEditor({
           </>
         )}
 
-        {/* ══ METALS TAB ════════════════════════════════════════════════ */}
+        {/* ══ METALS TAB ══════════════════════════════════════════════════ */}
         {activeTab === 'metals' && (
           <section className="adm-card">
             <header className="adm-card-head">
@@ -639,7 +697,7 @@ export default function ProductEditor({
                     className={`adm-chip${(form.metals ?? []).includes(m) ? ' is-active' : ''}`}
                     onClick={() => toggleMetal(m)}
                   >
-                    {m.replace(/_/g, ' ')}
+                    {m === 'platinum' ? 'platinum' : m.replace(/_/g, ' ')}
                   </button>
                 ))}
               </div>
@@ -671,10 +729,10 @@ export default function ProductEditor({
           </section>
         )}
 
-        {/* ══ PRICING TAB ═══════════════════════════════════════════════ */}
+        {/* ══ PRICING TAB ═════════════════════════════════════════════════ */}
         {activeTab === 'pricing' && (
           <>
-            {/* Metal weight */}
+            {/* ── Metal Specs ─────────────────────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
                 <h2 className="adm-h2">Metal Specs</h2>
@@ -692,10 +750,10 @@ export default function ProductEditor({
               </div>
             </section>
 
-            {/* Stone groups */}
+            {/* ── Stone of the Ring ───────────────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
-                <h2 className="adm-h2">Stones</h2>
+                <h2 className="adm-h2">Stone of the Ring</h2>
                 <button type="button" className="adm-btn adm-btn--sm" onClick={addStoneGroup}>
                   + Add Group
                 </button>
@@ -731,8 +789,8 @@ export default function ProductEditor({
                           value={g.length_mm ?? ''}
                           onChange={(e) => {
                             const length = e.target.value === '' ? null : Number(e.target.value);
-                            const width = g.width_mm ?? null;
-                            const eff = length != null && width != null ? (length + width) / 2 : (length ?? width);
+                            const width  = g.width_mm ?? null;
+                            const eff    = length != null && width != null ? (length + width) / 2 : (length ?? width);
                             updateStoneGroup(i, { length_mm: length, size_mm: eff });
                           }}
                           placeholder="6.50"
@@ -744,9 +802,9 @@ export default function ProductEditor({
                           type="number" step="0.05" min="0" className="adm-input"
                           value={g.width_mm ?? ''}
                           onChange={(e) => {
-                            const width = e.target.value === '' ? null : Number(e.target.value);
+                            const width  = e.target.value === '' ? null : Number(e.target.value);
                             const length = g.length_mm ?? null;
-                            const eff = length != null && width != null ? (length + width) / 2 : (width ?? length);
+                            const eff    = length != null && width != null ? (length + width) / 2 : (width ?? length);
                             updateStoneGroup(i, { width_mm: width, size_mm: eff });
                           }}
                           placeholder="6.50"
@@ -772,24 +830,157 @@ export default function ProductEditor({
                   </div>
                 ))}
               </div>
+
+              {/* Setting multiplier */}
+              <div className="adm-multiplier-block" style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                  <span className="adm-field-label" style={{ margin: 0 }}>Total stone count:</span>
+                  <strong style={{ fontFamily: "'Jost', sans-serif", fontSize: 15 }}>{totalStoneCount}</strong>
+                </div>
+                <span className="adm-field-label">Setting Multiplier (×)</span>
+                <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
+                  {SETTING_MULTIPLIER_PRESETS.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className={`adm-chip${form.setting_multiplier === p ? ' is-active' : ''}`}
+                      onClick={() => set('setting_multiplier', p)}
+                    >
+                      ×{p}
+                    </button>
+                  ))}
+                </div>
+                <div className="adm-dollar-wrap">
+                  <input
+                    type="number" step="1" min="1" className="adm-input"
+                    value={form.setting_multiplier ?? ''}
+                    onChange={(e) => set('setting_multiplier', e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder="4"
+                  />
+                </div>
+                {totalStoneCount > 0 && (form.setting_multiplier ?? 0) > 0 && (
+                  <p className="adm-stone-readout" style={{ marginTop: 8 }}>
+                    Setting Labour: <strong>{totalStoneCount} × {form.setting_multiplier} = ${settingLabour.toLocaleString('en-US')}</strong>
+                  </p>
+                )}
+              </div>
             </section>
 
-            {/* Labour */}
+            {/* ── Setting Centre Diamond ──────────────────────────────── */}
+            <section className="adm-card">
+              <header className="adm-card-head">
+                <h2 className="adm-h2">Setting Centre Diamond</h2>
+              </header>
+
+              <div className="adm-stone-group">
+                <div className="adm-fields adm-fields--4">
+                  <label className="adm-field">
+                    <span className="adm-field-label">Count</span>
+                    <input
+                      type="number" step="1" min="0" className="adm-input"
+                      value={form.centre_diamond_group?.count ?? ''}
+                      onChange={(e) => updateCentreGroup({ count: e.target.value === '' ? null : Number(e.target.value) })}
+                      placeholder="1"
+                    />
+                  </label>
+                  <label className="adm-field">
+                    <span className="adm-field-label">Length (mm)</span>
+                    <input
+                      type="number" step="0.05" min="0" className="adm-input"
+                      value={form.centre_diamond_group?.length_mm ?? ''}
+                      onChange={(e) => {
+                        const length = e.target.value === '' ? null : Number(e.target.value);
+                        const width  = form.centre_diamond_group?.width_mm ?? null;
+                        const eff    = length != null && width != null ? (length + width) / 2 : (length ?? width);
+                        updateCentreGroup({ length_mm: length, size_mm: eff });
+                      }}
+                      placeholder="6.50"
+                    />
+                  </label>
+                  <label className="adm-field">
+                    <span className="adm-field-label">Width (mm)</span>
+                    <input
+                      type="number" step="0.05" min="0" className="adm-input"
+                      value={form.centre_diamond_group?.width_mm ?? ''}
+                      onChange={(e) => {
+                        const width  = e.target.value === '' ? null : Number(e.target.value);
+                        const length = form.centre_diamond_group?.length_mm ?? null;
+                        const eff    = length != null && width != null ? (length + width) / 2 : (width ?? length);
+                        updateCentreGroup({ width_mm: width, size_mm: eff });
+                      }}
+                      placeholder="6.50"
+                    />
+                  </label>
+                  <label className="adm-field">
+                    <span className="adm-field-label">Shape</span>
+                    <div className="adm-shape-select">
+                      <DiamondShapeIcon shape={form.centre_diamond_group?.shape ?? null} className="adm-shape-select-icon" />
+                      <select
+                        className="adm-select adm-select--with-icon"
+                        value={form.centre_diamond_group?.shape ?? 'round'}
+                        onChange={(e) => updateCentreGroup({ shape: e.target.value })}
+                      >
+                        {DIAMOND_SHAPES.map((s) => (
+                          <option key={s.slug} value={s.slug}>{s.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </label>
+                </div>
+                <StoneGroupReadout group={form.centre_diamond_group ?? blankStoneGroup()} />
+              </div>
+
+              {/* Centre multiplier */}
+              <div className="adm-multiplier-block" style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+                <span className="adm-field-label">Centre Multiplier (×)</span>
+                <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
+                  {CENTRE_MULTIPLIER_PRESETS.map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className={`adm-chip${form.centre_multiplier === p ? ' is-active' : ''}`}
+                      onClick={() => set('centre_multiplier', p)}
+                    >
+                      ×{p}
+                    </button>
+                  ))}
+                </div>
+                <div className="adm-dollar-wrap">
+                  <input
+                    type="number" step="1" min="1" className="adm-input"
+                    value={form.centre_multiplier ?? ''}
+                    onChange={(e) => set('centre_multiplier', e.target.value === '' ? null : Number(e.target.value))}
+                    placeholder="50"
+                  />
+                </div>
+                {centreCount > 0 && (form.centre_multiplier ?? 0) > 0 && (
+                  <p className="adm-stone-readout" style={{ marginTop: 8 }}>
+                    Centre Diamond Labour: <strong>{centreCount} × {form.centre_multiplier} = ${centreLabour.toLocaleString('en-US')}</strong>
+                  </p>
+                )}
+              </div>
+            </section>
+
+            {/* ── Labour Summary (read-only) ───────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
                 <h2 className="adm-h2">Labour</h2>
               </header>
               <div className="adm-labour-split">
-                <LabourField
-                  label="Setting Labour (USD)"
-                  value={form.base_labor_usd}
-                  onChange={(v) => set('base_labor_usd', v)}
-                />
-                <LabourField
-                  label="Setting Center Diamond (USD)"
-                  value={form.diamond_labor_usd}
-                  onChange={(v) => set('diamond_labor_usd', v)}
-                />
+                <div className="adm-labour-field">
+                  <span className="adm-field-label">Setting Labour (USD)</span>
+                  <p className="adm-labour-computed">
+                    <strong>${settingLabour.toLocaleString('en-US')}</strong>
+                    <span className="adm-labour-formula">{totalStoneCount} stones × ×{form.setting_multiplier ?? 4}</span>
+                  </p>
+                </div>
+                <div className="adm-labour-field">
+                  <span className="adm-field-label">Setting Centre Diamond (USD)</span>
+                  <p className="adm-labour-computed">
+                    <strong>${centreLabour.toLocaleString('en-US')}</strong>
+                    <span className="adm-labour-formula">{centreCount} stone × ×{form.centre_multiplier ?? 50}</span>
+                  </p>
+                </div>
               </div>
               <div className="adm-labour-total">
                 <span className="adm-field-label">Total Labour</span>
@@ -797,38 +988,115 @@ export default function ProductEditor({
               </div>
             </section>
 
-            {/* Auto-calculated totals */}
+            {/* ── Auto-Calculated Totals ───────────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
                 <h2 className="adm-h2">Auto-Calculated Totals</h2>
                 <span className="adm-page-sub">Updates live as you type above</span>
               </header>
 
+              {/* Commission rate */}
+              <div className="adm-fields" style={{ marginBottom: 16 }}>
+                <label className="adm-field">
+                  <span className="adm-field-label">Commission Rate (%)</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                      type="number" step="1" min="0" max="100" className="adm-input"
+                      style={{ maxWidth: 120 }}
+                      value={form.commission_rate ?? ''}
+                      onChange={(e) => set('commission_rate', e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder="0"
+                    />
+                    <span className="adm-field-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>
+                      % added to sub-total
+                    </span>
+                  </div>
+                </label>
+              </div>
+
+              {/* Live spot indicator */}
+              <div className="adm-spot-badge" style={{
+                padding: '8px 12px',
+                background: 'var(--cream)',
+                borderRadius: 6,
+                marginBottom: 16,
+                fontSize: 12,
+                fontFamily: "'Jost', sans-serif",
+                color: 'var(--text-muted)',
+                display: 'flex',
+                gap: 12,
+                flexWrap: 'wrap' as const,
+                alignItems: 'center',
+              }}>
+                {livePrices ? (
+                  <>
+                    <span>Live market ·</span>
+                    <span><strong style={{ color: 'var(--text)' }}>${livePrices.gold_per_gram_24k.toFixed(2)}/g</strong> 24k Gold</span>
+                    <span><strong style={{ color: 'var(--text)' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Platinum</span>
+                    <span style={{ marginLeft: 'auto', opacity: 0.65 }}>
+                      Updated {new Date(livePrices.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </>
+                ) : (
+                  <span>Fetching live metal prices…</span>
+                )}
+              </div>
+
+              {/* Stones + Labour rows (same for every metal) */}
               <div className="adm-pricing-breakdown">
                 <div className="adm-pricing-row">
                   <span>Stones ({productTotal.total_carats > 0 ? `${productTotal.total_carats.toFixed(3)} ct` : '—'})</span>
                   <strong>${Math.round(productTotal.total_stone_price_usd).toLocaleString('en-US')}</strong>
                 </div>
                 <div className="adm-pricing-row">
-                  <span>Metal ({productTotal.metal_weight_g.toFixed(2)} g @ ${productTotal.metal_price_per_g_usd}/g)</span>
-                  <strong>${Math.round(productTotal.metal_cost_usd).toLocaleString('en-US')}</strong>
-                </div>
-                <div className="adm-pricing-row">
-                  <span>Labour (setting + center stone)</span>
-                  <strong>${Math.round(totalLabour).toLocaleString('en-US')}</strong>
-                </div>
-                <div className="adm-pricing-total">
-                  <span>Total Product Price</span>
-                  <strong>
-                    {productTotal.total_product_price_usd > 0
-                      ? `$${Math.round(productTotal.total_product_price_usd).toLocaleString('en-US')}`
-                      : '—'}
-                  </strong>
+                  <span>Labour (setting + centre diamond)</span>
+                  <strong>${totalLabour.toLocaleString('en-US')}</strong>
                 </div>
               </div>
 
+              {/* Per-metal price table */}
+              {(form.metals ?? []).length > 0 && (form.gold_weight_g ?? 0) > 0 && (
+                <div className="adm-metal-price-table" style={{ marginTop: 12 }}>
+                  {(form.metals ?? []).map((metal) => {
+                    const ratio       = DENSITY_RATIO[metal] ?? 1.0;
+                    const metalWeight = (form.gold_weight_g ?? 0) * ratio;
+                    const costPerG    = livePrices?.cost_per_gram[metal] ?? 0;
+                    const materialCost = metalWeight * costPerG;
+                    const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[metal] ?? 0;
+                    const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
+                    const subTotal      = materialCost + stoneCostVal + totalLabour + rhodiumUplift;
+                    const commission    = subTotal * ((form.commission_rate ?? 0) / 100);
+                    const finalTotal    = subTotal + commission;
+                    const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
+                    return (
+                      <div key={metal} className="adm-metal-price-row" style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr auto auto auto',
+                        gap: 12,
+                        padding: '10px 0',
+                        borderBottom: '1px solid var(--border)',
+                        alignItems: 'center',
+                        fontFamily: "'Jost', sans-serif",
+                        fontSize: 13,
+                      }}>
+                        <span style={{ color: 'var(--text)' }}>{label}</span>
+                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                          {metalWeight.toFixed(2)}g @ {livePrices ? `$${costPerG.toFixed(2)}/g` : '—'}
+                        </span>
+                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                          {livePrices ? `metal $${Math.round(materialCost).toLocaleString()}` : '—'}
+                        </span>
+                        <strong style={{ color: livePrices ? 'var(--logo-red)' : 'var(--text-muted)', fontSize: 14 }}>
+                          {livePrices ? `$${Math.round(finalTotal).toLocaleString('en-US')}` : '—'}
+                        </strong>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
               {/* Overrides */}
-              <div className="adm-fields" style={{ marginTop: 16 }}>
+              <div className="adm-fields" style={{ marginTop: 20 }}>
                 <label className="adm-field adm-field--full">
                   <span className="adm-field-label">Stone Value Override (leave blank to use auto)</span>
                   <div className="adm-dollar-wrap">
@@ -862,7 +1130,7 @@ export default function ProductEditor({
 
       </div>{/* end .adm-editor-body */}
 
-      {/* ── Sticky save/delete bar ────────────────────────────────────── */}
+      {/* Sticky save/delete bar */}
       <div className="adm-sticky-bar">
         <div className="adm-sticky-bar-info">
           {form.sku
@@ -884,9 +1152,11 @@ export default function ProductEditor({
   );
 }
 
+// ── Sub-components ────────────────────────────────────────────────────────────
+
 function StoneGroupReadout({ group }: { group: StoneGroup }) {
   const eff = groupEffectiveSize(group);
-  const b = computeStoneBreakdown(eff, group.count);
+  const b   = computeStoneBreakdown(eff, group.count);
   if (!eff || b.total_carats <= 0) {
     return (
       <p className="adm-stone-readout adm-stone-readout--empty">
@@ -905,42 +1175,6 @@ function StoneGroupReadout({ group }: { group: StoneGroup }) {
   );
 }
 
-function LabourField({
-  label,
-  value,
-  onChange,
-}: {
-  label: string;
-  value: number | null;
-  onChange: (v: number | null) => void;
-}) {
-  return (
-    <div className="adm-labour-field">
-      <span className="adm-field-label">{label}</span>
-      <div className="adm-chips adm-labour-presets">
-        {LABOUR_PRESETS.map((p) => (
-          <button
-            key={p}
-            type="button"
-            className={`adm-chip${value === p ? ' is-active' : ''}`}
-            onClick={() => onChange(p)}
-          >
-            ${p}
-          </button>
-        ))}
-      </div>
-      <div className="adm-dollar-wrap">
-        <input
-          type="number" step="1" min="0" className="adm-input"
-          value={value ?? ''}
-          onChange={(e) => onChange(e.target.value === '' ? null : Number(e.target.value))}
-          placeholder="0"
-        />
-      </div>
-    </div>
-  );
-}
-
 function MetalGallerySlot({
   metal,
   images,
@@ -954,9 +1188,9 @@ function MetalGallerySlot({
   onRemove: (idx: number) => void;
   onMove: (idx: number, dir: -1 | 1) => void;
 }) {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRef  = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
-  const label = metal.replace(/_/g, ' ');
+  const label = metal === 'platinum' ? 'Platinum' : metal.replace(/_/g, ' ');
 
   return (
     <div className="adm-metal-slot">

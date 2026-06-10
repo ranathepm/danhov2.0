@@ -115,12 +115,14 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
  * Use from server-side code that needs to compute today's price.
  */
 export type ProductWithPricing = Product & {
-  default_metal: string | null;
-  gold_weight_g: number | null;
+  default_metal:     string | null;
+  gold_weight_g:     number | null;
   markup_multiplier: number | null;
-  base_labor_usd: number | null;
+  base_labor_usd:    number | null;
   diamond_labor_usd: number | null;
-  stones_value_usd: number | null;
+  stones_value_usd:  number | null;
+  stone_groups:      import('@/lib/stone-math').StoneGroup[] | null;
+  commission_rate:   number | null;
 };
 
 export async function fetchProductWithPricingBySlug(
@@ -129,7 +131,7 @@ export async function fetchProductWithPricingBySlug(
   const { data, error } = await supabaseAnon
     .from('products')
     .select(
-      'sku, slug, name, collection, category, categories, metals, images, metal_images, price_display, sub_categories, is_active, default_metal, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, stones_value_usd'
+      'sku, slug, name, collection, category, categories, metals, images, metal_images, price_display, sub_categories, is_active, default_metal, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, stones_value_usd, stone_groups, commission_rate'
     )
     .eq('slug', slug)
     .eq('is_active', true)
