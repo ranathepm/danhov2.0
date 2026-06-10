@@ -5,9 +5,6 @@ export default function InvitationMoment() {
     <section className="inv-moment-section">
       <div className="inv-moment-inner">
         <span className="inv-eyebrow">The DANHOV Invitation</span>
-        <p className="inv-line1">
-          Jack saw <em>The Swirl Love Ring</em> in silence.
-        </p>
         <div className="inv-rule" />
         <h2 className="inv-headline">
           What do<br />you <em>see?</em>

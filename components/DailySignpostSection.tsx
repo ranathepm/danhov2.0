@@ -57,7 +57,7 @@ export default function DailySignpostSection() {
         <span className="signpost-category">{teaching.category}</span>
       )}
       <p className="signpost-quote">{teaching ? `"${teaching.text}"` : ' '}</p>
-      <p className="signpost-attribution">— Babig&apos;s Wisdom · Jack Hovsepian, Founder</p>
+      <p className="signpost-attribution">— Jack Hovsepian, Founder</p>
       <p className="signpost-date">{dateStr}</p>
       <div className="signpost-ctas">
         <Link href="/ring-builder" className="signpost-cta signpost-cta--primary">
