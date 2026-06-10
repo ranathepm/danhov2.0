@@ -256,9 +256,20 @@ p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, td, th {
   letter-spacing: 0.12em; text-transform: uppercase;
   color: #fff8f6; background: var(--logo-red);
   padding: 12px 28px; text-decoration: none;
-  transition: background 0.3s;
+  border-radius: 999px;
+  box-shadow:
+    0 0 6px rgba(172, 52, 56, 0.55),
+    0 0 14px rgba(172, 52, 56, 0.32),
+    0 0 30px rgba(172, 52, 56, 0.16);
+  transition: background 0.3s, box-shadow 0.35s ease;
 }
-.nav-cta:hover { background: var(--logo-red-dark); }
+.nav-cta:hover {
+  background: var(--logo-red-dark);
+  box-shadow:
+    0 0 10px rgba(172, 52, 56, 0.85),
+    0 0 22px rgba(172, 52, 56, 0.5),
+    0 0 44px rgba(172, 52, 56, 0.26);
+}
 
 /* MEGA MENU */
 .nav-links > li { position: static; }
@@ -1483,9 +1494,9 @@ footer {
 .prod-tab:hover { border-color: var(--logo-red); color: var(--logo-red); }
 .prod-tab.active { background: var(--logo-red); color: #fff8f6; border-color: var(--logo-red); }
 .products-filter { display: flex; justify-content: center; gap: 4px; margin-bottom: 48px; flex-wrap: wrap; }
-.prod-filter { font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 1px solid rgba(181,96,106,0.15); color: var(--grey); padding: 6px 16px; cursor: pointer; transition: all 0.25s; }
-.prod-filter:hover { border-color: var(--crimson); color: var(--crimson); }
-.prod-filter.active { background: var(--crimson); color: #fff8f6; border-color: var(--crimson); }
+.prod-filter { font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; background: transparent; border: 1px solid rgba(181,96,106,0.3); color: var(--grey); padding: 6px 16px; cursor: pointer; border-radius: 999px; box-shadow: 0 0 4px rgba(172,52,56,0.15), 0 0 10px rgba(172,52,56,0.08); transition: all 0.25s, box-shadow 0.35s ease; }
+.prod-filter:hover { border-color: var(--crimson); color: var(--crimson); box-shadow: 0 0 8px rgba(172,52,56,0.35), 0 0 18px rgba(172,52,56,0.18); }
+.prod-filter.active { background: var(--crimson); color: #fff8f6; border-color: var(--crimson); box-shadow: 0 0 8px rgba(172,52,56,0.6), 0 0 18px rgba(172,52,56,0.3); }
 .products-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1300px; margin: 0 auto; }
 .prod-card { background: #fdf0ed; border: 1px solid rgba(181,96,106,0.1); overflow: hidden; transition: box-shadow 0.3s, transform 0.3s; display: flex; flex-direction: column; }
 .prod-card:hover { box-shadow: 0 8px 32px rgba(172,52,56,0.12); transform: translateY(-2px); }
@@ -1502,8 +1513,8 @@ footer {
 .prod-cta { display: block; text-align: center; font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; color: var(--logo-red); text-decoration: none; padding: 12px; border-top: 1px solid rgba(181,96,106,0.12); transition: background 0.3s, color 0.3s; background: transparent; }
 .prod-cta:hover { background: var(--logo-red); color: #fff8f6; }
 .products-load-more { text-align: center; margin-top: 48px; }
-.btn-load-more { font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid var(--logo-red); color: var(--logo-red); padding: 14px 48px; cursor: pointer; transition: all 0.3s; }
-.btn-load-more:hover { background: var(--logo-red); color: #fff8f6; }
+.btn-load-more { font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; background: transparent; border: 1px solid rgba(172,52,56,0.7); color: var(--logo-red); padding: 14px 48px; cursor: pointer; border-radius: 999px; box-shadow: 0 0 6px rgba(172,52,56,0.3), 0 0 14px rgba(172,52,56,0.14); transition: all 0.3s, box-shadow 0.35s ease; }
+.btn-load-more:hover { background: var(--logo-red); color: #fff8f6; box-shadow: 0 0 10px rgba(172,52,56,0.7), 0 0 22px rgba(172,52,56,0.4); }
 
 /* RESPONSIVE */
 @media (max-width: 1100px) {
@@ -2060,10 +2071,23 @@ footer {
   font-size: 11px; font-weight: 600;
   letter-spacing: 0.2em; text-transform: uppercase;
   text-decoration: none; padding: 15px 36px;
-  transition: background 0.3s;
+  border-radius: 999px;
+  box-shadow:
+    0 0 6px rgba(172, 52, 56, 0.55),
+    0 0 14px rgba(172, 52, 56, 0.32),
+    0 0 30px rgba(172, 52, 56, 0.16),
+    0 0 60px rgba(172, 52, 56, 0.08);
+  transition: background 0.3s, box-shadow 0.35s ease;
   align-self: flex-start; margin-bottom: 18px;
 }
-.product-inquire-btn:hover { background: var(--logo-red-dark); }
+.product-inquire-btn:hover {
+  background: var(--logo-red-dark);
+  box-shadow:
+    0 0 10px rgba(172, 52, 56, 0.85),
+    0 0 22px rgba(172, 52, 56, 0.5),
+    0 0 44px rgba(172, 52, 56, 0.26),
+    0 0 88px rgba(172, 52, 56, 0.13);
+}
 .product-handcraft-note {
   font-family: 'Jost', sans-serif;
   font-size: 12px; color: var(--grey);
@@ -2189,18 +2213,29 @@ footer {
 .quote-lock-btn {
   background: var(--logo-red);
   color: #fff8f6;
-  border: none;
-  padding: 11px 18px;
+  border: 1px solid rgba(172, 52, 56, 0.8);
+  padding: 11px 22px;
   font-family: 'Jost', sans-serif;
   font-size: 11.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background 0.2s;
+  border-radius: 999px;
+  box-shadow:
+    0 0 6px rgba(172, 52, 56, 0.55),
+    0 0 14px rgba(172, 52, 56, 0.32),
+    0 0 30px rgba(172, 52, 56, 0.16);
+  transition: background 0.2s, box-shadow 0.35s ease;
   white-space: nowrap;
 }
-.quote-lock-btn:hover { background: var(--logo-red-dark); }
+.quote-lock-btn:hover {
+  background: var(--logo-red-dark);
+  box-shadow:
+    0 0 10px rgba(172, 52, 56, 0.85),
+    0 0 22px rgba(172, 52, 56, 0.5),
+    0 0 44px rgba(172, 52, 56, 0.26);
+}
 .quote-lock-disclosure {
   display: block;
   margin-top: 4px;
@@ -6353,7 +6388,7 @@ footer {
   margin-top: 16px;
   background: var(--logo-red);
   color: #fff8f6;
-  border: none;
+  border: 1px solid rgba(172, 52, 56, 0.8);
   cursor: pointer;
   font-family: 'Jost', sans-serif;
   font-size: 12.5px;
@@ -6361,8 +6396,12 @@ footer {
   letter-spacing: 0.22em;
   text-transform: uppercase;
   padding: 16px 24px;
-  border-radius: 2px;
-  transition: background 0.25s, transform 0.12s;
+  border-radius: 999px;
+  box-shadow:
+    0 0 6px rgba(172, 52, 56, 0.55),
+    0 0 14px rgba(172, 52, 56, 0.32),
+    0 0 30px rgba(172, 52, 56, 0.16);
+  transition: background 0.25s, transform 0.12s, box-shadow 0.35s ease;
 }
 .auth-submit:hover:not(:disabled) {
   background: var(--logo-red-dark);

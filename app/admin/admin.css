@@ -282,19 +282,20 @@ body:has(.admin-root) {
 /* ── Buttons + form controls ───────────────────────────────────────── */
 .adm-btn {
   display: inline-flex; align-items: center; justify-content: center;
-  padding: 9px 18px;
+  padding: 9px 20px;
   background: var(--adm-surface);
   color: var(--adm-text);
   border: 1px solid var(--adm-line);
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: all 0.15s;
+  box-shadow: 0 0 0 1px rgba(172,52,56,0.06), 0 0 8px rgba(172,52,56,0.08);
+  transition: all 0.15s, box-shadow 0.25s ease;
   text-decoration: none;
 }
-.adm-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); text-decoration: none; }
+.adm-btn:hover { border-color: var(--adm-accent); color: var(--adm-accent); text-decoration: none; box-shadow: 0 0 0 1px rgba(172,52,56,0.15), 0 0 12px rgba(172,52,56,0.18); }
 .adm-btn--sm { padding: 6px 14px; font-size: 12px; }
 .adm-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 /* `.admin-root a` has higher specificity than `.adm-btn-primary` alone,
@@ -1596,9 +1597,9 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .adm-action-btn {
   display: inline-flex;
   align-items: center;
-  padding: 4px 11px;
+  padding: 4px 13px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.06em;
