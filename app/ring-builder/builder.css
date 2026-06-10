@@ -1248,7 +1248,7 @@
   border: 1px solid rgba(172, 52, 56, 0.12);
   padding: 28px 32px;
   margin-bottom: 32px;
-  max-width: 860px;
+  width: 100%;
 }
 .builder-review-top {
   display: grid;
@@ -1568,16 +1568,16 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  background: transparent;
-  color: var(--logo-red);
+  background: var(--logo-red);
+  color: #fff;
   border: 1px solid var(--logo-red);
   cursor: pointer;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s, border-color 0.2s;
   white-space: nowrap;
 }
 .builder-review-add-diamond-btn:hover {
-  background: var(--logo-red);
-  color: #fff;
+  background: #8B2A2D;
+  border-color: #8B2A2D;
 }
 
 /* ── "Already in cart" badge on diamond grid ── */
@@ -2075,7 +2075,7 @@
 }
 .builder-review-diamond-media {
   position: relative;
-  width: 168px;
+  width: 220px;
   aspect-ratio: 1;
   margin: 0 auto;
   background: #fff;
@@ -2574,6 +2574,13 @@
   color: #fff8f6;
 }
 .be-card-cta:disabled { opacity: 0.65; cursor: default; }
+.be-card-cta.is-in-cart {
+  background: #ede8e2 !important;
+  color: #9c8f86 !important;
+  border-color: #ede8e2 !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
 .be-card-cta.is-selected {
   background: var(--logo-red);
   color: #fff8f6;

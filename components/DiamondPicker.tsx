@@ -64,8 +64,9 @@ export function DiamondCardMedia({
   const hasSpin = !!video;
   const hasImage = !!image && imgStatus !== 'error';
 
-  // autoPlay: spin is visible as soon as it loads; hover not required
-  const spinVisible = autoPlay ? spinReady : (hovering && spinReady);
+  // autoPlay: show iframe immediately — loupe360 has its own loader and
+  // will auto-rotate once its canvas initialises. No need to wait for onLoad.
+  const spinVisible = autoPlay ? spinMounted : (hovering && spinReady);
 
   const onEnter = () => {
     setHovering(true);
@@ -98,7 +99,12 @@ export function DiamondCardMedia({
           onError={() => setImgStatus('error')}
           className="dpicker-media-img"
           style={{
-            opacity: imgStatus === 'ok' && !(hasSpin && spinVisible) ? 1 : 0,
+            // autoPlay: keep image visible as background while loupe360 initialises,
+            // fade out once iframe has signalled onLoad (spinReady).
+            opacity: imgStatus === 'ok'
+              ? (autoPlay ? (spinReady ? 0 : 1) : (hasSpin && spinVisible ? 0 : 1))
+              : 0,
+            transition: 'opacity 0.4s ease',
           }}
         />
       )}
@@ -757,14 +763,15 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
                     <div className="be-card-price">${Number(price).toLocaleString('en-US')}</div>
                     <button
                       type="button"
-                      className={`be-card-cta${isSelected ? ' is-selected' : ''}`}
-                      disabled={!!holding}
+                      className={`be-card-cta${isSelected ? ' is-selected' : ''}${isInCart ? ' is-in-cart' : ''}`}
+                      disabled={!!holding || isInCart}
                       onClick={(e) => {
+                        if (isInCart) return;
                         e.stopPropagation();
                         selectStone(d);
                       }}
                     >
-                      {isHolding ? 'Reserving…' : isSelected ? '✓ Selected' : 'Select this diamond'}
+                      {isInCart ? '✓ Already in Cart' : isHolding ? 'Reserving…' : isSelected ? '✓ Selected' : 'Select this diamond'}
                     </button>
                   </div>
                 </div>

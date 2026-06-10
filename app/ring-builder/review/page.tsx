@@ -172,16 +172,30 @@ export default async function CompleteRingPage({
       />
 
       <div className="builder-review-edit-row">
-        {mode !== 'diamond' && (
-          <Link href={`/ring-builder/setting${settingSlug ? `?setting=${settingSlug}` : ''}${offerId ? `&diamond=${offerId}` : ''}${holdId ? `&hold=${holdId}` : ''}`}>
-            ← Edit Setting
-          </Link>
-        )}
-        {mode !== 'setting' && (
-          <Link href={`/ring-builder/diamond${settingSlug ? `?setting=${settingSlug}` : ''}${offerId ? `&diamond=${offerId}` : ''}${holdId ? `&hold=${holdId}` : ''}`}>
-            ← {mode === 'diamond' ? 'Change Diamond' : 'Edit Diamond'}
-          </Link>
-        )}
+        {mode !== 'diamond' && (() => {
+          const p = new URLSearchParams();
+          if (settingSlug) p.set('setting', settingSlug);
+          if (offerId) p.set('diamond', offerId);
+          if (holdId) p.set('hold', holdId);
+          const qs = p.toString();
+          return (
+            <Link href={`/ring-builder/setting${qs ? `?${qs}` : ''}`}>
+              ← Edit Setting
+            </Link>
+          );
+        })()}
+        {mode !== 'setting' && (() => {
+          const p = new URLSearchParams();
+          if (settingSlug) p.set('setting', settingSlug);
+          if (offerId) p.set('diamond', offerId);
+          if (holdId) p.set('hold', holdId);
+          const qs = p.toString();
+          return (
+            <Link href={`/ring-builder/diamond${qs ? `?${qs}` : ''}`}>
+              ← {mode === 'diamond' ? 'Change Diamond' : 'Edit Diamond'}
+            </Link>
+          );
+        })()}
       </div>
     </main>
   );
