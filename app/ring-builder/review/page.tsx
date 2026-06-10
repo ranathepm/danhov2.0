@@ -188,20 +188,24 @@ export default async function CompleteRingPage({
             </Link>
           );
         })()}
-        {/* "Edit Diamond" only for single-diamond — multi-diamond users remove via the review UI */}
-        {mode !== 'setting' && reviewDiamonds.length === 1 && (() => {
+        {mode !== 'setting' && reviewDiamonds.map((d, i) => {
           const p = new URLSearchParams();
           if (settingSlug) p.set('setting', settingSlug);
-          if (firstOfferId) p.set('diamond', firstOfferId);
-          if (holdParam) p.set('hold', holdParam);
-          if (firstOfferId) p.set('inorder', firstOfferId);
+          p.set('diamond', d.offer_id);
+          if (d.hold_id) p.set('hold', d.hold_id);
+          p.set('inorder', d.offer_id);
+          const otherIds = reviewDiamonds.filter((_, j) => j !== i).map(od => od.offer_id);
+          if (otherIds.length > 0) p.set('orderdiamond', otherIds.join('|'));
           const qs = p.toString();
+          const label = reviewDiamonds.length > 1
+            ? `Change Diamond ${i + 1}`
+            : `${mode === 'diamond' ? 'Change Diamond' : 'Edit Diamond'}`;
           return (
-            <Link href={`/ring-builder/diamond${qs ? `?${qs}` : ''}`}>
-              ← {mode === 'diamond' ? 'Change Diamond' : 'Edit Diamond'}
+            <Link key={d.offer_id} href={`/ring-builder/diamond${qs ? `?${qs}` : ''}`}>
+              ← {label}
             </Link>
           );
-        })()}
+        })}
       </div>
     </main>
   );

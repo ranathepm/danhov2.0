@@ -249,23 +249,30 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
               )}
             </div>
           )}
-          {firstDiamond && (firstDiamond.image || firstDiamond.video) && (
-            <div className={`builder-review-diamond-img${mode === 'diamond' ? ' builder-review-diamond-img--hero' : ''}`}>
-              <div className="builder-review-diamond-media">
-                <DiamondCardMedia
-                  image={firstDiamond.image}
-                  video={firstDiamond.video}
-                  shape={firstDiamond.shape.toUpperCase() as ShapeT}
-                  carat={firstDiamond.carat}
-                  autoPlay={true}
-                />
+          {mode !== 'setting' && diamonds.map((d, i) => {
+            if (!d.image && !d.video) return null;
+            return (
+              <div
+                key={d.offer_id}
+                className={`builder-review-diamond-img${mode === 'diamond' && i === 0 ? ' builder-review-diamond-img--hero' : ''}`}
+              >
+                <div className="builder-review-diamond-media">
+                  <DiamondCardMedia
+                    image={d.image}
+                    video={d.video}
+                    shape={d.shape.toUpperCase() as ShapeT}
+                    carat={d.carat}
+                    autoPlay={i === 0}
+                  />
+                </div>
+                <span className="builder-review-diamond-caption">
+                  {diamonds.length > 1
+                    ? `Diamond ${i + 1} of ${diamonds.length}`
+                    : `Your stone${d.video ? ' · 360° view' : ''}`}
+                </span>
               </div>
-              <span className="builder-review-diamond-caption">
-                Your stone{firstDiamond.video ? ' · 360° view' : ''}
-                {diamonds.length > 1 ? ` (1 of ${diamonds.length})` : ''}
-              </span>
-            </div>
-          )}
+            );
+          })}
           <p className="builder-review-tagline">
             {mode === 'ring'
               ? 'Your one-of-one — handcrafted in Los Angeles, made in 4–6 weeks.'
