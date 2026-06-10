@@ -41,18 +41,20 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
   const [email, setEmail] = useState('');
   const [ringSize, setRingSize] = useState('');
   const [customerNote, setCustomerNote] = useState('');
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [cartAdded, setCartAdded] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
   const needsRingSize = mode === 'ring' || mode === 'setting';
   const diamondPrice = diamond?.price_usd ?? 0;
-  const total =
+  const unitTotal =
     mode === 'ring'
       ? settingPrice + diamondPrice
       : mode === 'setting'
       ? settingPrice
       : diamondPrice;
+  const total = unitTotal * quantity;
   const deposit = Math.round(total * 0.5);
 
   function validate(): boolean {
@@ -75,6 +77,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
       const body: Record<string, unknown> = {
         mode,
         email,
+        quantity,
         ring_size: ringSize || undefined,
         note: customerNote.trim() || undefined,
       };
@@ -112,65 +115,71 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
 
     const note = customerNote.trim() || null;
     if (mode === 'ring' && setting && diamond) {
-      addItem({
-        id: `bundle-${setting.slug}-${diamond.offer_id}`,
-        sku: setting.sku,
-        slug: setting.slug,
-        name: `${stripMetalSuffix(setting.name)} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
-        collection: setting.collection ?? null,
-        metal: setting.default_metal ?? null,
-        image: setting.images?.[0] ?? null,
-        price_display: `$${total.toLocaleString('en-US')}`,
-        price_num: total,
-        ring_size: ringSize || null,
-        note,
-        bundle: {
-          setting_price_usd: settingPrice,
-          diamond: {
-            offer_id: diamond.offer_id,
-            hold_id: holdId ?? null,
-            shape: diamond.shape,
-            carat: diamond.carat,
-            color: diamond.color,
-            clarity: diamond.clarity,
-            cut: diamond.cut,
-            lab: diamond.lab,
-            cert_number: diamond.cert_number,
-            price_usd: diamond.price_usd,
-            image: diamond.image,
+      for (let i = 0; i < quantity; i++) {
+        addItem({
+          id: `bundle-${setting.slug}-${diamond.offer_id}${quantity > 1 ? `-${i}` : ''}`,
+          sku: setting.sku,
+          slug: setting.slug,
+          name: `${stripMetalSuffix(setting.name)} + ${diamond.carat.toFixed(2)}ct ${diamond.shape}`,
+          collection: setting.collection ?? null,
+          metal: setting.default_metal ?? null,
+          image: setting.images?.[0] ?? null,
+          price_display: `$${unitTotal.toLocaleString('en-US')}`,
+          price_num: unitTotal,
+          ring_size: ringSize || null,
+          note,
+          bundle: {
+            setting_price_usd: settingPrice,
+            diamond: {
+              offer_id: diamond.offer_id,
+              hold_id: holdId ?? null,
+              shape: diamond.shape,
+              carat: diamond.carat,
+              color: diamond.color,
+              clarity: diamond.clarity,
+              cut: diamond.cut,
+              lab: diamond.lab,
+              cert_number: diamond.cert_number,
+              price_usd: diamond.price_usd,
+              image: diamond.image,
+            },
           },
-        },
-      });
+        });
+      }
     } else if (mode === 'setting' && setting) {
-      addItem({
-        id: `setting-${setting.slug}-${ringSize}`,
-        sku: setting.sku,
-        slug: setting.slug,
-        name: stripMetalSuffix(setting.name),
-        collection: setting.collection ?? null,
-        metal: setting.default_metal ?? null,
-        image: setting.images?.[0] ?? null,
-        price_display: `$${settingPrice.toLocaleString('en-US')}`,
-        price_num: settingPrice,
-        ring_size: ringSize || null,
-        note,
-        bundle: null,
-      });
+      for (let i = 0; i < quantity; i++) {
+        addItem({
+          id: `setting-${setting.slug}-${ringSize}${quantity > 1 ? `-${i}` : ''}`,
+          sku: setting.sku,
+          slug: setting.slug,
+          name: stripMetalSuffix(setting.name),
+          collection: setting.collection ?? null,
+          metal: setting.default_metal ?? null,
+          image: setting.images?.[0] ?? null,
+          price_display: `$${settingPrice.toLocaleString('en-US')}`,
+          price_num: settingPrice,
+          ring_size: ringSize || null,
+          note,
+          bundle: null,
+        });
+      }
     } else if (mode === 'diamond' && diamond) {
-      addItem({
-        id: `diamond-${diamond.offer_id}`,
-        sku: diamond.offer_id.slice(0, 20),
-        slug: 'loose-diamond',
-        name: `${diamond.carat.toFixed(2)} ct ${diamond.shape} Diamond`,
-        collection: `${diamond.lab}${diamond.cert_number ? ` · ${diamond.cert_number}` : ''}`,
-        metal: null,
-        image: diamond.image,
-        price_display: `$${diamondPrice.toLocaleString('en-US')}`,
-        price_num: diamondPrice,
-        ring_size: null,
-        note,
-        bundle: null,
-      });
+      for (let i = 0; i < quantity; i++) {
+        addItem({
+          id: `diamond-${diamond.offer_id}${quantity > 1 ? `-${i}` : ''}`,
+          sku: diamond.offer_id.slice(0, 20),
+          slug: 'loose-diamond',
+          name: `${diamond.carat.toFixed(2)} ct ${diamond.shape} Diamond`,
+          collection: `${diamond.lab}${diamond.cert_number ? ` · ${diamond.cert_number}` : ''}`,
+          metal: null,
+          image: diamond.image,
+          price_display: `$${diamondPrice.toLocaleString('en-US')}`,
+          price_num: diamondPrice,
+          ring_size: null,
+          note,
+          bundle: null,
+        });
+      }
     }
 
     setCartAdded(true);
@@ -271,11 +280,32 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
 
           <div className="builder-review-divider builder-review-divider-strong" />
 
+          {/* Quantity */}
+          <div className="builder-review-qty">
+            <span className="builder-review-qty-label">Qty</span>
+            <button
+              type="button"
+              className="builder-review-qty-btn"
+              disabled={quantity <= 1}
+              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              aria-label="Decrease quantity"
+            >−</button>
+            <span className="builder-review-qty-val">{quantity}</span>
+            <button
+              type="button"
+              className="builder-review-qty-btn"
+              disabled={quantity >= 10}
+              onClick={() => setQuantity(q => Math.min(10, q + 1))}
+              aria-label="Increase quantity"
+            >+</button>
+          </div>
+
           {/* Totals */}
-          <div className="builder-review-totals">
+          <div className="builder-review-totals" style={{ marginTop: 20 }}>
             <div className="builder-review-total-row">
               <span>
                 {mode === 'ring' ? 'Commission total' : mode === 'setting' ? 'Setting total' : 'Diamond total'}
+                {quantity > 1 && <span style={{ fontSize: 11, color: '#9c8f86', marginLeft: 6 }}>× {quantity}</span>}
               </span>
               <strong>${total.toLocaleString('en-US')}</strong>
             </div>
@@ -327,18 +357,32 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
 
           {/* Add a setting — shown in diamond-only mode */}
           {mode === 'diamond' && diamond && (
-            <div className="builder-review-add-setting">
-              <div className="builder-review-add-setting-text">
-                <strong>Want to pair this diamond with a setting?</strong>
-                Browse our handcrafted settings — your diamond will be carried through.
+            <>
+              <div className="builder-review-add-setting">
+                <div className="builder-review-add-setting-text">
+                  <strong>Want to pair this diamond with a setting?</strong>
+                  Browse our handcrafted settings — your diamond will be carried through.
+                </div>
+                <a
+                  href={`/ring-builder/setting?diamond=${encodeURIComponent(diamond.offer_id)}${holdId ? `&hold=${encodeURIComponent(holdId)}` : ''}`}
+                  className="builder-review-add-setting-btn"
+                >
+                  Add a Setting →
+                </a>
               </div>
-              <a
-                href={`/ring-builder/setting?diamond=${encodeURIComponent(diamond.offer_id)}${holdId ? `&hold=${encodeURIComponent(holdId)}` : ''}`}
-                className="builder-review-add-setting-btn"
-              >
-                Add a Setting →
-              </a>
-            </div>
+              <div className="builder-review-add-diamond">
+                <div className="builder-review-add-diamond-text">
+                  <strong>Add another diamond?</strong>
+                  Select a second stone — the one above stays in your cart.
+                </div>
+                <a
+                  href={`/ring-builder/diamond?existing=${encodeURIComponent(diamond.offer_id)}`}
+                  className="builder-review-add-diamond-btn"
+                >
+                  Browse Diamonds →
+                </a>
+              </div>
+            </>
           )}
 
           {/* Email + action buttons */}
@@ -358,7 +402,7 @@ export default function BuilderReview({ mode, setting, diamond, settingPrice, ho
                 onClick={startCommission}
                 disabled={loading}
               >
-                {loading ? 'Opening secure checkout…' : 'Begin Commission →'}
+                {loading ? 'Opening secure checkout…' : 'Checkout →'}
               </button>
               <button
                 type="button"

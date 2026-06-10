@@ -35,6 +35,7 @@ const Body = z.object({
   ring_size: z.string().max(20).optional(),
   metal: z.string().max(60).optional(),
   note: z.string().max(500).optional(),
+  quantity: z.number().int().min(1).max(10).default(1),
 });
 
 export async function POST(req: NextRequest) {
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 
-  const { mode } = body;
+  const { mode, quantity } = body;
 
   // Validate mode-specific required fields
   if ((mode === 'ring' || mode === 'setting') && !body.setting_slug) {
@@ -134,12 +135,13 @@ export async function POST(req: NextRequest) {
   }
 
   // ── Totals ────────────────────────────────────────────────────────────
-  const total =
+  const unitTotal =
     mode === 'ring'
       ? settingPrice + (diamondData?.price ?? 0)
       : mode === 'setting'
       ? settingPrice
       : (diamondData?.price ?? 0);
+  const total = unitTotal * quantity;
 
   const deposit = Math.round(total * DEPOSIT_PERCENT);
   const balance = total - deposit;
@@ -191,7 +193,7 @@ export async function POST(req: NextRequest) {
     cancel_url: `${siteUrl}/ring-builder/review?${cancelParams.toString()}`,
     line_items: [
       {
-        quantity: 1,
+        quantity,
         price_data: {
           currency: 'usd',
           unit_amount: deposit * 100,
@@ -221,6 +223,7 @@ export async function POST(req: NextRequest) {
       diamond_color: diamondData?.color ?? '',
       diamond_clarity: diamondData?.clarity ?? '',
       diamond_cut: diamondData?.cut ?? '',
+      quantity: String(quantity),
       total_usd: String(total),
       deposit_usd: String(deposit),
       setting_price_usd: String(settingPrice),

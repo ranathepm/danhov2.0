@@ -353,11 +353,13 @@ type Props = {
   /** Server-prefetched diamonds so the grid renders on first paint with no client fetch. */
   initialItems?: Diamond[];
   initialTotalCount?: number;
+  /** Offer ID already in cart — shows "In Cart" badge on that card. */
+  existingOfferId?: string;
 };
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount }: Props) {
+export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount, existingOfferId }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -705,12 +707,16 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               const price = d.markup_price ?? d.price ?? 0;
               const isSelected = selected === d.id;
               const isHolding = holding === d.id;
+              const isInCart = !!(existingOfferId && d.id === existingOfferId);
               return (
                 <div
                   key={d.id}
-                  className={`be-card${isSelected ? ' is-selected' : ''}`}
+                  className={`be-card${isSelected ? ' is-selected' : ''}${isInCart ? ' be-card--in-cart' : ''}`}
                 >
                   <div className="be-card-media">
+                    {isInCart && (
+                      <span className="be-card-in-cart-badge">In Cart</span>
+                    )}
                     <div className="be-card-media-inner">
                       <DiamondCardMedia
                         image={d.diamond.image}
