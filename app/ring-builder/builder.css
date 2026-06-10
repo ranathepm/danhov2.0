@@ -2466,6 +2466,31 @@
   color: #fff8f6;
 }
 
+/* ── Diamond grid skeleton ──────────────────────────────── */
+@keyframes skel-shimmer {
+  0%   { background-position: -600px 0; }
+  100% { background-position:  600px 0; }
+}
+.be-skel-block,
+.be-skel-line {
+  background: linear-gradient(90deg, #ede8e2 25%, #f5f0ec 50%, #ede8e2 75%);
+  background-size: 1200px 100%;
+  animation: skel-shimmer 1.5s ease infinite;
+  border-radius: 3px;
+}
+.be-skel-block {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+.be-skel-line { height: 14px; display: block; }
+.be-card--skel {
+  pointer-events: none;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+.be-card--skel .be-card-media { background: #f0ebe6; }
+
 .be-empty {
   grid-column: 1 / -1;
   padding: 64px 24px;

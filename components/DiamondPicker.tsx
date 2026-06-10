@@ -676,6 +676,23 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
         {/* ── RIGHT — results grid ─────────────────────────────── */}
         <section className="be-results">
           <div className="be-grid">
+            {/* Shimmer skeleton shown while the first fetch is in flight */}
+            {loading && items.length === 0 && (
+              Array.from({ length: 12 }).map((_, i) => (
+                <div key={i} className="be-card be-card--skel" aria-hidden="true">
+                  <div className="be-card-media">
+                    <div className="be-card-media-inner be-skel-block" />
+                  </div>
+                  <div className="be-card-body">
+                    <div className="be-skel-line" style={{ width: '72%', marginBottom: 10 }} />
+                    <div className="be-skel-line" style={{ width: '54%', marginBottom: 10 }} />
+                    <div className="be-skel-line" style={{ width: '38%', marginBottom: 20 }} />
+                    <div className="be-skel-line" style={{ width: '100%', height: 38 }} />
+                  </div>
+                </div>
+              ))
+            )}
+
             {items.map((d) => {
               const cert = d.diamond.certificate;
               const price = d.markup_price ?? d.price ?? 0;

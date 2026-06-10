@@ -153,13 +153,13 @@ export default async function CompleteRingPage({
             <>Purchase <em>your diamond</em></>
           )}
         </h1>
-        <p className="section-body">
-          {mode === 'ring'
-            ? "Review your pairing below. When you're ready, the 50% deposit secures your commission and your piece begins in our Los Angeles atelier."
-            : mode === 'setting'
-            ? "Review your chosen setting. A 50% deposit secures your commission — your piece will be handcrafted to order in Los Angeles in 4–6 weeks."
-            : "Review your chosen diamond. Place a 50% deposit to secure it — a specialist will reach out to confirm shipping and any additional preferences."}
-        </p>
+        {mode !== 'diamond' && (
+          <p className="section-body">
+            {mode === 'ring'
+              ? "Review your pairing below. When you're ready, the 50% deposit secures your commission and your piece begins in our Los Angeles atelier."
+              : "Review your chosen setting. A 50% deposit secures your commission — your piece will be handcrafted to order in Los Angeles in 4–6 weeks."}
+          </p>
+        )}
       </section>
 
       <BuilderReview

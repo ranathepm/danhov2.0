@@ -39,23 +39,32 @@ export default async function SelectDiamondPage({
   let initialItems: Diamond[] = [];
   let initialTotalCount = 0;
   try {
-    const result = await cachedSearchDiamonds(
-      {
-        shapes: [initialShape],
-        labgrown: false,
-        sizes: { from: 0.5, to: 2.5 },
-        color: ['D', 'E', 'F', 'G', 'H'],
-        clarity: ['VS1', 'VS2', 'SI1'],
-        cut: ['EX', 'ID'],
-        availability: 'AVAILABLE',
-        has_image: true,
-      },
-      { limit: 24, offset: 0, order: { type: 'price', direction: 'ASC' } }
-    );
+    // Race against a 2.5s timeout — if the Nivoda cache is cold the API call
+    // can block for 10 s+. We'd rather render skeleton cards immediately and
+    // let the client fetch complete in the background than blank the page.
+    const result = await Promise.race([
+      cachedSearchDiamonds(
+        {
+          shapes: [initialShape],
+          labgrown: false,
+          sizes: { from: 0.5, to: 2.5 },
+          color: ['D', 'E', 'F', 'G', 'H'],
+          clarity: ['VS1', 'VS2', 'SI1'],
+          cut: ['EX', 'ID'],
+          availability: 'AVAILABLE',
+          has_image: true,
+        },
+        { limit: 24, offset: 0, order: { type: 'price', direction: 'ASC' } }
+      ),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('prefetch timeout')), 2500)
+      ),
+    ]);
     initialItems = (result.result.items ?? []) as Diamond[];
     initialTotalCount = result.result.total_count ?? 0;
   } catch {
-    // Nivoda unavailable — DiamondPicker falls back to its own client fetch
+    // Timeout or Nivoda unavailable — DiamondPicker renders skeletons and
+    // fires its own client-side fetch immediately on mount.
   }
 
   return (
