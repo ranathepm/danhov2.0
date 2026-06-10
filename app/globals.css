@@ -1611,11 +1611,12 @@ footer {
   display: block;
 }
 .page-hero-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(42px, 7vw, 88px);
-  font-weight: 600;
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(36px, 6vw, 80px);
+  font-weight: 700;
   line-height: 1.0;
   color: var(--logo-red);
+  letter-spacing: -0.01em;
   margin-bottom: 16px;
 }
 .page-hero-subtitle {

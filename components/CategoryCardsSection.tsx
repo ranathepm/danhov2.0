@@ -1,6 +1,5 @@
-import Link from 'next/link';
-import Image from 'next/image';
 import { supabaseAnon } from '@/lib/supabase/anon';
+import CollectionCardClient from './CollectionCardClient';
 
 const LIFE_PATH_SVG = (
   <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
@@ -106,16 +105,13 @@ const COLLECTIONS = [
 
 const CDN = 'https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62';
 
-// Exact SKUs for the hero product shown on each collection card.
-// When the DB has images for these SKUs those take priority; CDN URLs below are fallbacks.
 const PINNED_SKUS: Record<string, string> = {
-  abbraccio: 'AE520UQ-18W',  // Danhov Abbraccio Swirl Diamond Ring, 18k White Gold
-  couture:   'CE500VQ-18W',  // Danhov Couture Engagement Ring, 18k White Gold
-  voltaggio: 'VE508VH-14W',  // Danhov Tension Engagement Ring, 14k White Gold
-  classico:  'WE534UH-14W',  // Danhov Classico Ring, 14k White Gold
+  abbraccio: 'AE520UQ-18W',
+  couture:   'CE500VQ-18W',
+  voltaggio: 'VE508VH-14W',
+  classico:  'WE534UH-14W',
 };
 
-// CDN fallbacks — used when the exact DB product has no images stored.
 const CDN_FALLBACKS: Record<string, string> = {
   abbraccio: `${CDN}/a/e/ae520uq_r1_1_wg_1.jpg`,
   couture:   `${CDN}/r/1/r1_wg.jpg`,
@@ -123,9 +119,8 @@ const CDN_FALLBACKS: Record<string, string> = {
   classico:  `${CDN}/r/i/ring_2__25.png`,
 };
 
-async function getCollectionImages(): Promise<Record<string, string>> {
+async function getCollectionImages(): Promise<Record<string, string[]>> {
   try {
-    // Step 1 — Pull first image per collection for non-pinned collections.
     const { data } = await supabaseAnon
       .from('products')
       .select('sku, collection, images')
@@ -133,17 +128,19 @@ async function getCollectionImages(): Promise<Record<string, string>> {
       .eq('is_active', true)
       .not('collection', 'is', null);
 
-    const map: Record<string, string> = {};
+    const map: Record<string, string[]> = {};
     if (data) {
       for (const product of data) {
         const col = (product.collection as string | null)?.toLowerCase().trim();
-        if (col && Array.isArray(product.images) && product.images.length > 0 && !map[col]) {
-          map[col] = product.images[0];
+        if (col && Array.isArray(product.images) && product.images.length > 0) {
+          if (!map[col]) map[col] = [];
+          for (const img of product.images as string[]) {
+            if (map[col].length < 6) map[col].push(img);
+          }
         }
       }
     }
 
-    // Step 2 — Exact SKU lookup for pinned products.
     const { data: pinned } = await supabaseAnon
       .from('products')
       .select('sku, images')
@@ -157,19 +154,25 @@ async function getCollectionImages(): Promise<Record<string, string>> {
       }
     }
 
-    // Step 3 — Override map with pinned image (DB first, CDN fallback second).
     for (const [colKey, sku] of Object.entries(PINNED_SKUS)) {
       const dbImages = pinnedBySkuLower.get(sku.toLowerCase());
-      if (dbImages && dbImages.length > 0) {
-        map[colKey] = dbImages[0];
-      } else {
-        map[colKey] = CDN_FALLBACKS[colKey] ?? map[colKey];
+      const pinnedImgs =
+        dbImages && dbImages.length > 0
+          ? dbImages
+          : CDN_FALLBACKS[colKey]
+          ? [CDN_FALLBACKS[colKey]]
+          : [];
+      if (pinnedImgs.length > 0) {
+        const existing = (map[colKey] ?? []).filter((img) => !pinnedImgs.includes(img));
+        map[colKey] = [...pinnedImgs, ...existing].slice(0, 6);
       }
     }
 
     return map;
   } catch {
-    return { ...CDN_FALLBACKS };
+    return Object.fromEntries(
+      Object.entries(CDN_FALLBACKS).map(([k, v]) => [k, [v]])
+    );
   }
 }
 
@@ -190,46 +193,24 @@ export default async function CategoryCardsSection() {
 
         <div className="categories-grid">
           {COLLECTIONS.map((col) => {
-            const imgSrc =
+            const images =
               'customSvg' in col
-                ? null
-                : imageMap[col.value] || imageMap[col.label.toLowerCase()] || null;
+                ? []
+                : imageMap[col.value] ??
+                  imageMap[col.label.toLowerCase()] ??
+                  [];
 
             return (
-              <Link
+              <CollectionCardClient
                 key={col.value}
                 href={col.href}
-                className="cat-card"
-              >
-                <div className="cat-photo">
-                  {'customSvg' in col ? (
-                    <div className="cat-photo-placeholder">{col.customSvg}</div>
-                  ) : imgSrc ? (
-                    <Image
-                      src={imgSrc}
-                      alt={`${col.label} engagement ring by DANHOV`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      style={{ objectFit: 'contain', padding: '12px', mixBlendMode: 'multiply' }}
-                    />
-                  ) : (
-                    <div className="cat-photo-placeholder">
-                      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                        <circle cx="40" cy="40" r="30" stroke="#AC3438" strokeWidth="5" fill="none" />
-                        <circle cx="40" cy="26" r="5" fill="rgba(172,52,56,0.12)" stroke="#AC3438" strokeWidth="0.5" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <div className="cat-info">
-                  <span className="cat-eyebrow">{col.label}</span>
-                  <p className="cat-meaning">{col.meaning}</p>
-                  <p className="cat-body">{col.body}</p>
-                  <span className="cat-link">
-                    {'customSvg' in col ? 'Find Your Path' : `Explore ${col.label}`} &rarr;
-                  </span>
-                </div>
-              </Link>
+                images={images}
+                label={col.label}
+                meaning={col.meaning}
+                body={col.body}
+                linkLabel={'customSvg' in col ? 'Find Your Path' : `Explore ${col.label}`}
+                customSvg={'customSvg' in col ? col.customSvg : undefined}
+              />
             );
           })}
         </div>

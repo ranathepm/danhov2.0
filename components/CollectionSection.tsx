@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { supabaseAnon } from '@/lib/supabase/anon';
 import { fetchProductsByCategory, type Product } from '@/lib/products';
 import { stripMetalSuffix } from '@/lib/product-display';
+import CollectionCardClient from './CollectionCardClient';
 
 // ── Collection registry ───────────────────────────────────────────────────
 
@@ -80,34 +81,36 @@ const CATEGORY_FALLBACK: Record<string, (name: string) => string> = {
 type CollectionCard = {
   name: string;
   slug: string;
-  image: string | null;
+  images: string[];
   meaning: string;
   body: string;
 };
 
 async function fetchCollections(category: string): Promise<CollectionCard[]> {
   try {
-    // Fetch without the null filter so all products come back, then JS-filter
     const { data } = await supabaseAnon
       .from('products')
       .select('collection, images')
       .filter('categories', 'cs', JSON.stringify([category]))
       .eq('is_active', true);
 
-    const imageMap: Record<string, string> = {};
+    const imageMap: Record<string, string[]> = {};
     const seen = new Set<string>();
     const ordered: string[] = [];
 
     for (const product of data ?? []) {
       const col = (product.collection as string | null)?.trim();
-      if (!col) continue; // skip products with no collection name
+      if (!col) continue;
       const key = col.toLowerCase();
       if (!seen.has(key)) {
         seen.add(key);
         ordered.push(col);
       }
-      if (!imageMap[key] && Array.isArray(product.images) && product.images.length > 0) {
-        imageMap[key] = product.images[0];
+      if (Array.isArray(product.images) && product.images.length > 0) {
+        if (!imageMap[key]) imageMap[key] = [];
+        for (const img of product.images as string[]) {
+          if (imageMap[key].length < 6) imageMap[key].push(img);
+        }
       }
     }
 
@@ -115,14 +118,14 @@ async function fetchCollections(category: string): Promise<CollectionCard[]> {
     return ordered
       .map((name): CollectionCard | null => {
         const key = name.toLowerCase();
-        const img = imageMap[key] ?? null;
-        if (!img) return null; // skip collections with no product image
+        const imgs = imageMap[key] ?? [];
+        if (imgs.length === 0) return null;
         const slug = NAME_TO_SLUG[key] ?? key.replace(/[^a-z0-9]+/g, '-');
         const info = COLLECTION_INFO[slug] ?? COLLECTION_INFO[key] ?? null;
         return {
           name,
           slug,
-          image: img,
+          images: imgs,
           meaning: info?.meaning ?? '',
           body: info?.body ?? (fallbackBody ? fallbackBody(name) : ''),
         };
@@ -213,32 +216,15 @@ export default async function CollectionSection({
           /* Named collections exist — show beautiful collection cards */
           <div className="categories-grid">
             {collections.map((col) => (
-              <Link key={col.slug} href={`/collection/${col.slug}`} className="cat-card">
-                <div className="cat-photo">
-                  {col.image ? (
-                    <Image
-                      src={col.image}
-                      alt={`${col.name} by DANHOV`}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      style={{ objectFit: 'contain', padding: '12px', mixBlendMode: 'multiply' }}
-                    />
-                  ) : (
-                    <div className="cat-photo-placeholder">
-                      <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
-                        <circle cx="40" cy="40" r="30" stroke="#AC3438" strokeWidth="5" fill="none" />
-                        <circle cx="40" cy="26" r="5" fill="rgba(172,52,56,0.12)" stroke="#AC3438" strokeWidth="0.5" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <div className="cat-info">
-                  <span className="cat-eyebrow">{col.name}</span>
-                  <p className="cat-meaning">{col.meaning}</p>
-                  <p className="cat-body">{col.body}</p>
-                  <span className="cat-link">Explore {col.name} &rarr;</span>
-                </div>
-              </Link>
+              <CollectionCardClient
+                key={col.slug}
+                href={`/collection/${col.slug}`}
+                images={col.images}
+                label={col.name}
+                meaning={col.meaning}
+                body={col.body}
+                linkLabel={`Explore ${col.name}`}
+              />
             ))}
           </div>
         ) : fallbackProducts.length > 0 ? (
