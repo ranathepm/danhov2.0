@@ -363,11 +363,13 @@ type Props = {
   existingOfferId?: string;
   /** Offer ID currently reserved in a pending order (Change Diamond flow) — shows "In Your Order" badge + un-reserve option. */
   inOrderOfferId?: string;
+  /** Offer IDs already in the current order (ADD mode) — shows "In Your Order" badge, cannot be un-reserved. Selecting a new stone appends to this list. */
+  orderDiamondIds?: string[];
 };
 
 const VALID_SHAPES: Shape[] = ['ROUND', 'OVAL', 'PRINCESS', 'CUSHION', 'EMERALD', 'PEAR', 'HEART', 'MARQUISE', 'RADIANT', 'ASSCHER'];
 
-export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount, existingOfferId, inOrderOfferId }: Props) {
+export default function DiamondPicker({ settingSlug, metal, onSelected, initialOfferId, initialItems, initialTotalCount, existingOfferId, inOrderOfferId, orderDiamondIds }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   // Honour a ?shape= deep link from the homepage shape tiles so the
@@ -522,7 +524,14 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
 
     onSelected?.(d.id, holdId ?? '');
 
-    const qs = new URLSearchParams({ diamond: d.id });
+    const qs = new URLSearchParams();
+    if (orderDiamondIds && orderDiamondIds.length > 0) {
+      // ADD mode: append new stone ID to the existing list
+      const allIds = [...orderDiamondIds, d.id];
+      qs.set('diamonds', allIds.join('|'));
+    } else {
+      qs.set('diamond', d.id);
+    }
     if (settingSlug) qs.set('setting', settingSlug);
     if (holdId) qs.set('hold', holdId);
     if (metal) qs.set('metal', metal);
@@ -719,11 +728,15 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               const isHolding = holding === d.id;
               const isUnreserved = unreservedIds.has(d.id);
               const isInCart = !!(existingOfferId && d.id === existingOfferId && !isUnreserved);
+              // CHANGE mode: single inOrderOfferId, can be un-reserved
               const isInOrder = !!(inOrderOfferId && d.id === inOrderOfferId && !isUnreserved);
-              const isDisabled = !!holding || isInCart || isInOrder;
+              // ADD mode: already in the multi-diamond order list, cannot be un-reserved
+              const isInOrderAdd = !!(orderDiamondIds?.includes(d.id));
+              const isDisabled = !!holding || isInCart || isInOrder || isInOrderAdd;
 
               let btnText: string;
-              if (isInOrder) btnText = '✓ In Your Order';
+              if (isInOrderAdd) btnText = '✓ In Your Order';
+              else if (isInOrder) btnText = '✓ In Your Order';
               else if (isInCart) btnText = '✓ Already in Cart';
               else if (isHolding) btnText = 'Reserving…';
               else if (isSelected) btnText = '✓ Selected';
@@ -732,13 +745,13 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               return (
                 <div
                   key={d.id}
-                  className={`be-card${isSelected ? ' is-selected' : ''}${isInCart ? ' be-card--in-cart' : ''}${isInOrder ? ' be-card--in-order' : ''}`}
+                  className={`be-card${isSelected ? ' is-selected' : ''}${isInCart ? ' be-card--in-cart' : ''}${(isInOrder || isInOrderAdd) ? ' be-card--in-order' : ''}`}
                 >
                   <div className="be-card-media">
                     {isInCart && (
                       <span className="be-card-in-cart-badge">In Cart</span>
                     )}
-                    {isInOrder && (
+                    {(isInOrder || isInOrderAdd) && (
                       <span className="be-card-in-order-badge">In Your Order</span>
                     )}
                     <div className="be-card-media-inner">
@@ -781,17 +794,18 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
                     <div className="be-card-price">${Number(price).toLocaleString('en-US')}</div>
                     <button
                       type="button"
-                      className={`be-card-cta${isSelected ? ' is-selected' : ''}${isInCart ? ' is-in-cart' : ''}${isInOrder ? ' is-in-order' : ''}`}
+                      className={`be-card-cta${isSelected ? ' is-selected' : ''}${isInCart ? ' is-in-cart' : ''}${(isInOrder || isInOrderAdd) ? ' is-in-order' : ''}`}
                       disabled={isDisabled}
                       onClick={(e) => {
-                        if (isInCart || isInOrder) return;
+                        if (isInCart || isInOrder || isInOrderAdd) return;
                         e.stopPropagation();
                         selectStone(d);
                       }}
                     >
                       {btnText}
                     </button>
-                    {isInOrder && (
+                    {/* Un-reserve only available in CHANGE mode (inOrderOfferId), not ADD mode */}
+                    {isInOrder && !isInOrderAdd && (
                       <button
                         type="button"
                         className="be-card-unreserve"

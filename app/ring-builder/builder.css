@@ -1320,6 +1320,58 @@
   color: var(--logo-red);
   flex-shrink: 0;
 }
+/* Per-item layout helpers */
+.builder-review-line-left {
+  flex: 1;
+  min-width: 0;
+}
+.builder-review-line-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.builder-review-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.builder-review-line-subtotal {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  color: var(--grey);
+  letter-spacing: 0.04em;
+}
+.builder-review-diamond-idx {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  margin-bottom: 4px;
+}
+.builder-review-remove-diamond {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--grey);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+}
+.builder-review-remove-diamond:hover { color: var(--logo-red); }
+.builder-review-total-row--sub {
+  font-size: 12px;
+  color: var(--grey);
+  padding: 3px 0;
+}
+.builder-review-total-row--sub span { font-weight: 400; }
 .builder-review-divider {
   height: 1px;
   background: rgba(172, 52, 56, 0.1);

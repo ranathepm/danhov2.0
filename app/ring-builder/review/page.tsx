@@ -11,10 +11,10 @@ import { cachedGetDiamond } from '@/lib/nivoda-cache';
 export async function generateMetadata({
   searchParams,
 }: {
-  searchParams: { setting?: string; diamond?: string; hold?: string };
+  searchParams: { setting?: string; diamond?: string; diamonds?: string; hold?: string };
 }): Promise<Metadata> {
   const hasSetting = !!searchParams.setting;
-  const hasDiamond = !!searchParams.diamond;
+  const hasDiamond = !!(searchParams.diamonds || searchParams.diamond);
   if (hasSetting && hasDiamond)
     return {
       title: 'Complete Your Ring · Ring Builder',
@@ -44,38 +44,39 @@ function shapeDisplay(s: string | null): string {
 export default async function CompleteRingPage({
   searchParams,
 }: {
-  searchParams: { setting?: string; diamond?: string; hold?: string; metal?: string };
+  searchParams: { setting?: string; diamond?: string; diamonds?: string; hold?: string; metal?: string };
 }) {
   const settingSlug = searchParams.setting;
-  const offerId = searchParams.diamond;
-  const holdId = searchParams.hold;
   const chosenMetal = searchParams.metal ?? null;
 
+  // Parse diamonds: prefer ?diamonds=D1|D2, fall back to ?diamond=D
+  const diamondParam = searchParams.diamonds || searchParams.diamond;
+  const diamondIds = diamondParam
+    ? diamondParam.split('|').map(s => s.trim()).filter(Boolean)
+    : [];
+
+  // For backward compat: ?hold maps to the first/last diamond (the most recently selected one)
+  const holdParam = searchParams.hold ?? null;
+
   // Need at least one of setting or diamond
-  if (!settingSlug && !offerId) redirect('/ring-builder/setting');
+  if (!settingSlug && diamondIds.length === 0) redirect('/ring-builder/setting');
 
   const mode: 'ring' | 'setting' | 'diamond' =
-    settingSlug && offerId ? 'ring' : settingSlug ? 'setting' : 'diamond';
+    settingSlug && diamondIds.length > 0 ? 'ring' : settingSlug ? 'setting' : 'diamond';
 
-  // ── Load setting (ring / setting modes) ───────────────────────────────
+  // ── Load setting ──────────────────────────────────────────────────────
   let setting: Awaited<ReturnType<typeof fetchProductWithPricingBySlug>> | null = null;
   let settingPrice = 0;
   if (mode === 'ring' || mode === 'setting') {
     setting = await fetchProductWithPricingBySlug(settingSlug!);
     if (!setting) redirect('/ring-builder/setting');
 
-    // If the customer has chosen a specific metal, compute the live price for
-    // that metal — 18k costs ~28% more than 14k due to purity difference.
-    // Fall back to price_display only when the chosen metal matches the default
-    // (that's what price_display represents) or when pricing data is missing.
     const catalogPrice = parsePriceDisplay(setting.price_display);
-    const metalMatchesDefault =
-      !chosenMetal || chosenMetal === setting.default_metal;
+    const metalMatchesDefault = !chosenMetal || chosenMetal === setting.default_metal;
     const canComputeLive =
       (setting.gold_weight_g ?? 0) > 0 || (setting.stones_value_usd ?? 0) > 0;
 
     if (!metalMatchesDefault && canComputeLive) {
-      // Different metal — must compute live for accuracy
       try {
         const breakdown = await priceProduct(setting, chosenMetal);
         settingPrice = breakdown.total_usd;
@@ -94,22 +95,18 @@ export default async function CompleteRingPage({
     }
   }
 
-  // ── Load diamond (ring / diamond modes) ───────────────────────────────
-  let reviewDiamond: ReviewDiamond | null = null;
+  // ── Load all diamonds concurrently ────────────────────────────────────
+  const reviewDiamonds: ReviewDiamond[] = [];
   if (mode === 'ring' || mode === 'diamond') {
-    let nivoda: Awaited<ReturnType<typeof cachedGetDiamond>> | null = null;
-    try {
-      nivoda = await cachedGetDiamond(offerId!);
-    } catch (e) {
-      console.error('review: nivoda lookup failed', e);
-    }
-
-    if (!nivoda?.stone) {
-      if (mode === 'ring') redirect(`/ring-builder/diamond?setting=${settingSlug}`);
-      else redirect('/ring-builder/diamond');
-    } else {
+    const results = await Promise.all(
+      diamondIds.map(id =>
+        cachedGetDiamond(id).catch(() => null)
+      )
+    );
+    for (const [i, nivoda] of results.entries()) {
+      if (!nivoda?.stone) continue;
       const cert = nivoda.stone.diamond.certificate;
-      reviewDiamond = {
+      reviewDiamonds.push({
         offer_id: nivoda.stone.id,
         carat: cert?.carats ?? 1,
         shape: shapeDisplay(cert?.shape ?? null),
@@ -123,12 +120,20 @@ export default async function CompleteRingPage({
         price_usd: Math.round(
           Number(nivoda.stone.markup_price ?? nivoda.stone.price ?? 0)
         ),
-      };
+        // Map ?hold to the last diamond (the most recently added one when multi-selecting)
+        hold_id: i === diamondIds.length - 1 ? holdParam : null,
+      });
+    }
+
+    if (reviewDiamonds.length === 0) {
+      if (mode === 'ring') redirect(`/ring-builder/diamond?setting=${settingSlug}`);
+      else redirect('/ring-builder/diamond');
     }
   }
 
   const stepperHasSetting = mode === 'ring' || mode === 'setting';
   const stepperHasDiamond = mode === 'ring' || mode === 'diamond';
+  const firstOfferId = reviewDiamonds[0]?.offer_id;
 
   return (
     <main className="builder-page">
@@ -137,7 +142,7 @@ export default async function CompleteRingPage({
         hasSetting={stepperHasSetting}
         hasDiamond={stepperHasDiamond}
         settingSlug={settingSlug}
-        diamondId={offerId}
+        diamondId={firstOfferId}
       />
 
       <section className="builder-section-head">
@@ -150,7 +155,7 @@ export default async function CompleteRingPage({
           ) : mode === 'setting' ? (
             <>Purchase <em>your setting</em></>
           ) : (
-            <>Purchase <em>your diamond</em></>
+            <>Purchase <em>your diamond{reviewDiamonds.length > 1 ? 's' : ''}</em></>
           )}
         </h1>
         {mode !== 'diamond' && (
@@ -165,9 +170,8 @@ export default async function CompleteRingPage({
       <BuilderReview
         mode={mode}
         setting={setting ?? null}
-        diamond={reviewDiamond}
+        diamonds={reviewDiamonds}
         settingPrice={settingPrice}
-        holdId={holdId}
         metal={chosenMetal}
       />
 
@@ -175,8 +179,8 @@ export default async function CompleteRingPage({
         {mode !== 'diamond' && (() => {
           const p = new URLSearchParams();
           if (settingSlug) p.set('setting', settingSlug);
-          if (offerId) p.set('diamond', offerId);
-          if (holdId) p.set('hold', holdId);
+          if (firstOfferId) p.set('diamond', firstOfferId);
+          if (holdParam) p.set('hold', holdParam);
           const qs = p.toString();
           return (
             <Link href={`/ring-builder/setting${qs ? `?${qs}` : ''}`}>
@@ -184,12 +188,13 @@ export default async function CompleteRingPage({
             </Link>
           );
         })()}
-        {mode !== 'setting' && (() => {
+        {/* "Edit Diamond" only for single-diamond — multi-diamond users remove via the review UI */}
+        {mode !== 'setting' && reviewDiamonds.length === 1 && (() => {
           const p = new URLSearchParams();
           if (settingSlug) p.set('setting', settingSlug);
-          if (offerId) p.set('diamond', offerId);
-          if (holdId) p.set('hold', holdId);
-          if (offerId) p.set('inorder', offerId);
+          if (firstOfferId) p.set('diamond', firstOfferId);
+          if (holdParam) p.set('hold', holdParam);
+          if (firstOfferId) p.set('inorder', firstOfferId);
           const qs = p.toString();
           return (
             <Link href={`/ring-builder/diamond${qs ? `?${qs}` : ''}`}>
@@ -202,7 +207,6 @@ export default async function CompleteRingPage({
   );
 }
 
-// Parses catalog price_display ("$5,700", "$5,700 – $7,200", etc.) → first number found
 function parsePriceDisplay(display: string | null | undefined): number {
   if (!display) return 0;
   const m = display.match(/[\d,]+(?:\.\d+)?/);
