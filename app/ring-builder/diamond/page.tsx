@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import BuilderStepper from '@/components/BuilderStepper';
 import DiamondPicker, { type Diamond } from '@/components/DiamondPicker';
 import { cachedSearchDiamonds } from '@/lib/nivoda-cache';
+import type { NivodaShape } from '@/lib/nivoda';
 import '../builder.css';
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default async function SelectDiamondPage({
     VALID_SHAPES.includes(searchParams.shape?.toUpperCase() ?? '')
       ? searchParams.shape!.toUpperCase()
       : 'ROUND'
-  );
+  ) as NivodaShape;
   let initialItems: Diamond[] = [];
   let initialTotalCount = 0;
   try {
