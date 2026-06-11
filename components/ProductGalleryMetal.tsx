@@ -41,5 +41,13 @@ export default function ProductGalleryMetal({ defaultImages, metalImages, alt, c
     return defaults;
   }
 
-  return <ProductGallery images={getImages(selectedMetal)} alt={alt} collection={collection} />;
+  const defaults = validUrls(defaultImages);
+  return (
+    <ProductGallery
+      images={getImages(selectedMetal)}
+      alt={alt}
+      collection={collection}
+      fallbackImages={defaults}
+    />
+  );
 }

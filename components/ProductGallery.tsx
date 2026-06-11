@@ -4,18 +4,33 @@ import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
 function SafeImage({
-  src, alt, width, height, className, priority, sizes, unoptimized,
+  src, alt, width, height, className, priority, sizes, fallbackSrc,
 }: {
   src: string; alt: string; width: number; height: number;
-  className?: string; priority?: boolean; sizes?: string; unoptimized?: boolean;
+  className?: string; priority?: boolean; sizes?: string; fallbackSrc?: string;
 }) {
   const [failed, setFailed] = useState(false);
+  const [fallbackFailed, setFallbackFailed] = useState(false);
+
+  // Primary image failed — try the product's default image
+  if (failed && fallbackSrc && !fallbackFailed) {
+    return (
+      <Image
+        src={fallbackSrc} alt={alt} width={width} height={height}
+        className={className} sizes={sizes}
+        unoptimized={fallbackSrc.endsWith('.gif')}
+        onError={() => setFallbackFailed(true)}
+      />
+    );
+  }
+  // Both failed — show branded SVG placeholder
   if (failed) return <div className="pg-placeholder">{PLACEHOLDER}</div>;
+
   return (
     <Image
       src={src} alt={alt} width={width} height={height}
       className={className} priority={priority} sizes={sizes}
-      unoptimized={unoptimized ?? src.endsWith('.gif')}
+      unoptimized={src.endsWith('.gif')}
       onError={() => setFailed(true)}
     />
   );
@@ -25,6 +40,8 @@ type Props = {
   images: string[];
   alt: string;
   collection?: string | null;
+  /** Default product images used as fallback when a metal-specific image 404s. */
+  fallbackImages?: string[];
 };
 
 const PLACEHOLDER = (
@@ -61,7 +78,7 @@ const PLACEHOLDER = (
  * itself; the dot indicator tracks the current image with an
  * IntersectionObserver.
  */
-export default function ProductGallery({ images, alt, collection }: Props) {
+export default function ProductGallery({ images, alt, collection, fallbackImages }: Props) {
   const list = images.length > 0 ? images : [null];
   const railRef = useRef<HTMLDivElement>(null);
   const [activeMobileIdx, setActiveMobileIdx] = useState(0);
@@ -110,6 +127,7 @@ export default function ProductGallery({ images, alt, collection }: Props) {
                 className="pg-img"
                 priority={i === 0}
                 sizes="(max-width: 900px) 100vw, 56vw"
+                fallbackSrc={fallbackImages?.[i] ?? fallbackImages?.[0]}
               />
             ) : (
               <div className="pg-placeholder">{PLACEHOLDER}</div>
@@ -134,6 +152,7 @@ export default function ProductGallery({ images, alt, collection }: Props) {
                 className="pg-img"
                 priority={i === 0}
                 sizes="100vw"
+                fallbackSrc={fallbackImages?.[i] ?? fallbackImages?.[0]}
               />
             ) : (
               <div className="pg-placeholder">{PLACEHOLDER}</div>
