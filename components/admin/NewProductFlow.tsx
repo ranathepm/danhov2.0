@@ -27,6 +27,7 @@ const BLANK = {
   centre_diamond_group: null,
   centre_multiplier: 50,
   commission_rate: 0,
+  casting_labor_per_gram: 10,
   accounting_cost_usd: null,
   is_active: true,
   sub_categories: [] as string[],
