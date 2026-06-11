@@ -1964,16 +1964,14 @@ footer {
 .bc-sep { opacity: 0.4; }
 
 .product-metal-notice {
-  background: #fff8f6;
-  border-bottom: 1px solid rgba(172,52,56,0.10);
-  padding: 9px 64px;
-  text-align: center;
   font-family: 'Jost', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #8B2A2D;
+  color: #AC3438;
+  margin: 0 0 10px 0;
+  padding: 0;
 }
 
 .product-detail {
@@ -2181,7 +2179,6 @@ footer {
   .product-price { font-size: 22px; }
   .pg-cell { height: 360px; }
   .product-breadcrumb { padding: 16px 20px; margin-top: 70px; }
-  .product-metal-notice { padding: 8px 20px; font-size: 10px; }
 }
 
 

@@ -18,6 +18,7 @@ import {
   occasionForCategory,
 } from '@/lib/narratives';
 import { stripMetalSuffix } from '@/lib/product-display';
+import { METAL_LABEL_DISPLAY } from '@/lib/stone-math';
 import RelatedProducts from '@/components/RelatedProducts';
 
 type Params = { slug: string };
@@ -131,11 +132,6 @@ export default async function ProductPage({ params }: { params: Params }) {
         <span>{displayName}</span>
       </nav>
 
-      {/* METAL AVAILABILITY NOTICE */}
-      <div className="product-metal-notice">
-        This ring is handcrafted to order in all metals shown &nbsp;·&nbsp; Photography reflects our primary color variant
-      </div>
-
       {/* PRODUCT DETAIL — wrapped in MetalProvider so the gallery on
           the left and the swatches + CTA on the right share one
           selected-metal state. Clicking a swatch updates both columns. */}
@@ -159,6 +155,9 @@ export default async function ProductPage({ params }: { params: Params }) {
 
         {/* INFO */}
         <div className="product-info-col">
+          <p className="product-metal-notice">
+            Handcrafted to order in all metals shown &nbsp;·&nbsp; Photography reflects the primary variant
+          </p>
           {product.collection && (
             <span className="product-category-label">{product.collection}</span>
           )}
@@ -182,7 +181,9 @@ export default async function ProductPage({ params }: { params: Params }) {
           />
 
           {product.metals.length > 1 && (
-            <p className="product-metals-line">Also crafted in {product.metals.join(' · ')}</p>
+            <p className="product-metals-line">
+              Also crafted in {product.metals.map((m) => METAL_LABEL_DISPLAY[m] ?? m).join(' · ')}
+            </p>
           )}
 
           <NarrativeBox

@@ -3,6 +3,24 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
+function SafeImage({
+  src, alt, width, height, className, priority, sizes, unoptimized,
+}: {
+  src: string; alt: string; width: number; height: number;
+  className?: string; priority?: boolean; sizes?: string; unoptimized?: boolean;
+}) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <div className="pg-placeholder">{PLACEHOLDER}</div>;
+  return (
+    <Image
+      src={src} alt={alt} width={width} height={height}
+      className={className} priority={priority} sizes={sizes}
+      unoptimized={unoptimized ?? src.endsWith('.gif')}
+      onError={() => setFailed(true)}
+    />
+  );
+}
+
 type Props = {
   images: string[];
   alt: string;
@@ -84,7 +102,7 @@ export default function ProductGallery({ images, alt, collection }: Props) {
         {list.map((src, i) => (
           <div key={(src ?? 'placeholder') + i} className="pg-cell">
             {src ? (
-              <Image
+              <SafeImage
                 src={src}
                 alt={`${alt} — image ${i + 1} of ${list.length}`}
                 width={1200}
@@ -92,7 +110,6 @@ export default function ProductGallery({ images, alt, collection }: Props) {
                 className="pg-img"
                 priority={i === 0}
                 sizes="(max-width: 900px) 100vw, 56vw"
-                unoptimized={src.endsWith('.gif')}
               />
             ) : (
               <div className="pg-placeholder">{PLACEHOLDER}</div>
@@ -109,7 +126,7 @@ export default function ProductGallery({ images, alt, collection }: Props) {
         {list.map((src, i) => (
           <div key={(src ?? 'm-placeholder') + i} className="pg-rail-cell" data-idx={i}>
             {src ? (
-              <Image
+              <SafeImage
                 src={src}
                 alt={`${alt} — image ${i + 1} of ${list.length}`}
                 width={900}
