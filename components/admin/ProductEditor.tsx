@@ -754,12 +754,12 @@ export default function ProductEditor({
                 </label>
                 <label className="adm-field">
                   <span className="adm-field-label">Casting Labor ($/gram of alloy weight)</span>
-                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  <div className="adm-chips" style={{ marginTop: 4 }}>
                     {CASTING_LABOR_PRESETS.map((v) => (
                       <button
                         key={v}
                         type="button"
-                        className={`adm-preset-btn${(form.casting_labor_per_gram ?? 10) === v ? ' is-active' : ''}`}
+                        className={`adm-chip${(form.casting_labor_per_gram ?? 10) === v ? ' is-active' : ''}`}
                         onClick={() => set('casting_labor_per_gram', v)}
                       >
                         ${v}/g
