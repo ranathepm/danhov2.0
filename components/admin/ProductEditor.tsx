@@ -989,17 +989,13 @@ export default function ProductEditor({
               <div className="adm-labour-split">
                 <div className="adm-labour-field">
                   <span className="adm-field-label">Setting Labour (USD)</span>
-                  <p className="adm-labour-computed">
-                    <strong>${settingLabour.toLocaleString('en-US')}</strong>
-                    <span className="adm-labour-formula">{totalStoneCount} stones × ×{form.setting_multiplier ?? 4}</span>
-                  </p>
+                  <strong className="adm-labour-amount">${settingLabour.toLocaleString('en-US')}</strong>
+                  <span className="adm-labour-formula">{totalStoneCount} stones × ${form.setting_multiplier ?? 4} each</span>
                 </div>
                 <div className="adm-labour-field">
                   <span className="adm-field-label">Setting Centre Diamond (USD)</span>
-                  <p className="adm-labour-computed">
-                    <strong>${centreLabour.toLocaleString('en-US')}</strong>
-                    <span className="adm-labour-formula">{centreCount} stone × ×{form.centre_multiplier ?? 50}</span>
-                  </p>
+                  <strong className="adm-labour-amount">${centreLabour.toLocaleString('en-US')}</strong>
+                  <span className="adm-labour-formula">{centreCount} stone × ${form.centre_multiplier ?? 50} each</span>
                 </div>
               </div>
               <div className="adm-labour-total">
