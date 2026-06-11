@@ -1016,13 +1016,14 @@ export default function ProductEditor({
 
               {/* Live spot indicator */}
               <div className="adm-spot-badge" style={{
-                padding: '8px 12px',
-                background: 'var(--cream)',
+                padding: '10px 14px',
+                background: '#fff8f6',
+                border: '1px solid #e8ddd8',
                 borderRadius: 6,
                 marginBottom: 16,
                 fontSize: 12,
                 fontFamily: "'Jost', sans-serif",
-                color: 'var(--text-muted)',
+                color: '#6b5b52',
                 display: 'flex',
                 gap: 12,
                 flexWrap: 'wrap' as const,
@@ -1030,15 +1031,15 @@ export default function ProductEditor({
               }}>
                 {livePrices ? (
                   <>
-                    <span>Live market ·</span>
-                    <span><strong style={{ color: 'var(--text)' }}>${livePrices.gold_per_gram_24k.toFixed(2)}/g</strong> 24k Gold</span>
-                    <span><strong style={{ color: 'var(--text)' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Platinum</span>
-                    <span style={{ marginLeft: 'auto', opacity: 0.65 }}>
+                    <span style={{ color: '#AC3438', fontWeight: 600 }}>Live market ·</span>
+                    <span><strong style={{ color: '#1a1410' }}>${livePrices.gold_per_gram_24k.toFixed(2)}/g</strong> 24k Gold</span>
+                    <span><strong style={{ color: '#1a1410' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Platinum</span>
+                    <span style={{ marginLeft: 'auto', color: '#9e8880' }}>
                       Updated {new Date(livePrices.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </>
                 ) : (
-                  <span>Fetching live metal prices…</span>
+                  <span style={{ color: '#9e8880' }}>Fetching live metal prices…</span>
                 )}
               </div>
 
