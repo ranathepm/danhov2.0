@@ -42,6 +42,7 @@ type Product = {
   centre_diamond_group: StoneGroup | null;
   centre_multiplier: number | null;
   commission_rate: number | null;
+  casting_labor_per_gram: number | null;
   accounting_cost_usd: number | null;
   is_active: boolean;
   sub_categories: string[] | null;
@@ -50,6 +51,7 @@ type Product = {
 type LivePrices = {
   gold_per_gram_24k: number;
   platinum_per_gram_spot: number;
+  iridium_per_gram_spot: number;
   fetched_at: string;
   cost_per_gram: Record<string, number>;
 };
@@ -148,9 +150,10 @@ export default function ProductEditor({
     diamond_labor_usd:    product.diamond_labor_usd ?? null,
     accounting_cost_usd:  product.accounting_cost_usd ?? null,
     setting_multiplier:   product.setting_multiplier ?? 4,
-    centre_diamond_group: product.centre_diamond_group ?? blankStoneGroup(),
-    centre_multiplier:    product.centre_multiplier ?? 50,
-    commission_rate:      product.commission_rate ?? 0,
+    centre_diamond_group:   product.centre_diamond_group ?? blankStoneGroup(),
+    centre_multiplier:      product.centre_multiplier ?? 50,
+    commission_rate:        product.commission_rate ?? 0,
+    casting_labor_per_gram: product.casting_labor_per_gram ?? 10,
   });
 
   // Live metal prices fetched from /api/metal-prices
@@ -257,10 +260,11 @@ export default function ProductEditor({
         base_labor_usd:       settingLabour,
         diamond_labor_usd:    centreLabour,
         // New fields
-        setting_multiplier:   form.setting_multiplier,
-        centre_diamond_group: cleanCentre,
-        centre_multiplier:    form.centre_multiplier,
-        commission_rate:      form.commission_rate ?? 0,
+        setting_multiplier:     form.setting_multiplier,
+        centre_diamond_group:   cleanCentre,
+        centre_multiplier:      form.centre_multiplier,
+        commission_rate:        form.commission_rate ?? 0,
+        casting_labor_per_gram: form.casting_labor_per_gram ?? 10,
       };
       const res = await fetch(url, {
         method,
@@ -737,7 +741,7 @@ export default function ProductEditor({
               <header className="adm-card-head">
                 <h2 className="adm-h2">Metal Specs</h2>
               </header>
-              <div className="adm-fields">
+              <div className="adm-fields adm-fields--2">
                 <label className="adm-field">
                   <span className="adm-field-label">Weight in Platinum (grams)</span>
                   <input
@@ -746,6 +750,21 @@ export default function ProductEditor({
                     onChange={(e) => set('gold_weight_g', e.target.value === '' ? null : Number(e.target.value))}
                     placeholder="e.g. 4.8"
                   />
+                </label>
+                <label className="adm-field">
+                  <span className="adm-field-label">Casting Labor ($/gram)</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <input
+                      type="number" step="1" min="0" className="adm-input"
+                      style={{ maxWidth: 120 }}
+                      value={form.casting_labor_per_gram ?? ''}
+                      onChange={(e) => set('casting_labor_per_gram', e.target.value === '' ? null : Number(e.target.value))}
+                      placeholder="10"
+                    />
+                    <span className="adm-field-label" style={{ margin: 0, whiteSpace: 'nowrap', fontSize: 11 }}>
+                      per gram of alloy weight
+                    </span>
+                  </div>
                 </label>
               </div>
             </section>
@@ -1033,7 +1052,8 @@ export default function ProductEditor({
                   <>
                     <span style={{ color: '#AC3438', fontWeight: 600 }}>Live market ·</span>
                     <span><strong style={{ color: '#1a1410' }}>${livePrices.gold_per_gram_24k.toFixed(2)}/g</strong> 24k Gold</span>
-                    <span><strong style={{ color: '#1a1410' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Platinum</span>
+                    <span><strong style={{ color: '#1a1410' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Pt spot</span>
+                    <span><strong style={{ color: '#1a1410' }}>${livePrices.iridium_per_gram_spot?.toFixed(2) ?? '—'}/g</strong> Ir (manual)</span>
                     <span style={{ marginLeft: 'auto', color: '#9e8880' }}>
                       Updated {new Date(livePrices.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -1053,21 +1073,27 @@ export default function ProductEditor({
                   <span>Labour (setting + centre diamond)</span>
                   <strong>${totalLabour.toLocaleString('en-US')}</strong>
                 </div>
+                <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
+                  <span>Casting labor (${(form.casting_labor_per_gram ?? 10).toFixed(0)}/g × actual alloy weight — varies per metal)</span>
+                  <span>per row below</span>
+                </div>
               </div>
 
               {/* Per-metal price table */}
               {(form.metals ?? []).length > 0 && (form.gold_weight_g ?? 0) > 0 && (
                 <div className="adm-metal-price-table" style={{ marginTop: 12 }}>
                   {(form.metals ?? []).map((metal) => {
-                    const ratio       = DENSITY_RATIO[metal] ?? 1.0;
-                    const metalWeight = (form.gold_weight_g ?? 0) * ratio;
-                    const costPerG    = livePrices?.cost_per_gram[metal] ?? 0;
-                    const materialCost = metalWeight * costPerG;
+                    const ratio         = DENSITY_RATIO[metal] ?? 1.0;
+                    const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
+                    const costPerG      = livePrices?.cost_per_gram[metal] ?? 0;
+                    const materialCost  = metalWeight * costPerG;
+                    const castingLabor  = metalWeight * (form.casting_labor_per_gram ?? 10);
                     const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[metal] ?? 0;
                     const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
-                    const subTotal      = materialCost + stoneCostVal + totalLabour + rhodiumUplift;
+                    const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
                     const commission    = subTotal * ((form.commission_rate ?? 0) / 100);
-                    const finalTotal    = subTotal + commission;
+                    const rawTotal      = subTotal + commission;
+                    const finalTotal    = Math.round(rawTotal / 10) * 10;  // round to nearest $10
                     const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
                     return (
                       <div key={metal} className="adm-metal-price-row" style={{
@@ -1085,10 +1111,10 @@ export default function ProductEditor({
                           {metalWeight.toFixed(2)}g @ {livePrices ? `$${costPerG.toFixed(2)}/g` : '—'}
                         </span>
                         <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-                          {livePrices ? `metal $${Math.round(materialCost).toLocaleString()}` : '—'}
+                          {livePrices ? `metal $${Math.round(materialCost).toLocaleString()} + cast $${Math.round(castingLabor).toLocaleString()}` : '—'}
                         </span>
                         <strong style={{ color: livePrices ? 'var(--logo-red)' : 'var(--text-muted)', fontSize: 14 }}>
-                          {livePrices ? `$${Math.round(finalTotal).toLocaleString('en-US')}` : '—'}
+                          {livePrices ? `$${finalTotal.toLocaleString('en-US')}` : '—'}
                         </strong>
                       </div>
                     );

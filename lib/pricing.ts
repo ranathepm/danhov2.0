@@ -1,25 +1,27 @@
 /**
- * Pricing engine — Phase 3.
+ * Pricing engine — Phase 4.
  *
- * Supports platinum (Pt950) and all 14k/18k gold alloy variants.
+ * Supports platinum (900Pt/100Ir alloy) and all 14k/18k gold alloy variants.
  *
  * Formula per metal variant:
- *   metalWeight   = platinumSpecWeight × DENSITY_RATIO[metal]
- *   metalCostPerG = spot × purity  +  alloyCost   (gold)
- *                 = platSpot × 0.95               (platinum)
- *   metalCost     = metalWeight × metalCostPerG
- *   labour        = base_labor_usd + diamond_labor_usd
- *   stones        = stones_value_usd  (or auto from stone_groups if null)
- *   rhodium       = per-metal rhodium plating uplift (white gold only)
- *   subTotal      = metalCost + labour + stones + rhodium
- *   commission    = subTotal × (commission_rate / 100)
- *   total         = subTotal + commission
+ *   metalWeight    = platinumSpecWeight × DENSITY_RATIO[metal]
+ *   metalCostPerG  = goldSpot × purity + alloyCost            (gold)
+ *                  = (platSpot × 0.90) + (iridiumSpot × 0.10) (platinum 900Pt/100Ir)
+ *   metalCost      = metalWeight × metalCostPerG
+ *   castingLabor   = metalWeight × casting_labor_per_gram
+ *   labour         = base_labor_usd + diamond_labor_usd
+ *   stones         = stones_value_usd  (or auto from stone_groups if null)
+ *   rhodium        = per-metal rhodium plating uplift (white gold only)
+ *   subTotal       = metalCost + castingLabor + labour + stones + rhodium
+ *   commission     = subTotal × (commission_rate / 100)
+ *   total          = roundTo10(subTotal + commission)
  *
  * Spot prices:
  *   Gold (XAU)     → GoldAPI /XAU/USD → price_gram_24k (USD per gram, 24k pure)
  *   Platinum (XPT) → GoldAPI /XPT/USD → price per troy oz ÷ 31.1035 = USD/g
+ *   Iridium        → metal_prices table (manual update) → default $237/g
  *
- * Both spots cached in metal_prices table (2-hour TTL on paid GoldAPI tier).
+ * Gold + platinum cached 2-hour TTL. Iridium read from DB (no expiry — moves slowly).
  */
 
 import { createServiceClient } from '@/lib/supabase/server';
@@ -27,6 +29,15 @@ import { computeStoneGroupsBreakdown, type StoneGroup } from '@/lib/stone-math';
 
 const GOLDAPI_BASE   = 'https://www.goldapi.io/api';
 const OUNCE_TO_GRAMS = 31.1035;
+
+// Iridium has no standard free API — stored in metal_prices table (manual updates).
+// Fallback when no DB row exists: ~$237/g ≈ $7,400/troy oz ÷ 31.1 (Jun 2026 reference).
+const IRIDIUM_SPOT_DEFAULT = 237.0;
+
+/** Round a price to the nearest $10 (e.g. $2892 → $2890, $2895 → $2900). */
+function roundTo10(n: number): number {
+  return Math.round(n / 10) * 10;
+}
 
 // ── Metal constants ───────────────────────────────────────────────────────────
 
@@ -64,8 +75,9 @@ const GOLD_PURITY: Record<string, number> = {
   '14k_rose':   0.5833,
 };
 
-// Platinum alloy purity (Pt950 standard for jewelry)
-const PT_PURITY = 0.95;
+// DANHOV uses 900Pt/100Ir alloy: 90% platinum + 10% iridium by weight.
+const PT_FRACTION  = 0.90;
+const IR_FRACTION  = 0.10;
 
 // Base alloy cost per gram (silver, copper, palladium, etc. in the gold alloy)
 const ALLOY_COST_PER_G = 3;
@@ -99,6 +111,7 @@ export type SpotPrice = {
 export type AllSpots = {
   gold: SpotPrice;
   platinum: SpotPrice;
+  iridium: SpotPrice;
 };
 
 async function fetchSpot(
@@ -177,21 +190,59 @@ export async function getPlatinumSpot(): Promise<SpotPrice> {
   return fetchSpot('XPT', 'platinum');
 }
 
-/** Fetch both gold and platinum spots in parallel (shared cache). */
+/**
+ * Iridium spot: reads the most-recent row from metal_prices (metal='iridium').
+ * Falls back to IRIDIUM_SPOT_DEFAULT when no row exists.
+ * Admin updates it by inserting a new row in Supabase or via admin panel.
+ */
+export async function getIridiumSpot(): Promise<SpotPrice> {
+  const client = createServiceClient();
+  const { data } = await client
+    .from('metal_prices')
+    .select('price_per_gram_usd, fetched_at')
+    .eq('metal', 'iridium')
+    .order('fetched_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (data) {
+    return {
+      price_per_gram_usd: Number(data.price_per_gram_usd),
+      fetched_at: data.fetched_at as string,
+    };
+  }
+  return {
+    price_per_gram_usd: IRIDIUM_SPOT_DEFAULT,
+    fetched_at: new Date().toISOString(),
+  };
+}
+
+/** Fetch gold, platinum, and iridium spots in parallel. */
 export async function getAllSpots(): Promise<AllSpots> {
-  const [gold, platinum] = await Promise.all([getGoldSpot(), getPlatinumSpot()]);
-  return { gold, platinum };
+  const [gold, platinum, iridium] = await Promise.all([
+    getGoldSpot(),
+    getPlatinumSpot(),
+    getIridiumSpot(),
+  ]);
+  return { gold, platinum, iridium };
 }
 
 // ── Metal cost helpers (pure, no DB) ─────────────────────────────────────────
 
-/** USD per gram of finished alloy at given spot prices. */
+/**
+ * USD per gram of finished alloy at given spot prices.
+ * Platinum uses 900Pt/100Ir: (platSpot × 0.90) + (iridiumSpot × 0.10).
+ * iridiumSpot defaults to IRIDIUM_SPOT_DEFAULT when not passed.
+ */
 export function metalCostPerGram(
   metalKey: string,
   goldSpot: number,
   platSpot: number,
+  iridiumSpot: number = IRIDIUM_SPOT_DEFAULT,
 ): number {
-  if (metalKey === 'platinum') return platSpot * PT_PURITY;
+  if (metalKey === 'platinum') {
+    return (platSpot * PT_FRACTION) + (iridiumSpot * IR_FRACTION);
+  }
   const purity = GOLD_PURITY[metalKey] ?? 0.5833;
   return goldSpot * purity + ALLOY_COST_PER_G;
 }
@@ -204,20 +255,22 @@ export function metalWeightFromPlat(platinumWeightG: number, metalKey: string): 
 // ── Pricing inputs / outputs ──────────────────────────────────────────────────
 
 export type PricingInputs = {
-  default_metal:      string | null;
-  gold_weight_g:      number | null;          // weight spec'd in platinum grams
-  base_labor_usd:     number | null;          // setting labour
-  diamond_labor_usd?: number | null;          // centre-diamond setting labour
-  stones_value_usd:   number | null;          // override; null → auto from stone_groups
-  stone_groups?:      StoneGroup[] | null;    // used when stones_value_usd is null
-  commission_rate?:   number | null;          // % added to sub-total (e.g. 20 = +20 %)
-  markup_multiplier?: number | null;          // legacy field — ignored
+  default_metal:           string | null;
+  gold_weight_g:           number | null;        // weight spec'd in platinum grams
+  base_labor_usd:          number | null;        // setting labour
+  diamond_labor_usd?:      number | null;        // centre-diamond setting labour
+  casting_labor_per_gram?: number | null;        // per-gram casting/finishing cost
+  stones_value_usd:        number | null;        // override; null → auto from stone_groups
+  stone_groups?:           StoneGroup[] | null;  // used when stones_value_usd is null
+  commission_rate?:        number | null;        // % added to sub-total (e.g. 20 = +20 %)
+  markup_multiplier?:      number | null;        // legacy field — ignored
 };
 
 export type PriceBreakdown = {
   total_usd:             number;
   metal_cost_usd:        number;
   metal_with_markup_usd: number;  // legacy alias = metal_cost_usd
+  casting_labor_usd:     number;
   labor_usd:             number;
   stones_usd:            number;
   rhodium_uplift_usd:    number;
@@ -256,12 +309,19 @@ export function computePrice(
       ? p.default_metal
       : '14k_yellow';
 
-  const platWeight  = p.gold_weight_g ?? 0;
-  const metalWeight = metalWeightFromPlat(platWeight, metalKey);
-  const costPerG    = metalCostPerGram(metalKey, spots.gold.price_per_gram_usd, spots.platinum.price_per_gram_usd);
-  const metalCost   = metalWeight * costPerG;
-  const rhodium     = RHODIUM_UPLIFT[metalKey] ?? 0;
-  const labor       = (p.base_labor_usd ?? 0) + (p.diamond_labor_usd ?? 0);
+  const platWeight     = p.gold_weight_g ?? 0;
+  const metalWeight    = metalWeightFromPlat(platWeight, metalKey);
+  const iridiumPerGram = spots.iridium.price_per_gram_usd;
+  const costPerG       = metalCostPerGram(
+    metalKey,
+    spots.gold.price_per_gram_usd,
+    spots.platinum.price_per_gram_usd,
+    iridiumPerGram,
+  );
+  const metalCost    = metalWeight * costPerG;
+  const castingLabor = metalWeight * (p.casting_labor_per_gram ?? 0);
+  const rhodium      = RHODIUM_UPLIFT[metalKey] ?? 0;
+  const labor        = (p.base_labor_usd ?? 0) + (p.diamond_labor_usd ?? 0);
 
   // Stone cost: use override if set, else auto-compute from stone_groups
   let stones = p.stones_value_usd ?? null;
@@ -273,7 +333,7 @@ export function computePrice(
     }
   }
 
-  const subTotal   = metalCost + labor + stones + rhodium;
+  const subTotal   = metalCost + castingLabor + labor + stones + rhodium;
   const commRate   = p.commission_rate ?? 0;
   const commission = subTotal * (commRate / 100);
   const total      = subTotal + commission;
@@ -281,9 +341,10 @@ export function computePrice(
   const isPlatinum = metalKey === 'platinum';
 
   return {
-    total_usd:             Math.round(total),
+    total_usd:             roundTo10(total),
     metal_cost_usd:        Math.round(metalCost * 100) / 100,
     metal_with_markup_usd: Math.round(metalCost),
+    casting_labor_usd:     Math.round(castingLabor),
     labor_usd:             labor,
     stones_usd:            Math.round(stones),
     rhodium_uplift_usd:    rhodium,

@@ -7,23 +7,20 @@
  *
  * Response shape:
  * {
- *   gold_per_gram_24k:      number,   // XAU spot, $/g pure 24k gold
- *   platinum_per_gram_spot: number,   // XPT spot, $/g pure platinum
- *   fetched_at:             string,   // ISO timestamp of more-recent spot
- *   cost_per_gram: {                  // finished alloy cost (material + alloy metals)
- *     platinum:     number,           // XPT × 0.95
+ *   gold_per_gram_24k:       number,  // XAU spot, $/g pure 24k gold
+ *   platinum_per_gram_spot:  number,  // XPT spot, $/g pure platinum
+ *   iridium_per_gram_spot:   number,  // Ir spot (manual), $/g
+ *   fetched_at:              string,  // ISO timestamp of most-recent spot
+ *   cost_per_gram: {                  // finished alloy cost per gram
+ *     platinum:     number,           // (XPT × 0.90) + (Ir × 0.10)  — 900Pt/100Ir
  *     "18k_yellow": number,           // XAU × 0.75 + 3
- *     "18k_white":  number,
- *     "18k_rose":   number,
- *     "14k_yellow": number,           // XAU × 0.5833 + 3
- *     "14k_white":  number,
- *     "14k_rose":   number,
+ *     ...
  *   }
  * }
  */
 
 import { NextResponse } from 'next/server';
-import { getGoldSpot, getPlatinumSpot, metalCostPerGram } from '@/lib/pricing';
+import { getAllSpots, metalCostPerGram } from '@/lib/pricing';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -36,25 +33,30 @@ const ALL_METALS = [
 
 export async function GET() {
   try {
-    const [goldSpot, platSpot] = await Promise.all([getGoldSpot(), getPlatinumSpot()]);
+    const spots = await getAllSpots();
+    const { gold: goldSpot, platinum: platSpot, iridium: irSpot } = spots;
 
     const costPerGram: Record<string, number> = {};
     for (const metal of ALL_METALS) {
       costPerGram[metal] = Math.round(
-        metalCostPerGram(metal, goldSpot.price_per_gram_usd, platSpot.price_per_gram_usd) * 100,
+        metalCostPerGram(
+          metal,
+          goldSpot.price_per_gram_usd,
+          platSpot.price_per_gram_usd,
+          irSpot.price_per_gram_usd,
+        ) * 100,
       ) / 100;
     }
 
-    // Expose the more recent of the two timestamps
-    const fetchedAt =
-      new Date(goldSpot.fetched_at) >= new Date(platSpot.fetched_at)
-        ? goldSpot.fetched_at
-        : platSpot.fetched_at;
+    const fetchedAt = [goldSpot.fetched_at, platSpot.fetched_at, irSpot.fetched_at]
+      .sort()
+      .at(-1)!;
 
     return NextResponse.json(
       {
         gold_per_gram_24k:      Math.round(goldSpot.price_per_gram_usd * 100) / 100,
         platinum_per_gram_spot: Math.round(platSpot.price_per_gram_usd * 100) / 100,
+        iridium_per_gram_spot:  Math.round(irSpot.price_per_gram_usd * 100) / 100,
         fetched_at:             fetchedAt,
         cost_per_gram:          costPerGram,
       },

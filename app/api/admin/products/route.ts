@@ -9,6 +9,7 @@ const ALLOWED_FIELDS = [
   'sku', 'slug', 'name', 'collection', 'category', 'categories',
   'metals', 'images', 'metal_images', 'price_display', 'description', 'default_metal',
   'gold_weight_g', 'markup_multiplier', 'base_labor_usd', 'diamond_labor_usd',
+  'casting_labor_per_gram',
   'stones_value_usd', 'stone_count_input', 'stone_size_mm', 'stone_groups',
   'setting_multiplier', 'centre_diamond_group', 'centre_multiplier', 'commission_rate',
   'accounting_cost_usd', 'is_active', 'sub_categories',
