@@ -17,27 +17,6 @@ type Props = {
   pricemap?: Record<string, number>;
 };
 
-/**
- * Convert a display-name metal string to the pricing key used in pricemap.
- * e.g. 'White Gold' with metals[0]='18k Yellow Gold' → '18k_white'
- * The first element of the metals array always carries the karat prefix.
- */
-function toMetalKey(displayName: string | null, metals: string[]): string | null {
-  if (!displayName) return null;
-  // Already in key format (e.g. '18k_yellow')
-  if (/^(14k|18k)_(yellow|white|rose)$/.test(displayName)) return displayName;
-
-  const puritySource = metals[0] ?? '';
-  const pMatch = puritySource.match(/(14k|18k)/i);
-  const purity = pMatch ? pMatch[1].toLowerCase() : '18k';
-
-  const d = displayName.toLowerCase();
-  if (d.includes('yellow')) return `${purity}_yellow`;
-  if (d.includes('rose')) return `${purity}_rose`;
-  if (d.includes('white')) return `${purity}_white`;
-  if (d.includes('gold')) return `${purity}_yellow`;
-  return null;
-}
 
 export default function ProductOptions({
   sku: _sku,
@@ -55,11 +34,10 @@ export default function ProductOptions({
   const metal = selectedMetal;
   const setMetal = setSelectedMetal;
 
-  // Derive the live price for the currently selected metal.
-  const key = toMetalKey(metal, metals);
-  const livePrice = key ? pricemap[key] : undefined;
+  // metal is already in key format ('platinum', '14k_yellow', etc.) — pricemap uses the same keys.
+  const livePrice = metal ? pricemap[metal] : undefined;
   const displayPrice = livePrice
-    ? '$' + livePrice.toLocaleString('en-US')
+    ? '$' + Math.round(livePrice).toLocaleString('en-US')
     : (price_display ?? null);
 
   function goToDiamond() {
