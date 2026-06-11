@@ -64,8 +64,9 @@ const METAL_OPTIONS = [
   '18k_yellow', '18k_white', '18k_rose',
 ];
 
-const SETTING_MULTIPLIER_PRESETS = [4, 6, 8, 10];
-const CENTRE_MULTIPLIER_PRESETS  = [25, 50, 75, 100];
+const SETTING_MULTIPLIER_PRESETS  = [4, 6, 8, 10];
+const CENTRE_MULTIPLIER_PRESETS   = [25, 50, 75, 100];
+const CASTING_LABOR_PRESETS       = [5, 10, 15, 20];
 
 type Tab = 'identity' | 'images' | 'metals' | 'pricing';
 
@@ -752,18 +753,18 @@ export default function ProductEditor({
                   />
                 </label>
                 <label className="adm-field">
-                  <span className="adm-field-label">Casting Labor ($/gram)</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input
-                      type="number" step="1" min="0" className="adm-input"
-                      style={{ maxWidth: 120 }}
-                      value={form.casting_labor_per_gram ?? ''}
-                      onChange={(e) => set('casting_labor_per_gram', e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder="10"
-                    />
-                    <span className="adm-field-label" style={{ margin: 0, whiteSpace: 'nowrap', fontSize: 11 }}>
-                      per gram of alloy weight
-                    </span>
+                  <span className="adm-field-label">Casting Labor ($/gram of alloy weight)</span>
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {CASTING_LABOR_PRESETS.map((v) => (
+                      <button
+                        key={v}
+                        type="button"
+                        className={`adm-preset-btn${(form.casting_labor_per_gram ?? 10) === v ? ' is-active' : ''}`}
+                        onClick={() => set('casting_labor_per_gram', v)}
+                      >
+                        ${v}/g
+                      </button>
+                    ))}
                   </div>
                 </label>
               </div>
