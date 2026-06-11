@@ -131,6 +131,11 @@ export default async function ProductPage({ params }: { params: Params }) {
         <span>{displayName}</span>
       </nav>
 
+      {/* METAL AVAILABILITY NOTICE */}
+      <div className="product-metal-notice">
+        This ring is handcrafted to order in all metals shown &nbsp;·&nbsp; Photography reflects our primary color variant
+      </div>
+
       {/* PRODUCT DETAIL — wrapped in MetalProvider so the gallery on
           the left and the swatches + CTA on the right share one
           selected-metal state. Clicking a swatch updates both columns. */}
