@@ -1049,7 +1049,7 @@ export default function ProductEditor({
                 return (
                   <div className="adm-pricing-breakdown">
                     <div className="adm-pricing-row">
-                      <span>Stones ({productTotal.total_carats > 0 ? `${productTotal.total_carats.toFixed(3)} ct` : '—'})</span>
+                      <span>Stones ({productTotal.total_carats > 0 ? `${fmtCt(productTotal.total_carats)} ct` : '—'})</span>
                       <strong>${Math.round(productTotal.total_stone_price_usd).toLocaleString('en-US')}</strong>
                     </div>
                     <div className="adm-pricing-row">
@@ -1281,6 +1281,24 @@ export default function ProductEditor({
   );
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/**
+ * Format a carat value with enough decimal places to show meaningful
+ * precision — no fixed rounding that would hide tiny stone weights.
+ *   0.0038  →  "0.0038"   (4 dp)
+ *   0.0912  →  "0.0912"   (4 dp)
+ *   0.571   →  "0.571"    (3 dp)
+ *   1.25    →  "1.25"     (2 dp)
+ */
+function fmtCt(ct: number): string {
+  if (!ct || ct <= 0) return '0';
+  if (ct < 0.001) return ct.toFixed(5);
+  if (ct < 0.1)   return ct.toFixed(4);
+  if (ct < 1)     return ct.toFixed(3);
+  return ct.toFixed(2);
+}
+
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function StoneGroupReadout({ group }: { group: StoneGroup }) {
@@ -1295,9 +1313,9 @@ function StoneGroupReadout({ group }: { group: StoneGroup }) {
   }
   return (
     <p className="adm-stone-readout">
-      <span>{b.carat_per_stone.toFixed(3)} ct each</span>
+      <span>{fmtCt(b.carat_per_stone)} ct each</span>
       <span className="adm-stone-readout-sep">·</span>
-      <span><strong>{b.total_carats.toFixed(3)} ct</strong> total</span>
+      <span><strong>{fmtCt(b.total_carats)} ct</strong> total</span>
       <span className="adm-stone-readout-sep">·</span>
       <span>≈ <strong>${Math.round(b.total_stone_price_usd).toLocaleString('en-US')}</strong></span>
     </p>
