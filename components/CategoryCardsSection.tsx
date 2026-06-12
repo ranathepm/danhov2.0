@@ -1,26 +1,20 @@
 import { supabaseAnon } from '@/lib/supabase/anon';
-import CollectionCardClient from './CollectionCardClient';
+import { fetchProductsByCategory } from '@/lib/products';
+import CategoryGridClient, {
+  type EngagementCard,
+  type CategoryData,
+  type CollectionItem,
+  type ProductItem,
+} from './CategoryGridClient';
 
-const LIFE_PATH_SVG = (
-  <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-    <circle cx="60" cy="60" r="40" stroke="#AC3438" strokeWidth="0.5" opacity="0.3" fill="none" />
-    <line x1="60" y1="24" x2="60" y2="96" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
-    <line x1="28" y1="42" x2="92" y2="78" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
-    <line x1="92" y1="42" x2="28" y2="78" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
-    <line x1="24" y1="60" x2="96" y2="60" stroke="#AC3438" strokeWidth="0.8" opacity="0.5" />
-    <circle cx="60" cy="60" r="14" fill="rgba(172,52,56,0.08)" stroke="#AC3438" strokeWidth="1" />
-    <circle cx="60" cy="24" r="2.5" fill="#AC3438" />
-    <circle cx="92" cy="78" r="2.5" fill="#AC3438" />
-    <circle cx="28" cy="78" r="2.5" fill="#AC3438" />
-  </svg>
-);
+// ── Engagement collection definitions ─────────────────────────────────────
 
 const COLLECTIONS = [
   {
     label: 'Abbraccio',
     value: 'abbraccio',
     meaning: 'The Embrace',
-    body: 'DANHOV\'s most iconic swirl settings — the stone held in a spiral embrace of gold.',
+    body: "DANHOV's most iconic swirl settings — the stone held in a spiral embrace of gold.",
     href: '/collection/abbraccio',
   },
   {
@@ -41,7 +35,7 @@ const COLLECTIONS = [
     label: 'Norme de Danhov',
     value: 'norme',
     meaning: 'The Standard',
-    body: 'Foundational forms that define DANHOV\'s benchmark for excellence in gold work.',
+    body: "Foundational forms that define DANHOV's benchmark for excellence in gold work.",
     href: '/collection/norme',
   },
   {
@@ -62,7 +56,7 @@ const COLLECTIONS = [
     label: 'Petalo',
     value: 'petalo',
     meaning: 'The Petal',
-    body: 'Nature\'s most perfect architecture — organic petal forms blooming in 14k and 18k gold.',
+    body: "Nature's most perfect architecture — organic petal forms blooming in 14k and 18k gold.",
     href: '/collection/petalo',
   },
   {
@@ -99,9 +93,11 @@ const COLLECTIONS = [
     meaning: 'Your Number, Your Sign',
     body: 'Enter the day you arrived. We calculate your life path number and your sign, then create an original design from both — a form no other birth date makes. Not your fate. A mirror.',
     href: '/life-path',
-    customSvg: LIFE_PATH_SVG,
+    isLifePath: true,
   },
 ];
+
+// ── CDN pinned image helpers ───────────────────────────────────────────────
 
 const CDN = 'https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62';
 
@@ -176,8 +172,130 @@ async function getCollectionImages(): Promise<Record<string, string[]>> {
   }
 }
 
+// ── Category data fetching (wedding / fine / mens panels) ─────────────────
+
+const NAME_TO_SLUG: Record<string, string> = {
+  'abbraccio': 'abbraccio',
+  'voltaggio': 'voltaggio',
+  'classico': 'classico',
+  'norme de danhov': 'norme',
+  'carezza': 'carezza',
+  'per lei': 'per-lei',
+  'petalo': 'petalo',
+  'solo filo': 'solo',
+  'eleganza': 'eleganza',
+  'couture': 'couture',
+  'unito': 'unito',
+};
+
+const COLLECTION_INFO: Record<string, { meaning: string; body: string }> = {
+  abbraccio: { meaning: 'The Embrace', body: "DANHOV's most iconic swirl settings — the stone held in a spiral embrace of gold." },
+  voltaggio: { meaning: 'The Voltage', body: 'Tension-set designs where the diamond is suspended by the energy of the ring itself.' },
+  classico:  { meaning: 'The Classic', body: 'Timeless solitaire profiles refined over four decades of master craftsmanship in Los Angeles.' },
+  norme:     { meaning: 'The Standard', body: "Foundational forms that define DANHOV's benchmark for excellence in gold work." },
+  carezza:   { meaning: 'The Caress', body: 'Delicate pavé and micro-setting work — softness woven into gold, touch made permanent.' },
+  'per-lei': { meaning: 'For Her', body: 'Floral forms and feminine geometries, each piece created in devotion for singular women.' },
+  petalo:    { meaning: 'The Petal', body: "Nature's most perfect architecture — organic petal forms blooming in 14k and 18k gold." },
+  solo:      { meaning: 'Single Thread', body: 'A single continuous thread of gold — minimal, essential, unbroken as a promise.' },
+  eleganza:  { meaning: 'The Elegance', body: 'Refined simplicity. Designs that speak through restraint and perfection of proportion.' },
+  couture:   { meaning: 'The Sovereign', body: 'Statement pieces with presence. Worn not to become — but to declare what already is.' },
+  unito:     { meaning: 'United', body: 'Two forms joined as one. For love that is both distinct and inseparable.' },
+};
+
+const CATEGORY_FALLBACK: Record<string, (name: string) => string> = {
+  wedding: (name) =>
+    `${name} wedding bands — handcrafted in 14k and 18k gold in Los Angeles to be worn every day, for life.`,
+  fine: (name) =>
+    `${name} fine jewelry — gold and diamond pieces built for daily wear and lasting beauty, made to order in Los Angeles.`,
+  mens: (name) =>
+    `${name} men's collection — bold, precise forms in 14k and 18k gold. Made in Los Angeles for the man who wears with intention.`,
+};
+
+async function fetchCategoryData(category: string): Promise<CategoryData> {
+  try {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('collection, images')
+      .filter('categories', 'cs', JSON.stringify([category]))
+      .eq('is_active', true);
+
+    const imageMap: Record<string, string[]> = {};
+    const seen = new Set<string>();
+    const ordered: string[] = [];
+
+    for (const product of data ?? []) {
+      const col = (product.collection as string | null)?.trim();
+      if (!col) continue;
+      const key = col.toLowerCase();
+      if (!seen.has(key)) {
+        seen.add(key);
+        ordered.push(col);
+      }
+      if (Array.isArray(product.images) && product.images.length > 0) {
+        if (!imageMap[key]) imageMap[key] = [];
+        for (const img of product.images as string[]) {
+          if (imageMap[key].length < 6) imageMap[key].push(img);
+        }
+      }
+    }
+
+    const fallbackBody = CATEGORY_FALLBACK[category];
+    const collections: CollectionItem[] = ordered
+      .map((name): CollectionItem | null => {
+        const key = name.toLowerCase();
+        const imgs = imageMap[key] ?? [];
+        if (imgs.length === 0) return null;
+        const slug = NAME_TO_SLUG[key] ?? key.replace(/[^a-z0-9]+/g, '-');
+        const info = COLLECTION_INFO[slug] ?? COLLECTION_INFO[key] ?? null;
+        return {
+          name,
+          slug,
+          images: imgs,
+          meaning: info?.meaning ?? '',
+          body: info?.body ?? (fallbackBody ? fallbackBody(name) : ''),
+        };
+      })
+      .filter((c): c is CollectionItem => c !== null);
+
+    if (collections.length > 0) return { collections, products: [] };
+
+    const fallbackProds = await fetchProductsByCategory(category, 8);
+    const products: ProductItem[] = fallbackProds.map((p) => ({
+      sku: p.sku,
+      slug: p.slug,
+      name: p.name,
+      collection: p.collection ?? null,
+      images: p.images ?? null,
+      price_display: p.price_display ?? null,
+    }));
+    return { collections: [], products };
+  } catch {
+    return { collections: [], products: [] };
+  }
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
+
 export default async function CategoryCardsSection() {
-  const imageMap = await getCollectionImages();
+  const [imageMap, weddingData, fineData, mensData] = await Promise.all([
+    getCollectionImages(),
+    fetchCategoryData('wedding'),
+    fetchCategoryData('fine'),
+    fetchCategoryData('mens'),
+  ]);
+
+  const engagementCards: EngagementCard[] = COLLECTIONS.map((col) => ({
+    label: col.label,
+    value: col.value,
+    meaning: col.meaning,
+    body: col.body,
+    href: col.href,
+    images: col.isLifePath
+      ? []
+      : imageMap[col.value] ?? imageMap[col.label.toLowerCase()] ?? [],
+    linkLabel: col.isLifePath ? 'Find Your Path' : `Explore ${col.label}`,
+    isLifePath: col.isLifePath ?? false,
+  }));
 
   return (
     <section id="engagement-rings" className="categories-section">
@@ -191,29 +309,12 @@ export default async function CategoryCardsSection() {
           </p>
         </div>
 
-        <div className="categories-grid">
-          {COLLECTIONS.map((col) => {
-            const images =
-              'customSvg' in col
-                ? []
-                : imageMap[col.value] ??
-                  imageMap[col.label.toLowerCase()] ??
-                  [];
-
-            return (
-              <CollectionCardClient
-                key={col.value}
-                href={col.href}
-                images={images}
-                label={col.label}
-                meaning={col.meaning}
-                body={col.body}
-                linkLabel={'customSvg' in col ? 'Find Your Path' : `Explore ${col.label}`}
-                customSvg={'customSvg' in col ? col.customSvg : undefined}
-              />
-            );
-          })}
-        </div>
+        <CategoryGridClient
+          engagementCards={engagementCards}
+          weddingData={weddingData}
+          fineData={fineData}
+          mensData={mensData}
+        />
       </div>
     </section>
   );

@@ -5,7 +5,6 @@ import SignatureSection from '@/components/SignatureSection';
 import InvitationMoment from '@/components/InvitationMoment';
 import FindFormSection from '@/components/FindFormSection';
 import CategoryCardsSection from '@/components/CategoryCardsSection';
-import CollectionSection from '@/components/CollectionSection';
 import CoCreateSection from '@/components/CoCreateSection';
 import DailySignpostSection from '@/components/DailySignpostSection';
 import InvitationsMoreSection from '@/components/InvitationsMoreSection';
@@ -125,39 +124,6 @@ export default async function HomePage() {
 
       {/* ── ENGAGEMENT RINGS — collection cards with Life Path ───── */}
       <CategoryCardsSection />
-
-      {/* ── WEDDING BANDS — same card style, own collections ─────── */}
-      <CollectionSection
-        id="wedding-bands"
-        category="wedding"
-        eyebrow="Wedding Bands"
-        title="The circle that begins where it ends."
-        intro="Two people. One unbroken form. DANHOV's bands are made with the same intention as the moment they mark."
-        viewAllHref="/wedding-bands"
-        viewAllLabel="Browse All Wedding Bands"
-      />
-
-      {/* ── FINE JEWELRY — same card style, own collections ──────── */}
-      <CollectionSection
-        id="fine-jewelry"
-        category="fine"
-        eyebrow="Fine Jewelry"
-        title="Quiet pieces, for loud lives."
-        intro="Designed to be worn every day. Small enough to forget. Beautiful enough to remember forever."
-        viewAllHref="/fine-jewelry"
-        viewAllLabel="Browse All Fine Jewelry"
-      />
-
-      {/* ── MEN'S — same card style, own collections ─────────────── */}
-      <CollectionSection
-        id="mens"
-        category="mens"
-        eyebrow="Men's Jewelry"
-        title="Strength, worn well."
-        intro="A ring that carries a name. A band that asks nothing — and says everything."
-        viewAllHref="/mens"
-        viewAllLabel="Browse All Men's Jewelry"
-      />
 
       {/* ── CO-CREATE ────────────────────────────────────────────── */}
       <CoCreateSection />
