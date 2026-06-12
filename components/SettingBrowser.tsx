@@ -30,11 +30,11 @@ function parseMetalOption(raw: string): MetalOption {
   const isPlatinum = /PLAT/i.test(raw);
 
   let name = 'Gold';
-  let color = '#D4A843';
-  if (isRose) { name = 'Rose Gold'; color = '#C98080'; }
-  else if (isWhite) { name = 'White Gold'; color = '#C8C8C8'; }
-  else if (isYellow) { name = 'Yellow Gold'; color = '#D4A843'; }
-  else if (isPlatinum) { name = 'Platinum'; color = '#E8E8F0'; }
+  let color = 'linear-gradient(135deg, #e9c463 0%, #c69a3a 100%)';
+  if (isRose) { name = 'Rose Gold'; color = 'linear-gradient(135deg, #f1b7a3 0%, #cf8a72 100%)'; }
+  else if (isWhite) { name = 'White Gold'; color = 'linear-gradient(135deg, #f4efe9 0%, #c9c7c2 100%)'; }
+  else if (isYellow) { name = 'Yellow Gold'; color = 'linear-gradient(135deg, #e9c463 0%, #c69a3a 100%)'; }
+  else if (isPlatinum) { name = 'Platinum'; color = 'linear-gradient(135deg, #ecebe7 0%, #babab5 100%)'; }
 
   return {
     key: normaliseMetalKey(raw),
@@ -93,6 +93,12 @@ function buildGroups(products: Product[]): ProductGroup[] {
   }
 
   return Array.from(map.values()).map((variants) => {
+    // Sort so platinum appears first — it's the prestige default
+    variants.sort((a, b) => {
+      const aIsPl = /plat/i.test(variantPrimaryMetal(a) ?? '');
+      const bIsPl = /plat/i.test(variantPrimaryMetal(b) ?? '');
+      return aIsPl === bIsPl ? 0 : aIsPl ? -1 : 1;
+    });
     const seenColors = new Set<string>();
     const swatches: Array<{ metal: MetalOption; slug: string; metalRaw: string }> = [];
     for (const v of variants) {

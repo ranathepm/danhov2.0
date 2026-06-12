@@ -25,10 +25,26 @@ interface Props {
 
 function metalColour(raw: string): string {
   const up = raw.toUpperCase();
-  if (/ROSE|PINK/.test(up)) return '#C98080';
-  if (/WHITE/.test(up)) return '#C8C8C8';
-  if (/PLAT/.test(up)) return '#E8E8F0';
-  return '#D4A843';
+  if (/ROSE|PINK/.test(up)) return 'linear-gradient(135deg, #f1b7a3 0%, #cf8a72 100%)';
+  if (/WHITE/.test(up)) return 'linear-gradient(135deg, #f4efe9 0%, #c9c7c2 100%)';
+  if (/PLAT/.test(up)) return 'linear-gradient(135deg, #ecebe7 0%, #babab5 100%)';
+  return 'linear-gradient(135deg, #e9c463 0%, #c69a3a 100%)';
+}
+
+function metalToSuffix(metalKey: string): string {
+  const m = metalKey.toLowerCase();
+  if (m.includes('plat')) return 'PL';
+  const karatMatch = m.match(/(\d+)\s*k/);
+  const karat = karatMatch ? karatMatch[1] : '14';
+  if (m.includes('rose') || m.includes('pink')) return `${karat}R`;
+  if (m.includes('white')) return `${karat}W`;
+  if (m.includes('yellow') || m.includes('gold')) return `${karat}Y`;
+  return 'PL';
+}
+
+function computeDisplaySku(rawSku: string, metalKey: string): string {
+  const base = rawSku.replace(/-?(PL|14Y|14W|14R|18Y|18W|18R)$/i, '');
+  return `${base}-${metalToSuffix(metalKey)}`;
 }
 
 function metalKarat(raw: string): string {
@@ -97,6 +113,8 @@ export default function SettingDetailClient({
     ? [metalKarat(metal), metalLabel(metal)].filter(Boolean).join(' ')
     : '';
 
+  const displaySku = metal ? computeDisplaySku(product.sku, metal) : product.sku;
+
   return (
     <div className="sd-panel">
       {/* Name + share */}
@@ -104,7 +122,7 @@ export default function SettingDetailClient({
         <div>
           <h1 className="sd-name">
             {stripMetalSuffix(product.name)}
-            {product.sku && <span className="sd-sku"> ({product.sku})</span>}
+            {displaySku && <span className="sd-sku"> ({displaySku})</span>}
           </h1>
           {product.collection && (
             <div className="sd-style-row">

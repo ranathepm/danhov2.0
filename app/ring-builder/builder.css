@@ -158,19 +158,21 @@
 /* Metal chips */
 .sb-metal-chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .sb-metal-chip {
-  display: flex; flex-direction: column; align-items: center; gap: 4px;
-  background: none; border: none; cursor: pointer; padding: 4px 8px;
-  border-radius: 4px; transition: background 0.15s;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  background: none; border: none; cursor: pointer; padding: 4px 6px;
+  border-radius: 4px; transition: transform 0.15s;
   font-family: 'Cormorant Garamond', serif;
 }
-.sb-metal-chip:hover { background: #f5f0eb; }
-.sb-metal-chip.is-active .sb-metal-circle { box-shadow: 0 0 0 2px var(--logo-red); }
+.sb-metal-chip:hover { transform: translateY(-1px); }
+.sb-metal-chip.is-active .sb-metal-circle {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--logo-red), inset 0 -2px 5px rgba(0,0,0,0.18);
+}
 .sb-metal-circle {
   width: 44px; height: 44px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.5);
   display: flex; align-items: center; justify-content: center;
-  position: relative; box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-  transition: box-shadow 0.15s;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12), inset 0 -2px 5px rgba(0,0,0,0.14);
+  transition: box-shadow 0.18s;
 }
 .sb-metal-karat {
   font-size: 10px; font-weight: 700; color: rgba(0,0,0,0.55);
@@ -476,20 +478,22 @@
 .sd-option-chip.is-active .sd-option-label { color: var(--logo-red); font-weight: 600; }
 
 /* Metal options */
-.sd-metal-options { display: flex; flex-wrap: wrap; gap: 10px; }
+.sd-metal-options { display: flex; flex-wrap: wrap; gap: 12px; }
 .sd-metal-option {
-  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: none; border: none; cursor: pointer; padding: 4px 6px;
   border-radius: 4px; font-family: 'Cormorant Garamond', serif;
-  transition: background 0.15s;
+  transition: transform 0.15s;
 }
-.sd-metal-option:hover { background: #f5f0eb; }
-.sd-metal-option.is-active .sd-metal-circle { box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--logo-red); }
+.sd-metal-option:hover { transform: translateY(-1px); }
+.sd-metal-option.is-active .sd-metal-circle {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--logo-red), inset 0 -2px 6px rgba(0,0,0,0.18);
+}
 .sd-metal-circle {
   width: 48px; height: 48px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-  transition: box-shadow 0.15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12), inset 0 -2px 6px rgba(0,0,0,0.14);
+  transition: box-shadow 0.18s;
 }
 .sd-metal-karat {
   font-size: 10px; font-weight: 700; color: rgba(0,0,0,0.5);

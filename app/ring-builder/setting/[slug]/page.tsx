@@ -30,7 +30,9 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
   const product = await fetchProductBySlug(params.slug);
   if (!product) notFound();
 
-  const defaultMetal = searchParams.metal ?? product.default_metal ?? (product.metals?.[0] ?? null);
+  const preferPlatinum = (ms: string[]): string | null =>
+    ms.find((m) => /plat/i.test(m)) ?? ms[0] ?? null;
+  const defaultMetal = searchParams.metal ?? preferPlatinum(metals);
   const metals = product.metals ?? [];
   // Prefer multi-diamond param; fall back to single
   const diamondsParam = searchParams.diamonds || null;
