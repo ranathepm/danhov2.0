@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchProductWithPricingBySlug } from '@/lib/products';
-import { priceAllOptions } from '@/lib/pricing';
+import { priceAllOptions, computePrice, availableMetals, STATIC_SPOTS } from '@/lib/pricing';
 import NarrativeBox from '@/components/NarrativeBox';
 import WishlistHeart from '@/components/WishlistHeart';
 import ProductGalleryMetal from '@/components/ProductGalleryMetal';
@@ -72,26 +72,27 @@ export default async function ProductPage({ params }: { params: Params }) {
   // Compute live prices per metal variant so the detail page can update
   // the displayed price when the customer switches metal swatches.
   let pricemap: Record<string, number> = {};
-  // Gold weight is mandatory — without it the formula collapses to just
-  // the stored labour cost (e.g. $800) for every metal, overriding the
-  // correct price_display. Markup must also be set so the gold component
-  // is meaningful.
-  // Weight alone is sufficient — commission_rate defaults to 0 and labour/stones
-  // are already computed and stored; no longer gated on markup_multiplier.
   const hasPricingData = (product.gold_weight_g ?? 0) > 0;
   if (hasPricingData) {
     try {
       const breakdowns = await priceAllOptions(product, product.metals);
       for (const b of breakdowns) {
-        // Belt-and-suspenders: only store prices where gold actually
-        // contributed (metal_cost_usd > 0). Discards labour-only totals
-        // that would otherwise override a correct price_display.
         if (b.total_usd > 0 && b.metal_cost_usd > 0) {
           pricemap[b.metal_used] = b.total_usd;
         }
       }
     } catch {
-      // GoldAPI unavailable — ProductOptions will fall back to price_display
+      // GoldAPI unreachable — compute with static spot prices so the
+      // markup_multiplier is still applied rather than falling back to
+      // the raw cost stored in price_display.
+      const metals = availableMetals(product.metals ?? []);
+      const keys   = metals.length > 0
+        ? metals
+        : [product.default_metal ?? '14k_yellow'];
+      for (const k of keys) {
+        const b = computePrice(product, STATIC_SPOTS, k);
+        if (b.total_usd > 0) pricemap[b.metal_used] = b.total_usd;
+      }
     }
   }
 

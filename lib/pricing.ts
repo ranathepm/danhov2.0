@@ -38,6 +38,18 @@ function roundTo10(n: number): number {
   return Math.round(n / 10) * 10;
 }
 
+/**
+ * Static fallback spot prices used when GoldAPI is unreachable and the DB
+ * cache is empty.  Calibrated to Jun 2026 wholesale rates:
+ *   Gold 24k ≈ $98/g  → 14k alloy ≈ $60/g, 18k alloy ≈ $76/g
+ *   Platinum ≈ $32/g  → 900Pt/100Ir alloy ≈ $52/g
+ */
+export const STATIC_SPOTS: AllSpots = {
+  gold:     { price_per_gram_usd: 98,                   fetched_at: 'static' },
+  platinum: { price_per_gram_usd: 32,                   fetched_at: 'static' },
+  iridium:  { price_per_gram_usd: IRIDIUM_SPOT_DEFAULT, fetched_at: 'static' },
+};
+
 // ── Metal constants ───────────────────────────────────────────────────────────
 
 /**
