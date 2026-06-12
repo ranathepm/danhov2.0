@@ -13,8 +13,7 @@
  *   stones         = stones_value_usd  (or auto from stone_groups if null)
  *   rhodium        = per-metal rhodium plating uplift (white gold only)
  *   subTotal       = metalCost + castingLabor + labour + stones + rhodium
- *   commission     = subTotal × (commission_rate / 100)
- *   total          = roundTo10(subTotal + commission)
+ *   total          = roundTo10(subTotal × markup_multiplier)
  *
  * Spot prices:
  *   Gold (XAU)     → GoldAPI /XAU/USD → price_gram_24k (USD per gram, 24k pure)
@@ -262,8 +261,8 @@ export type PricingInputs = {
   casting_labor_per_gram?: number | null;        // per-gram casting/finishing cost
   stones_value_usd:        number | null;        // override; null → auto from stone_groups
   stone_groups?:           StoneGroup[] | null;  // used when stones_value_usd is null
-  commission_rate?:        number | null;        // % added to sub-total (e.g. 20 = +20 %)
-  markup_multiplier?:      number | null;        // legacy field — ignored
+  commission_rate?:        number | null;        // kept for backward compat; no longer used
+  markup_multiplier?:      number | null;        // website price = roundTo10(cost × multiplier)
 };
 
 export type PriceBreakdown = {
@@ -333,10 +332,11 @@ export function computePrice(
     }
   }
 
-  const subTotal   = metalCost + castingLabor + labor + stones + rhodium;
-  const commRate   = p.commission_rate ?? 0;
-  const commission = subTotal * (commRate / 100);
-  const total      = subTotal + commission;
+  const subTotal = metalCost + castingLabor + labor + stones + rhodium;
+  const markup   = (p.markup_multiplier != null && p.markup_multiplier > 0)
+    ? p.markup_multiplier
+    : 4;
+  const total    = subTotal * markup;
 
   const isPlatinum = metalKey === 'platinum';
 
@@ -348,7 +348,7 @@ export function computePrice(
     labor_usd:             labor,
     stones_usd:            Math.round(stones),
     rhodium_uplift_usd:    rhodium,
-    commission_usd:        Math.round(commission),
+    commission_usd:        0,
     metal_used:            metalKey,
     metal_label:           METAL_LABEL[metalKey] ?? metalKey,
     spot_per_gram_usd:     Math.round(
