@@ -18,6 +18,7 @@ import {
   occasionForCategory,
 } from '@/lib/narratives';
 import { stripMetalSuffix } from '@/lib/product-display';
+import SkuDisplay from '@/components/SkuDisplay';
 import { METAL_LABEL_DISPLAY } from '@/lib/stone-math';
 import RelatedProducts from '@/components/RelatedProducts';
 
@@ -156,7 +157,7 @@ export default async function ProductPage({ params }: { params: Params }) {
             <h1 className="product-name">{displayName}</h1>
             <WishlistHeart slug={product.slug} />
           </div>
-          <span className="product-style-num">Style {product.sku}</span>
+          <SkuDisplay sku={product.sku} />
           <div className="product-divider" />
 
           <ProductOptions
