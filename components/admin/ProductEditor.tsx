@@ -1005,36 +1005,6 @@ export default function ProductEditor({
                 <span className="adm-page-sub">Updates live as you type above</span>
               </header>
 
-              {/* Website Markup Multiplier */}
-              <div className="adm-fields" style={{ marginBottom: 20 }}>
-                <div className="adm-field adm-field--full">
-                  <span className="adm-field-label">Website Markup Multiplier</span>
-                  <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
-                    {MARKUP_MULTIPLIER_PRESETS.map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        className={`adm-chip${(form.markup_multiplier ?? 4) === p ? ' is-active' : ''}`}
-                        onClick={() => set('markup_multiplier', p)}
-                      >
-                        ×{p}
-                      </button>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <input
-                      type="number" step="0.1" min="1" className="adm-input"
-                      style={{ maxWidth: 120 }}
-                      value={form.markup_multiplier ?? ''}
-                      onChange={(e) => set('markup_multiplier', e.target.value === '' ? null : Number(e.target.value))}
-                    />
-                    <span className="adm-field-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>
-                      × cost price = website price shown to customers
-                    </span>
-                  </div>
-                </div>
-              </div>
-
               {/* Live spot indicator */}
               <div className="adm-spot-badge" style={{
                 padding: '10px 14px',
@@ -1066,46 +1036,64 @@ export default function ProductEditor({
               </div>
 
               {/* Stones + Labor rows (same for every metal) */}
-              <div className="adm-pricing-breakdown">
-                <div className="adm-pricing-row">
-                  <span>Stones ({productTotal.total_carats > 0 ? `${productTotal.total_carats.toFixed(3)} ct` : '—'})</span>
-                  <strong>${Math.round(productTotal.total_stone_price_usd).toLocaleString('en-US')}</strong>
-                </div>
-                <div className="adm-pricing-row">
-                  <span>Labor (setting + centre diamond)</span>
-                  <strong>${totalLabour.toLocaleString('en-US')}</strong>
-                </div>
-                <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
-                  <span>Casting labor (${(form.casting_labor_per_gram ?? 10).toFixed(0)}/g × alloy weight — varies per metal)</span>
-                  <span>per row below</span>
-                </div>
-              </div>
+              {(() => {
+                const defMetal       = form.default_metal ?? 'platinum';
+                const defRatio       = DENSITY_RATIO[defMetal] ?? 1.0;
+                const defWeight      = (form.gold_weight_g ?? 0) * defRatio;
+                const perG           = form.casting_labor_per_gram ?? 10;
+                const defCasting     = defWeight * perG;
+                const defLabel       = METAL_LABEL_DISPLAY[defMetal] ?? defMetal.replace(/_/g, ' ');
+                return (
+                  <div className="adm-pricing-breakdown">
+                    <div className="adm-pricing-row">
+                      <span>Stones ({productTotal.total_carats > 0 ? `${productTotal.total_carats.toFixed(3)} ct` : '—'})</span>
+                      <strong>${Math.round(productTotal.total_stone_price_usd).toLocaleString('en-US')}</strong>
+                    </div>
+                    <div className="adm-pricing-row">
+                      <span>Labor (setting + centre diamond)</span>
+                      <strong>${totalLabour.toLocaleString('en-US')}</strong>
+                    </div>
+                    <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
+                      <span>Casting labor (${perG.toFixed(0)}/g × alloy weight — varies per metal)</span>
+                      <span style={{ fontFamily: "'Jost', sans-serif" }}>
+                        {defWeight > 0
+                          ? `${defLabel}: ${defWeight.toFixed(2)}g × $${perG} = $${Math.round(defCasting)}`
+                          : '—'}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
 
-              {/* Per-metal price table — shows all metals when none selected yet (new product) */}
+              {/* Per-metal price table — fixed column widths ensure header/data alignment */}
               {(form.gold_weight_g ?? 0) > 0 && (() => {
                 const metalsToShow = (form.metals ?? []).length > 0 ? (form.metals ?? []) : METAL_OPTIONS;
-                const markup = form.markup_multiplier ?? 4;
+                const markup       = form.markup_multiplier ?? 4;
+                const COL = '1fr 160px 160px 90px 120px';
                 return (
-                  <div className="adm-metal-price-table" style={{ marginTop: 12 }}>
+                  <div className="adm-metal-price-table" style={{ marginTop: 16, border: '1px solid var(--border)', borderRadius: 6, overflow: 'hidden' }}>
+                    {/* Header */}
                     <div style={{
                       display: 'grid',
-                      gridTemplateColumns: '1fr auto auto auto auto',
-                      gap: 10,
-                      padding: '6px 0',
-                      borderBottom: '2px solid var(--border)',
+                      gridTemplateColumns: COL,
+                      padding: '8px 14px',
+                      background: '#f5eeeb',
+                      borderBottom: '1px solid var(--border)',
                       fontFamily: "'Jost', sans-serif",
                       fontSize: 11,
-                      color: 'var(--text-muted)',
+                      color: '#7a6860',
                       textTransform: 'uppercase' as const,
-                      letterSpacing: '0.06em',
+                      letterSpacing: '0.07em',
+                      fontWeight: 600,
                     }}>
                       <span>Metal</span>
-                      <span>Weight / Rate</span>
-                      <span>Metal + Casting</span>
+                      <span style={{ textAlign: 'right' }}>Weight / Rate</span>
+                      <span style={{ textAlign: 'right' }}>Metal + Casting</span>
                       <span style={{ textAlign: 'right' }}>Cost</span>
                       <span style={{ textAlign: 'right', color: '#AC3438' }}>Website Price</span>
                     </div>
-                    {metalsToShow.map((metal) => {
+                    {/* Rows */}
+                    {metalsToShow.map((metal, idx) => {
                       const ratio         = DENSITY_RATIO[metal] ?? 1.0;
                       const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
                       const costPerG      = livePrices?.cost_per_gram[metal] ?? 0;
@@ -1119,29 +1107,29 @@ export default function ProductEditor({
                       const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
                       const isDefault     = metal === (form.default_metal ?? 'platinum');
                       return (
-                        <div key={metal} className="adm-metal-price-row" style={{
+                        <div key={metal} style={{
                           display: 'grid',
-                          gridTemplateColumns: '1fr auto auto auto auto',
-                          gap: 10,
-                          padding: '9px 0',
-                          borderBottom: '1px solid var(--border)',
+                          gridTemplateColumns: COL,
+                          padding: '10px 14px',
+                          borderBottom: idx < metalsToShow.length - 1 ? '1px solid var(--border)' : 'none',
                           alignItems: 'center',
                           fontFamily: "'Jost', sans-serif",
                           fontSize: 13,
+                          background: isDefault ? '#fffaf8' : 'transparent',
                         }}>
-                          <span style={{ color: 'var(--text)', fontWeight: isDefault ? 600 : 400 }}>
+                          <span style={{ color: '#1a1410', fontWeight: isDefault ? 600 : 400 }}>
                             {label}{isDefault ? ' ★' : ''}
                           </span>
-                          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                          <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
                             {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}
                           </span>
-                          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                          <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
                             {livePrices ? `$${Math.round(materialCost).toLocaleString()} + $${Math.round(castingLabor).toLocaleString()}` : '—'}
                           </span>
-                          <span style={{ color: 'var(--text-muted)', fontSize: 12, textAlign: 'right' }}>
+                          <span style={{ color: '#1a1410', fontSize: 13, textAlign: 'right', fontWeight: 500 }}>
                             {livePrices ? `$${costTotal.toLocaleString('en-US')}` : '—'}
                           </span>
-                          <strong style={{ color: livePrices ? '#AC3438' : 'var(--text-muted)', fontSize: 14, textAlign: 'right' }}>
+                          <strong style={{ color: livePrices ? '#AC3438' : '#bbb', fontSize: 14, textAlign: 'right' }}>
                             {livePrices ? `$${websitePrice.toLocaleString('en-US')}` : '—'}
                           </strong>
                         </div>
@@ -1150,6 +1138,45 @@ export default function ProductEditor({
                   </div>
                 );
               })()}
+
+              {/* Website Markup Multiplier — directly above Total Product Price */}
+              {(form.gold_weight_g ?? 0) > 0 && (
+                <div style={{
+                  marginTop: 20,
+                  padding: '14px 16px',
+                  background: '#fdf9f7',
+                  border: '1px solid #e8ddd8',
+                  borderRadius: 6,
+                  fontFamily: "'Jost', sans-serif",
+                }}>
+                  <span className="adm-field-label" style={{ display: 'block', marginBottom: 8 }}>
+                    Website Markup Multiplier
+                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
+                    <div className="adm-chips" style={{ margin: 0 }}>
+                      {MARKUP_MULTIPLIER_PRESETS.map((p) => (
+                        <button
+                          key={p}
+                          type="button"
+                          className={`adm-chip${(form.markup_multiplier ?? 4) === p ? ' is-active' : ''}`}
+                          onClick={() => set('markup_multiplier', p)}
+                        >
+                          ×{p}
+                        </button>
+                      ))}
+                    </div>
+                    <input
+                      type="number" step="0.1" min="1" className="adm-input"
+                      style={{ maxWidth: 90 }}
+                      value={form.markup_multiplier ?? ''}
+                      onChange={(e) => set('markup_multiplier', e.target.value === '' ? null : Number(e.target.value))}
+                    />
+                    <span style={{ fontSize: 12, color: '#9e8880' }}>
+                      cost × multiplier = website price shown to customers
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Total Product Price summary */}
               {(form.gold_weight_g ?? 0) > 0 && livePrices && (() => {
@@ -1168,27 +1195,30 @@ export default function ProductEditor({
                 const label         = METAL_LABEL_DISPLAY[defaultMetal] ?? defaultMetal.replace(/_/g, ' ');
                 return (
                   <div style={{
-                    marginTop: 16,
-                    padding: '14px 16px',
+                    marginTop: 8,
+                    padding: '16px 16px',
                     background: '#fff8f6',
-                    border: '1px solid #e8ddd8',
+                    border: '1px solid #AC3438',
                     borderRadius: 6,
                     fontFamily: "'Jost', sans-serif",
                   }}>
-                    <div style={{ fontSize: 11, color: '#9e8880', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: 8 }}>
-                      Total Product Price — {label} (default)
+                    <div style={{ fontSize: 11, color: '#9e8880', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: 12 }}>
+                      Total Product Price — {label} (default metal)
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' as const }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' as const }}>
                       <div>
-                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 2 }}>Product Cost</div>
-                        <div style={{ fontSize: 20, fontWeight: 600, color: '#1a1410' }}>
+                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 3 }}>Product Cost</div>
+                        <div style={{ fontSize: 22, fontWeight: 600, color: '#1a1410' }}>
                           ${costTotal.toLocaleString('en-US')}
                         </div>
                       </div>
-                      <div style={{ fontSize: 18, color: '#c8b8b0' }}>×{markup}</div>
+                      <div style={{ fontSize: 20, color: '#c8b8b0', fontWeight: 300, padding: '0 4px' }}>×{markup}</div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ width: 1, height: 36, background: '#e8ddd8' }} />
+                      </div>
                       <div>
-                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 2 }}>Website Price</div>
-                        <div style={{ fontSize: 24, fontWeight: 700, color: '#AC3438' }}>
+                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 3 }}>Website Price (shown to customers)</div>
+                        <div style={{ fontSize: 28, fontWeight: 700, color: '#AC3438', letterSpacing: '-0.5px' }}>
                           ${websitePrice.toLocaleString('en-US')}
                         </div>
                       </div>
