@@ -16,15 +16,53 @@
  */
 
 /**
- * Carat weight of a single round brilliant of the given mm diameter.
+ * Industry-standard round brilliant carat weight lookup table.
+ * Source: GIA / Serendipity / Harmony Jewels reference charts.
+ * Melee stones (< 2 mm) are cut heavier than the cubic formula predicts.
  *
- * Formula: ct ≈ 0.0038 × mm³  (depth ≈ 62% of diameter, GIA standard)
- *
- * Calibration:  3.0 mm → 0.10 ct  |  4.0 mm → 0.25 ct
- *               5.0 mm → 0.50 ct  |  6.5 mm → 1.00 ct
+ * Calibration:
+ *   1.0 mm → 0.005 ct  |  1.5 mm → 0.015 ct  |  2.0 mm → 0.030 ct
+ *   3.0 mm → 0.100 ct  |  4.5 mm → 0.360 ct  |  6.5 mm → 1.000 ct
  */
+const ROUND_CARAT_LUT: [mm: number, ct: number][] = [
+  [1.0,  0.005],
+  [1.2,  0.009],
+  [1.5,  0.015],
+  [2.0,  0.030],
+  [2.5,  0.060],
+  [3.0,  0.100],
+  [3.5,  0.180],
+  [4.0,  0.250],
+  [4.5,  0.360],
+  [5.0,  0.500],
+  [5.5,  0.660],
+  [6.0,  0.840],
+  [6.5,  1.000],
+  [7.0,  1.250],
+  [7.5,  1.500],
+  [8.0,  2.000],
+  [9.0,  3.000],
+  [10.0, 4.000],
+];
+
 export function caratFromMm(mm: number): number {
   if (!Number.isFinite(mm) || mm <= 0) return 0;
+  // Below 1 mm: scale proportionally from the 1 mm anchor
+  if (mm < ROUND_CARAT_LUT[0][0]) {
+    return ROUND_CARAT_LUT[0][1] * Math.pow(mm / ROUND_CARAT_LUT[0][0], 3);
+  }
+  // Above 10 mm: extrapolate with GIA cubic formula (accurate at large sizes)
+  const last = ROUND_CARAT_LUT[ROUND_CARAT_LUT.length - 1];
+  if (mm > last[0]) return 0.0038 * Math.pow(mm, 3);
+  // Linear interpolation between bracketing table entries
+  for (let i = 1; i < ROUND_CARAT_LUT.length; i++) {
+    const [mm0, ct0] = ROUND_CARAT_LUT[i - 1];
+    const [mm1, ct1] = ROUND_CARAT_LUT[i];
+    if (mm <= mm1) {
+      const t = (mm - mm0) / (mm1 - mm0);
+      return ct0 + t * (ct1 - ct0);
+    }
+  }
   return 0.0038 * Math.pow(mm, 3);
 }
 
@@ -73,9 +111,9 @@ export function caratFromShape(
   const L = Number(length_mm ?? 0);
   const W = Number(width_mm ?? 0);
   if (!L || !W) return 0;
-  const avgMm     = (L + W) / 2;
+  const avgMm      = (L + W) / 2;
   const correction = SHAPE_CARAT_CORRECTION[shape ?? 'round'] ?? 1.00;
-  return 0.0038 * Math.pow(avgMm, 3) * correction;
+  return caratFromMm(avgMm) * correction;
 }
 
 /**
