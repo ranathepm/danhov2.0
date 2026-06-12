@@ -345,7 +345,11 @@ export function computePrice(
   }
 
   const subTotal    = metalCost + castingLabor + labor + stones + rhodium;
-  const markup      = (p.markup_multiplier != null && p.markup_multiplier > 0)
+  // Snap to the nearest standard preset (2 / 3 / 4 / 5). Old DB records may
+  // store non-standard values like 2.2 or 3.5 — treat those as 4, matching
+  // the behaviour of the admin editor.
+  const VALID_MULTIPLIERS = new Set([2, 3, 4, 5]);
+  const markup = p.markup_multiplier != null && VALID_MULTIPLIERS.has(p.markup_multiplier)
     ? p.markup_multiplier
     : 4;
   // Round cost to nearest $10 first, then apply markup — so displayed cost × markup = displayed website price.
