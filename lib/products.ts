@@ -145,45 +145,64 @@ export async function fetchProductWithPricingBySlug(
   return (data as ProductWithPricing) ?? null;
 }
 
+/** Strip trailing metal/karat suffix from a SKU to get the base design key. */
+function baseDesignSku(sku: string | null | undefined): string {
+  if (!sku) return `__no_sku__${Math.random()}`;
+  return sku.replace(/-\d*[a-z]+$/i, '').toLowerCase();
+}
+
 /**
  * Fetch related products for a product detail page.
  * Priority: same collection first, then same category to fill remaining slots.
+ * Deduplicates by base SKU so metal variants of the same ring don't fill all 4 slots.
+ * Always returns exactly `limit` unique designs (or fewer if insufficient data).
  */
 export async function fetchRelatedProducts(
   currentSlug: string,
   collection: string | null,
   category: string,
-  limit = 6
+  limit = 4
 ): Promise<Product[]> {
   const results: Product[] = [];
-  const seen = new Set([currentSlug]);
+  const seenSlugs = new Set([currentSlug]);
+  const seenBaseSkus = new Set<string>();
 
-  if (collection) {
-    const { data } = await supabaseAnon
-      .from('products')
-      .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
-      .ilike('collection', collection)
-      .eq('is_active', true)
-      .neq('slug', currentSlug)
-      .limit(limit);
+  const COLS = 'sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active';
 
-    for (const p of (data ?? []) as Product[]) {
-      if (!seen.has(p.slug)) { seen.add(p.slug); results.push(p); }
+  function addUnique(rows: Product[]): void {
+    for (const p of rows) {
+      if (results.length >= limit) break;
+      if (seenSlugs.has(p.slug)) continue;
+      const base = baseDesignSku(p.sku);
+      if (seenBaseSkus.has(base)) continue;
+      seenSlugs.add(p.slug);
+      seenBaseSkus.add(base);
+      results.push(p);
     }
   }
 
+  // 1. Same collection — fetch generous pool so dedup still yields `limit` results
+  if (collection) {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select(COLS)
+      .ilike('collection', collection)
+      .eq('is_active', true)
+      .neq('slug', currentSlug)
+      .limit(limit * 8);
+    addUnique((data ?? []) as Product[]);
+  }
+
+  // 2. Fill remaining from same category (different collection is fine here)
   if (results.length < limit) {
     const { data } = await supabaseAnon
       .from('products')
-      .select('sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active')
+      .select(COLS)
       .filter('categories', 'cs', JSON.stringify([category]))
       .eq('is_active', true)
       .neq('slug', currentSlug)
-      .limit(limit * 2);
-
-    for (const p of (data ?? []) as Product[]) {
-      if (!seen.has(p.slug) && results.length < limit) { seen.add(p.slug); results.push(p); }
-    }
+      .limit(limit * 8);
+    addUnique((data ?? []) as Product[]);
   }
 
   return results.slice(0, limit);

@@ -1582,7 +1582,7 @@ footer {
 .page-hero {
   padding-top: 81px;
   min-height: 340px;
-  background: linear-gradient(160deg, #faf7f2 0%, #ede6d8 50%, #e0d5c5 100%);
+  background: linear-gradient(160deg, #fffef9 0%, #faf8f1 50%, #f3ede2 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1596,8 +1596,8 @@ footer {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 25% 60%, rgba(212,190,155,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 75% 40%, rgba(180,165,140,0.12) 0%, transparent 50%);
+    radial-gradient(ellipse at 25% 60%, rgba(220,210,190,0.14) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 40%, rgba(200,188,168,0.10) 0%, transparent 50%);
   pointer-events: none;
 }
 .page-hero-inner { position: relative; z-index: 1; padding: 60px 48px 56px; }

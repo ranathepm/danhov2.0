@@ -225,14 +225,14 @@
   flex: 1; position: relative; display: flex; align-items: center;
 }
 .sb-price-dollar {
-  position: absolute; left: 10px;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px;
-  color: #9a8f86; pointer-events: none; line-height: 1;
+  position: absolute; left: 12px;
+  font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600;
+  color: #1a1410; pointer-events: none; line-height: 1;
 }
 .sb-price-input {
   flex: 1; width: 100%; border: 1px solid #e8e2db; border-radius: 4px;
-  padding: 8px 12px 8px 22px; font-family: 'Cormorant Garamond', serif;
-  font-size: 14px; text-align: center; color: #1a1410;
+  padding: 10px 12px 10px 30px; font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; font-weight: 500; text-align: center; color: #1a1410;
   outline: none; background: #fff;
   transition: border-color 0.15s;
   -moz-appearance: textfield;

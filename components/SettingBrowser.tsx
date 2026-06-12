@@ -139,14 +139,150 @@ function parsePrice(display: string | null): number | null {
   return m ? Math.round(Number(m[0])) : null;
 }
 
-// ─── Ring style icon (generic) ─────────────────────────────────────────────
+// ─── Per-collection ring style icons ──────────────────────────────────────
 
-function StyleRingIcon() {
+const COLLECTION_ICONS: Record<string, React.ReactNode> = {
+  abbraccio: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <path d="M28 11C29.5 6 34 6 34 9.5C34 13 29 13.5 26.5 10C24 6.5 26.5 2.5 30 4.5" strokeWidth="1.3" strokeLinecap="round" fill="none" />
+    </svg>
+  ),
+  classico: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="28" cy="6.5" r="3.5" />
+      <line x1="25.5" y1="9.5" x2="24.5" y2="11.5" strokeWidth="1" />
+      <line x1="30.5" y1="9.5" x2="31.5" y2="11.5" strokeWidth="1" />
+    </svg>
+  ),
+  couture: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="28" cy="6.5" r="2.5" />
+      <circle cx="28" cy="6.5" r="5" strokeWidth="0.8" strokeDasharray="1.5 1.5" />
+      <circle cx="28" cy="1.5" r="1" fill="currentColor" />
+      <circle cx="33.2" cy="3.8" r="1" fill="currentColor" />
+      <circle cx="22.8" cy="3.8" r="1" fill="currentColor" />
+    </svg>
+  ),
+  voltaggio: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <path d="M10 19C10 14 18 11 28 11C38 11 46 14 46 19C46 24 38 27 28 27C18 27 10 24 10 19Z" />
+      <path d="M18 19C18 16 22 14 28 14C34 14 38 16 38 19C38 22 34 24 28 24C22 24 18 22 18 19Z" />
+      <line x1="28" y1="3" x2="28" y2="10.5" strokeWidth="0.8" />
+      <circle cx="28" cy="6.5" r="3" strokeWidth="1.2" />
+    </svg>
+  ),
+  'norme de danhov': (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <rect x="24.5" y="3" width="7" height="7" rx="0.5" strokeWidth="1.3" />
+    </svg>
+  ),
+  norme: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <rect x="24.5" y="3" width="7" height="7" rx="0.5" strokeWidth="1.3" />
+    </svg>
+  ),
+  'per lei': (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <path d="M24 3.5C24 3.5 24 9 28 9C32 9 32 3.5 32 3.5" fill="none" strokeLinecap="round" />
+      <path d="M21.5 5.5C21.5 5.5 21.5 10.5 28 10.5C34.5 10.5 34.5 5.5 34.5 5.5" fill="none" strokeWidth="0.8" strokeLinecap="round" />
+    </svg>
+  ),
+  petalo: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <ellipse cx="28" cy="6" rx="2.5" ry="4.5" strokeWidth="1.2" />
+      <ellipse cx="22.5" cy="8.5" rx="2" ry="3.2" transform="rotate(-35 22.5 8.5)" strokeWidth="0.9" />
+      <ellipse cx="33.5" cy="8.5" rx="2" ry="3.2" transform="rotate(35 33.5 8.5)" strokeWidth="0.9" />
+    </svg>
+  ),
+  perlina: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="21.5" cy="9" r="2" fill="currentColor" fillOpacity="0.12" strokeWidth="1" />
+      <circle cx="28" cy="5.5" r="2.8" fill="currentColor" fillOpacity="0.12" strokeWidth="1" />
+      <circle cx="34.5" cy="9" r="2" fill="currentColor" fillOpacity="0.12" strokeWidth="1" />
+    </svg>
+  ),
+  'pop of color': (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="28" cy="6.5" r="4" fill="currentColor" fillOpacity="0.22" strokeWidth="1.2" />
+      <circle cx="26.5" cy="5" r="1.2" fill="currentColor" fillOpacity="0.45" stroke="none" />
+    </svg>
+  ),
+  'award winners': (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <path d="M28 2L29.4 6H33.5L30.3 8.3L31.5 12.5L28 10L24.5 12.5L25.7 8.3L22.5 6H26.6L28 2Z" strokeWidth="1" strokeLinejoin="round" />
+    </svg>
+  ),
+  eleganza: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <ellipse cx="28" cy="6.5" rx="2.2" ry="4.5" strokeWidth="1.2" />
+    </svg>
+  ),
+  carezza: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="28" cy="5" r="1.2" fill="currentColor" />
+      <circle cx="24" cy="7" r="1" fill="currentColor" />
+      <circle cx="32" cy="7" r="1" fill="currentColor" />
+      <circle cx="21.5" cy="10" r="0.8" fill="currentColor" />
+      <circle cx="34.5" cy="10" r="0.8" fill="currentColor" />
+    </svg>
+  ),
+  unito: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+      <ellipse cx="24" cy="17" rx="14" ry="7" />
+      <ellipse cx="32" cy="17" rx="14" ry="7" />
+      <line x1="28" y1="4" x2="28" y2="10" strokeWidth="1" />
+    </svg>
+  ),
+  'solo filo': (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
+      <ellipse cx="28" cy="15" rx="21" ry="10" />
+    </svg>
+  ),
+  solo: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true">
+      <ellipse cx="28" cy="15" rx="21" ry="10" />
+    </svg>
+  ),
+  rings: (
+    <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="3.5" aria-hidden="true">
+      <ellipse cx="28" cy="14" rx="18" ry="9" />
+    </svg>
+  ),
+};
+
+function CollectionStyleIcon({ collection }: { collection: string }) {
+  const key = collection.toLowerCase();
+  const icon = COLLECTION_ICONS[key];
+  if (icon) return <>{icon}</>;
   return (
     <svg viewBox="0 0 56 28" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
-      <ellipse cx="28" cy="14" rx="20" ry="10" />
-      <ellipse cx="28" cy="14" rx="13" ry="6" />
-      <circle cx="28" cy="4" r="3" />
+      <ellipse cx="28" cy="19" rx="18" ry="8" />
+      <ellipse cx="28" cy="19" rx="11" ry="4.5" />
+      <circle cx="28" cy="6" r="3" />
     </svg>
   );
 }
@@ -308,7 +444,7 @@ export default function SettingBrowser({ products, diamondId, diamondsParam }: P
                     onClick={() => setActiveStyles((s) => toggleSet(s, col))}
                     aria-pressed={activeStyles.has(col)}
                   >
-                    <span className="sb-style-icon"><StyleRingIcon /></span>
+                    <span className="sb-style-icon"><CollectionStyleIcon collection={col} /></span>
                     <span className="sb-style-label">{col}</span>
                   </button>
                 ))}
