@@ -16,7 +16,7 @@ const BLANK = {
   description: '',
   default_metal: 'platinum',
   gold_weight_g: null,
-  markup_multiplier: 2.2,
+  markup_multiplier: 4,
   base_labor_usd: 4,
   diamond_labor_usd: 50,
   stones_value_usd: null,

@@ -67,6 +67,7 @@ const METAL_OPTIONS = [
 const SETTING_MULTIPLIER_PRESETS  = [4, 6, 8, 10];
 const CENTRE_MULTIPLIER_PRESETS   = [25, 50, 75, 100];
 const CASTING_LABOR_PRESETS       = [5, 10, 15, 20];
+const MARKUP_MULTIPLIER_PRESETS   = [2, 3, 4, 5];
 
 type Tab = 'identity' | 'images' | 'metals' | 'pricing';
 
@@ -153,8 +154,9 @@ export default function ProductEditor({
     setting_multiplier:   product.setting_multiplier ?? 4,
     centre_diamond_group:   product.centre_diamond_group ?? blankStoneGroup(),
     centre_multiplier:      product.centre_multiplier ?? 50,
-    commission_rate:        product.commission_rate ?? 0,
+    commission_rate:        0,
     casting_labor_per_gram: product.casting_labor_per_gram ?? 10,
+    markup_multiplier:      product.markup_multiplier ?? 4,
   });
 
   // Live metal prices fetched from /api/metal-prices
@@ -264,7 +266,8 @@ export default function ProductEditor({
         setting_multiplier:     form.setting_multiplier,
         centre_diamond_group:   cleanCentre,
         centre_multiplier:      form.centre_multiplier,
-        commission_rate:        form.commission_rate ?? 0,
+        commission_rate:        0,
+        markup_multiplier:      form.markup_multiplier ?? 4,
         casting_labor_per_gram: form.casting_labor_per_gram ?? 10,
       };
       const res = await fetch(url, {
@@ -749,7 +752,6 @@ export default function ProductEditor({
                     type="number" step="0.1" className="adm-input"
                     value={form.gold_weight_g ?? ''}
                     onChange={(e) => set('gold_weight_g', e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder="e.g. 4.8"
                   />
                 </label>
                 <label className="adm-field">
@@ -799,7 +801,6 @@ export default function ProductEditor({
                           type="number" step="1" min="0" className="adm-input"
                           value={g.count ?? ''}
                           onChange={(e) => updateStoneGroup(i, { count: e.target.value === '' ? null : Number(e.target.value) })}
-                          placeholder="38"
                         />
                       </label>
                       <label className="adm-field">
@@ -813,7 +814,6 @@ export default function ProductEditor({
                             const eff    = length != null && width != null ? (length + width) / 2 : (length ?? width);
                             updateStoneGroup(i, { length_mm: length, size_mm: eff });
                           }}
-                          placeholder="6.50"
                         />
                       </label>
                       <label className="adm-field">
@@ -827,7 +827,6 @@ export default function ProductEditor({
                             const eff    = length != null && width != null ? (length + width) / 2 : (width ?? length);
                             updateStoneGroup(i, { width_mm: width, size_mm: eff });
                           }}
-                          placeholder="6.50"
                         />
                       </label>
                       <label className="adm-field">
@@ -875,12 +874,11 @@ export default function ProductEditor({
                     type="number" step="1" min="1" className="adm-input"
                     value={form.setting_multiplier ?? ''}
                     onChange={(e) => set('setting_multiplier', e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder="4"
                   />
                 </div>
                 {totalStoneCount > 0 && (form.setting_multiplier ?? 0) > 0 && (
                   <p className="adm-stone-readout" style={{ marginTop: 8 }}>
-                    Setting Labour: <strong>{totalStoneCount} × {form.setting_multiplier} = ${settingLabour.toLocaleString('en-US')}</strong>
+                    Setting Labor: <strong>{totalStoneCount} × {form.setting_multiplier} = ${settingLabour.toLocaleString('en-US')}</strong>
                   </p>
                 )}
               </div>
@@ -900,7 +898,6 @@ export default function ProductEditor({
                       type="number" step="1" min="0" className="adm-input"
                       value={form.centre_diamond_group?.count ?? ''}
                       onChange={(e) => updateCentreGroup({ count: e.target.value === '' ? null : Number(e.target.value) })}
-                      placeholder="1"
                     />
                   </label>
                   <label className="adm-field">
@@ -914,7 +911,6 @@ export default function ProductEditor({
                         const eff    = length != null && width != null ? (length + width) / 2 : (length ?? width);
                         updateCentreGroup({ length_mm: length, size_mm: eff });
                       }}
-                      placeholder="6.50"
                     />
                   </label>
                   <label className="adm-field">
@@ -928,7 +924,6 @@ export default function ProductEditor({
                         const eff    = length != null && width != null ? (length + width) / 2 : (width ?? length);
                         updateCentreGroup({ width_mm: width, size_mm: eff });
                       }}
-                      placeholder="6.50"
                     />
                   </label>
                   <label className="adm-field">
@@ -970,25 +965,24 @@ export default function ProductEditor({
                     type="number" step="1" min="1" className="adm-input"
                     value={form.centre_multiplier ?? ''}
                     onChange={(e) => set('centre_multiplier', e.target.value === '' ? null : Number(e.target.value))}
-                    placeholder="50"
                   />
                 </div>
                 {centreCount > 0 && (form.centre_multiplier ?? 0) > 0 && (
                   <p className="adm-stone-readout" style={{ marginTop: 8 }}>
-                    Centre Diamond Labour: <strong>{centreCount} × {form.centre_multiplier} = ${centreLabour.toLocaleString('en-US')}</strong>
+                    Centre Diamond Labor: <strong>{centreCount} × {form.centre_multiplier} = ${centreLabour.toLocaleString('en-US')}</strong>
                   </p>
                 )}
               </div>
             </section>
 
-            {/* ── Labour Summary (read-only) ───────────────────────────── */}
+            {/* ── Labor Summary (read-only) ────────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
-                <h2 className="adm-h2">Labour</h2>
+                <h2 className="adm-h2">Labor</h2>
               </header>
               <div className="adm-labour-split">
                 <div className="adm-labour-field">
-                  <span className="adm-field-label">Setting Labour (USD)</span>
+                  <span className="adm-field-label">Setting Labor (USD)</span>
                   <strong className="adm-labour-amount">${settingLabour.toLocaleString('en-US')}</strong>
                   <span className="adm-labour-formula">{totalStoneCount} stones × ${form.setting_multiplier ?? 4} each</span>
                 </div>
@@ -999,7 +993,7 @@ export default function ProductEditor({
                 </div>
               </div>
               <div className="adm-labour-total">
-                <span className="adm-field-label">Total Labour</span>
+                <span className="adm-field-label">Total Labor</span>
                 <strong>${totalLabour.toLocaleString('en-US')}</strong>
               </div>
             </section>
@@ -1011,23 +1005,34 @@ export default function ProductEditor({
                 <span className="adm-page-sub">Updates live as you type above</span>
               </header>
 
-              {/* Commission rate */}
-              <div className="adm-fields" style={{ marginBottom: 16 }}>
-                <label className="adm-field">
-                  <span className="adm-field-label">Commission Rate (%)</span>
+              {/* Website Markup Multiplier */}
+              <div className="adm-fields" style={{ marginBottom: 20 }}>
+                <div className="adm-field adm-field--full">
+                  <span className="adm-field-label">Website Markup Multiplier</span>
+                  <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
+                    {MARKUP_MULTIPLIER_PRESETS.map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        className={`adm-chip${(form.markup_multiplier ?? 4) === p ? ' is-active' : ''}`}
+                        onClick={() => set('markup_multiplier', p)}
+                      >
+                        ×{p}
+                      </button>
+                    ))}
+                  </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <input
-                      type="number" step="1" min="0" max="100" className="adm-input"
+                      type="number" step="0.1" min="1" className="adm-input"
                       style={{ maxWidth: 120 }}
-                      value={form.commission_rate ?? ''}
-                      onChange={(e) => set('commission_rate', e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder="0"
+                      value={form.markup_multiplier ?? ''}
+                      onChange={(e) => set('markup_multiplier', e.target.value === '' ? null : Number(e.target.value))}
                     />
                     <span className="adm-field-label" style={{ margin: 0, whiteSpace: 'nowrap' }}>
-                      % added to sub-total
+                      × cost price = website price shown to customers
                     </span>
                   </div>
-                </label>
+                </div>
               </div>
 
               {/* Live spot indicator */}
@@ -1060,64 +1065,137 @@ export default function ProductEditor({
                 )}
               </div>
 
-              {/* Stones + Labour rows (same for every metal) */}
+              {/* Stones + Labor rows (same for every metal) */}
               <div className="adm-pricing-breakdown">
                 <div className="adm-pricing-row">
                   <span>Stones ({productTotal.total_carats > 0 ? `${productTotal.total_carats.toFixed(3)} ct` : '—'})</span>
                   <strong>${Math.round(productTotal.total_stone_price_usd).toLocaleString('en-US')}</strong>
                 </div>
                 <div className="adm-pricing-row">
-                  <span>Labour (setting + centre diamond)</span>
+                  <span>Labor (setting + centre diamond)</span>
                   <strong>${totalLabour.toLocaleString('en-US')}</strong>
                 </div>
                 <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
-                  <span>Casting labor (${(form.casting_labor_per_gram ?? 10).toFixed(0)}/g × actual alloy weight — varies per metal)</span>
+                  <span>Casting labor (${(form.casting_labor_per_gram ?? 10).toFixed(0)}/g × alloy weight — varies per metal)</span>
                   <span>per row below</span>
                 </div>
               </div>
 
-              {/* Per-metal price table */}
-              {(form.metals ?? []).length > 0 && (form.gold_weight_g ?? 0) > 0 && (
-                <div className="adm-metal-price-table" style={{ marginTop: 12 }}>
-                  {(form.metals ?? []).map((metal) => {
-                    const ratio         = DENSITY_RATIO[metal] ?? 1.0;
-                    const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
-                    const costPerG      = livePrices?.cost_per_gram[metal] ?? 0;
-                    const materialCost  = metalWeight * costPerG;
-                    const castingLabor  = metalWeight * (form.casting_labor_per_gram ?? 10);
-                    const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[metal] ?? 0;
-                    const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
-                    const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
-                    const commission    = subTotal * ((form.commission_rate ?? 0) / 100);
-                    const rawTotal      = subTotal + commission;
-                    const finalTotal    = Math.round(rawTotal / 10) * 10;  // round to nearest $10
-                    const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
-                    return (
-                      <div key={metal} className="adm-metal-price-row" style={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr auto auto auto',
-                        gap: 12,
-                        padding: '10px 0',
-                        borderBottom: '1px solid var(--border)',
-                        alignItems: 'center',
-                        fontFamily: "'Jost', sans-serif",
-                        fontSize: 13,
-                      }}>
-                        <span style={{ color: 'var(--text)' }}>{label}</span>
-                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-                          {metalWeight.toFixed(2)}g @ {livePrices ? `$${costPerG.toFixed(2)}/g` : '—'}
-                        </span>
-                        <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-                          {livePrices ? `metal $${Math.round(materialCost).toLocaleString()} + cast $${Math.round(castingLabor).toLocaleString()}` : '—'}
-                        </span>
-                        <strong style={{ color: livePrices ? 'var(--logo-red)' : 'var(--text-muted)', fontSize: 14 }}>
-                          {livePrices ? `$${finalTotal.toLocaleString('en-US')}` : '—'}
-                        </strong>
+              {/* Per-metal price table — shows all metals when none selected yet (new product) */}
+              {(form.gold_weight_g ?? 0) > 0 && (() => {
+                const metalsToShow = (form.metals ?? []).length > 0 ? (form.metals ?? []) : METAL_OPTIONS;
+                const markup = form.markup_multiplier ?? 4;
+                return (
+                  <div className="adm-metal-price-table" style={{ marginTop: 12 }}>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr auto auto auto auto',
+                      gap: 10,
+                      padding: '6px 0',
+                      borderBottom: '2px solid var(--border)',
+                      fontFamily: "'Jost', sans-serif",
+                      fontSize: 11,
+                      color: 'var(--text-muted)',
+                      textTransform: 'uppercase' as const,
+                      letterSpacing: '0.06em',
+                    }}>
+                      <span>Metal</span>
+                      <span>Weight / Rate</span>
+                      <span>Metal + Casting</span>
+                      <span style={{ textAlign: 'right' }}>Cost</span>
+                      <span style={{ textAlign: 'right', color: '#AC3438' }}>Website Price</span>
+                    </div>
+                    {metalsToShow.map((metal) => {
+                      const ratio         = DENSITY_RATIO[metal] ?? 1.0;
+                      const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
+                      const costPerG      = livePrices?.cost_per_gram[metal] ?? 0;
+                      const materialCost  = metalWeight * costPerG;
+                      const castingLabor  = metalWeight * (form.casting_labor_per_gram ?? 10);
+                      const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[metal] ?? 0;
+                      const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
+                      const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
+                      const costTotal     = Math.round(subTotal / 10) * 10;
+                      const websitePrice  = Math.round((subTotal * markup) / 10) * 10;
+                      const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
+                      const isDefault     = metal === (form.default_metal ?? 'platinum');
+                      return (
+                        <div key={metal} className="adm-metal-price-row" style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr auto auto auto auto',
+                          gap: 10,
+                          padding: '9px 0',
+                          borderBottom: '1px solid var(--border)',
+                          alignItems: 'center',
+                          fontFamily: "'Jost', sans-serif",
+                          fontSize: 13,
+                        }}>
+                          <span style={{ color: 'var(--text)', fontWeight: isDefault ? 600 : 400 }}>
+                            {label}{isDefault ? ' ★' : ''}
+                          </span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                            {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}
+                          </span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+                            {livePrices ? `$${Math.round(materialCost).toLocaleString()} + $${Math.round(castingLabor).toLocaleString()}` : '—'}
+                          </span>
+                          <span style={{ color: 'var(--text-muted)', fontSize: 12, textAlign: 'right' }}>
+                            {livePrices ? `$${costTotal.toLocaleString('en-US')}` : '—'}
+                          </span>
+                          <strong style={{ color: livePrices ? '#AC3438' : 'var(--text-muted)', fontSize: 14, textAlign: 'right' }}>
+                            {livePrices ? `$${websitePrice.toLocaleString('en-US')}` : '—'}
+                          </strong>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+
+              {/* Total Product Price summary */}
+              {(form.gold_weight_g ?? 0) > 0 && livePrices && (() => {
+                const defaultMetal  = form.default_metal ?? 'platinum';
+                const ratio         = DENSITY_RATIO[defaultMetal] ?? 1.0;
+                const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
+                const costPerG      = livePrices.cost_per_gram[defaultMetal] ?? 0;
+                const materialCost  = metalWeight * costPerG;
+                const castingLabor  = metalWeight * (form.casting_labor_per_gram ?? 10);
+                const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[defaultMetal] ?? 0;
+                const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
+                const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
+                const markup        = form.markup_multiplier ?? 4;
+                const costTotal     = Math.round(subTotal / 10) * 10;
+                const websitePrice  = Math.round((subTotal * markup) / 10) * 10;
+                const label         = METAL_LABEL_DISPLAY[defaultMetal] ?? defaultMetal.replace(/_/g, ' ');
+                return (
+                  <div style={{
+                    marginTop: 16,
+                    padding: '14px 16px',
+                    background: '#fff8f6',
+                    border: '1px solid #e8ddd8',
+                    borderRadius: 6,
+                    fontFamily: "'Jost', sans-serif",
+                  }}>
+                    <div style={{ fontSize: 11, color: '#9e8880', textTransform: 'uppercase' as const, letterSpacing: '0.06em', marginBottom: 8 }}>
+                      Total Product Price — {label} (default)
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' as const }}>
+                      <div>
+                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 2 }}>Product Cost</div>
+                        <div style={{ fontSize: 20, fontWeight: 600, color: '#1a1410' }}>
+                          ${costTotal.toLocaleString('en-US')}
+                        </div>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                      <div style={{ fontSize: 18, color: '#c8b8b0' }}>×{markup}</div>
+                      <div>
+                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 2 }}>Website Price</div>
+                        <div style={{ fontSize: 24, fontWeight: 700, color: '#AC3438' }}>
+                          ${websitePrice.toLocaleString('en-US')}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Overrides */}
               <div className="adm-fields" style={{ marginTop: 20 }}>
@@ -1128,11 +1206,6 @@ export default function ProductEditor({
                       type="number" step="50" className="adm-input"
                       value={form.stones_value_usd ?? ''}
                       onChange={(e) => set('stones_value_usd', e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder={
-                        productTotal.total_stone_price_usd > 0
-                          ? `Auto: ${Math.round(productTotal.total_stone_price_usd)}`
-                          : '0'
-                      }
                     />
                   </div>
                 </label>
@@ -1143,7 +1216,6 @@ export default function ProductEditor({
                       type="number" step="10" className="adm-input"
                       value={form.accounting_cost_usd ?? ''}
                       onChange={(e) => set('accounting_cost_usd', e.target.value === '' ? null : Number(e.target.value))}
-                      placeholder="Internal cost"
                     />
                   </div>
                 </label>
