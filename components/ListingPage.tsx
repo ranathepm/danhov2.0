@@ -256,9 +256,8 @@ export default function ListingPage({
       <div className="ai-advisor-wrap">
         <div className="dnh-panel">
           <div className="dnh-panel-copy">
-            <strong>Not sure where to start?</strong>
             <span>
-              Our advisor can help you find the perfect style, metal, and fit — in seconds.
+              Let our advisor guide you to the perfect style, metal, and fit.
             </span>
           </div>
           <button

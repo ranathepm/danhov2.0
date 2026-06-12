@@ -61,7 +61,6 @@ export default async function HomePage() {
         </div>
 
         <div className="hero-scroll" id="heroScroll" style={{ opacity: 0 }}>
-          <span>Scroll</span>
           <div className="scroll-line" />
         </div>
       </section>

@@ -115,52 +115,55 @@ const CDN_FALLBACKS: Record<string, string> = {
   classico:  `${CDN}/r/i/ring_2__25.png`,
 };
 
+// Each card shows only ONE product's image variants — no mixing products across collections.
+// Pinned collections use the exact pinned SKU. Others use the first product found.
 async function getCollectionImages(): Promise<Record<string, string[]>> {
   try {
-    const { data } = await supabaseAnon
-      .from('products')
-      .select('sku, collection, images')
-      .filter('categories', 'cs', JSON.stringify(['engagement']))
-      .eq('is_active', true)
-      .not('collection', 'is', null);
-
-    const map: Record<string, string[]> = {};
-    if (data) {
-      for (const product of data) {
-        const col = (product.collection as string | null)?.toLowerCase().trim();
-        if (col && Array.isArray(product.images) && product.images.length > 0) {
-          if (!map[col]) map[col] = [];
-          for (const img of product.images as string[]) {
-            if (map[col].length < 6) map[col].push(img);
-          }
-        }
-      }
-    }
-
+    // 1. Fetch pinned products first
     const { data: pinned } = await supabaseAnon
       .from('products')
       .select('sku, images')
       .in('sku', Object.values(PINNED_SKUS))
       .eq('is_active', true);
 
-    const pinnedBySkuLower = new Map<string, string[]>();
+    const map: Record<string, string[]> = {};
+    const pinnedCollections = new Set<string>();
+
     for (const p of (pinned ?? [])) {
       if (Array.isArray(p.images) && p.images.length > 0) {
-        pinnedBySkuLower.set((p.sku as string).toLowerCase(), p.images as string[]);
+        const sku = (p.sku as string).toLowerCase();
+        for (const [colKey, pinnedSku] of Object.entries(PINNED_SKUS)) {
+          if (sku === pinnedSku.toLowerCase()) {
+            map[colKey] = (p.images as string[]).slice(0, 8);
+            pinnedCollections.add(colKey);
+          }
+        }
       }
     }
 
-    for (const [colKey, sku] of Object.entries(PINNED_SKUS)) {
-      const dbImages = pinnedBySkuLower.get(sku.toLowerCase());
-      const pinnedImgs =
-        dbImages && dbImages.length > 0
-          ? dbImages
-          : CDN_FALLBACKS[colKey]
-          ? [CDN_FALLBACKS[colKey]]
-          : [];
-      if (pinnedImgs.length > 0) {
-        const existing = (map[colKey] ?? []).filter((img) => !pinnedImgs.includes(img));
-        map[colKey] = [...pinnedImgs, ...existing].slice(0, 6);
+    // Fallback to CDN for pinned collections that returned no DB images
+    for (const [colKey] of Object.entries(PINNED_SKUS)) {
+      if (!map[colKey] && CDN_FALLBACKS[colKey]) {
+        map[colKey] = [CDN_FALLBACKS[colKey]];
+        pinnedCollections.add(colKey);
+      }
+    }
+
+    // 2. For each non-pinned collection, use the FIRST product with images only
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('collection, images')
+      .filter('categories', 'cs', JSON.stringify(['engagement']))
+      .eq('is_active', true)
+      .not('collection', 'is', null);
+
+    if (data) {
+      for (const product of data) {
+        const col = (product.collection as string | null)?.toLowerCase().trim();
+        if (!col || pinnedCollections.has(col) || map[col]) continue;
+        if (Array.isArray(product.images) && product.images.length > 0) {
+          map[col] = (product.images as string[]).slice(0, 8);
+        }
       }
     }
 

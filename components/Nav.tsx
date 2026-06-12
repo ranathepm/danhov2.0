@@ -14,9 +14,9 @@ import { useWishlist } from '@/components/WishlistProvider';
 const LINKS_ROW = [
   { href: '/', label: 'Home' },
   { href: '/#engagement-rings', label: 'Engagement Rings' },
-  { href: '/#wedding-bands', label: 'Wedding Bands' },
-  { href: '/#fine-jewelry', label: 'Fine Jewelry' },
-  { href: '/#mens', label: "Men's" },
+  { href: '/wedding-bands', label: 'Wedding Bands' },
+  { href: '/fine-jewelry', label: 'Fine Jewelry' },
+  { href: '/mens', label: "Men's" },
   { href: '/ring-builder', label: 'Ring Builder' },
   { href: '/philosophy', label: 'Philosophy' },
   { href: '/story', label: 'Story' },
