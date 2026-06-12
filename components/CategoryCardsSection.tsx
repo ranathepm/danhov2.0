@@ -172,7 +172,7 @@ async function getCollectionImages(): Promise<Record<string, string[]>> {
   }
 }
 
-// ── Category data fetching (wedding / fine / mens panels) ─────────────────
+// ── Category data fetching (wedding / fine / mens preview images) ──────────
 
 const NAME_TO_SLUG: Record<string, string> = {
   'abbraccio': 'abbraccio',
@@ -274,6 +274,27 @@ async function fetchCategoryData(category: string): Promise<CategoryData> {
   }
 }
 
+// Extract up to `max` preview images from a category dataset
+function extractPreviewImages(data: CategoryData, max = 4): string[] {
+  const imgs: string[] = [];
+  for (const col of data.collections) {
+    for (const img of col.images) {
+      if (imgs.length >= max) return imgs;
+      if (!imgs.includes(img)) imgs.push(img);
+    }
+  }
+  if (imgs.length < max) {
+    for (const prod of data.products) {
+      const img = (prod.images ?? [])[0];
+      if (img && !imgs.includes(img)) {
+        imgs.push(img);
+        if (imgs.length >= max) break;
+      }
+    }
+  }
+  return imgs;
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default async function CategoryCardsSection() {
@@ -297,6 +318,40 @@ export default async function CategoryCardsSection() {
     isLifePath: col.isLifePath ?? false,
   }));
 
+  // The 3 category cards navigate directly to their own pages
+  const categoryCards: EngagementCard[] = [
+    {
+      label: 'Wedding Bands',
+      value: 'wedding',
+      meaning: 'The Unbroken Circle',
+      body: 'Two people. One unbroken form. Handcrafted bands made with the same intention as the moment they mark.',
+      href: '/wedding-bands',
+      images: extractPreviewImages(weddingData),
+      linkLabel: 'Browse Wedding Bands',
+      isLifePath: false,
+    },
+    {
+      label: 'Fine Jewelry',
+      value: 'fine',
+      meaning: 'The Daily Beautiful',
+      body: 'Designed to be worn every day. Small enough to forget. Beautiful enough to remember forever.',
+      href: '/fine-jewelry',
+      images: extractPreviewImages(fineData),
+      linkLabel: 'Browse Fine Jewelry',
+      isLifePath: false,
+    },
+    {
+      label: "Men's Jewelry",
+      value: 'mens',
+      meaning: 'The Worn Statement',
+      body: 'A ring that carries a name. A band that asks nothing — and says everything.',
+      href: '/mens',
+      images: extractPreviewImages(mensData),
+      linkLabel: "Browse Men's Jewelry",
+      isLifePath: false,
+    },
+  ];
+
   return (
     <section id="engagement-rings" className="categories-section">
       <div className="categories-inner">
@@ -310,10 +365,7 @@ export default async function CategoryCardsSection() {
         </div>
 
         <CategoryGridClient
-          engagementCards={engagementCards}
-          weddingData={weddingData}
-          fineData={fineData}
-          mensData={mensData}
+          engagementCards={[...engagementCards, ...categoryCards]}
         />
       </div>
     </section>

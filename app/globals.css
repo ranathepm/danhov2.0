@@ -8001,33 +8001,6 @@ aside {
 }
 .cat-card--inert { cursor: default; }
 .cat-card--inert:hover { box-shadow: none; transform: none; }
-.cat-card--expandable {
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-align: left;
-  font-family: inherit;
-  width: 100%;
-  padding: 0;
-  color: inherit;
-}
-.cat-card--expandable.is-open {
-  box-shadow: 0 0 0 2px #AC3438, 0 24px 48px rgba(42,26,20,0.12);
-  transform: translateY(-4px);
-}
-.cat-card--expandable.is-open .cat-link--expand {
-  color: #AC3438;
-}
-.cat-expand-panel {
-  background: #fdf8f3;
-  border-top: 1px solid rgba(172,52,56,0.18);
-  padding: 52px 0 40px;
-  animation: panelFadeIn 0.3s ease;
-}
-@keyframes panelFadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
 .cat-photo {
   background: #fdf8f3;
   display: flex;
