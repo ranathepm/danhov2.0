@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="blog-post-page">
       <style>{`
-        .blog-post-page { font-family: 'Jost', sans-serif; color: #1a1410; background: #faf6f1; }
+        .blog-post-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; }
 
         .post-breadcrumb { background: #fff; border-bottom: 1px solid #ede8e2; padding: 14px 24px; font-size: 12px; color: #8a7f76; }
         .post-breadcrumb a { color: #8a7f76; text-decoration: none; transition: color 0.15s; }

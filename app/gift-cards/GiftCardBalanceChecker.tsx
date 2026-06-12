@@ -56,7 +56,7 @@ export default function GiftCardBalanceChecker() {
           placeholder="DANHOV-XXXX-XXXX-XXXX"
           style={{
             flex: 1, border: '1px solid #d4c9c0', borderRadius: 6,
-            padding: '9px 12px', fontSize: 13, fontFamily: "'Jost', sans-serif",
+            padding: '9px 12px', fontSize: 13, fontFamily: "'Cormorant Garamond', serif",
             outline: 'none', letterSpacing: '0.06em',
           }}
           onKeyDown={(e) => e.key === 'Enter' && check()}
@@ -67,7 +67,7 @@ export default function GiftCardBalanceChecker() {
           style={{
             padding: '9px 16px', background: '#1a1410', color: '#fff',
             border: 'none', borderRadius: 6, fontSize: 12, cursor: 'pointer',
-            fontFamily: "'Jost', sans-serif", letterSpacing: '0.08em', whiteSpace: 'nowrap',
+            fontFamily: "'Cormorant Garamond', serif", letterSpacing: '0.08em', whiteSpace: 'nowrap',
           }}
         >
           {loading ? '…' : 'Check'}

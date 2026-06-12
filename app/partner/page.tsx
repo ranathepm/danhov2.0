@@ -84,7 +84,7 @@ export default function PartnerPage() {
   return (
     <main className="partner-page">
       <style>{`
-        .partner-page { font-family: 'Jost', sans-serif; color: #1a1410; }
+        .partner-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; }
 
         /* Hero */
         .partner-hero {
@@ -188,7 +188,7 @@ export default function PartnerPage() {
         .partner-form-group select,
         .partner-form-group textarea {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 11px 14px; font-size: 14px; font-family: 'Jost', sans-serif;
+          padding: 11px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
           background: #fff; color: #1a1410; outline: none;
           transition: border-color 0.15s;
         }
@@ -199,7 +199,7 @@ export default function PartnerPage() {
         .partner-submit {
           background: #1a1410; color: #faf6f1;
           border: none; border-radius: 999px; cursor: pointer;
-          padding: 14px 40px; font-size: 13px; font-family: 'Jost', sans-serif;
+          padding: 14px 40px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.12em; text-transform: uppercase;
           align-self: center; transition: background 0.2s;
         }

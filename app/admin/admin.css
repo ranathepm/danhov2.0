@@ -18,7 +18,7 @@
   min-height: 100vh;
   background: var(--adm-bg);
   color: var(--adm-text);
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 14px;
   line-height: 1.55;
   cursor: auto;                  /* override the public-site custom cursor */
@@ -144,8 +144,8 @@ body:has(.admin-root) {
 .adm-page { display: flex; flex-direction: column; gap: 24px; }
 .adm-page-head { display: flex; flex-direction: column; gap: 4px; }
 .adm-page-head--with-actions { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
-.adm-h1 { font-family: 'Jost', sans-serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); letter-spacing: 0.01em; }
-.adm-h2 { font-family: 'Jost', sans-serif; font-size: 16px; font-weight: 600; margin: 0; color: var(--adm-text); letter-spacing: 0.02em; }
+.adm-h1 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); letter-spacing: 0.01em; }
+.adm-h2 { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; margin: 0; color: var(--adm-text); letter-spacing: 0.02em; }
 .adm-page-sub { font-size: 13px; color: var(--adm-mute); margin: 0; }
 .adm-back-link { display: inline-block; font-size: 12px; color: var(--adm-mute) !important; letter-spacing: 0.05em; margin-bottom: 6px; }
 .adm-mono { font-family: monospace; font-size: 12.5px; }
@@ -606,7 +606,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   content: '$';
   position: absolute;
   left: 12px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 14px;
   color: var(--adm-mute);
   pointer-events: none;
@@ -953,7 +953,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin-bottom: 12px;
 }
 .admin-root .adm-block-type {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -1270,7 +1270,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .admin-root .adm-btn-full { width: 100%; justify-content: center; }
 
 .admin-root .adm-h2 {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1278,7 +1278,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin: 0;
 }
 .admin-root .adm-h3 {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--adm-text);
@@ -1457,7 +1457,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin-bottom: 12px;
 }
 .adm-commission-mode {
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 13px;
   font-weight: 600;
   color: #AC3438;
@@ -1503,7 +1503,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
 }
 .adm-commission-table td {
   padding: 5px 10px 5px 0;
@@ -1616,7 +1616,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
-  font-family: 'Jost', sans-serif;
+  font-family: 'Cormorant Garamond', serif;
   text-decoration: none !important;
   transition: opacity 0.14s;
   line-height: 1.6;

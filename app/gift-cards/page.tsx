@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function GiftCardsPage() {
   return (
-    <main style={{ fontFamily: "'Jost', sans-serif", color: '#1a1410', background: '#faf6f1' }}>
+    <main style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410', background: '#faf6f1' }}>
       <style>{`
         /* ── Hero ── */
         .gc-hero {

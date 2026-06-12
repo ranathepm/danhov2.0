@@ -139,7 +139,7 @@ export default function GiftCardBuyFlow() {
   const recipientEmail = form.forSelf ? form.senderEmail : form.recipientEmail;
 
   return (
-    <div style={{ fontFamily: "'Jost', sans-serif", minHeight: '100vh', background: '#faf6f1' }}>
+    <div style={{ fontFamily: "'Cormorant Garamond', serif", minHeight: '100vh', background: '#faf6f1' }}>
       <style>{`
         .gcb-wrap { max-width: 700px; margin: 0 auto; padding: 88px 24px 80px; }
         .gcb-breadcrumb {
@@ -187,7 +187,7 @@ export default function GiftCardBuyFlow() {
         }
         .gcb-input, .gcb-textarea, .gcb-select {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 12px 14px; font-size: 14px; font-family: 'Jost', sans-serif;
+          padding: 12px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
           background: #fff; color: #1a1410; outline: none;
           transition: border-color 0.15s; width: 100%; box-sizing: border-box;
         }
@@ -246,13 +246,13 @@ export default function GiftCardBuyFlow() {
         .gcb-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; }
         .gcb-back-btn {
           background: none; border: none; cursor: pointer; font-size: 13px;
-          color: #8a7f76; font-family: 'Jost', sans-serif; padding: 0;
+          color: #8a7f76; font-family: 'Cormorant Garamond', serif; padding: 0;
           display: flex; align-items: center; gap: 6px; transition: color 0.15s;
         }
         .gcb-back-btn:hover { color: #1a1410; }
         .gcb-next-btn {
           background: #1a1410; color: #fff; border: none; border-radius: 2px;
-          padding: 14px 40px; font-size: 12px; font-family: 'Jost', sans-serif;
+          padding: 14px 40px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; min-width: 180px;
         }
@@ -260,7 +260,7 @@ export default function GiftCardBuyFlow() {
         .gcb-next-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .gcb-checkout-btn {
           background: #AC3438; color: #fff; border: none; border-radius: 2px;
-          padding: 16px 48px; font-size: 13px; font-family: 'Jost', sans-serif;
+          padding: 16px 48px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; min-width: 220px;
         }
@@ -269,7 +269,7 @@ export default function GiftCardBuyFlow() {
         .gcb-error { font-size: 13px; color: #AC3438; padding: 10px 14px; background: rgba(172,52,56,0.06); border-left: 3px solid #AC3438; border-radius: 4px; margin-top: 12px; }
         .gcb-addcart-btn {
           background: #fff; color: #1a1410; border: 1.5px solid #1a1410; border-radius: 2px;
-          padding: 16px 32px; font-size: 12px; font-family: 'Jost', sans-serif;
+          padding: 16px 32px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: all 0.2s; min-width: 180px;
         }

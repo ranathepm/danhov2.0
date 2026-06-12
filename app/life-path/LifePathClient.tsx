@@ -446,7 +446,7 @@ export default function LifePathClient() {
   return (
     <main className="lp-page">
       <style>{`
-        .lp-page { min-height: 100vh; font-family: 'Jost', sans-serif; }
+        .lp-page { min-height: 100vh; font-family: 'Cormorant Garamond', serif; }
 
         /* ── Landing ── */
         .lp-landing {
@@ -485,7 +485,7 @@ export default function LifePathClient() {
         .lp-landing-btn {
           display: inline-block; padding: 16px 56px; background: #AC3438; color: #faf6f1;
           font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-          border: none; cursor: pointer; font-family: 'Jost', sans-serif;
+          border: none; cursor: pointer; font-family: 'Cormorant Garamond', serif;
           border-radius: 999px; transition: background 0.2s;
         }
         .lp-landing-btn:hover { background: #8f2b2e; }
@@ -501,7 +501,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Jost', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-input-back:hover { color: #1a1410; }
         .lp-input-inner { max-width: 440px; width: 100%; }
@@ -534,7 +534,7 @@ export default function LifePathClient() {
         .lp-email-row { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 4px; }
         .lp-email-input {
           width: 100%; padding: 14px 16px; background: #fff; border: 1px solid #ede8e2;
-          font-size: 14px; font-family: 'Jost', sans-serif; color: #1a1410;
+          font-size: 14px; font-family: 'Cormorant Garamond', serif; color: #1a1410;
           outline: none; transition: border-color 0.2s; box-sizing: border-box;
         }
         .lp-email-input:focus { border-color: #AC3438; }
@@ -543,7 +543,7 @@ export default function LifePathClient() {
         .lp-error { font-size: 12px; color: #AC3438; margin: 10px 0 0; min-height: 18px; text-align: left; }
         .lp-reveal-btn {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
           border-radius: 999px; transition: background 0.2s;
         }
@@ -558,7 +558,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Jost', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-results-back:hover { color: #1a1410; }
         .lp-results-inner {
@@ -632,14 +632,14 @@ export default function LifePathClient() {
         .lp-ctas { display: flex; flex-direction: column; gap: 12px; }
         .lp-cta-primary {
           display: block; width: 100%; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-decoration: none; text-align: center;
           border: none; border-radius: 999px; transition: background 0.2s; cursor: pointer;
         }
         .lp-cta-primary:hover { background: #8f2b2e; }
         .lp-cta-secondary {
           display: block; width: 100%; padding: 15px; background: transparent; color: #1a1410;
-          font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-align: center;
           border: 1px solid rgba(172,52,56,0.25); cursor: pointer;
           border-radius: 999px; transition: border-color 0.2s, color 0.2s;
@@ -690,7 +690,7 @@ export default function LifePathClient() {
           display: inline-block; font-size: 10px; letter-spacing: 0.14em;
           text-transform: uppercase; color: #AC3438; text-decoration: none;
           cursor: pointer; background: none; border: none; padding: 0;
-          font-family: 'Jost', sans-serif; align-self: flex-start;
+          font-family: 'Cormorant Garamond', serif; align-self: flex-start;
           transition: color 0.2s;
         }
         .lp-piece-cta:hover { color: #8B2A2D; }
@@ -721,7 +721,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Jost', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-commission-back:hover { color: #1a1410; }
         .lp-commission-inner { max-width: 480px; width: 100%; }
@@ -759,7 +759,7 @@ export default function LifePathClient() {
         }
         .lp-form-input, .lp-form-textarea {
           width: 100%; padding: 13px 14px; background: #fff; border: 1px solid #ede8e2;
-          font-size: 14px; font-family: 'Jost', sans-serif; color: #1a1410;
+          font-size: 14px; font-family: 'Cormorant Garamond', serif; color: #1a1410;
           outline: none; transition: border-color 0.2s; box-sizing: border-box;
         }
         .lp-form-input:focus, .lp-form-textarea:focus { border-color: #AC3438; }
@@ -768,7 +768,7 @@ export default function LifePathClient() {
         .lp-form-error { font-size: 12px; color: #AC3438; margin: 8px 0 0; min-height: 18px; }
         .lp-submit-btn {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Jost', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
           border-radius: 999px; transition: background 0.2s;
         }
@@ -803,7 +803,7 @@ export default function LifePathClient() {
         }
         .lp-success-back {
           display: inline-block; padding: 14px 48px; border: 1px solid #ede8e2;
-          color: #1a1410; font-family: 'Jost', sans-serif; font-size: 11px;
+          color: #1a1410; font-family: 'Cormorant Garamond', serif; font-size: 11px;
           letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
           transition: border-color 0.2s, color 0.2s;
         }
