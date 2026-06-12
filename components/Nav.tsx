@@ -14,9 +14,9 @@ import { useWishlist } from '@/components/WishlistProvider';
 const LINKS_ROW = [
   { href: '/', label: 'Home' },
   { href: '/#engagement-rings', label: 'Engagement Rings' },
-  { href: '/wedding-bands', label: 'Wedding Bands' },
-  { href: '/fine-jewelry', label: 'Fine Jewelry' },
-  { href: '/mens', label: "Men's" },
+  { href: '/#engagement-rings', label: 'Wedding Bands' },
+  { href: '/#engagement-rings', label: 'Fine Jewelry' },
+  { href: '/#engagement-rings', label: "Men's" },
   { href: '/ring-builder', label: 'Ring Builder' },
   { href: '/philosophy', label: 'Philosophy' },
   { href: '/story', label: 'Story' },
@@ -162,7 +162,7 @@ export default function Nav() {
           {LINKS_ROW.map((l) => {
             const active = isActiveLink(pathname, l.href);
             return (
-              <li key={l.href}>
+              <li key={l.label}>
                 <Link
                   href={l.href}
                   prefetch
@@ -190,7 +190,7 @@ export default function Nav() {
       >
         <ul className="nav-drawer-links">
           {LINKS.map((l) => (
-            <li key={l.href}>
+            <li key={l.label}>
               <Link
                 href={l.href}
                 onClick={(e) => {

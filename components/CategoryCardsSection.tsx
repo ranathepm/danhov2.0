@@ -116,54 +116,58 @@ const CDN_FALLBACKS: Record<string, string> = {
 };
 
 // Each card shows only ONE product's image variants — no mixing products across collections.
-// Pinned collections use the exact pinned SKU. Others use the first product found.
+// Pinned collections prefer the exact pinned SKU; if it has < 2 images, the product
+// with the most variants in that collection is used so hover cycling actually works.
 async function getCollectionImages(): Promise<Record<string, string[]>> {
   try {
-    // 1. Fetch pinned products first
-    const { data: pinned } = await supabaseAnon
+    // 1. Fetch all engagement products in one query (collection + images + sku)
+    const { data: all } = await supabaseAnon
       .from('products')
-      .select('sku, images')
-      .in('sku', Object.values(PINNED_SKUS))
-      .eq('is_active', true);
-
-    const map: Record<string, string[]> = {};
-    const pinnedCollections = new Set<string>();
-
-    for (const p of (pinned ?? [])) {
-      if (Array.isArray(p.images) && p.images.length > 0) {
-        const sku = (p.sku as string).toLowerCase();
-        for (const [colKey, pinnedSku] of Object.entries(PINNED_SKUS)) {
-          if (sku === pinnedSku.toLowerCase()) {
-            map[colKey] = (p.images as string[]).slice(0, 8);
-            pinnedCollections.add(colKey);
-          }
-        }
-      }
-    }
-
-    // Fallback to CDN for pinned collections that returned no DB images
-    for (const [colKey] of Object.entries(PINNED_SKUS)) {
-      if (!map[colKey] && CDN_FALLBACKS[colKey]) {
-        map[colKey] = [CDN_FALLBACKS[colKey]];
-        pinnedCollections.add(colKey);
-      }
-    }
-
-    // 2. For each non-pinned collection, use the FIRST product with images only
-    const { data } = await supabaseAnon
-      .from('products')
-      .select('collection, images')
+      .select('sku, collection, images')
       .filter('categories', 'cs', JSON.stringify(['engagement']))
       .eq('is_active', true)
       .not('collection', 'is', null);
 
-    if (data) {
-      for (const product of data) {
-        const col = (product.collection as string | null)?.toLowerCase().trim();
-        if (!col || pinnedCollections.has(col) || map[col]) continue;
-        if (Array.isArray(product.images) && product.images.length > 0) {
-          map[col] = (product.images as string[]).slice(0, 8);
-        }
+    const rows = all ?? [];
+
+    // Build a per-collection index: colKey → product with most images
+    const bestByCol: Record<string, string[]> = {};
+    for (const p of rows) {
+      const col = (p.collection as string | null)?.toLowerCase().trim();
+      if (!col) continue;
+      if (!Array.isArray(p.images) || p.images.length === 0) continue;
+      const imgs = (p.images as string[]).slice(0, 8);
+      if (!bestByCol[col] || imgs.length > bestByCol[col].length) {
+        bestByCol[col] = imgs;
+      }
+    }
+
+    const map: Record<string, string[]> = {};
+
+    // 2. For pinned collections: prefer the pinned SKU if it has ≥ 2 images,
+    //    otherwise fall back to the best product in that collection.
+    for (const [colKey, pinnedSku] of Object.entries(PINNED_SKUS)) {
+      const pinned = rows.find(
+        (p) => (p.sku as string).toLowerCase() === pinnedSku.toLowerCase()
+      );
+      const pinnedImgs = Array.isArray(pinned?.images) && (pinned!.images as string[]).length >= 2
+        ? (pinned!.images as string[]).slice(0, 8)
+        : null;
+
+      if (pinnedImgs) {
+        map[colKey] = pinnedImgs;
+      } else if (bestByCol[colKey]) {
+        map[colKey] = bestByCol[colKey];
+      } else if (CDN_FALLBACKS[colKey]) {
+        map[colKey] = [CDN_FALLBACKS[colKey]];
+      }
+    }
+
+    // 3. For non-pinned collections use the product with the most images
+    const pinnedKeys = new Set(Object.keys(PINNED_SKUS));
+    for (const [col, imgs] of Object.entries(bestByCol)) {
+      if (!pinnedKeys.has(col) && !map[col]) {
+        map[col] = imgs;
       }
     }
 

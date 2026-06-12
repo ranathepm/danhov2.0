@@ -60,9 +60,6 @@ export default async function HomePage() {
           </div>
         </div>
 
-        <div className="hero-scroll" id="heroScroll" style={{ opacity: 0 }}>
-          <div className="scroll-line" />
-        </div>
       </section>
 
       {/* ── SIGNATURE RING ───────────────────────────────────────── */}

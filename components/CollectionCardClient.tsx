@@ -73,6 +73,7 @@ export default function CollectionCardClient({
                 zIndex: i === activeIdx ? 1 : 0,
               }}
               priority={i === 0}
+              unoptimized={src.includes('.supabase.co') || src.endsWith('.gif')}
             />
           ))
         ) : (
