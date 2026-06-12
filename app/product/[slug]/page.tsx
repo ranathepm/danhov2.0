@@ -23,7 +23,7 @@ import RelatedProducts from '@/components/RelatedProducts';
 
 type Params = { slug: string };
 
-export const revalidate = 300;
+export const revalidate = 0;
 
 const CATEGORY_HREF: Record<string, { href: string; label: string }> = {
   engagement: { href: '/engagement-rings', label: 'Engagement Rings' },

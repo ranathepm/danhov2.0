@@ -1106,7 +1106,7 @@ export default function ProductEditor({
                       const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
                       const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
                       const costTotal     = Math.round(subTotal / 10) * 10;
-                      const websitePrice  = Math.round((subTotal * markup) / 10) * 10;
+                      const websitePrice  = Math.round((costTotal * markup) / 10) * 10;
                       const label         = METAL_LABEL_DISPLAY[metal] ?? metal.replace(/_/g, ' ');
                       const isDefault     = metal === (form.default_metal ?? 'platinum');
                       return (
@@ -1194,7 +1194,7 @@ export default function ProductEditor({
                 const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
                 const markup        = form.markup_multiplier ?? 4;
                 const costTotal     = Math.round(subTotal / 10) * 10;
-                const websitePrice  = Math.round((subTotal * markup) / 10) * 10;
+                const websitePrice  = Math.round((costTotal * markup) / 10) * 10;
                 const label         = METAL_LABEL_DISPLAY[defaultMetal] ?? defaultMetal.replace(/_/g, ' ');
                 return (
                   <div style={{

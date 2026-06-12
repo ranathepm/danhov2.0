@@ -332,11 +332,13 @@ export function computePrice(
     }
   }
 
-  const subTotal = metalCost + castingLabor + labor + stones + rhodium;
-  const markup   = (p.markup_multiplier != null && p.markup_multiplier > 0)
+  const subTotal    = metalCost + castingLabor + labor + stones + rhodium;
+  const markup      = (p.markup_multiplier != null && p.markup_multiplier > 0)
     ? p.markup_multiplier
     : 4;
-  const total    = subTotal * markup;
+  // Round cost to nearest $10 first, then apply markup — so displayed cost × markup = displayed website price.
+  const costRounded = roundTo10(subTotal);
+  const total       = costRounded * markup;
 
   const isPlatinum = metalKey === 'platinum';
 
