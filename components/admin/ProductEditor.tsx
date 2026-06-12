@@ -156,7 +156,10 @@ export default function ProductEditor({
     centre_multiplier:      product.centre_multiplier ?? 50,
     commission_rate:        0,
     casting_labor_per_gram: product.casting_labor_per_gram ?? 10,
-    markup_multiplier:      product.markup_multiplier ?? 4,
+    // Snap to 4 for any legacy/unexpected value — only exact preset values are kept
+    markup_multiplier: [2, 3, 4, 5].includes(product.markup_multiplier ?? 0)
+      ? product.markup_multiplier
+      : 4,
   });
 
   // Live metal prices fetched from /api/metal-prices
@@ -1282,7 +1285,7 @@ export default function ProductEditor({
 
 function StoneGroupReadout({ group }: { group: StoneGroup }) {
   const eff = groupEffectiveSize(group);
-  const b   = computeStoneBreakdown(eff, group.count);
+  const b   = computeStoneBreakdown(eff, group.count, group.shape, group.length_mm, group.width_mm);
   if (!eff || b.total_carats <= 0) {
     return (
       <p className="adm-stone-readout adm-stone-readout--empty">

@@ -18,17 +18,64 @@
 /**
  * Carat weight of a single round brilliant of the given mm diameter.
  *
- * Formula: ct ≈ 0.0038 × mm³ (assumes ideal cut: depth ≈ 0.62 × dia)
+ * Formula: ct ≈ 0.0038 × mm³  (depth ≈ 62% of diameter, GIA standard)
  *
- * Calibration:
- *   3.0 mm → 0.10 ct
- *   4.0 mm → 0.25 ct
- *   5.0 mm → 0.50 ct
- *   6.5 mm → 1.00 ct
+ * Calibration:  3.0 mm → 0.10 ct  |  4.0 mm → 0.25 ct
+ *               5.0 mm → 0.50 ct  |  6.5 mm → 1.00 ct
  */
 export function caratFromMm(mm: number): number {
   if (!Number.isFinite(mm) || mm <= 0) return 0;
   return 0.0038 * Math.pow(mm, 3);
+}
+
+/**
+ * Shape-specific correction factors relative to a round brilliant of the
+ * same average diameter.  Different cuts are ground to different depths and
+ * girdle shapes, so the same mm footprint yields a different carat weight.
+ *
+ * Factors calibrated against GIA / EGL reference charts:
+ *   Princess  (+15 %): square-cornered deep pavilion
+ *   Cushion   (+10 %): similar to princess, slight spread
+ *   Radiant   (+18 %): deepest common cut
+ *   Asscher   (+15 %): square step-cut, deep
+ *   Emerald   (+20 %): rectangular step-cut, significant depth
+ *   Oval      (-10 %): similar spread to round, slightly shallower
+ *   Pear      (-15 %): tapered girdle reduces volume
+ *   Marquise  (-10 %): elliptical, comparable depth to oval
+ *   Heart     (-10 %): similar to oval; cleft removes material
+ *   Trillion  (-30 %): very shallow; broad table, thin pavilion
+ *   Baguette  (-15 %): step-cut rectangle; shallower than round
+ */
+const SHAPE_CARAT_CORRECTION: Record<string, number> = {
+  round:    1.00,
+  oval:     0.90,
+  princess: 1.15,
+  cushion:  1.10,
+  emerald:  1.20,
+  pear:     0.85,
+  marquise: 0.90,
+  asscher:  1.15,
+  radiant:  1.18,
+  heart:    0.90,
+  trillion: 0.70,
+  baguette: 0.85,
+};
+
+/**
+ * Carat weight from length × width + shape.  Uses the round-brilliant
+ * baseline formula (0.0038 × avg_mm³) scaled by the shape correction.
+ */
+export function caratFromShape(
+  shape: string | null | undefined,
+  length_mm: number | null | undefined,
+  width_mm: number | null | undefined,
+): number {
+  const L = Number(length_mm ?? 0);
+  const W = Number(width_mm ?? 0);
+  if (!L || !W) return 0;
+  const avgMm     = (L + W) / 2;
+  const correction = SHAPE_CARAT_CORRECTION[shape ?? 'round'] ?? 1.00;
+  return 0.0038 * Math.pow(avgMm, 3) * correction;
 }
 
 /**
@@ -121,10 +168,18 @@ export type StoneBreakdown = {
 export function computeStoneBreakdown(
   stoneSizeMm: number | null | undefined,
   stoneCount: number | null | undefined,
+  shape?: string | null,
+  length_mm?: number | null,
+  width_mm?: number | null,
 ): StoneBreakdown {
-  const mm = Number(stoneSizeMm ?? 0);
   const count = Number(stoneCount ?? 0);
-  const caratPerStone = caratFromMm(mm);
+  // Use shape-aware formula when shape + at least one dimension is provided
+  const hasShapeDims = shape != null && (length_mm != null || width_mm != null);
+  const L = length_mm ?? stoneSizeMm;
+  const W = width_mm ?? stoneSizeMm;
+  const caratPerStone = hasShapeDims
+    ? caratFromShape(shape, L, W)
+    : caratFromMm(Number(stoneSizeMm ?? 0));
   const totalCarats = caratPerStone * Math.max(0, count);
   const pricePerCarat = pricePerCaratFromCt(caratPerStone);
   const totalStonePrice = totalCarats * pricePerCarat;
@@ -150,7 +205,13 @@ export function computeStoneGroupsBreakdown(
   let totalCarats = 0;
   let totalStonePrice = 0;
   for (const g of list) {
-    const b = computeStoneBreakdown(effectiveSizeMm(g ?? {}), g?.count);
+    const b = computeStoneBreakdown(
+      effectiveSizeMm(g ?? {}),
+      g?.count,
+      g?.shape,
+      g?.length_mm,
+      g?.width_mm,
+    );
     totalCarats += b.total_carats;
     totalStonePrice += b.total_stone_price_usd;
   }
