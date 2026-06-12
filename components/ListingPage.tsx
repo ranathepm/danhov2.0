@@ -536,6 +536,7 @@ function VanCleefCard({
 
   const [selectedMetal, setSelectedMetal] = useState(defaultMetal);
   const [cyclingIdx, setCyclingIdx] = useState(0);
+  const [imgFailed, setImgFailed] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Images for selected metal — try the exact metal, then closest family, then default
@@ -569,6 +570,7 @@ function VanCleefCard({
     e.preventDefault();
     setSelectedMetal(m);
     setCyclingIdx(0);
+    setImgFailed(false);
   }
 
   useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
@@ -587,7 +589,7 @@ function VanCleefCard({
         onMouseEnter={startCycling}
         onMouseLeave={stopCycling}
       >
-        {currentImg ? (
+        {currentImg && !imgFailed ? (
           <Image
             src={currentImg}
             alt={product.name}
@@ -595,6 +597,8 @@ function VanCleefCard({
             height={600}
             className="vc-card-img"
             loading="lazy"
+            unoptimized={currentImg.includes('.supabase.co') || currentImg.endsWith('.gif')}
+            onError={() => setImgFailed(true)}
           />
         ) : (
           <div className="vc-card-placeholder">{placeholder}</div>
