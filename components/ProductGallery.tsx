@@ -3,6 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 
+// Bypass Next.js image optimization for Supabase storage URLs — admin uploads
+// use unoptimized thumbnails and the website should match that behavior.
+function shouldSkipOptimization(url: string): boolean {
+  return url.includes('.supabase.co') || url.endsWith('.gif');
+}
+
 function SafeImage({
   src, alt, width, height, className, priority, sizes, fallbackSrc,
 }: {
@@ -18,7 +24,7 @@ function SafeImage({
       <Image
         src={fallbackSrc} alt={alt} width={width} height={height}
         className={className} sizes={sizes}
-        unoptimized={fallbackSrc.endsWith('.gif')}
+        unoptimized={shouldSkipOptimization(fallbackSrc)}
         onError={() => setFallbackFailed(true)}
       />
     );
@@ -30,7 +36,7 @@ function SafeImage({
     <Image
       src={src} alt={alt} width={width} height={height}
       className={className} priority={priority} sizes={sizes}
-      unoptimized={src.endsWith('.gif')}
+      unoptimized={shouldSkipOptimization(src)}
       onError={() => setFailed(true)}
     />
   );
