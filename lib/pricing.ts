@@ -109,6 +109,17 @@ export const METAL_LABEL: Record<string, string> = {
   '18k_rose':   '18k Rose Gold',
 };
 
+/**
+ * Canonical ordered list of all metals DANHOV offers.
+ * Every product is available in all of these — platinum is the pricing base,
+ * and the other metal prices are derived from it automatically.
+ */
+export const ALL_METALS = [
+  'platinum',
+  '14k_yellow', '14k_white', '14k_rose',
+  '18k_yellow', '18k_white', '18k_rose',
+] as const;
+
 // Legacy alias
 export const PURITY_LABEL = METAL_LABEL;
 

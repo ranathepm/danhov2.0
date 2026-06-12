@@ -64,17 +64,39 @@ const METAL_OPTIONS = [
   '18k_yellow', '18k_white', '18k_rose',
 ];
 
+// ── SKU autocomplete lookup ───────────────────────────────────────────────────
+// First letter = collection code, second letter = category code.
+// Type "AE" → Abbraccio + Engagement. Add new codes here as collections grow.
+const SKU_COLLECTION: Record<string, string> = {
+  A: 'Abbraccio',
+  V: 'Voltaggio',
+  C: 'Classico',
+  N: 'Norme de Danhov',
+  R: 'Carezza',
+  P: 'Per Lei',
+  T: 'Petalo',
+  S: 'Solo Filo',
+  E: 'Eleganza',
+  O: 'Couture',
+  U: 'Unito',
+};
+const SKU_CATEGORY: Record<string, string> = {
+  E: 'engagement',
+  W: 'wedding',
+  F: 'fine',
+  M: 'mens',
+};
+
 const SETTING_MULTIPLIER_PRESETS  = [4, 6, 8, 10];
 const CENTRE_MULTIPLIER_PRESETS   = [25, 50, 75, 100];
 const CASTING_LABOR_PRESETS       = [5, 10, 15, 20];
 const MARKUP_MULTIPLIER_PRESETS   = [2, 3, 4, 5];
 
-type Tab = 'identity' | 'images' | 'metals' | 'pricing';
+type Tab = 'identity' | 'images' | 'pricing';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'identity', label: 'Identity' },
   { id: 'images',   label: 'Images'   },
-  { id: 'metals',   label: 'Metals'   },
   { id: 'pricing',  label: 'Pricing'  },
 ];
 
@@ -142,7 +164,8 @@ export default function ProductEditor({
   const [form, setForm] = useState<Product>({
     ...product,
     categories:           product.categories ?? [product.category],
-    metals:               product.metals ?? [],
+    metals:               METAL_OPTIONS,   // all metals always
+    default_metal:        'platinum',      // always priced in platinum
     images:               product.images ?? [],
     metal_images:         product.metal_images ?? {},
     sub_categories:       product.sub_categories ?? [],
@@ -262,16 +285,17 @@ export default function ProductEditor({
         stone_groups:         cleanGroups,
         stone_count_input:    first?.count ?? null,
         stone_size_mm:        first?.size_mm ?? null,
-        // Store computed labour so the pricing engine can use them directly
         base_labor_usd:       settingLabour,
         diamond_labor_usd:    centreLabour,
-        // New fields
         setting_multiplier:     form.setting_multiplier,
         centre_diamond_group:   cleanCentre,
         centre_multiplier:      form.centre_multiplier,
         commission_rate:        0,
         markup_multiplier:      form.markup_multiplier ?? 4,
         casting_labor_per_gram: form.casting_labor_per_gram ?? 10,
+        // Always available in all metals; platinum is the pricing base
+        metals:               METAL_OPTIONS,
+        default_metal:        'platinum',
       };
       const res = await fetch(url, {
         method,
@@ -447,6 +471,19 @@ export default function ProductEditor({
     });
   }
 
+  function handleSkuChange(raw: string) {
+    const upper = raw.toUpperCase();
+    const col   = upper.length >= 1 ? SKU_COLLECTION[upper[0]] : undefined;
+    const cat   = upper.length >= 2 ? SKU_CATEGORY[upper[1]]   : undefined;
+    setForm((f) => ({
+      ...f,
+      sku:        raw,
+      collection: col ?? f.collection,
+      category:   cat ?? f.category,
+      categories: cat ? [cat] : f.categories,
+    }));
+  }
+
   const imageCount = (form.images ?? []).length;
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -485,23 +522,28 @@ export default function ProductEditor({
             </header>
 
             <div className="adm-fields adm-fields--3">
-              <label className="adm-field">
+              <div className="adm-field">
                 <span className="adm-field-label">SKU *</span>
                 <input
                   className="adm-input adm-mono"
                   value={form.sku}
                   disabled={!isNew}
-                  onChange={(e) => set('sku', e.target.value)}
-                  placeholder="AE520UQ"
+                  onChange={(e) => isNew ? handleSkuChange(e.target.value) : undefined}
+                  placeholder="AE520-PL"
                 />
-              </label>
+                {isNew && (
+                  <span style={{ fontSize: 11, color: '#9e8880', marginTop: 4, display: 'block' }}>
+                    First 2 letters auto-fill collection + category (e.g. AE → Abbraccio · Engagement). Always end with <strong>-PL</strong>.
+                  </span>
+                )}
+              </div>
               <label className="adm-field">
                 <span className="adm-field-label">Slug *</span>
                 <input
                   className="adm-input adm-mono"
                   value={form.slug}
                   onChange={(e) => set('slug', e.target.value)}
-                  placeholder="abbraccio-swirl-diamond-ring"
+                  placeholder="ae520-pl"
                 />
               </label>
               <label className="adm-field">
@@ -514,6 +556,20 @@ export default function ProductEditor({
                 />
               </label>
             </div>
+
+            {isNew && (
+              <div style={{ background: '#faf6f1', border: '1px solid #e8ddd8', borderRadius: 8, padding: '10px 14px', marginBottom: 8, fontSize: 12, color: '#7a6860' }}>
+                <strong style={{ color: '#1a1410' }}>SKU code reference</strong>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 24px', marginTop: 6 }}>
+                  {Object.entries(SKU_COLLECTION).map(([code, name]) => (
+                    <span key={code}><strong>{code}</strong> = {name}</span>
+                  ))}
+                  <span style={{ gridColumn: '1/-1', marginTop: 4, color: '#AC3438' }}>
+                    <strong>E</strong>=Engagement · <strong>W</strong>=Wedding · <strong>F</strong>=Fine Jewelry · <strong>M</strong>=Mens
+                  </span>
+                </div>
+              </div>
+            )}
 
             <div className="adm-fields">
               <label className="adm-field adm-field--full">
@@ -657,88 +713,30 @@ export default function ProductEditor({
               )}
             </section>
 
-            {(form.metals ?? []).length > 0 && (
-              <section className="adm-card">
-                <header className="adm-card-head">
-                  <h2 className="adm-h2">Per-Metal Photos</h2>
-                  <span className="adm-page-sub">Override per variant — empty rows fall back to main gallery</span>
-                </header>
-                <div className="adm-metal-galleries">
-                  {(form.metals ?? []).map((m) => {
-                    const arr = form.metal_images?.[m] ?? [];
-                    return (
-                      <MetalGallerySlot
-                        key={m}
-                        metal={m}
-                        images={arr}
-                        onUpload={(files) => uploadMetalFiles(m, files)}
-                        onRemove={(idx) => removeMetalImage(m, idx)}
-                        onMove={(idx, dir) => moveMetalImage(m, idx, dir)}
-                      />
-                    );
-                  })}
-                </div>
-              </section>
-            )}
-
-            {(form.metals ?? []).length === 0 && (
-              <p className="adm-page-sub" style={{ padding: '12px 0' }}>
-                Add metals in the <button type="button" className="adm-link" style={{ font: 'inherit' }} onClick={() => setActiveTab('metals')}>Metals tab</button> to upload per-variant photos.
-              </p>
-            )}
+            <section className="adm-card">
+              <header className="adm-card-head">
+                <h2 className="adm-h2">Per-Metal Photos</h2>
+                <span className="adm-page-sub">Override per variant — empty slots fall back to the main gallery above</span>
+              </header>
+              <div className="adm-metal-galleries">
+                {METAL_OPTIONS.map((m) => {
+                  const arr = form.metal_images?.[m] ?? [];
+                  return (
+                    <MetalGallerySlot
+                      key={m}
+                      metal={m}
+                      images={arr}
+                      onUpload={(files) => uploadMetalFiles(m, files)}
+                      onRemove={(idx) => removeMetalImage(m, idx)}
+                      onMove={(idx, dir) => moveMetalImage(m, idx, dir)}
+                    />
+                  );
+                })}
+              </div>
+            </section>
           </>
         )}
 
-        {/* ══ METALS TAB ══════════════════════════════════════════════════ */}
-        {activeTab === 'metals' && (
-          <section className="adm-card">
-            <header className="adm-card-head">
-              <h2 className="adm-h2">Metals</h2>
-            </header>
-
-            <div>
-              <span className="adm-field-label" style={{ display: 'block', marginBottom: 10 }}>
-                Available in these metals
-              </span>
-              <div className="adm-chips">
-                {METAL_OPTIONS.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    className={`adm-chip${(form.metals ?? []).includes(m) ? ' is-active' : ''}`}
-                    onClick={() => toggleMetal(m)}
-                  >
-                    {m === 'platinum' ? 'platinum' : m.replace(/_/g, ' ')}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="adm-fields" style={{ marginTop: 8 }}>
-              <label className="adm-field">
-                <span className="adm-field-label">Default Metal (shown first on product page)</span>
-                <select
-                  className="adm-select"
-                  value={form.default_metal ?? 'platinum'}
-                  onChange={(e) => set('default_metal', e.target.value)}
-                >
-                  {METAL_OPTIONS.map((m) => (
-                    <option key={m} value={m}>{m === 'platinum' ? 'Platinum' : m.replace(/_/g, ' ')}</option>
-                  ))}
-                </select>
-              </label>
-            </div>
-
-            {(form.metals ?? []).length > 0 && (
-              <p className="adm-page-sub">
-                {(form.metals ?? []).length} metal{(form.metals ?? []).length === 1 ? '' : 's'} selected ·{' '}
-                <button type="button" className="adm-link" style={{ font: 'inherit' }} onClick={() => setActiveTab('images')}>
-                  Upload per-metal photos →
-                </button>
-              </p>
-            )}
-          </section>
-        )}
 
         {/* ══ PRICING TAB ═════════════════════════════════════════════════ */}
         {activeTab === 'pricing' && (

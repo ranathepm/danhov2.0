@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { fetchProductWithPricingBySlug } from '@/lib/products';
-import { priceAllOptions, computePrice, availableMetals, STATIC_SPOTS } from '@/lib/pricing';
+import { priceAllOptions, computePrice, STATIC_SPOTS, ALL_METALS } from '@/lib/pricing';
 import NarrativeBox from '@/components/NarrativeBox';
 import WishlistHeart from '@/components/WishlistHeart';
 import ProductGalleryMetal from '@/components/ProductGalleryMetal';
@@ -72,24 +72,20 @@ export default async function ProductPage({ params }: { params: Params }) {
   // Compute live prices per metal variant so the detail page can update
   // the displayed price when the customer switches metal swatches.
   let pricemap: Record<string, number> = {};
+  // All products are available in every metal — prices are derived from the
+  // platinum spec weight automatically. Always price all metals.
   const hasPricingData = (product.gold_weight_g ?? 0) > 0;
   if (hasPricingData) {
     try {
-      const breakdowns = await priceAllOptions(product, product.metals);
+      const breakdowns = await priceAllOptions(product, [...ALL_METALS]);
       for (const b of breakdowns) {
         if (b.total_usd > 0 && b.metal_cost_usd > 0) {
           pricemap[b.metal_used] = b.total_usd;
         }
       }
     } catch {
-      // GoldAPI unreachable — compute with static spot prices so the
-      // markup_multiplier is still applied rather than falling back to
-      // the raw cost stored in price_display.
-      const metals = availableMetals(product.metals ?? []);
-      const keys   = metals.length > 0
-        ? metals
-        : [product.default_metal ?? '14k_yellow'];
-      for (const k of keys) {
+      // GoldAPI unreachable — use static spots so markup is still applied.
+      for (const k of ALL_METALS) {
         const b = computePrice(product, STATIC_SPOTS, k);
         if (b.total_usd > 0) pricemap[b.metal_used] = b.total_usd;
       }
@@ -136,13 +132,7 @@ export default async function ProductPage({ params }: { params: Params }) {
       {/* PRODUCT DETAIL — wrapped in MetalProvider so the gallery on
           the left and the swatches + CTA on the right share one
           selected-metal state. Clicking a swatch updates both columns. */}
-      <MetalProvider
-        initialMetal={
-          product.default_metal && product.metals.includes(product.default_metal)
-            ? product.default_metal
-            : product.metals[0] ?? null
-        }
-      >
+      <MetalProvider initialMetal="platinum">
       <div className="product-detail">
         {/* IMAGE GALLERY */}
         <div className="product-image-col">
@@ -174,8 +164,8 @@ export default async function ProductPage({ params }: { params: Params }) {
             slug={product.slug}
             name={product.name}
             collection={product.collection}
-            metals={product.metals}
-            defaultMetal={product.default_metal}
+            metals={[...ALL_METALS]}
+            defaultMetal="platinum"
             images={product.images}
             price_display={product.price_display}
             pricemap={pricemap}
