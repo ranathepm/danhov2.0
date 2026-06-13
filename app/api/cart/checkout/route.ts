@@ -167,7 +167,7 @@ export async function POST(req: NextRequest) {
   const stripe = getStripe();
   const host    = req.headers.get('host') ?? '';
   const proto   = req.headers.get('x-forwarded-proto') || (host.startsWith('localhost') ? 'http' : 'https');
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${proto}://${host}`;
+  const siteUrl = `${proto}://${host}`;
 
   // Build Stripe line items — one per cart piece
   const lineItems = priced.map((p) => {
