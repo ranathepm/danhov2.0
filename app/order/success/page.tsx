@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { finalizeCheckoutSession } from '@/lib/checkout-finalize';
 import CartClearOnSuccess from '@/components/CartClearOnSuccess';
+import StripeHistoryFix from '@/components/StripeHistoryFix';
 
 export const metadata = { title: 'Order received — DANHOV' };
 export const dynamic = 'force-dynamic';
@@ -33,6 +34,8 @@ export default async function OrderSuccessPage({
           payment so a stray /order/success visit without a paid
           session can't wipe an in-progress cart. */}
       {paid && <CartClearOnSuccess />}
+      {/* Prevent browser "back" from returning to the Stripe checkout page. */}
+      <StripeHistoryFix />
 
       <span className="section-eyebrow">Commission Confirmed</span>
       <h1 className="section-title" style={{ marginTop: 24 }}>
@@ -90,7 +93,26 @@ export default async function OrderSuccessPage({
         &ldquo;Presence is a present.&rdquo;
       </p>
 
-      <div style={{ marginTop: 48 }}>
+      <div style={{ marginTop: 48, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+        {reference && (
+          <Link
+            href={`/track-order?ref=${reference}`}
+            style={{
+              display: 'inline-block',
+              padding: '14px 40px',
+              background: '#AC3438',
+              color: '#fff',
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 13,
+              letterSpacing: '0.16em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              borderRadius: 999,
+            }}
+          >
+            Track Your Order
+          </Link>
+        )}
         <Link href="/" className="btn-primary">Return Home</Link>
       </div>
     </main>

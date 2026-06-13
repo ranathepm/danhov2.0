@@ -282,9 +282,6 @@ async function fetchCategoryData(category: string): Promise<CategoryData> {
 }
 
 // Extract up to `max` preview images from a category dataset.
-// Uses round-robin across collections (1 image per collection per pass) so the
-// preview isn't monopolised by a single collection. `exclude` prevents the same
-// primary image appearing on more than one category card (wedding vs men's).
 function extractPreviewImages(data: CategoryData, exclude: string[] = [], max = 4): string[] {
   const imgs: string[] = [];
   let round = 0;
@@ -309,15 +306,68 @@ function extractPreviewImages(data: CategoryData, exclude: string[] = [], max = 
   return imgs;
 }
 
+/**
+ * For the Wedding / Fine / Men's category cards on the homepage.
+ * Finds the single product in the category with the most metal_images entries
+ * (most colour variants photographed) and returns ONE image per metal colour.
+ * On hover the card cycles through the same ring in different metals — exactly
+ * like the engagement collection cards do with their pinned SKU images.
+ */
+async function fetchCategoryPreviewImages(category: string, exclude: string[] = []): Promise<string[]> {
+  try {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('images, metal_images')
+      .filter('categories', 'cs', JSON.stringify([category]))
+      .eq('is_active', true);
+
+    let bestImages: string[] = [];
+
+    for (const p of data ?? []) {
+      const metalImgs = (p.metal_images as Record<string, string[]> | null) ?? {};
+      // Sort metal keys: platinum → white → yellow → rose (consistent order)
+      const metalKeys = Object.keys(metalImgs)
+        .filter(k => (metalImgs[k]?.length ?? 0) > 0)
+        .sort((a, b) => {
+          const pri = (k: string) =>
+            k.includes('plat') ? 0 : k.includes('white') ? 1 : k.includes('yellow') ? 2 : 3;
+          return pri(a) - pri(b);
+        });
+
+      // One image per metal variant of THIS product (same ring, different colours)
+      const variantImages = metalKeys
+        .map(k => metalImgs[k][0])
+        .filter((img): img is string => !!img && !exclude.includes(img));
+
+      if (variantImages.length > bestImages.length) {
+        bestImages = variantImages;
+      }
+    }
+
+    // Fallback: use regular product images if no metal_images present
+    if (bestImages.length === 0) {
+      for (const p of data ?? []) {
+        const imgs = ((p.images as string[]) ?? []).filter(img => !exclude.includes(img));
+        if (imgs.length > bestImages.length) bestImages = imgs.slice(0, 4);
+      }
+    }
+
+    return bestImages.slice(0, 6);
+  } catch {
+    return [];
+  }
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default async function CategoryCardsSection() {
-  const [imageMap, weddingData, fineData, mensData] = await Promise.all([
-    getCollectionImages(),
-    fetchCategoryData('wedding'),
-    fetchCategoryData('fine'),
-    fetchCategoryData('mens'),
-  ]);
+  // Engagement collection images and category preview images run in parallel.
+  // Category preview images are sequenced so each card excludes the previous
+  // card's primary image — guarantees wedding ≠ fine ≠ mens on display.
+  const imageMap = await getCollectionImages();
+  const weddingImgs = await fetchCategoryPreviewImages('wedding');
+  const fineImgs    = await fetchCategoryPreviewImages('fine',   [weddingImgs[0]].filter(Boolean));
+  const mensImgs    = await fetchCategoryPreviewImages('mens',   [weddingImgs[0], fineImgs[0]].filter(Boolean));
 
   const engagementCards: EngagementCard[] = COLLECTIONS.map((col) => ({
     label: col.label,
@@ -331,13 +381,6 @@ export default async function CategoryCardsSection() {
     linkLabel: col.isLifePath ? 'Find Your Path' : `Explore ${col.label}`,
     isLifePath: col.isLifePath ?? false,
   }));
-
-  // The 3 category cards navigate directly to their own pages.
-  // Build preview images sequentially, passing already-used primary images as
-  // exclusions so each card shows a distinctly different product photo.
-  const weddingImgs = extractPreviewImages(weddingData);
-  const fineImgs    = extractPreviewImages(fineData,   [weddingImgs[0]].filter(Boolean));
-  const mensImgs    = extractPreviewImages(mensData,   [weddingImgs[0], fineImgs[0]].filter(Boolean));
 
   const categoryCards: EngagementCard[] = [
     {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 type OrderResult = {
   id: string;
@@ -32,8 +33,9 @@ function formatDate(iso: string) {
 }
 
 export default function TrackOrderPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
-  const [orderId, setOrderId] = useState('');
+  const [orderId, setOrderId] = useState(searchParams.get('ref') ?? '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [order, setOrder] = useState<OrderResult | null>(null);
