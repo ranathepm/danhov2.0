@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
-import { fetchProductsByCategory } from '@/lib/products';
+import { fetchProductsWithPricingByCategory } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: 'Engagement Rings · Handcrafted Spiral Settings',
@@ -38,7 +39,9 @@ export default async function EngagementRingsPage({
 }: {
   searchParams: { collection?: string };
 }) {
-  const products = await fetchProductsByCategory('engagement');
+  const rawProducts = await fetchProductsWithPricingByCategory('engagement');
+  const priceMap = await computeListingPriceMap(rawProducts);
+  const products = rawProducts.map(p => ({ ...p, price_computed: priceMap[p.sku] }));
   const initialCollection = searchParams.collection ?? 'all';
 
   return (

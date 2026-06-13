@@ -419,3 +419,32 @@ export async function priceAllOptions(
 export function formatUsd(n: number): string {
   return '$' + Math.round(n).toLocaleString('en-US');
 }
+
+/**
+ * Batch-compute default-metal prices for a list of products.
+ * Fetches spot prices once (2-hour cache), then runs computePrice for every
+ * product that has gold_weight_g or stones_value_usd configured.
+ * Returns a map of { sku → total_usd }. Products without pricing data are absent.
+ */
+export async function computeListingPriceMap(
+  products: Array<PricingInputs & { sku: string }>,
+): Promise<Record<string, number>> {
+  const priceable = products.filter(
+    p => (p.gold_weight_g ?? 0) > 0 || (p.stones_value_usd ?? 0) > 0,
+  );
+  if (priceable.length === 0) return {};
+  try {
+    const spots = await getAllSpots();
+    const result: Record<string, number> = {};
+    for (const p of priceable) {
+      try {
+        result[p.sku] = computePrice(p, spots, p.default_metal).total_usd;
+      } catch {
+        // skip products that fail individual computation
+      }
+    }
+    return result;
+  } catch {
+    return {};
+  }
+}

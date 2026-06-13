@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
-import { fetchProductsByCategory } from '@/lib/products';
+import { fetchProductsWithPricingByCategory } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: 'Fine Jewelry · Pendants, Earrings, Bracelets & Rings',
@@ -22,7 +23,9 @@ const COLLECTIONS = [
 ];
 
 export default async function FineJewelryPage() {
-  const products = await fetchProductsByCategory('fine');
+  const rawProducts = await fetchProductsWithPricingByCategory('fine');
+  const priceMap = await computeListingPriceMap(rawProducts);
+  const products = rawProducts.map(p => ({ ...p, price_computed: priceMap[p.sku] }));
   return (
     <>
       <ListingSchema category="fine" title="Fine Jewelry" />

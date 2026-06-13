@@ -72,26 +72,18 @@ export default async function CompleteRingPage({
     if (!setting) redirect('/ring-builder/setting');
 
     const catalogPrice = parsePriceDisplay(setting.price_display);
-    const metalMatchesDefault = !chosenMetal || chosenMetal === setting.default_metal;
     const canComputeLive =
       (setting.gold_weight_g ?? 0) > 0 || (setting.stones_value_usd ?? 0) > 0;
 
-    if (!metalMatchesDefault && canComputeLive) {
-      try {
-        const breakdown = await priceProduct(setting, chosenMetal);
-        settingPrice = breakdown.total_usd;
-      } catch {
-        settingPrice = catalogPrice;
-      }
-    } else if (catalogPrice > 0) {
-      settingPrice = catalogPrice;
-    } else if (canComputeLive) {
+    if (canComputeLive) {
       try {
         const breakdown = await priceProduct(setting, chosenMetal ?? setting.default_metal);
         settingPrice = breakdown.total_usd;
       } catch {
-        settingPrice = 0;
+        settingPrice = catalogPrice;
       }
+    } else {
+      settingPrice = catalogPrice;
     }
   }
 

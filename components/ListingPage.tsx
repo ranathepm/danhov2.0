@@ -148,7 +148,8 @@ function baseDesignKey(p: Product): string {
 
 type SortKey = 'featured' | 'price_asc' | 'price_desc' | 'newest';
 
-function parsePrice(p: { price_display: string | null }): number {
+function parsePrice(p: Product): number {
+  if (p.price_computed != null) return p.price_computed;
   if (!p.price_display) return 0;
   const m = p.price_display.match(/[\d,]+/);
   if (!m) return 0;
@@ -224,6 +225,12 @@ export default function ListingPage({
         }
         best.metal_images = mergedMetalImages;
         best.metals = Array.from(mergedMetals);
+        // Pick computed price from any variant that has one (representative may not be
+        // the variant the admin configured pricing on)
+        if (best.price_computed == null) {
+          const withPrice = variants.slice(1).find(v => v.price_computed != null);
+          if (withPrice) best.price_computed = withPrice.price_computed;
+        }
       }
       return best;
     });
@@ -634,8 +641,12 @@ function VanCleefCard({
         <Link href={`/product/${product.slug}`} className="vc-card-name-link" prefetch={false}>
           <h3 className="vc-card-name">{stripMetalSuffix(product.name)}</h3>
         </Link>
-        {product.price_display && (
-          <p className="vc-card-price">{product.price_display}</p>
+        {(product.price_computed != null || product.price_display) && (
+          <p className="vc-card-price">
+            {product.price_computed != null
+              ? '$' + product.price_computed.toLocaleString('en-US')
+              : product.price_display}
+          </p>
         )}
 
         <div className="vc-card-metals">

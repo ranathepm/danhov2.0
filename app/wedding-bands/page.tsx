@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
-import { fetchProductsByCategory } from '@/lib/products';
+import { fetchProductsWithPricingByCategory } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: "Wedding Bands · His & Hers · Handcrafted in Los Angeles",
@@ -20,7 +21,9 @@ const COLLECTIONS = [
 ];
 
 export default async function WeddingBandsPage() {
-  const products = await fetchProductsByCategory('wedding');
+  const rawProducts = await fetchProductsWithPricingByCategory('wedding');
+  const priceMap = await computeListingPriceMap(rawProducts);
+  const products = rawProducts.map(p => ({ ...p, price_computed: priceMap[p.sku] }));
   return (
     <>
       <ListingSchema category="wedding" title="Wedding Bands" />

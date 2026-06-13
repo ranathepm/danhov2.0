@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { requireAdmin } from '@/lib/admin-auth';
 import { createServiceClient } from '@/lib/supabase/server';
 import { stripMetalSuffix } from '@/lib/product-display';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +19,7 @@ export default async function AdminProductsPage({
   let query = sb
     .from('products')
     .select(
-      'sku, slug, name, collection, category, categories, metals, images, price_display, is_active'
+      'sku, slug, name, collection, category, categories, metals, default_metal, images, price_display, is_active, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, stones_value_usd, stone_groups'
     )
     .order('category')
     .order('collection')
@@ -38,12 +39,22 @@ export default async function AdminProductsPage({
     category: string;
     categories: string[] | null;
     metals: string[] | null;
+    default_metal: string | null;
     images: string[] | null;
     price_display: string | null;
     is_active: boolean;
+    gold_weight_g: number | null;
+    markup_multiplier: number | null;
+    base_labor_usd: number | null;
+    diamond_labor_usd: number | null;
+    casting_labor_per_gram: number | null;
+    stones_value_usd: number | null;
+    stone_groups: unknown;
   };
   const { data: products } = await query.limit(500);
   const list: ProductRow[] = (products as ProductRow[]) ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const priceMap = await computeListingPriceMap(list as any[]);
 
   return (
     <div className="adm-page">
@@ -150,7 +161,11 @@ export default async function AdminProductsPage({
                   <td>{p.collection || '—'}</td>
                   <td className="adm-cap">{p.category}</td>
                   <td>{(p.images as string[])?.length ?? 0}</td>
-                  <td>{p.price_display || '—'}</td>
+                  <td>
+                    {priceMap[p.sku] != null
+                      ? <><strong>${priceMap[p.sku].toLocaleString('en-US')}</strong>{p.price_display && p.price_display !== '$' + priceMap[p.sku].toLocaleString('en-US') ? <span style={{color:'#9c8f86',fontSize:11,marginLeft:4}}>({p.price_display})</span> : null}</>
+                      : (p.price_display || '—')}
+                  </td>
                   <td>
                     <span className={`adm-pill adm-pill--${p.is_active ? 'active' : 'inactive'}`}>
                       {p.is_active ? 'active' : 'inactive'}

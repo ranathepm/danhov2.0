@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import ListingPage from '@/components/ListingPage';
 import ListingSchema from '@/components/ListingSchema';
 import PageBlocks from '@/components/PageBlocks';
-import { fetchProductsByCategory } from '@/lib/products';
+import { fetchProductsWithPricingByCategory } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 export const metadata: Metadata = {
   title: "Men's Jewelry · Rings, Bracelets & Necklaces",
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 export const revalidate = 300;
 
 export default async function MensPage() {
-  const products = await fetchProductsByCategory('mens');
+  const rawProducts = await fetchProductsWithPricingByCategory('mens');
+  const priceMap = await computeListingPriceMap(rawProducts);
+  const products = rawProducts.map(p => ({ ...p, price_computed: priceMap[p.sku] }));
   return (
     <>
       <ListingSchema category="mens" title="Men's Jewelry" />

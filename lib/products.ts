@@ -15,6 +15,10 @@ export type Product = {
    *  if it exists and is non-empty; otherwise it falls back to images. */
   metal_images: Record<string, string[]> | null;
   price_display: string | null;
+  /** Live-computed price from the pricing engine (USD). Populated server-side
+   *  when the product has pricing inputs configured; undefined otherwise.
+   *  Always takes precedence over price_display for display and sorting. */
+  price_computed?: number;
   sub_categories: string[];    // ['her-bands', 'award-winners', ...]
   is_active: boolean;
 };
@@ -125,6 +129,34 @@ export type ProductWithPricing = Product & {
   stone_groups:            import('@/lib/stone-math').StoneGroup[] | null;
   commission_rate:         number | null;
 };
+
+const PRICING_COLS =
+  'sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, stones_value_usd, stone_groups, commission_rate';
+
+/** Like fetchProductsByCategory but includes all pricing-engine fields. */
+export async function fetchProductsWithPricingByCategory(category: string): Promise<ProductWithPricing[]> {
+  const { data, error } = await supabaseAnon
+    .from('products')
+    .select(PRICING_COLS)
+    .filter('categories', 'cs', JSON.stringify([category]))
+    .eq('is_active', true)
+    .order('sku', { ascending: true });
+  if (error) { console.error('fetchProductsWithPricingByCategory error:', error); return []; }
+  return (data ?? []) as ProductWithPricing[];
+}
+
+/** Like fetchProductsByCollection but includes all pricing-engine fields. */
+export async function fetchProductsWithPricingByCollection(collectionSlug: string): Promise<ProductWithPricing[]> {
+  const collectionName = COLLECTION_SLUG_TO_NAME[collectionSlug] ?? collectionSlug;
+  const { data, error } = await supabaseAnon
+    .from('products')
+    .select(PRICING_COLS)
+    .ilike('collection', collectionName)
+    .eq('is_active', true)
+    .order('sku', { ascending: true });
+  if (error) { console.error('fetchProductsWithPricingByCollection error:', error); return []; }
+  return (data ?? []) as ProductWithPricing[];
+}
 
 export async function fetchProductWithPricingBySlug(
   slug: string

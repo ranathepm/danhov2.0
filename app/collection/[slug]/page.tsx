@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ListingPage from '@/components/ListingPage';
-import { fetchProductsByCollection } from '@/lib/products';
+import { fetchProductsWithPricingByCollection } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 
 // ── Collection registry ───────────────────────────────────────────────────
 // Each entry defines the page title, eyebrow (meaning), subtitle, and the
@@ -105,7 +106,9 @@ export default async function CollectionPage({
   const meta = COLLECTION_META[params.slug];
   if (!meta) return notFound();
 
-  const products = await fetchProductsByCollection(params.slug);
+  const rawProducts = await fetchProductsWithPricingByCollection(params.slug);
+  const priceMap = await computeListingPriceMap(rawProducts);
+  const products = rawProducts.map(p => ({ ...p, price_computed: priceMap[p.sku] }));
 
   return (
     <ListingPage
