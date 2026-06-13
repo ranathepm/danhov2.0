@@ -227,6 +227,7 @@ export type StoneGroup = {
   length_mm?: number | null;
   width_mm?: number | null;
   shape: string | null;
+  carat_each_override?: number | null;
 };
 
 /** Effective diameter from a group's length/width (falls back to size_mm). */
@@ -297,8 +298,14 @@ export function computeStoneGroupsBreakdown(
       g?.length_mm,
       g?.width_mm,
     );
-    totalCarats += b.total_carats;
-    totalStonePrice += b.total_stone_price_usd;
+    const caratEach = (g?.carat_each_override != null && g.carat_each_override > 0)
+      ? g.carat_each_override
+      : b.carat_per_stone;
+    const count = Math.max(0, Number(g?.count ?? 0));
+    const groupCt = caratEach * count;
+    const groupPrice = groupCt * pricePerCaratFromCt(caratEach);
+    totalCarats += groupCt;
+    totalStonePrice += groupPrice;
   }
   return {
     carat_per_stone: 0,

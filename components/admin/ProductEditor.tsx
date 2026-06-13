@@ -6,6 +6,7 @@ import Image from 'next/image';
 import {
   computeProductTotal,
   computeStoneBreakdown,
+  pricePerCaratFromCt,
   DIAMOND_SHAPES,
   DENSITY_RATIO,
   RHODIUM_UPLIFT_DISPLAY,
@@ -103,7 +104,7 @@ const TABS: { id: Tab; label: string }[] = [
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function blankStoneGroup(): StoneGroup {
-  return { count: null, size_mm: null, length_mm: null, width_mm: null, shape: 'round' };
+  return { count: null, size_mm: null, length_mm: null, width_mm: null, shape: 'round', carat_each_override: null };
 }
 
 function groupEffectiveSize(g: StoneGroup): number | null {
@@ -127,6 +128,7 @@ function initialStoneGroups(p: {
       length_mm: g?.length_mm ?? g?.size_mm ?? null,
       width_mm: g?.width_mm ?? g?.size_mm ?? null,
       shape: g?.shape ?? 'round',
+      carat_each_override: (g as StoneGroup)?.carat_each_override ?? null,
     }));
   }
   if (p.stone_count_input != null || p.stone_size_mm != null) {
@@ -478,6 +480,7 @@ export default function ProductEditor({
     setForm((f) => ({
       ...f,
       sku:        raw,
+      slug:       raw.toLowerCase(),
       collection: col ?? f.collection,
       category:   cat ?? f.category,
       categories: cat ? [cat] : f.categories,
@@ -529,7 +532,6 @@ export default function ProductEditor({
                   value={form.sku}
                   disabled={!isNew}
                   onChange={(e) => isNew ? handleSkuChange(e.target.value) : undefined}
-                  placeholder="AE520-PL"
                 />
                 {isNew && (
                   <span style={{ fontSize: 11, color: '#9e8880', marginTop: 4, display: 'block' }}>
@@ -543,7 +545,6 @@ export default function ProductEditor({
                   className="adm-input adm-mono"
                   value={form.slug}
                   onChange={(e) => set('slug', e.target.value)}
-                  placeholder="ae520-pl"
                 />
               </label>
               <label className="adm-field">
@@ -552,7 +553,6 @@ export default function ProductEditor({
                   className="adm-input"
                   value={form.collection ?? ''}
                   onChange={(e) => set('collection', e.target.value || null)}
-                  placeholder="Abbraccio"
                 />
               </label>
             </div>
@@ -578,7 +578,6 @@ export default function ProductEditor({
                   className="adm-input"
                   value={form.name}
                   onChange={(e) => set('name', e.target.value)}
-                  placeholder="Abbraccio Swirl Diamond Ring"
                 />
               </label>
             </div>
@@ -846,7 +845,7 @@ export default function ProductEditor({
                         </div>
                       </label>
                     </div>
-                    <StoneGroupReadout group={g} />
+                    <StoneGroupReadout group={g} onUpdate={(patch) => updateStoneGroup(i, patch)} />
                   </div>
                 ))}
               </div>
@@ -943,7 +942,7 @@ export default function ProductEditor({
                     </div>
                   </label>
                 </div>
-                <StoneGroupReadout group={form.centre_diamond_group ?? blankStoneGroup()} />
+                <StoneGroupReadout group={form.centre_diamond_group ?? blankStoneGroup()} onUpdate={(patch) => updateCentreGroup(patch)} />
               </div>
 
               {/* Centre multiplier */}
@@ -1095,12 +1094,14 @@ export default function ProductEditor({
                     </div>
                     {/* Rows */}
                     {metalsToShow.map((metal, idx) => {
-                      const ratio         = DENSITY_RATIO[metal] ?? 1.0;
+                      // Color variants of the same karat use identical pricing (only color differs, not cost)
+                      const pricingMetal  = /^14k/.test(metal) ? '14k_yellow' : /^18k/.test(metal) ? '18k_yellow' : metal;
+                      const ratio         = DENSITY_RATIO[pricingMetal] ?? 1.0;
                       const metalWeight   = (form.gold_weight_g ?? 0) * ratio;
-                      const costPerG      = livePrices?.cost_per_gram[metal] ?? 0;
+                      const costPerG      = livePrices?.cost_per_gram[pricingMetal] ?? 0;
                       const materialCost  = metalWeight * costPerG;
                       const castingLabor  = metalWeight * (form.casting_labor_per_gram ?? 10);
-                      const rhodiumUplift = RHODIUM_UPLIFT_DISPLAY[metal] ?? 0;
+                      const rhodiumUplift = 0; // same for all color variants within a karat
                       const stoneCostVal  = form.stones_value_usd ?? productTotal.total_stone_price_usd;
                       const subTotal      = materialCost + castingLabor + stoneCostVal + totalLabour + rhodiumUplift;
                       const costTotal     = Math.round(subTotal / 10) * 10;
@@ -1122,7 +1123,7 @@ export default function ProductEditor({
                             {label}{isDefault ? ' ★' : ''}
                           </span>
                           <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
-                            {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}
+                            {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}{pricingMetal !== metal ? ' *' : ''}
                           </span>
                           <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
                             {livePrices ? `$${Math.round(materialCost).toLocaleString()} + $${Math.round(castingLabor).toLocaleString()}` : '—'}
@@ -1299,23 +1300,73 @@ function fmtCt(ct: number): string {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
-function StoneGroupReadout({ group }: { group: StoneGroup }) {
+function StoneGroupReadout({
+  group,
+  onUpdate,
+}: {
+  group: StoneGroup;
+  onUpdate?: (patch: Partial<StoneGroup>) => void;
+}) {
   const eff = groupEffectiveSize(group);
   const b   = computeStoneBreakdown(eff, group.count, group.shape, group.length_mm, group.width_mm);
-  if (!eff || b.total_carats <= 0) {
+  const hasOverride = group.carat_each_override != null && group.carat_each_override > 0;
+  const caratEach   = hasOverride ? group.carat_each_override! : b.carat_per_stone;
+  const count       = Math.max(0, Number(group.count ?? 0));
+  const totalCt     = caratEach * count;
+  const pricePerCt  = pricePerCaratFromCt(caratEach);
+  const totalPrice  = totalCt * pricePerCt;
+
+  if (!eff && !hasOverride) {
     return (
       <p className="adm-stone-readout adm-stone-readout--empty">
         Enter length &amp; width to estimate carats &amp; cost.
       </p>
     );
   }
+
+  if (onUpdate) {
+    return (
+      <div className="adm-stone-readout adm-stone-readout--editable" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const, marginTop: 8 }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <input
+            type="number"
+            step="0.0001"
+            min="0"
+            className="adm-input"
+            style={{ width: 72, padding: '3px 6px', fontSize: 12 }}
+            value={hasOverride ? fmtCt(group.carat_each_override!) : (b.carat_per_stone > 0 ? fmtCt(b.carat_per_stone) : '')}
+            placeholder={b.carat_per_stone > 0 ? fmtCt(b.carat_per_stone) : '0'}
+            onChange={(e) => {
+              const v = e.target.value === '' ? null : Number(e.target.value);
+              onUpdate({ carat_each_override: v });
+            }}
+          />
+          <span style={{ fontSize: 12, color: '#7a6860', whiteSpace: 'nowrap' as const }}>ct each</span>
+        </label>
+        <span className="adm-stone-readout-sep">·</span>
+        <span style={{ fontSize: 12 }}><strong>{fmtCt(totalCt)} ct</strong> total</span>
+        <span className="adm-stone-readout-sep">·</span>
+        <span style={{ fontSize: 12 }}>≈ <strong>${Math.round(totalPrice).toLocaleString('en-US')}</strong></span>
+        {hasOverride && (
+          <button
+            type="button"
+            style={{ fontSize: 10, color: '#AC3438', background: 'none', border: 'none', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+            onClick={() => onUpdate({ carat_each_override: null })}
+          >
+            reset to auto
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
     <p className="adm-stone-readout">
-      <span>{fmtCt(b.carat_per_stone)} ct each</span>
+      <span>{fmtCt(caratEach)} ct each</span>
       <span className="adm-stone-readout-sep">·</span>
-      <span><strong>{fmtCt(b.total_carats)} ct</strong> total</span>
+      <span><strong>{fmtCt(totalCt)} ct</strong> total</span>
       <span className="adm-stone-readout-sep">·</span>
-      <span>≈ <strong>${Math.round(b.total_stone_price_usd).toLocaleString('en-US')}</strong></span>
+      <span>≈ <strong>${Math.round(totalPrice).toLocaleString('en-US')}</strong></span>
     </p>
   );
 }

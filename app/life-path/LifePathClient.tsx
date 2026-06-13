@@ -919,7 +919,7 @@ export default function LifePathClient() {
                 <LifePathDesign num={result.lifePathNum} zodiacIndex={result.zodiacIndex} day={result.day} />
               </div>
               <p className="lp-design-story">&ldquo;{generateStory(lpData.title, result.zodiac.sign)}&rdquo;</p>
-              <p className="lp-design-note">A unique form, generated from your number and sign. When you commission your piece, our jeweler will refine it by hand — in silence.</p>
+              <p className="lp-design-note">A unique form, generated from your number and sign. When you request your piece, our jeweler will refine it by hand — in silence.</p>
             </div>
 
             {/* Right: life path info */}
@@ -952,7 +952,7 @@ export default function LifePathClient() {
               {/* CTAs */}
               <div className="lp-ctas">
                 <button type="button" className="lp-cta-primary" onClick={goToCommission}>
-                  Commission This Design
+                  Request This Design
                 </button>
                 <button type="button" className="lp-cta-secondary" onClick={handleReset}>
                   Calculate Another
@@ -994,7 +994,7 @@ export default function LifePathClient() {
                 Every piece is made to order, handcrafted by a single jeweler in Los Angeles. Pricing is confirmed by your specialist within one business day.
               </p>
               <button type="button" className="lp-cta-primary" style={{ maxWidth: 320, margin: '0 auto', display: 'block' }} onClick={goToCommission}>
-                Begin Your Commission
+                Request Your Design
               </button>
             </div>
           </div>
@@ -1010,8 +1010,8 @@ export default function LifePathClient() {
         <div className="lp-commission">
           <button className="lp-commission-back" onClick={() => setScreen('results')}>← Back</button>
           <div className="lp-commission-inner">
-            <span className="lp-commission-eyebrow">Private Commission</span>
-            <h2 className="lp-commission-title">Commission Your<br/>Life Path Piece</h2>
+            <span className="lp-commission-eyebrow">Private Design Request</span>
+            <h2 className="lp-commission-title">Request Your<br/>Life Path Piece</h2>
             <p className="lp-commission-sub">
               Our atelier will handcraft a piece designed around your unique number. Leave your details and a DANHOV jeweler will reach out to begin.
             </p>
@@ -1050,7 +1050,7 @@ export default function LifePathClient() {
             {commError && <p className="lp-form-error">{commError}</p>}
 
             <button type="button" className="lp-submit-btn" disabled={commSubmitting} onClick={handleCommissionSubmit}>
-              {commSubmitting ? 'Sending…' : 'Send Commission Request'}
+              {commSubmitting ? 'Sending…' : 'Send Request'}
             </button>
           </div>
         </div>
@@ -1066,7 +1066,7 @@ export default function LifePathClient() {
               </svg>
             </div>
             <span className="lp-success-eyebrow">Request Received</span>
-            <h2 className="lp-success-title">Your commission<br/>is on its way.</h2>
+            <h2 className="lp-success-title">Your request<br/>is on its way.</h2>
             <div className="lp-success-divider"/>
             <p className="lp-success-sub">
               A DANHOV jeweler will be in touch within one business day to begin crafting your Life Path piece — made only for you.
