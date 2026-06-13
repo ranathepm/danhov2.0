@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 
 const STATUS_LABELS: Record<string, string> = {
   pending:       'Order Received',
-  deposit_paid:  'Deposit Confirmed',
+  deposit_paid:  'Order Confirmed',
   in_production: 'In Production',
   shipped:       'Shipped',
   delivered:     'Delivered',
@@ -15,8 +15,8 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_DESCRIPTIONS: Record<string, string> = {
-  pending:       'Your order has been received and is awaiting deposit confirmation.',
-  deposit_paid:  'Your deposit is confirmed. Your piece is being scheduled for production.',
+  pending:       'Your order has been received and is being confirmed.',
+  deposit_paid:  'Your order is confirmed. Your piece is being scheduled for production.',
   in_production: 'Our master jewelers in Los Angeles are handcrafting your piece. Estimated 4–6 weeks from this stage.',
   shipped:       'Your piece has left our Los Angeles atelier via FedEx Priority Overnight, fully insured.',
   delivered:     'Your DANHOV piece has been delivered. We hope it brings you joy for a lifetime.',

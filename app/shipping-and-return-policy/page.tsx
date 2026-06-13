@@ -61,9 +61,9 @@ export default function ShippingReturnsPage() {
           ],
         },
         {
-          heading: 'Deposits',
+          heading: 'Payment',
           body: [
-            'A 50% deposit secures your commission and locks your price; the balance is due before shipping. Deposits can be paid online via Stripe or by phone with a specialist.',
+            'Payment is collected securely at checkout via Stripe. You may also pay by phone with a DANHOV specialist.',
           ],
         },
       ]}

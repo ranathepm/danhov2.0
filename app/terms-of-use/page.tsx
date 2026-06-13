@@ -19,7 +19,7 @@ export default function TermsPage() {
           heading: 'Orders & pricing',
           body: [
             'Each piece is handcrafted to order. Prices shown are computed from the current metal market, the piece specification, and craftsmanship; a locked quote is honoured for its stated duration. We reserve the right to confirm availability and final pricing before production begins.',
-            'A 50% deposit reserves your commission; the balance is due before shipping.',
+            'Every piece is handcrafted to order. Payment is collected at checkout to begin production.',
           ],
         },
         {

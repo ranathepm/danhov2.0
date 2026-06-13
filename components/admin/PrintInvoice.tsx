@@ -315,8 +315,8 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         </div>
 
         <div className="invoice-balance">
-          50% deposit (paid): <b>${order.deposit_usd.toLocaleString('en-US')}</b><br />
-          Balance due before shipping: <b>${balance.toLocaleString('en-US')}</b>
+          Amount paid: <b>${order.deposit_usd.toLocaleString('en-US')}</b>
+          {balance > 0 && <><br />Balance due before shipping: <b>${balance.toLocaleString('en-US')}</b></>}
           {order.tracking_number && (
             <>
               <br /><br />

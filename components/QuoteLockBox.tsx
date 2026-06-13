@@ -223,7 +223,6 @@ export default function QuoteLockBox({ slug, sku }: { slug: string; sku: string 
           </p>
           <DepositButton quoteId={status.lock.quote_id} email={email} />
           <span className="quote-lock-disclosure" style={{ marginTop: 4 }}>
-            50% deposit secures the commission · balance due before shipping.
             Production: 4–6 weeks. Secured by Stripe.
           </span>
         </>

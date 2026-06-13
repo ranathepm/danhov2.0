@@ -40,10 +40,6 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
     a: 'Non-customised pieces carry a 30-day return policy with full refund to the original payment method. Customised or personalised pieces are evaluated case-by-case — please reach out directly. One complimentary resizing is included within 60 days of delivery.',
   },
   {
-    q: 'How do deposits work?',
-    a: 'A 50% deposit secures your commission and the locked price; the balance is due before shipping. You can pay the deposit online via Stripe directly from a locked-quote page, or by phone with a specialist.',
-  },
-  {
     q: 'Where is DANHOV located?',
     a: 'DANHOV was founded in Los Angeles, California in 1984 by master jeweler Jack Hovsepian. Our atelier remains in Los Angeles, where every piece is handcrafted to order. Private appointments are available at the atelier.',
   },
@@ -53,7 +49,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: 'How do I book a private consultation?',
-    a: 'Use the "Book Appointment" button at the top of the site, or visit the appointment section on the homepage. Consultations are 30 minutes, held privately over Zoom with a DANHOV specialist, with the Zoom link arriving by email upon booking. No deposit is required to book.',
+    a: 'Use the "Book Appointment" button at the top of the site, or visit the appointment section on the homepage. Consultations are 30 minutes, held privately over Zoom with a DANHOV specialist, with the Zoom link arriving by email upon booking. No payment is required to book.',
   },
 ];
 

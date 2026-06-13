@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
           currency: 'usd',
           unit_amount: depositUsd * 100,
           product_data: {
-            name: `${product.name} (Style ${product.sku}) — 50% deposit`,
+            name: `${product.name} (Style ${product.sku})`,
             description: `Locked at $${totalUsd.toLocaleString('en-US')} in ${(lock.metal_choice || '').replace(/_/g, ' ')}. Balance of $${balanceUsd.toLocaleString('en-US')} due before shipping.`,
             images: product.images && Array.isArray(product.images) && product.images[0] ? [product.images[0] as string] : undefined,
             metadata: { sku: product.sku, slug: product.slug },
