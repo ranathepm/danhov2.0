@@ -40,7 +40,7 @@ export default function DepositButton({ quoteId, email, className }: Props) {
         onClick={go}
         disabled={loading}
       >
-        {loading ? 'Opening secure checkout…' : 'Pay 50% deposit & start your commission →'}
+        {loading ? 'Opening secure checkout…' : 'Pay 50% deposit →'}
       </button>
       {err && <span className="quote-lock-err" style={{ display: 'block', marginTop: 8 }}>{err}</span>}
     </>

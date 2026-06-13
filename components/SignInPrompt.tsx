@@ -57,7 +57,7 @@ export default function SignInPrompt({ open, onClose, onSignedIn, pieceName }: P
           <AuthForm
             initialMode="signup"
             eyebrow="Sign up to add to cart"
-            subtitle={`Create your DANHOV account to add the ${pieceName} to your cart. Your cart, saved pieces, and commission stay with your account.`}
+            subtitle={`Create your DANHOV account to add the ${pieceName} to your cart. Your cart and saved pieces follow you across devices.`}
             onSuccess={onSignedIn}
             compact
           />

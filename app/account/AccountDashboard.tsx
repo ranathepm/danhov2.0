@@ -162,7 +162,7 @@ export default function AccountDashboard({
 
           {orders.length === 0 ? (
             <div className="acct-empty">
-              <p>Your past commissions will appear here.</p>
+              <p>Your past orders will appear here.</p>
             </div>
           ) : (
             <ul className="acct-orders">
@@ -185,7 +185,7 @@ export default function AccountDashboard({
                         </span>
                       </div>
                       <div className="acct-order-name">
-                        {o.product_name ?? 'Custom DANHOV commission'}
+                        {o.product_name ?? 'Custom DANHOV piece'}
                         {o.product_sku ? <span className="acct-order-sku"> · Style {o.product_sku}</span> : null}
                       </div>
                       <div className="acct-order-meta">

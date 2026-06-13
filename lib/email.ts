@@ -224,7 +224,7 @@ export function depositReceiptEmail(args: {
   const paid = '$' + args.depositUsd.toLocaleString('en-US');
 
   const body = `
-    <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;color:#AC3438;">Your commission has begun.</p>
+    <p style="margin:0 0 16px;font-family:Georgia,serif;font-size:22px;color:#AC3438;">Your order has begun.</p>
     <p style="margin:0 0 16px;">Thank you. Your order secures the craftsmanship of the <strong>${escape(args.productName)}</strong> — and the next four to six weeks of master-jeweler hands turning gold into your piece.</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background:#fdf0ed;border:1px solid rgba(172,52,56,0.18);">
       <tr><td style="padding:24px;">

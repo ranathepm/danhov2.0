@@ -217,7 +217,7 @@ export default function TrackOrderPage() {
       {/* Hero */}
       <section className="track-hero">
         <span className="track-eyebrow">Order Tracking</span>
-        <h1>Track Your Commission</h1>
+        <h1>Track Your Order</h1>
         <p className="track-hero-sub">
           Follow your piece from the atelier bench to your door.
           Enter your email and order number from your confirmation.
@@ -274,7 +274,7 @@ export default function TrackOrderPage() {
             {/* Header */}
             <div className="track-result-header">
               <p className="track-result-order-id">Order #{order.id.slice(0, 8).toUpperCase()}</p>
-              <p className="track-result-product">{order.productName ?? 'DANHOV Commission'}</p>
+              <p className="track-result-product">{order.productName ?? 'DANHOV Order'}</p>
               <p className="track-result-date">Placed {formatDate(order.createdAt)}</p>
             </div>
 

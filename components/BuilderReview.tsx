@@ -528,7 +528,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
             )}
             <div className="builder-review-total-row">
               <span>
-                {mode === 'ring' ? 'Commission total' : mode === 'setting' ? 'Setting total' : 'Diamond total'}
+                {mode === 'ring' ? 'Order total' : mode === 'setting' ? 'Setting total' : 'Diamond total'}
               </span>
               <strong>${total.toLocaleString('en-US')}</strong>
             </div>

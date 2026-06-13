@@ -37,7 +37,7 @@ export default async function OrderSuccessPage({
       {/* Prevent browser "back" from returning to the Stripe checkout page. */}
       <StripeHistoryFix />
 
-      <span className="section-eyebrow">Commission Confirmed</span>
+      <span className="section-eyebrow">Order Confirmed</span>
       <h1 className="section-title" style={{ marginTop: 24 }}>
         Your <em>journey</em> has begun.
       </h1>

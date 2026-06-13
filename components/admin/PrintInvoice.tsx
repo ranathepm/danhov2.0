@@ -228,7 +228,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         </div>
 
         <div className="invoice-section">
-          <div className="invoice-section-title">Commission</div>
+          <div className="invoice-section-title">Order Details</div>
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontStyle: 'italic', color: '#1a1410', marginBottom: 4 }}>
             {stripMetalSuffix(product.name)}
           </div>
@@ -315,7 +315,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         </div>
 
         <div className="invoice-balance">
-          50% commission deposit (paid): <b>${order.deposit_usd.toLocaleString('en-US')}</b><br />
+          50% deposit (paid): <b>${order.deposit_usd.toLocaleString('en-US')}</b><br />
           Balance due before shipping: <b>${balance.toLocaleString('en-US')}</b>
           {order.tracking_number && (
             <>

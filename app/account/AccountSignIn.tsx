@@ -24,7 +24,7 @@ export default function AccountSignIn() {
         <AuthForm
           initialMode="signup"
           eyebrow="Sign in or sign up to DANHOV"
-          subtitle="Create your account in seconds — track your commission, save pieces, and your cart follows you across devices."
+          subtitle="Create your account in seconds — track your orders, save pieces, and your cart follows you across devices."
           onSuccess={handleSuccess}
         />
       </div>
