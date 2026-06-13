@@ -1055,11 +1055,11 @@ export default function ProductEditor({
                     </div>
                     <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
                       <span>Casting labor (${perG.toFixed(0)}/g × alloy weight — varies per metal)</span>
-                      <span style={{ fontFamily: "'Cormorant Garamond', serif" }}>
+                      <strong style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410' }}>
                         {defWeight > 0
                           ? `${defLabel}: ${defWeight.toFixed(2)}g × $${perG} = $${Math.round(defCasting)}`
                           : '—'}
-                      </span>
+                      </strong>
                     </div>
                   </div>
                 );
@@ -1116,22 +1116,22 @@ export default function ProductEditor({
                           borderBottom: idx < metalsToShow.length - 1 ? '1px solid var(--border)' : 'none',
                           alignItems: 'center',
                           fontFamily: "'Cormorant Garamond', serif",
-                          fontSize: 13,
+                          fontSize: 15,
                           background: isDefault ? '#fffaf8' : 'transparent',
                         }}>
                           <span style={{ color: '#1a1410', fontWeight: isDefault ? 600 : 400 }}>
                             {label}{isDefault ? ' ★' : ''}
                           </span>
-                          <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
+                          <span style={{ color: '#7a6860', fontSize: 14, textAlign: 'right' }}>
                             {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}{pricingMetal !== metal ? ' *' : ''}
                           </span>
-                          <span style={{ color: '#7a6860', fontSize: 12, textAlign: 'right' }}>
+                          <span style={{ color: '#7a6860', fontSize: 14, textAlign: 'right' }}>
                             {livePrices ? `$${Math.round(materialCost).toLocaleString()} + $${Math.round(castingLabor).toLocaleString()}` : '—'}
                           </span>
-                          <span style={{ color: '#1a1410', fontSize: 13, textAlign: 'right', fontWeight: 500 }}>
+                          <span style={{ color: '#1a1410', fontSize: 15, textAlign: 'right', fontWeight: 500 }}>
                             {livePrices ? `$${costTotal.toLocaleString('en-US')}` : '—'}
                           </span>
-                          <strong style={{ color: livePrices ? '#AC3438' : '#bbb', fontSize: 14, textAlign: 'right' }}>
+                          <strong style={{ color: livePrices ? '#AC3438' : '#bbb', fontSize: 16, textAlign: 'right' }}>
                             {livePrices ? `$${websitePrice.toLocaleString('en-US')}` : '—'}
                           </strong>
                         </div>
