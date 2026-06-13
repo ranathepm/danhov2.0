@@ -126,14 +126,18 @@ function metalKeyFromLabel(label: string): string | null {
 }
 
 /**
- * Base-design key for a SKU — strips the trailing metal token so every
- * metal variant of one design collapses to a single key. danhov sells each
- * metal as its own product page (…-14w, …-14y, …-18k-rose, …-pt), but the
- * listing should show each *design* once (client request). Mirrors the
- * token grammar in scripts/crawl/07-link-metal-variants.mjs.
+ * Base-design key for a product — groups all metal variants of the same design
+ * so the listing shows each design once. Uses the stripped product name as the
+ * primary key (more robust than SKU regex, catches any SKU naming convention).
+ * Includes collection + primary category so same-named designs in different
+ * categories (e.g. an engagement ring vs a wedding band with the same name)
+ * are NOT merged.
  */
-function baseDesignKey(sku: string): string {
-  const s = String(sku).toLowerCase();
+function baseDesignKey(p: Product): string {
+  const namePart = stripMetalSuffix(p.name).toLowerCase().trim();
+  if (namePart) return `${namePart}||${(p.collection ?? '').toLowerCase()}||${p.category}`;
+  // Fallback: SKU-based stripping for products without descriptive names
+  const s = String(p.sku).toLowerCase();
   return s
     .replace(/-(14|18)k-(white|yellow|rose)$/, '')
     .replace(/-(14|18)k[wyr]$/, '')
@@ -185,32 +189,44 @@ export default function ListingPage({
       return true;
     });
 
-    // ── Collapse metal variants → one card per design (client request) ──
-    // Group by base-design key and keep a single representative per group.
-    // Preference order for the representative:
-    //   1. when a metal filter is active, a variant in that metal
-    //   2. a platinum variant (the new default metal)
-    //   3. the variant that actually has photos
-    //   4. first seen
-    const groups = new Map<string, Product>();
+    // ── Collapse metal variants → one card per design ──
+    // Group all variants by base design key, pick the best representative,
+    // then MERGE the other variants' metal_images and metals into it so the
+    // card shows swatches and cycling images for every available colour.
+    const groups = new Map<string, Product[]>();
     for (const p of result) {
-      const key = baseDesignKey(p.sku);
-      const existing = groups.get(key);
-      if (!existing) {
-        groups.set(key, p);
-        continue;
-      }
-      const score = (x: Product): number => {
-        let s = 0;
-        const dm = (x.default_metal ?? '').toLowerCase();
-        if (metalFilter !== 'all' && dm.includes(metalFilter)) s += 8;
-        if (dm.includes('platinum')) s += 4;
-        if ((x.images?.length ?? 0) > 0) s += 2;
-        return s;
-      };
-      if (score(p) > score(existing)) groups.set(key, p);
+      const key = baseDesignKey(p);
+      const arr = groups.get(key) ?? [];
+      arr.push(p);
+      groups.set(key, arr);
     }
-    const deduped = Array.from(groups.values());
+
+    const scoreVariant = (x: Product): number => {
+      let s = 0;
+      const dm = (x.default_metal ?? '').toLowerCase();
+      if (metalFilter !== 'all' && dm.includes(metalFilter)) s += 8;
+      if (dm.includes('platinum')) s += 4;
+      if ((x.images?.length ?? 0) > 0) s += 2;
+      return s;
+    };
+
+    const deduped = Array.from(groups.values()).map((variants) => {
+      variants.sort((a, b) => scoreVariant(b) - scoreVariant(a));
+      const best: Product = { ...variants[0] };
+      if (variants.length > 1) {
+        const mergedMetalImages: Record<string, string[]> = { ...(best.metal_images ?? {}) };
+        const mergedMetals = new Set(best.metals ?? []);
+        for (const v of variants.slice(1)) {
+          for (const [metal, imgs] of Object.entries(v.metal_images ?? {})) {
+            if (!mergedMetalImages[metal] && imgs.length > 0) mergedMetalImages[metal] = imgs;
+          }
+          for (const m of v.metals ?? []) mergedMetals.add(m);
+        }
+        best.metal_images = mergedMetalImages;
+        best.metals = Array.from(mergedMetals);
+      }
+      return best;
+    });
 
     // Sort
     if (sortKey === 'price_asc') {
@@ -218,8 +234,18 @@ export default function ListingPage({
     } else if (sortKey === 'price_desc') {
       deduped.sort((a, b) => parsePrice(b) - parsePrice(a));
     } else if (sortKey === 'newest') {
-      // SKU is roughly chronological — newer SKUs sort lower
       deduped.sort((a, b) => b.sku.localeCompare(a.sku));
+    } else {
+      // featured: engagement rings first, then fine, then wedding, then mens
+      // (relevant on collection pages like Abbraccio that mix rings + bands)
+      const categoryPriority = (p: Product) =>
+        p.category === 'engagement' ? 0 :
+        p.category === 'fine'       ? 1 :
+        p.category === 'wedding'    ? 2 : 3;
+      deduped.sort((a, b) => {
+        const diff = categoryPriority(a) - categoryPriority(b);
+        return diff !== 0 ? diff : a.sku.localeCompare(b.sku);
+      });
     }
     return deduped;
   }, [products, collectionFilter, metalFilter, sortKey, collections, category, showMetalFilter]);
@@ -227,7 +253,7 @@ export default function ListingPage({
   // Total distinct designs (collapsed across metal variants), independent
   // of the active filters — drives the "X handcrafted styles" hero count.
   const totalCount = useMemo(
-    () => new Set(products.map((p) => baseDesignKey(p.sku))).size,
+    () => new Set(products.map((p) => baseDesignKey(p))).size,
     [products],
   );
   const visibleCount = filtered.length;

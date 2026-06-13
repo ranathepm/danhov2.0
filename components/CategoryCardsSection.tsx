@@ -281,23 +281,30 @@ async function fetchCategoryData(category: string): Promise<CategoryData> {
   }
 }
 
-// Extract up to `max` preview images from a category dataset
-function extractPreviewImages(data: CategoryData, max = 4): string[] {
+// Extract up to `max` preview images from a category dataset.
+// Uses round-robin across collections (1 image per collection per pass) so the
+// preview isn't monopolised by a single collection. `exclude` prevents the same
+// primary image appearing on more than one category card (wedding vs men's).
+function extractPreviewImages(data: CategoryData, exclude: string[] = [], max = 4): string[] {
   const imgs: string[] = [];
-  for (const col of data.collections) {
-    for (const img of col.images) {
-      if (imgs.length >= max) return imgs;
-      if (!imgs.includes(img)) imgs.push(img);
-    }
-  }
-  if (imgs.length < max) {
-    for (const prod of data.products) {
-      const img = (prod.images ?? [])[0];
-      if (img && !imgs.includes(img)) {
+  let round = 0;
+  while (imgs.length < max) {
+    let added = false;
+    for (const col of data.collections) {
+      const img = col.images[round];
+      if (img && !imgs.includes(img) && !exclude.includes(img)) {
         imgs.push(img);
+        added = true;
         if (imgs.length >= max) break;
       }
     }
+    if (!added) break;
+    round++;
+  }
+  for (const prod of data.products) {
+    if (imgs.length >= max) break;
+    const img = (prod.images ?? [])[0];
+    if (img && !imgs.includes(img) && !exclude.includes(img)) imgs.push(img);
   }
   return imgs;
 }
@@ -325,7 +332,13 @@ export default async function CategoryCardsSection() {
     isLifePath: col.isLifePath ?? false,
   }));
 
-  // The 3 category cards navigate directly to their own pages
+  // The 3 category cards navigate directly to their own pages.
+  // Build preview images sequentially, passing already-used primary images as
+  // exclusions so each card shows a distinctly different product photo.
+  const weddingImgs = extractPreviewImages(weddingData);
+  const fineImgs    = extractPreviewImages(fineData,   [weddingImgs[0]].filter(Boolean));
+  const mensImgs    = extractPreviewImages(mensData,   [weddingImgs[0], fineImgs[0]].filter(Boolean));
+
   const categoryCards: EngagementCard[] = [
     {
       label: 'Wedding Bands',
@@ -333,7 +346,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Unbroken Circle',
       body: 'Two people. One unbroken form. Handcrafted bands made with the same intention as the moment they mark.',
       href: '/wedding-bands',
-      images: extractPreviewImages(weddingData),
+      images: weddingImgs,
       linkLabel: 'Browse Wedding Bands',
       isLifePath: false,
     },
@@ -343,7 +356,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Daily Beautiful',
       body: 'Designed to be worn every day. Small enough to forget. Beautiful enough to remember forever.',
       href: '/fine-jewelry',
-      images: extractPreviewImages(fineData),
+      images: fineImgs,
       linkLabel: 'Browse Fine Jewelry',
       isLifePath: false,
     },
@@ -353,7 +366,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Worn Statement',
       body: 'A ring that carries a name. A band that asks nothing — and says everything.',
       href: '/mens',
-      images: extractPreviewImages(mensData),
+      images: mensImgs,
       linkLabel: "Browse Men's Jewelry",
       isLifePath: false,
     },
