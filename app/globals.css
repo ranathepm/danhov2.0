@@ -7953,6 +7953,38 @@ aside {
   .findform-card-svg { width: 48px; height: 48px; }
 }
 
+/* Shape card — selected/navigating state */
+.findform-card--active {
+  transform: translateY(-6px) scale(0.96);
+  border-color: #AC3438;
+  box-shadow: 0 16px 32px rgba(42,26,20,0.1);
+  opacity: 0.75;
+  pointer-events: none;
+}
+.findform-card-svg {
+  position: relative;
+}
+.findform-card-spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.findform-card-spinner::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(172,52,56,0.25);
+  border-top-color: #AC3438;
+  border-radius: 50%;
+  animation: ff-spin 0.7s linear infinite;
+}
+@keyframes ff-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ============================================================
    CATEGORY CARDS SECTION
    ============================================================ */

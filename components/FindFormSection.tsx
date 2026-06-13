@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 
 const SHAPES = [
@@ -106,6 +109,8 @@ const SHAPES = [
 ];
 
 export default function FindFormSection() {
+  const [active, setActive] = useState<string | null>(null);
+
   return (
     <section className="findform-section">
       <div className="findform-section-inner">
@@ -129,13 +134,17 @@ export default function FindFormSection() {
             <Link
               key={s.name}
               href={`/ring-builder/diamond?shape=${s.value}`}
-              className="findform-card"
+              className={`findform-card${active === s.value ? ' findform-card--active' : ''}`}
               aria-label={`Browse ${s.name} cut diamonds`}
+              onClick={() => setActive(s.value)}
             >
               <div className="findform-card-svg">
                 <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
                   {s.svg}
                 </svg>
+                {active === s.value && (
+                  <span className="findform-card-spinner" aria-hidden="true" />
+                )}
               </div>
               <span className="findform-card-name">{s.name}</span>
               <p className="findform-card-meaning">{s.meaning}</p>
