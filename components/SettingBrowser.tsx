@@ -84,7 +84,7 @@ type ProductGroup = {
   minPrice: number | null;
 };
 
-function buildGroups(products: Product[]): ProductGroup[] {
+function buildGroups(products: Product[], priceMap?: Record<string, number>): ProductGroup[] {
   const map = new Map<string, Product[]>();
   for (const p of products) {
     const key = baseSkuKey(p.sku);
@@ -123,7 +123,8 @@ function buildGroups(products: Product[]): ProductGroup[] {
 
     let minPrice: number | null = null;
     for (const v of variants) {
-      const p = parsePrice(v.price_display);
+      const computed = priceMap?.[v.sku] ?? null;
+      const p = computed !== null ? computed : parsePrice(v.price_display);
       if (p !== null && (minPrice === null || p < minPrice)) minPrice = p;
     }
 
@@ -297,13 +298,14 @@ function CollectionStyleIcon({ collection }: { collection: string }) {
 
 interface Props {
   products: Product[];
+  priceMap?: Record<string, number>;
   diamondId?: string;
   diamondsParam?: string | null;
 }
 
 // ─── Main component ────────────────────────────────────────────────────────
 
-export default function SettingBrowser({ products, diamondId, diamondsParam }: Props) {
+export default function SettingBrowser({ products, priceMap, diamondId, diamondsParam }: Props) {
   const allCollections = useMemo(() => {
     const seen = new Set<string>();
     const out: string[] = [];
@@ -334,7 +336,7 @@ export default function SettingBrowser({ products, diamondId, diamondsParam }: P
   }, [products]);
 
   // Group products by base SKU — one card per unique setting
-  const groups = useMemo(() => buildGroups(products), [products]);
+  const groups = useMemo(() => buildGroups(products, priceMap), [products, priceMap]);
 
   const { globalMin, globalMax } = useMemo(() => {
     let min = Infinity;

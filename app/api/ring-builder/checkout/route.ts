@@ -18,6 +18,7 @@ import { getStripe, DEPOSIT_PERCENT } from '@/lib/stripe';
 import { priceProduct } from '@/lib/pricing';
 import { fetchProductWithPricingBySlug } from '@/lib/products';
 import { refreshDiamond } from '@/lib/nivoda-cache';
+import { stripMetalSuffix } from '@/lib/product-display';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -351,7 +352,13 @@ export async function POST(req: NextRequest) {
     nivoda_offer_id: firstDiamond?.offer_id ?? null,
     nivoda_hold_id: firstDiamond?.hold_id ?? null,
     product_sku: metalSku ?? null,
-    product_name: setting?.name ?? null,
+    product_name: setting
+      ? (() => {
+          const base = stripMetalSuffix(setting.name);
+          const ml = formatMetal(chosenMetal);
+          return ml ? `${base} in ${ml}` : base;
+        })()
+      : null,
     custom_overrides: {
       ring_size: ringSize ?? null,
       ring_sizes: body.ring_sizes ?? null,

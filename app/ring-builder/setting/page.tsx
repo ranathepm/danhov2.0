@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
-import { fetchProductsByCategory } from '@/lib/products';
+import { fetchProductsWithPricingByCategory } from '@/lib/products';
+import { computeListingPriceMap } from '@/lib/pricing';
 import BuilderStepper from '@/components/BuilderStepper';
 import SettingBrowser from '@/components/SettingBrowser';
 import '../builder.css';
@@ -18,7 +19,8 @@ interface PageProps {
 }
 
 export default async function SelectRingPage({ searchParams }: PageProps) {
-  const products = await fetchProductsByCategory('engagement');
+  const products = await fetchProductsWithPricingByCategory('engagement');
+  const priceMap = await computeListingPriceMap(products);
   // Prefer multi-diamond param; fall back to single
   const diamondsParam = searchParams.diamonds || null;
   const diamondId = diamondsParam
@@ -39,7 +41,7 @@ export default async function SelectRingPage({ searchParams }: PageProps) {
         </p>
       </section>
 
-      <SettingBrowser products={products} diamondId={diamondId} diamondsParam={diamondsParam} />
+      <SettingBrowser products={products} priceMap={priceMap} diamondId={diamondId} diamondsParam={diamondsParam} />
 
       <div className="builder-advisor-strip">
         <span className="builder-advisor-text">Not sure which setting is right?</span>

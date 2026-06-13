@@ -60,7 +60,16 @@ export default function SettingDetailClient({
   diamondsParam,
 }: Props) {
   const router = useRouter();
-  const productMetals = product.metals ?? [];
+  // Platinum first, then 18k, then 14k, preserve sub-order within groups
+  const productMetals = [...(product.metals ?? [])].sort((a, b) => {
+    const score = (m: string) => {
+      const l = m.toLowerCase();
+      if (l.includes('plat')) return 0;
+      if (l.includes('18k') || l.includes('18 k')) return 1;
+      return 2;
+    };
+    return score(a) - score(b);
+  });
   const [showMoreMetals, setShowMoreMetals] = useState(false);
   const [descOpen, setDescOpen] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -120,10 +129,8 @@ export default function SettingDetailClient({
       {/* Name + share */}
       <div className="sd-name-row">
         <div>
-          <h1 className="sd-name">
-            {stripMetalSuffix(product.name)}
-            {displaySku && <span className="sd-sku"> ({displaySku})</span>}
-          </h1>
+          <h1 className="sd-name">{stripMetalSuffix(product.name)}</h1>
+          {displaySku && <p className="sd-sku">Style {displaySku}</p>}
           {product.collection && (
             <div className="sd-style-row">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">

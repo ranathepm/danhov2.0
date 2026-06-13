@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { stripMetalSuffix } from '@/lib/product-display';
 
 type Result = {
   sku: string;
@@ -12,6 +11,7 @@ type Result = {
   category: string;
   image: string | null;
   price_display: string | null;
+  price_computed: string | null;
 };
 
 type QuickLink = { href: string; label: string };
@@ -171,13 +171,13 @@ export default function SearchOverlay({
                           )}
                         </div>
                         <div className="search-result-meta">
-                          <div className="search-result-name">{stripMetalSuffix(r.name)}</div>
+                          <div className="search-result-name">{r.name}</div>
                           <div className="search-result-sub">
                             {r.collection ?? r.category} · Style {r.sku}
                           </div>
                         </div>
-                        {r.price_display && (
-                          <div className="search-result-price">{r.price_display}</div>
+                        {(r.price_computed ?? r.price_display) && (
+                          <div className="search-result-price">{r.price_computed ?? r.price_display}</div>
                         )}
                       </Link>
                     </li>

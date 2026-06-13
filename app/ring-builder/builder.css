@@ -429,7 +429,11 @@
   font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700;
   color: #1a1410; margin: 0 0 6px; line-height: 1.25;
 }
-.sd-sku { font-weight: 400; font-size: 18px; color: #6b5e57; }
+.sd-sku {
+  font-family: 'Jost', sans-serif; font-weight: 400; font-size: 12px;
+  color: #9c8a7a; letter-spacing: 0.04em; text-transform: uppercase;
+  margin: 0 0 10px; display: block;
+}
 .sd-style-row {
   display: flex; align-items: center; gap: 6px;
   font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;

@@ -127,23 +127,22 @@ function metalKeyFromLabel(label: string): string | null {
 
 /**
  * Base-design key for a product — groups all metal variants of the same design
- * so the listing shows each design once. Uses the stripped product name as the
- * primary key (more robust than SKU regex, catches any SKU naming convention).
- * Includes collection + primary category so same-named designs in different
- * categories (e.g. an engagement ring vs a wedding band with the same name)
- * are NOT merged.
+ * so the listing shows each design once.
+ *
+ * Primary: SKU-based, stripping the metal suffix (PL, 14Y, 14W, etc.).
+ * Variants always share the same base SKU regardless of how names are worded.
+ * Fallback: name-based for products whose SKU has no recognized metal suffix.
  */
 function baseDesignKey(p: Product): string {
+  const sku = String(p.sku ?? '');
+  if (/-(?:PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i.test(sku)) {
+    const base = sku.replace(/-(?:PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '').toLowerCase();
+    return `sku:${base}||${p.category}`;
+  }
+  // Fallback for products without a recognized SKU metal suffix
   const namePart = stripMetalSuffix(p.name).toLowerCase().trim();
-  if (namePart) return `${namePart}||${(p.collection ?? '').toLowerCase()}||${p.category}`;
-  // Fallback: SKU-based stripping for products without descriptive names
-  const s = String(p.sku).toLowerCase();
-  return s
-    .replace(/-(14|18)k-(white|yellow|rose)$/, '')
-    .replace(/-(14|18)k[wyr]$/, '')
-    .replace(/-(14|18)[wyr]$/, '')
-    .replace(/-(platinum|plat|pt|pl)$/, '')
-    .replace(/-(white|yellow|rose)-gold$/, '');
+  if (namePart) return `name:${namePart}||${(p.collection ?? '').toLowerCase()}||${p.category}`;
+  return `sku:${sku.toLowerCase()}||${p.category}`;
 }
 
 type SortKey = 'featured' | 'price_asc' | 'price_desc' | 'newest';
