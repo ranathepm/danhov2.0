@@ -316,6 +316,18 @@ export function availableMetals(metals: string[]): string[] {
 }
 
 /**
+ * Normalize a metal key to its pricing equivalent.
+ * DANHOV's pricing policy: color is not a cost factor within a karat tier.
+ * All 14k variants price identically to 14k yellow; all 18k to 18k yellow.
+ * Rhodium plating is absorbed into overhead, not charged per-piece.
+ */
+function pricingNormalKey(metal: string): string {
+  if (metal.startsWith('14k')) return '14k_yellow';
+  if (metal.startsWith('18k')) return '18k_yellow';
+  return metal;
+}
+
+/**
  * Pure compute — no DB or network.
  * Pass spots from getAllSpots().
  */
@@ -331,18 +343,22 @@ export function computePrice(
       ? p.default_metal
       : '14k_yellow';
 
+  // Use yellow-normalized key for density + cost calculations so all colors
+  // within the same karat tier produce identical prices (matches admin table).
+  const priceKey = pricingNormalKey(metalKey);
+
   const platWeight     = p.gold_weight_g ?? 0;
-  const metalWeight    = metalWeightFromPlat(platWeight, metalKey);
+  const metalWeight    = metalWeightFromPlat(platWeight, priceKey);
   const iridiumPerGram = spots.iridium.price_per_gram_usd;
   const costPerG       = metalCostPerGram(
-    metalKey,
+    priceKey,
     spots.gold.price_per_gram_usd,
     spots.platinum.price_per_gram_usd,
     iridiumPerGram,
   );
   const metalCost    = metalWeight * costPerG;
   const castingLabor = metalWeight * (p.casting_labor_per_gram ?? 0);
-  const rhodium      = RHODIUM_UPLIFT[metalKey] ?? 0;
+  const rhodium      = 0; // color is not a cost factor — matches admin pricing policy
   const labor        = (p.base_labor_usd ?? 0) + (p.diamond_labor_usd ?? 0);
 
   // Stone cost: use override if set, else auto-compute from stone_groups
@@ -367,7 +383,7 @@ export function computePrice(
   const costRounded = roundTo10(subTotal);
   const total       = costRounded * markup;
 
-  const isPlatinum = metalKey === 'platinum';
+  const isPlatinum = priceKey === 'platinum';
 
   return {
     total_usd:             roundTo10(total),
