@@ -427,7 +427,7 @@ export function formatUsd(n: number): string {
  * Returns a map of { sku → total_usd }. Products without pricing data are absent.
  */
 export async function computeListingPriceMap(
-  products: Array<PricingInputs & { sku: string }>,
+  products: Array<PricingInputs & { sku: string; metals?: string[] | null }>,
 ): Promise<Record<string, number>> {
   const priceable = products.filter(
     p => (p.gold_weight_g ?? 0) > 0 || (p.stones_value_usd ?? 0) > 0,
@@ -438,7 +438,10 @@ export async function computeListingPriceMap(
     const result: Record<string, number> = {};
     for (const p of priceable) {
       try {
-        result[p.sku] = computePrice(p, spots, p.default_metal).total_usd;
+        // Prefer platinum for consistent pricing; fall back to default_metal
+        const platMetal = p.metals?.find(m => /plat/i.test(m)) ?? null;
+        const effectiveMetal = platMetal ?? p.default_metal;
+        result[p.sku] = computePrice(p, spots, effectiveMetal).total_usd;
       } catch {
         // skip products that fail individual computation
       }

@@ -50,6 +50,28 @@ function formatMetal(raw: string | null | undefined): string {
   return raw.replace(/_/g, ' ');
 }
 
+/** Strip trailing metal suffix from a SKU (e.g. -14y, -PL, -18w). */
+function stripSkuSuffix(sku: string): string {
+  return sku.replace(/-?(PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '');
+}
+
+/** Map a metal string (e.g. "platinum", "14k_yellow") → SKU suffix (e.g. "PL", "14Y"). */
+function metalToSuffix(metal: string | null | undefined): string {
+  if (!metal) return 'PL';
+  const m = metal.toLowerCase();
+  if (m.includes('plat')) return 'PL';
+  const k = m.match(/(\d+)\s*k/);
+  const karat = k ? k[1] : '14';
+  if (m.includes('rose') || m.includes('pink')) return `${karat}R`;
+  if (m.includes('white')) return `${karat}W`;
+  return `${karat}Y`;
+}
+
+/** Compute the SKU for a given metal choice (e.g. "SE500UQ-14y" + "platinum" → "SE500UQ-PL"). */
+function skuForMetal(rawSku: string, metal: string | null | undefined): string {
+  return `${stripSkuSuffix(rawSku)}-${metalToSuffix(metal)}`;
+}
+
 export async function POST(req: NextRequest) {
   if (!process.env.STRIPE_SECRET_KEY) {
     return NextResponse.json(
@@ -313,6 +335,10 @@ export async function POST(req: NextRequest) {
     quantity: d.quantity,
   }));
 
+  // Compute the SKU that reflects the actual metal chosen (e.g. SE500UQ-PL not SE500UQ-14y)
+  const chosenMetal = body.metal ?? setting?.default_metal;
+  const metalSku = setting ? skuForMetal(setting.sku, chosenMetal) : null;
+
   await client.from('orders').insert({
     customer_email: customerEmail,
     stripe_checkout_session_id: session.id,
@@ -322,7 +348,7 @@ export async function POST(req: NextRequest) {
     currency: 'usd',
     nivoda_offer_id: firstDiamond?.offer_id ?? null,
     nivoda_hold_id: firstDiamond?.hold_id ?? null,
-    product_sku: setting?.sku ?? null,
+    product_sku: metalSku ?? null,
     product_name: setting?.name ?? null,
     custom_overrides: {
       ring_size: ringSize ?? null,
@@ -345,10 +371,10 @@ export async function POST(req: NextRequest) {
         ring_size: ringSize ?? null,
         setting: setting
           ? {
-              sku: setting.sku,
+              sku: metalSku ?? setting.sku,
               slug: setting.slug,
               name: setting.name,
-              metal: body.metal ?? setting.default_metal,
+              metal: chosenMetal,
               price_usd: settingPrice,
               quantity: settingQty,
               breakdown: settingBreakdown,

@@ -8,6 +8,21 @@ import { DIAMOND_SHAPES, type StoneGroup } from '@/lib/stone-math';
 import DiamondShapeIcon from '@/components/admin/DiamondShapeIcon';
 import { stripMetalSuffix } from '@/lib/product-display';
 
+function skuForMetal(rawSku: string, metal: string | null | undefined): string {
+  const base = rawSku.replace(/-?(PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '');
+  const m = (metal ?? '').toLowerCase();
+  let suffix = 'PL';
+  if (m.includes('plat')) suffix = 'PL';
+  else {
+    const k = m.match(/(\d+)\s*k/);
+    const karat = k ? k[1] : '14';
+    if (m.includes('rose') || m.includes('pink')) suffix = `${karat}R`;
+    else if (m.includes('white')) suffix = `${karat}W`;
+    else if (m.includes('yellow') || m.includes('gold')) suffix = `${karat}Y`;
+  }
+  return base === rawSku ? rawSku : `${base}-${suffix}`;
+}
+
 // Map a diamond-shape slug → its human label for the order readout.
 const SHAPE_LABEL: Record<string, string> = Object.fromEntries(
   DIAMOND_SHAPES.map((s) => [s.slug, s.label]),
@@ -337,7 +352,7 @@ export default function OrderDetail({
           {/* Commission bundle — read-only detail card, shown for ring-builder orders */}
           {bundle?.flow === 'ring_builder' && (
             <section className="adm-card adm-commission-bundle">
-              <h3 className="adm-h3">Commission Details</h3>
+              <h3 className="adm-h3">Order Details</h3>
               {modeLabel && (
                 <div className="adm-commission-type">
                   <span className="adm-field-label">Order type</span>
@@ -375,7 +390,7 @@ export default function OrderDetail({
                         <tr><td>Name</td><td><strong>{stripMetalSuffix(bundle.setting.name)}</strong></td></tr>
                       )}
                       {bundle.setting.sku && (
-                        <tr><td>SKU</td><td><span className="adm-mono">{bundle.setting.sku}</span></td></tr>
+                        <tr><td>SKU</td><td><span className="adm-mono">{skuForMetal(bundle.setting.sku, bundle.setting.metal)}</span></td></tr>
                       )}
                       {bundle.setting.metal && (
                         <tr><td>Metal</td><td><strong>{formatMetal(bundle.setting.metal)}</strong></td></tr>

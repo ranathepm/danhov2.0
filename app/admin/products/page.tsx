@@ -5,6 +5,12 @@ import { createServiceClient } from '@/lib/supabase/server';
 import { stripMetalSuffix } from '@/lib/product-display';
 import { computeListingPriceMap } from '@/lib/pricing';
 
+/** Strip metal suffix and re-attach -PL to show the platinum-default SKU. */
+function toPlSku(sku: string): string {
+  const base = sku.replace(/-?(PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '');
+  return base === sku ? sku : `${base}-PL`;
+}
+
 export const dynamic = 'force-dynamic';
 
 type Search = { q?: string; category?: string; only?: string };
@@ -156,7 +162,7 @@ export default async function AdminProductsPage({
                       <span className="adm-thumb-empty">—</span>
                     )}
                   </td>
-                  <td className="adm-mono">{p.sku}</td>
+                  <td className="adm-mono">{toPlSku(p.sku)}</td>
                   <td className="adm-cell-name">{stripMetalSuffix(p.name)}</td>
                   <td>{p.collection || '—'}</td>
                   <td className="adm-cap">{p.category}</td>
