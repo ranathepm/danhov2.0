@@ -262,7 +262,9 @@ export async function POST(req: NextRequest) {
   }
 
   const stripe = getStripe();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://danhov-web.vercel.app';
+  const host    = req.headers.get('host') ?? '';
+  const proto   = req.headers.get('x-forwarded-proto') || (host.startsWith('localhost') ? 'http' : 'https');
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${proto}://${host}`;
 
   const cancelParams = new URLSearchParams();
   if (body.setting_slug) cancelParams.set('setting', body.setting_slug);

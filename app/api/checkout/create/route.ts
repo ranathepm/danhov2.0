@@ -85,7 +85,9 @@ export async function POST(req: NextRequest) {
   const balanceUsd = totalUsd - depositUsd;
 
   const stripe = getStripe();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://danhov-web.vercel.app';
+  const host    = req.headers.get('host') ?? '';
+  const proto   = req.headers.get('x-forwarded-proto') || (host.startsWith('localhost') ? 'http' : 'https');
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || `${proto}://${host}`;
 
   // 2) Create Stripe Checkout session
   const session = await stripe.checkout.sessions.create({
