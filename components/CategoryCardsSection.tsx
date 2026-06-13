@@ -308,10 +308,9 @@ function extractPreviewImages(data: CategoryData, exclude: string[] = [], max = 
 
 /**
  * For the Wedding / Fine / Men's category cards on the homepage.
- * Finds the single product in the category with the most metal_images entries
- * (most colour variants photographed) and returns ONE image per metal colour.
- * On hover the card cycles through the same ring in different metals — exactly
- * like the engagement collection cards do with their pinned SKU images.
+ * Per-product: merges metal_images (one per colour) + regular images into a
+ * combined pool, then picks the product with the largest combined pool.
+ * This guarantees cycling even when metal_images is absent or sparse.
  */
 async function fetchCategoryPreviewImages(category: string, exclude: string[] = []): Promise<string[]> {
   try {
@@ -321,11 +320,13 @@ async function fetchCategoryPreviewImages(category: string, exclude: string[] = 
       .filter('categories', 'cs', JSON.stringify([category]))
       .eq('is_active', true);
 
+    if (!data || data.length === 0) return [];
+
     let bestImages: string[] = [];
 
-    for (const p of data ?? []) {
+    for (const p of data) {
+      // Metal variant images: one per colour, sorted platinum→white→yellow→rose
       const metalImgs = (p.metal_images as Record<string, string[]> | null) ?? {};
-      // Sort metal keys: platinum → white → yellow → rose (consistent order)
       const metalKeys = Object.keys(metalImgs)
         .filter(k => (metalImgs[k]?.length ?? 0) > 0)
         .sort((a, b) => {
@@ -333,23 +334,20 @@ async function fetchCategoryPreviewImages(category: string, exclude: string[] = 
             k.includes('plat') ? 0 : k.includes('white') ? 1 : k.includes('yellow') ? 2 : 3;
           return pri(a) - pri(b);
         });
-
-      // One image per metal variant of THIS product (same ring, different colours)
       const variantImages = metalKeys
         .map(k => metalImgs[k][0])
         .filter((img): img is string => !!img && !exclude.includes(img));
 
-      if (variantImages.length > bestImages.length) {
-        bestImages = variantImages;
-      }
-    }
+      // Regular product images (used to supplement or replace when metal_images is sparse)
+      const regularImages = ((p.images as string[]) ?? []).filter(img => !exclude.includes(img));
 
-    // Fallback: use regular product images if no metal_images present
-    if (bestImages.length === 0) {
-      for (const p of data ?? []) {
-        const imgs = ((p.images as string[]) ?? []).filter(img => !exclude.includes(img));
-        if (imgs.length > bestImages.length) bestImages = imgs.slice(0, 4);
+      // Merge: metal variants first, then fill from regular images (no duplicates, cap at 4)
+      const combined = [...variantImages];
+      for (const img of regularImages) {
+        if (!combined.includes(img) && combined.length < 4) combined.push(img);
       }
+
+      if (combined.length > bestImages.length) bestImages = combined;
     }
 
     return bestImages.slice(0, 6);
