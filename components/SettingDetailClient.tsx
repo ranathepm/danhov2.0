@@ -17,6 +17,7 @@ interface ProductInfo {
 
 interface Props {
   product: ProductInfo;
+  pricemap?: Record<string, number>;
   metal: string;
   onMetalChange: (m: string) => void;
   diamondId?: string;
@@ -54,6 +55,7 @@ function metalKarat(raw: string): string {
 
 export default function SettingDetailClient({
   product,
+  pricemap = {},
   metal,
   onMetalChange,
   diamondId,
@@ -112,9 +114,11 @@ export default function SettingDetailClient({
     }
   }
 
-  const price = product.price_display;
-  const priceFormatted = price
-    ? '$' + (price.replace(/[^0-9]/g, '') || '').replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' USD'
+  const livePrice = metal ? pricemap[metal] : undefined;
+  const priceFormatted = livePrice
+    ? '$' + Math.round(livePrice).toLocaleString('en-US') + ' USD'
+    : product.price_display
+    ? '$' + (product.price_display.replace(/[^0-9]/g, '') || '').replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' USD'
     : null;
 
   // Metal display name

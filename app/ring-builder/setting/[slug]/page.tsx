@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { fetchProductBySlug, fetchProductsByCategory } from '@/lib/products';
+import { fetchProductBySlug, fetchProductsByCategory, fetchProductWithPricingBySlug } from '@/lib/products';
+import { priceAllOptions, computePrice, STATIC_SPOTS, ALL_METALS } from '@/lib/pricing';
 import BuilderStepper from '@/components/BuilderStepper';
 import SettingDetailLayout from '@/components/SettingDetailLayout';
 import '../../builder.css';
@@ -27,8 +28,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function SettingDetailPage({ params, searchParams }: Props) {
-  const product = await fetchProductBySlug(params.slug);
+  const product = await fetchProductWithPricingBySlug(params.slug);
   if (!product) notFound();
+
+  // Compute live per-metal prices
+  let pricemap: Record<string, number> = {};
+  if ((product.gold_weight_g ?? 0) > 0) {
+    try {
+      const breakdowns = await priceAllOptions(product, [...ALL_METALS]);
+      for (const b of breakdowns) {
+        if (b.total_usd > 0 && b.metal_cost_usd > 0) pricemap[b.metal_used] = b.total_usd;
+      }
+    } catch {
+      for (const k of ALL_METALS) {
+        const b = computePrice(product, STATIC_SPOTS, k);
+        if (b.total_usd > 0) pricemap[b.metal_used] = b.total_usd;
+      }
+    }
+  }
 
   const metals = product.metals ?? [];
   const preferPlatinum = (ms: string[]): string | null =>
@@ -64,6 +81,7 @@ export default async function SettingDetailPage({ params, searchParams }: Props)
           metals,
           price_display: product.price_display,
         }}
+        pricemap={pricemap}
         defaultMetal={defaultMetal}
         images={product.images ?? []}
         metalImages={(product.metal_images as Record<string, string[]>) ?? {}}

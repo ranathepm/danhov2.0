@@ -15,6 +15,7 @@ interface ProductInfo {
 
 interface Props {
   product: ProductInfo;
+  pricemap?: Record<string, number>;
   defaultMetal: string | null;
   images: string[];
   metalImages: Record<string, string[]>;
@@ -22,7 +23,7 @@ interface Props {
   diamondsParam?: string | null;
 }
 
-export default function SettingDetailLayout({ product, defaultMetal, images, metalImages, diamondId, diamondsParam }: Props) {
+export default function SettingDetailLayout({ product, pricemap, defaultMetal, images, metalImages, diamondId, diamondsParam }: Props) {
   const [metal, setMetal] = useState(defaultMetal ?? product.metals?.[0] ?? '');
 
   // Use metal-specific images when available, fall back to default product images
@@ -36,6 +37,7 @@ export default function SettingDetailLayout({ product, defaultMetal, images, met
       <SettingGallery images={activeImages} name={product.name} />
       <SettingDetailClient
         product={product}
+        pricemap={pricemap}
         metal={metal}
         onMetalChange={setMetal}
         diamondId={diamondId}
