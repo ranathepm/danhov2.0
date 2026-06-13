@@ -129,20 +129,22 @@ function metalKeyFromLabel(label: string): string | null {
  * Base-design key for a product — groups all metal variants of the same design
  * so the listing shows each design once.
  *
- * Primary: SKU-based, stripping the metal suffix (PL, 14Y, 14W, etc.).
- * Variants always share the same base SKU regardless of how names are worded.
- * Fallback: name-based for products whose SKU has no recognized metal suffix.
+ * Strategy: stripped product name + category. We intentionally exclude collection
+ * from the key because the same design variant sometimes has a null or different
+ * collection value in the DB. Category is included so a "Diamond Solitaire" in
+ * engagement and one in wedding don't merge.
+ *
+ * Name stripping removes " in [metal]" suffixes. For products where the name
+ * carries no metal at all (e.g. "Norem de Danhov tension style engagement ring"),
+ * stripMetalSuffix is a no-op and the name itself is the key — so all DB rows
+ * sharing that exact name collapse to one card, exactly as the admin intended.
  */
 function baseDesignKey(p: Product): string {
-  const sku = String(p.sku ?? '');
-  if (/-(?:PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i.test(sku)) {
-    const base = sku.replace(/-(?:PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '').toLowerCase();
-    return `sku:${base}||${p.category}`;
-  }
-  // Fallback for products without a recognized SKU metal suffix
   const namePart = stripMetalSuffix(p.name).toLowerCase().trim();
-  if (namePart) return `name:${namePart}||${(p.collection ?? '').toLowerCase()}||${p.category}`;
-  return `sku:${sku.toLowerCase()}||${p.category}`;
+  if (namePart) return `${namePart}||${p.category}`;
+  // Absolute fallback: strip any trailing -[letters/digits] metal code from SKU
+  const sku = String(p.sku ?? '');
+  return sku.replace(/-\d*[a-zA-Z]+$/i, '').toLowerCase() + `||${p.category}`;
 }
 
 type SortKey = 'featured' | 'price_asc' | 'price_desc' | 'newest';
