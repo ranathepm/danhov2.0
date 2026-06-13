@@ -1300,6 +1300,49 @@ function fmtCt(ct: number): string {
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
+function CaratInput({
+  autoValue,
+  override,
+  onCommit,
+}: {
+  autoValue: number;
+  override: number | null;
+  onCommit: (v: number | null) => void;
+}) {
+  const externalDisplay = override != null && override > 0
+    ? fmtCt(override)
+    : (autoValue > 0 ? fmtCt(autoValue) : '');
+  const [draft, setDraft] = useState(externalDisplay);
+  const [focused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (!focused) setDraft(externalDisplay);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [externalDisplay]);
+
+  return (
+    <input
+      type="text"
+      inputMode="decimal"
+      className="adm-input"
+      style={{ width: 76, padding: '3px 8px', fontSize: 13 }}
+      value={draft}
+      placeholder={autoValue > 0 ? fmtCt(autoValue) : '0'}
+      onChange={(e) => setDraft(e.target.value)}
+      onFocus={(e) => { setFocused(true); e.target.select(); }}
+      onBlur={() => {
+        setFocused(false);
+        const raw = draft.trim();
+        const num = raw === '' ? null : Number(raw);
+        const v = num != null && !isNaN(num) && num > 0 ? num : null;
+        onCommit(v);
+        setDraft(v != null ? fmtCt(v) : (autoValue > 0 ? fmtCt(autoValue) : ''));
+      }}
+      onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }}
+    />
+  );
+}
+
 function StoneGroupReadout({
   group,
   onUpdate,
@@ -1328,18 +1371,10 @@ function StoneGroupReadout({
     return (
       <div className="adm-stone-readout adm-stone-readout--editable" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const, marginTop: 8 }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-          <input
-            type="number"
-            step="0.0001"
-            min="0"
-            className="adm-input"
-            style={{ width: 72, padding: '3px 6px', fontSize: 12 }}
-            value={hasOverride ? fmtCt(group.carat_each_override!) : (b.carat_per_stone > 0 ? fmtCt(b.carat_per_stone) : '')}
-            placeholder={b.carat_per_stone > 0 ? fmtCt(b.carat_per_stone) : '0'}
-            onChange={(e) => {
-              const v = e.target.value === '' ? null : Number(e.target.value);
-              onUpdate({ carat_each_override: v });
-            }}
+          <CaratInput
+            autoValue={b.carat_per_stone}
+            override={group.carat_each_override ?? null}
+            onCommit={(v) => onUpdate({ carat_each_override: v })}
           />
           <span style={{ fontSize: 12, color: '#7a6860', whiteSpace: 'nowrap' as const }}>ct each</span>
         </label>
