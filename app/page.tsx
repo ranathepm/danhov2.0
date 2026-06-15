@@ -53,7 +53,7 @@ export default async function HomePage() {
 
           <div className="origin-founder" id="heroFounder" style={{ opacity: 0 }}>
             <div className="origin-founder-line" />
-            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(11px,1.4vw,14px)', letterSpacing: '0.4em', textTransform: 'uppercase' }}>
+            <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(11px,1.4vw,14px)', letterSpacing: '0.4em', textTransform: 'uppercase', color: '#111111' }}>
               Jack Hovsepian — Founder, DANHOV — Est. 1984
             </span>
             <div className="origin-founder-line" />
