@@ -200,7 +200,7 @@ function LifePathDesign({ num, zodiacIndex, day }: { num: number; zodiacIndex: n
       ))}
       <circle cx={cx} cy={cy} r={centerR} fill="#AC3438" opacity="0.18" />
       <circle cx={cx} cy={cy} r={centerR} stroke="#AC3438" strokeWidth="1.5" fill="none" />
-      <text x={cx} y={cy + 6} textAnchor="middle" fontFamily="'Nunito Sans', sans-serif" fontSize="18" fill="#faf6f1" opacity="0.85">{num}</text>
+      <text x={cx} y={cy + 6} textAnchor="middle" fontFamily="'Cormorant Garamond', serif" fontSize="18" fill="#faf6f1" opacity="0.85">{num}</text>
     </svg>
   );
 }
@@ -227,7 +227,7 @@ function PieceRingSVG({ num }: { num: number }) {
           />
         );
       })}
-      <text x="60" y="60" textAnchor="middle" fontFamily="'Nunito Sans', sans-serif" fontSize="20" fill="#AC3438" fontStyle="italic">{num}</text>
+      <text x="60" y="60" textAnchor="middle" fontFamily="'Cormorant Garamond', serif" fontSize="20" fill="#AC3438" fontStyle="italic">{num}</text>
       <path d="M34 70 C32 96 32 118 36 132 Q42 144 60 144 Q78 144 84 132 C88 118 88 96 86 70" stroke="#AC3438" strokeWidth="1.2" />
       <path d="M43 72 C42 97 42 116 45 128 Q50 138 60 138 Q70 138 75 128 C78 116 78 97 77 72" stroke="#AC3438" strokeWidth="0.4" opacity="0.28" />
     </svg>
@@ -252,7 +252,7 @@ function PiecePendantSVG({ num }: { num: number }) {
           />
         );
       })}
-      <text x="60" y="106" textAnchor="middle" fontFamily="'Nunito Sans', sans-serif" fontSize="44" fill="#AC3438" fontStyle="italic">{num}</text>
+      <text x="60" y="106" textAnchor="middle" fontFamily="'Cormorant Garamond', serif" fontSize="44" fill="#AC3438" fontStyle="italic">{num}</text>
     </svg>
   );
 }
@@ -262,7 +262,7 @@ function PieceSignetSVG({ num }: { num: number }) {
     <svg viewBox="0 0 120 140" fill="none" aria-hidden="true">
       <ellipse cx="60" cy="48" rx="40" ry="28" stroke="#AC3438" strokeWidth="1.2" fill="rgba(172,52,56,0.04)" />
       <ellipse cx="60" cy="48" rx="32" ry="20" stroke="#AC3438" strokeWidth="0.5" fill="none" opacity="0.35" />
-      <text x="60" y="57" textAnchor="middle" fontFamily="'Nunito Sans', sans-serif" fontSize="28" fill="#AC3438" fontStyle="italic">{num}</text>
+      <text x="60" y="57" textAnchor="middle" fontFamily="'Cormorant Garamond', serif" fontSize="28" fill="#AC3438" fontStyle="italic">{num}</text>
       <path d="M20 64 C20 76 22 88 22 106" stroke="#AC3438" strokeWidth="1.2" fill="none" />
       <path d="M100 64 C100 76 98 88 98 106" stroke="#AC3438" strokeWidth="1.2" fill="none" />
       <ellipse cx="60" cy="106" rx="38" ry="9"  stroke="#AC3438" strokeWidth="1.2" fill="rgba(172,52,56,0.03)" />
@@ -277,7 +277,7 @@ function PieceBangleSVG({ num }: { num: number }) {
     <svg viewBox="0 0 120 150" fill="none" aria-hidden="true">
       <path d="M18 108 A44 44 0 1 1 102 108" stroke="#AC3438" strokeWidth="7" strokeLinecap="round" fill="none" />
       <path d="M28 103 A34 34 0 1 1 92 103" stroke="#AC3438" strokeWidth="0.6" strokeLinecap="round" fill="none" opacity="0.28" />
-      <text x="60" y="48" textAnchor="middle" fontFamily="'Nunito Sans', sans-serif" fontSize="22" fill="#AC3438" fontStyle="italic">{num}</text>
+      <text x="60" y="48" textAnchor="middle" fontFamily="'Cormorant Garamond', serif" fontSize="22" fill="#AC3438" fontStyle="italic">{num}</text>
       {dots.map(d => {
         const rad = (d - 90) * Math.PI / 180;
         return (
@@ -446,7 +446,7 @@ export default function LifePathClient() {
   return (
     <main className="lp-page">
       <style>{`
-        .lp-page { min-height: 100vh; font-family: 'Nunito Sans', sans-serif; }
+        .lp-page { min-height: 100vh; font-family: 'Cormorant Garamond', serif; }
 
         /* ── Landing ── */
         .lp-landing {
@@ -473,19 +473,19 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 24px;
         }
         .lp-landing-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(42px, 7vw, 72px); font-weight: 300;
           color: #1a1410; margin: 0 0 20px; line-height: 1.05; letter-spacing: 0.04em;
         }
         .lp-landing-divider { width: 40px; height: 1px; background: #AC3438; margin: 0 auto 20px; }
         .lp-landing-sub {
           font-size: 15px; color: #7a5c58; line-height: 1.7; margin: 0 0 44px;
-          font-style: italic; font-family: 'Nunito Sans', sans-serif;
+          font-style: italic; font-family: 'Cormorant Garamond', serif;
         }
         .lp-landing-btn {
           display: inline-block; padding: 16px 56px; background: #AC3438; color: #faf6f1;
           font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-          border: none; cursor: pointer; font-family: 'Nunito Sans', sans-serif;
+          border: none; cursor: pointer; font-family: 'Cormorant Garamond', serif;
           border-radius: 999px; transition: background 0.2s;
         }
         .lp-landing-btn:hover { background: #8f2b2e; }
@@ -501,7 +501,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-input-back:hover { color: #1a1410; }
         .lp-input-inner { max-width: 440px; width: 100%; }
@@ -510,7 +510,7 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 20px;
         }
         .lp-input-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(30px, 5vw, 46px); font-weight: 400;
           color: #1a1410; margin: 0 0 8px; line-height: 1.1;
         }
@@ -526,7 +526,7 @@ export default function LifePathClient() {
         }
         .lp-date-input {
           width: 100%; padding: 14px 12px; background: #fff; border: 1px solid #ede8e2;
-          font-size: 16px; font-family: 'Nunito Sans', sans-serif; color: #1a1410;
+          font-size: 16px; font-family: 'Cormorant Garamond', serif; color: #1a1410;
           text-align: center; outline: none; transition: border-color 0.2s; box-sizing: border-box;
         }
         .lp-date-input:focus { border-color: #AC3438; }
@@ -534,7 +534,7 @@ export default function LifePathClient() {
         .lp-email-row { display: flex; flex-direction: column; gap: 6px; text-align: left; margin-bottom: 4px; }
         .lp-email-input {
           width: 100%; padding: 14px 16px; background: #fff; border: 1px solid #ede8e2;
-          font-size: 14px; font-family: 'Nunito Sans', sans-serif; color: #1a1410;
+          font-size: 14px; font-family: 'Cormorant Garamond', serif; color: #1a1410;
           outline: none; transition: border-color 0.2s; box-sizing: border-box;
         }
         .lp-email-input:focus { border-color: #AC3438; }
@@ -543,7 +543,7 @@ export default function LifePathClient() {
         .lp-error { font-size: 12px; color: #AC3438; margin: 10px 0 0; min-height: 18px; text-align: left; }
         .lp-reveal-btn {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Nunito Sans', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
           border-radius: 999px; transition: background 0.2s;
         }
@@ -558,7 +558,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-results-back:hover { color: #1a1410; }
         .lp-results-inner {
@@ -577,7 +577,7 @@ export default function LifePathClient() {
         }
         .lp-design-svg-wrap svg { width: 100%; height: 100%; }
         .lp-design-story {
-          font-family: 'Nunito Sans', sans-serif; font-style: italic;
+          font-family: 'Cormorant Garamond', serif; font-style: italic;
           font-size: 15px; color: #6b5e57; line-height: 1.75;
           text-align: center; margin: 20px 0 10px;
         }
@@ -592,12 +592,12 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 12px;
         }
         .lp-number-big {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(72px, 12vw, 110px); color: #AC3438;
           line-height: 1; margin: 0; display: block;
         }
         .lp-number-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(24px, 4vw, 34px); font-weight: 400;
           color: #1a1410; margin: 8px 0 0;
         }
@@ -622,24 +622,24 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #9c8f86; margin-bottom: 4px;
         }
         .lp-zodiac-sign {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 22px; color: #1a1410; display: block; line-height: 1; margin-bottom: 4px;
         }
         .lp-zodiac-dates { font-size: 11px; color: #9c8f86; display: block; margin-bottom: 6px; }
-        .lp-zodiac-desc { font-size: 12px; color: #6b5e57; font-style: italic; font-family: 'Nunito Sans', sans-serif; }
+        .lp-zodiac-desc { font-size: 12px; color: #6b5e57; font-style: italic; font-family: 'Cormorant Garamond', serif; }
 
         /* CTAs */
         .lp-ctas { display: flex; flex-direction: column; gap: 12px; }
         .lp-cta-primary {
           display: block; width: 100%; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Nunito Sans', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-decoration: none; text-align: center;
           border: none; border-radius: 999px; transition: background 0.2s; cursor: pointer;
         }
         .lp-cta-primary:hover { background: #8f2b2e; }
         .lp-cta-secondary {
           display: block; width: 100%; padding: 15px; background: transparent; color: #1a1410;
-          font-family: 'Nunito Sans', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-align: center;
           border: 1px solid rgba(172,52,56,0.25); cursor: pointer;
           border-radius: 999px; transition: border-color 0.2s, color 0.2s;
@@ -657,7 +657,7 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 12px;
         }
         .lp-pieces-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(26px, 4vw, 38px); font-weight: 400;
           color: #1a1410; margin: 0 0 12px; line-height: 1.1;
         }
@@ -682,7 +682,7 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 6px;
         }
         .lp-piece-name {
-          font-family: 'Nunito Sans', sans-serif; font-size: 17px;
+          font-family: 'Cormorant Garamond', serif; font-size: 17px;
           color: #1a1410; margin: 0 0 8px; line-height: 1.2; font-weight: 400;
         }
         .lp-piece-desc { font-size: 12px; color: #7a6e68; line-height: 1.65; margin: 0 0 16px; flex: 1; }
@@ -690,7 +690,7 @@ export default function LifePathClient() {
           display: inline-block; font-size: 10px; letter-spacing: 0.14em;
           text-transform: uppercase; color: #AC3438; text-decoration: none;
           cursor: pointer; background: none; border: none; padding: 0;
-          font-family: 'Nunito Sans', sans-serif; align-self: flex-start;
+          font-family: 'Cormorant Garamond', serif; align-self: flex-start;
           transition: color 0.2s;
         }
         .lp-piece-cta:hover { color: #8B2A2D; }
@@ -698,7 +698,7 @@ export default function LifePathClient() {
           text-align: center; margin-top: 40px;
         }
         .lp-pieces-commission-note {
-          font-family: 'Nunito Sans', sans-serif; font-style: italic;
+          font-family: 'Cormorant Garamond', serif; font-style: italic;
           font-size: 15px; color: #7a6e68; margin: 0 0 20px; line-height: 1.7;
         }
 
@@ -706,7 +706,7 @@ export default function LifePathClient() {
         .lp-disclaimer {
           max-width: 600px; margin: 48px auto 0; padding-top: 32px;
           border-top: 1px solid #ede8e2;
-          font-family: 'Nunito Sans', sans-serif; font-style: italic;
+          font-family: 'Cormorant Garamond', serif; font-style: italic;
           font-size: 14px; color: #9c8f86; line-height: 1.75; text-align: center;
         }
 
@@ -721,7 +721,7 @@ export default function LifePathClient() {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           color: #9c8f86; background: none; border: none; cursor: pointer;
           display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
         }
         .lp-commission-back:hover { color: #1a1410; }
         .lp-commission-inner { max-width: 480px; width: 100%; }
@@ -730,7 +730,7 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 12px;
         }
         .lp-commission-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(26px, 4vw, 38px); font-weight: 400;
           color: #1a1410; margin: 0 0 8px; line-height: 1.1;
         }
@@ -741,11 +741,11 @@ export default function LifePathClient() {
           display: flex; align-items: center; gap: 14px;
         }
         .lp-commission-context-num {
-          font-family: 'Nunito Sans', sans-serif; font-size: 36px;
+          font-family: 'Cormorant Garamond', serif; font-size: 36px;
           color: #AC3438; line-height: 1; flex-shrink: 0;
         }
         .lp-commission-context-title {
-          font-family: 'Nunito Sans', sans-serif; font-size: 18px;
+          font-family: 'Cormorant Garamond', serif; font-size: 18px;
           color: #1a1410; display: block;
         }
         .lp-commission-context-zodiac { font-size: 11px; color: #9c8f86; letter-spacing: 0.08em; }
@@ -759,7 +759,7 @@ export default function LifePathClient() {
         }
         .lp-form-input, .lp-form-textarea {
           width: 100%; padding: 13px 14px; background: #fff; border: 1px solid #ede8e2;
-          font-size: 14px; font-family: 'Nunito Sans', sans-serif; color: #1a1410;
+          font-size: 14px; font-family: 'Cormorant Garamond', serif; color: #1a1410;
           outline: none; transition: border-color 0.2s; box-sizing: border-box;
         }
         .lp-form-input:focus, .lp-form-textarea:focus { border-color: #AC3438; }
@@ -768,7 +768,7 @@ export default function LifePathClient() {
         .lp-form-error { font-size: 12px; color: #AC3438; margin: 8px 0 0; min-height: 18px; }
         .lp-submit-btn {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
-          font-family: 'Nunito Sans', sans-serif; font-size: 11px; letter-spacing: 0.2em;
+          font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
           border-radius: 999px; transition: background 0.2s;
         }
@@ -792,18 +792,18 @@ export default function LifePathClient() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 14px;
         }
         .lp-success-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(30px, 5vw, 48px); font-weight: 300;
           color: #1a1410; margin: 0 0 16px; line-height: 1.1;
         }
         .lp-success-divider { width: 40px; height: 1px; background: #AC3438; margin: 0 auto 20px; }
         .lp-success-sub {
           font-size: 14px; color: #7a5c58; line-height: 1.75; margin: 0 0 40px;
-          font-style: italic; font-family: 'Nunito Sans', sans-serif;
+          font-style: italic; font-family: 'Cormorant Garamond', serif;
         }
         .lp-success-back {
           display: inline-block; padding: 14px 48px; border: 1px solid #ede8e2;
-          color: #1a1410; font-family: 'Nunito Sans', sans-serif; font-size: 11px;
+          color: #1a1410; font-family: 'Cormorant Garamond', serif; font-size: 11px;
           letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none;
           transition: border-color 0.2s, color 0.2s;
         }

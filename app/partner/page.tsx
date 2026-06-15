@@ -84,7 +84,7 @@ export default function PartnerPage() {
   return (
     <main className="partner-page">
       <style>{`
-        .partner-page { font-family: 'Nunito Sans', sans-serif; color: #1a1410; }
+        .partner-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; }
 
         /* Hero */
         .partner-hero {
@@ -105,7 +105,7 @@ export default function PartnerPage() {
           color: #AC3438; margin-bottom: 20px; display: block;
         }
         .partner-hero h1 {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(36px, 6vw, 64px);
           font-weight: 400; color: #faf6f1; line-height: 1.15;
           margin: 0 auto 24px; max-width: 760px;
@@ -133,7 +133,7 @@ export default function PartnerPage() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 12px;
         }
         .partner-section-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(28px, 4vw, 42px); font-weight: 400;
           text-align: center; color: #1a1410; margin: 0 0 56px;
         }
@@ -147,7 +147,7 @@ export default function PartnerPage() {
           border-radius: 8px; padding: 28px 24px;
         }
         .partner-type-label {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 20px; color: #1a1410; margin-bottom: 10px;
         }
         .partner-type-desc { font-size: 14px; color: #6b5e57; line-height: 1.6; }
@@ -165,7 +165,7 @@ export default function PartnerPage() {
         }
         .partner-benefit-icon { flex-shrink: 0; margin-top: 2px; }
         .partner-benefit-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 18px; color: #1a1410; margin-bottom: 6px;
         }
         .partner-benefit-body { font-size: 14px; color: #6b5e57; line-height: 1.65; }
@@ -188,7 +188,7 @@ export default function PartnerPage() {
         .partner-form-group select,
         .partner-form-group textarea {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 11px 14px; font-size: 14px; font-family: 'Nunito Sans', sans-serif;
+          padding: 11px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
           background: #fff; color: #1a1410; outline: none;
           transition: border-color 0.15s;
         }
@@ -199,7 +199,7 @@ export default function PartnerPage() {
         .partner-submit {
           background: #1a1410; color: #faf6f1;
           border: none; border-radius: 999px; cursor: pointer;
-          padding: 14px 40px; font-size: 13px; font-family: 'Nunito Sans', sans-serif;
+          padding: 14px 40px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.12em; text-transform: uppercase;
           align-self: center; transition: background 0.2s;
         }
@@ -211,7 +211,7 @@ export default function PartnerPage() {
           padding: 60px 24px; text-align: center;
         }
         .partner-contact h2 {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 32px; font-weight: 400; color: #faf6f1; margin-bottom: 12px;
         }
         .partner-contact p { font-size: 15px; color: #c4b8ad; margin-bottom: 28px; }

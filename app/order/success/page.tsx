@@ -72,7 +72,7 @@ export default async function OrderSuccessPage({
           <div
             style={{
               fontSize: 28,
-              fontFamily: "'Nunito Sans', sans-serif",
+              fontFamily: "'Cormorant Garamond', serif",
               color: 'var(--logo-red)',
               marginTop: 6,
               fontWeight: 600,
@@ -89,7 +89,7 @@ export default async function OrderSuccessPage({
         </div>
       )}
 
-      <p style={{ marginTop: 36, fontFamily: "'Nunito Sans', sans-serif", fontStyle: 'italic', fontSize: 17, color: '#7a5c58' }}>
+      <p style={{ marginTop: 36, fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontSize: 17, color: '#7a5c58' }}>
         &ldquo;Presence is a present.&rdquo;
       </p>
 
@@ -102,7 +102,7 @@ export default async function OrderSuccessPage({
               padding: '14px 40px',
               background: '#AC3438',
               color: '#fff',
-              fontFamily: "'Nunito Sans', sans-serif",
+              fontFamily: "'Cormorant Garamond', serif",
               fontSize: 13,
               letterSpacing: '0.16em',
               textTransform: 'uppercase',

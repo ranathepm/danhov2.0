@@ -19,7 +19,7 @@ export default function BlogPage() {
   return (
     <main className="blog-page">
       <style>{`
-        .blog-page { font-family: 'Nunito Sans', sans-serif; color: #1a1410; background: #faf6f1; }
+        .blog-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; }
 
         .blog-header {
           background: linear-gradient(160deg, #1a1410 0%, #2c1f18 60%, #3d2a20 100%);
@@ -31,13 +31,13 @@ export default function BlogPage() {
           pointer-events: none;
         }
         .blog-eyebrow { display: block; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: #AC3438; margin-bottom: 16px; }
-        .blog-header h1 { font-family: 'Nunito Sans', sans-serif; font-size: clamp(32px, 5vw, 56px); font-weight: 400; color: #faf6f1; margin: 0 0 16px; line-height: 1.15; }
+        .blog-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 5vw, 56px); font-weight: 400; color: #faf6f1; margin: 0 0 16px; line-height: 1.15; }
         .blog-header-sub { font-size: 15px; color: #c4b8ad; max-width: 480px; margin: 0 auto; line-height: 1.6; }
 
         .blog-filter { background: #fff; border-bottom: 1px solid #ede8e2; padding: 0 24px; }
         .blog-filter-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; }
         .blog-filter-inner::-webkit-scrollbar { display: none; }
-        .blog-cat-item { font-family: 'Nunito Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a7f76; padding: 18px 20px; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }
+        .blog-cat-item { font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a7f76; padding: 18px 20px; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; }
         .blog-cat-item:first-child { border-color: #AC3438; color: #1a1410; }
 
         .blog-featured { max-width: 1100px; margin: 0 auto; padding: 64px 24px 0; }
@@ -45,7 +45,7 @@ export default function BlogPage() {
         .blog-featured-img { min-height: 360px; position: relative; background: linear-gradient(135deg, #1a1410 0%, #3d2a20 50%, #6b4d3a 100%); display: flex; align-items: center; justify-content: center; }
         .blog-featured-body { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
         .blog-post-cat { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #AC3438; margin-bottom: 16px; display: block; }
-        .blog-featured-title { font-family: 'Nunito Sans', sans-serif; font-size: clamp(22px, 3vw, 34px); font-weight: 400; color: #1a1410; margin: 0 0 16px; line-height: 1.25; }
+        .blog-featured-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 3vw, 34px); font-weight: 400; color: #1a1410; margin: 0 0 16px; line-height: 1.25; }
         .blog-featured-excerpt { font-size: 15px; color: #6b5e57; line-height: 1.7; margin-bottom: 28px; }
         .blog-featured-meta { font-size: 12px; color: #9c8f86; margin-bottom: 24px; }
         .blog-featured-link { display: inline-block; color: #AC3438; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid rgba(172,52,56,0.35); padding-bottom: 2px; transition: border-color 0.15s; }
@@ -60,18 +60,18 @@ export default function BlogPage() {
         .blog-card-img img { object-fit: cover; }
         .blog-card-img svg { opacity: 0.25; }
         .blog-card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-        .blog-card-title { font-family: 'Nunito Sans', sans-serif; font-size: 20px; font-weight: 400; color: #1a1410; margin: 0 0 10px; line-height: 1.3; }
+        .blog-card-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: #1a1410; margin: 0 0 10px; line-height: 1.3; }
         .blog-card-excerpt { font-size: 13.5px; color: #6b5e57; line-height: 1.65; flex: 1; margin-bottom: 16px; }
         .blog-card-meta { font-size: 11px; color: #9c8f86; }
         .blog-card-read { display: inline-block; color: #AC3438; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 1px solid rgba(172,52,56,0.3); padding-bottom: 1px; margin-top: 14px; }
 
         .blog-newsletter { background: linear-gradient(135deg, #1a1410 0%, #2c1f18 100%); padding: 64px 24px; text-align: center; }
-        .blog-newsletter h2 { font-family: 'Nunito Sans', sans-serif; font-size: 34px; font-weight: 400; color: #faf6f1; margin-bottom: 12px; }
+        .blog-newsletter h2 { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 400; color: #faf6f1; margin-bottom: 12px; }
         .blog-newsletter p { font-size: 14px; color: #c4b8ad; margin-bottom: 32px; }
         .blog-newsletter-form { display: flex; gap: 12px; max-width: 420px; margin: 0 auto; }
-        .blog-newsletter-input { flex: 1; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); border-radius: 999px; padding: 12px 20px; font-size: 14px; font-family: 'Nunito Sans', sans-serif; color: #faf6f1; outline: none; transition: border-color 0.15s; }
+        .blog-newsletter-input { flex: 1; border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.06); border-radius: 999px; padding: 12px 20px; font-size: 14px; font-family: 'Cormorant Garamond', serif; color: #faf6f1; outline: none; transition: border-color 0.15s; }
         .blog-newsletter-input::placeholder { color: #8a7f76; }
-        .blog-newsletter-btn { background: #AC3438; color: #fff; border: none; border-radius: 999px; padding: 12px 24px; font-size: 12px; font-family: 'Nunito Sans', sans-serif; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+        .blog-newsletter-btn { background: #AC3438; color: #fff; border: none; border-radius: 999px; padding: 12px 24px; font-size: 12px; font-family: 'Cormorant Garamond', serif; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
         .blog-newsletter-btn:hover { background: #8B2A2D; }
 
         @media (max-width: 768px) {

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function GiftCardsPage() {
   return (
-    <main style={{ fontFamily: "'Nunito Sans', sans-serif", color: '#1a1410', background: '#faf6f1' }}>
+    <main style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410', background: '#faf6f1' }}>
       <style>{`
         /* ── Hero ── */
         .gc-hero {
@@ -32,7 +32,7 @@ export default function GiftCardsPage() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 18px;
         }
         .gc-hero h1 {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(32px, 4.5vw, 56px); font-weight: 400;
           color: #faf6f1; margin: 0 0 20px; line-height: 1.12;
         }
@@ -63,7 +63,7 @@ export default function GiftCardsPage() {
           pointer-events: none;
         }
         .gc-card-logo {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 24px; color: #faf6f1; letter-spacing: 0.15em;
           position: relative; z-index: 1;
         }
@@ -73,7 +73,7 @@ export default function GiftCardsPage() {
         }
         .gc-card-bottom { position: relative; z-index: 1; }
         .gc-card-amount {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 38px; color: #faf6f1; line-height: 1; margin-bottom: 6px;
         }
         .gc-card-footer {
@@ -90,7 +90,7 @@ export default function GiftCardsPage() {
           text-transform: uppercase; color: #AC3438; text-align: center; margin-bottom: 12px;
         }
         .gc-section-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(24px, 3.5vw, 36px); font-weight: 400;
           text-align: center; color: #1a1410; margin: 0 0 44px;
         }
@@ -114,7 +114,7 @@ export default function GiftCardsPage() {
         }
         .gc-service-card.featured .gc-service-icon { background: #AC3438; }
         .gc-service-name {
-          font-family: 'Nunito Sans', sans-serif; font-size: 22px; color: #1a1410;
+          font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #1a1410;
         }
         .gc-service-desc { font-size: 13.5px; color: #6b5e57; line-height: 1.65; flex: 1; }
         .gc-service-link {
@@ -133,11 +133,11 @@ export default function GiftCardsPage() {
         .gc-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 0; }
         .gc-step { text-align: center; }
         .gc-step-num {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 48px; color: rgba(172,52,56,0.15); line-height: 1;
           display: block; margin-bottom: 12px;
         }
-        .gc-step-title { font-family: 'Nunito Sans', sans-serif; font-size: 18px; color: #1a1410; margin-bottom: 8px; }
+        .gc-step-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #1a1410; margin-bottom: 8px; }
         .gc-step-body { font-size: 13.5px; color: #6b5e57; line-height: 1.65; }
 
         /* ── Perks strip ── */

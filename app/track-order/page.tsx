@@ -70,7 +70,7 @@ export default function TrackOrderPage() {
   return (
     <main className="track-page">
       <style>{`
-        .track-page { font-family: 'Nunito Sans', sans-serif; color: #1a1410; background: #faf6f1; min-height: 100vh; }
+        .track-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; min-height: 100vh; }
 
         /* Hero */
         .track-hero {
@@ -88,7 +88,7 @@ export default function TrackOrderPage() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 16px;
         }
         .track-hero h1 {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: clamp(30px, 5vw, 52px); font-weight: 400;
           color: #faf6f1; margin: 0 auto 16px; max-width: 600px; line-height: 1.15;
         }
@@ -107,7 +107,7 @@ export default function TrackOrderPage() {
           padding: 40px 36px;
         }
         .track-form-title {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 22px; color: #1a1410; margin-bottom: 28px; text-align: center;
         }
         .track-form { display: flex; flex-direction: column; gap: 16px; }
@@ -117,14 +117,14 @@ export default function TrackOrderPage() {
         }
         .track-form-group input {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 12px 14px; font-size: 14px; font-family: 'Nunito Sans', sans-serif;
+          padding: 12px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
           color: #1a1410; outline: none; transition: border-color 0.15s;
         }
         .track-form-group input:focus { border-color: #AC3438; }
         .track-form-group input::placeholder { color: #b4a89d; }
         .track-submit {
           background: #1a1410; color: #faf6f1; border: none; border-radius: 999px;
-          padding: 13px; font-size: 13px; font-family: 'Nunito Sans', sans-serif;
+          padding: 13px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
           letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; margin-top: 4px;
         }
@@ -153,7 +153,7 @@ export default function TrackOrderPage() {
         }
         .track-result-order-id { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a7f76; margin-bottom: 4px; }
         .track-result-product {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 22px; color: #faf6f1; margin-bottom: 2px;
         }
         .track-result-date { font-size: 12px; color: #8a7f76; }
@@ -195,7 +195,7 @@ export default function TrackOrderPage() {
         /* Status */
         .track-status-body { padding: 24px 32px 32px; }
         .track-status-label {
-          font-family: 'Nunito Sans', sans-serif;
+          font-family: 'Cormorant Garamond', serif;
           font-size: 20px; color: #1a1410; margin-bottom: 6px;
         }
         .track-status-desc { font-size: 14px; color: #6b5e57; line-height: 1.65; margin-bottom: 20px; }
@@ -321,7 +321,7 @@ export default function TrackOrderPage() {
                 background: 'none', border: 'none', cursor: 'pointer',
                 color: '#AC3438', fontSize: 13, letterSpacing: '0.1em',
                 textTransform: 'uppercase', textDecoration: 'underline',
-                fontFamily: "'Nunito Sans', sans-serif",
+                fontFamily: "'Cormorant Garamond', serif",
               }}
             >
               Track another order

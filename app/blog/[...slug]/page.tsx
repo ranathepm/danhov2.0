@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: Props) {
   return (
     <main className="blog-post-page">
       <style>{`
-        .blog-post-page { font-family: 'Nunito Sans', sans-serif; color: #1a1410; background: #faf6f1; }
+        .blog-post-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; }
 
         .post-breadcrumb { background: #fff; border-bottom: 1px solid #ede8e2; padding: 14px 24px; font-size: 12px; color: #8a7f76; }
         .post-breadcrumb a { color: #8a7f76; text-decoration: none; transition: color 0.15s; }
@@ -118,7 +118,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         .post-hero { background: linear-gradient(160deg, #1a1410 0%, #2c1f18 60%, #3d2a20 100%); padding: 64px 24px 56px; text-align: center; }
         .post-hero-cat { display: inline-block; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: #AC3438; margin-bottom: 20px; }
-        .post-hero h1 { font-family: 'Nunito Sans', sans-serif; font-size: clamp(28px, 4.5vw, 52px); font-weight: 400; color: #faf6f1; margin: 0 0 20px; line-height: 1.18; max-width: 760px; margin-left: auto; margin-right: auto; }
+        .post-hero h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px, 4.5vw, 52px); font-weight: 400; color: #faf6f1; margin: 0 0 20px; line-height: 1.18; max-width: 760px; margin-left: auto; margin-right: auto; }
         .post-hero-meta { font-size: 13px; color: #9c8f86; }
 
         .post-featured-img { max-width: 860px; margin: 0 auto; padding: 0 24px; transform: translateY(-32px); }
@@ -128,12 +128,12 @@ export default async function BlogPostPage({ params }: Props) {
 
         .post-body-wrap { max-width: 720px; margin: 0 auto; padding: 0 24px 80px; }
 
-        .post-excerpt { font-family: 'Nunito Sans', sans-serif; font-size: clamp(18px, 2.5vw, 24px); font-weight: 400; color: #4a3f38; line-height: 1.6; margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #ede8e2; }
+        .post-excerpt { font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 24px); font-weight: 400; color: #4a3f38; line-height: 1.6; margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #ede8e2; }
 
         .post-content { font-size: 16px; line-height: 1.8; color: #3a3028; }
         .post-content h1,
         .post-content h2,
-        .post-content h3 { font-family: 'Nunito Sans', sans-serif; font-weight: 400; color: #1a1410; margin: 2.2em 0 0.7em; line-height: 1.25; }
+        .post-content h3 { font-family: 'Cormorant Garamond', serif; font-weight: 400; color: #1a1410; margin: 2.2em 0 0.7em; line-height: 1.25; }
         .post-content h2 { font-size: clamp(22px, 3vw, 30px); }
         .post-content h3 { font-size: clamp(18px, 2.5vw, 24px); }
         .post-content p { margin: 0 0 1.5em; }
@@ -141,7 +141,7 @@ export default async function BlogPostPage({ params }: Props) {
         .post-content li { margin-bottom: 0.4em; }
         .post-content a { color: #AC3438; text-decoration: underline; text-underline-offset: 3px; }
         .post-content img { max-width: 100%; height: auto; border-radius: 6px; margin: 2em 0; display: block; }
-        .post-content blockquote { border-left: 3px solid #AC3438; margin: 2em 0; padding: 0 0 0 24px; font-family: 'Nunito Sans', sans-serif; font-size: clamp(18px, 2.5vw, 23px); color: #4a3f38; }
+        .post-content blockquote { border-left: 3px solid #AC3438; margin: 2em 0; padding: 0 0 0 24px; font-family: 'Cormorant Garamond', serif; font-size: clamp(18px, 2.5vw, 23px); color: #4a3f38; }
         .post-content strong { font-weight: 600; color: #1a1410; }
         .post-content hr { border: none; border-top: 1px solid #ede8e2; margin: 2.5em 0; }
 
@@ -158,7 +158,7 @@ export default async function BlogPostPage({ params }: Props) {
         .post-related-img { height: 160px; position: relative; background: linear-gradient(135deg, #1a1410 0%, #3d2a20 60%, #6b4d3a 100%); display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .post-related-body { padding: 20px; }
         .post-related-cat { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: #AC3438; margin-bottom: 8px; display: block; }
-        .post-related-title { font-family: 'Nunito Sans', sans-serif; font-size: 18px; font-weight: 400; color: #1a1410; line-height: 1.3; margin: 0 0 8px; }
+        .post-related-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; color: #1a1410; line-height: 1.3; margin: 0 0 8px; }
         .post-related-date { font-size: 11px; color: #9c8f86; }
 
         .post-back { max-width: 720px; margin: 0 auto; padding: 40px 24px 0; }
