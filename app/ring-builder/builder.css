@@ -42,7 +42,7 @@
   width: 100%;
   border-bottom: 3px solid transparent;
   transition: color 0.15s, border-color 0.15s, background 0.15s;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 .rb-step-link:hover { color: #1a1410; background: #faf6f1; }
 .rb-step--active .rb-step-link {
@@ -60,7 +60,7 @@
   background: #e8e2db;
   color: #6b5e57;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 15px; font-weight: 600;
   transition: background 0.15s, color 0.15s;
 }
@@ -109,7 +109,7 @@
 .sb-toggle-btn {
   background: none; border: none;
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px;
   color: #6b5e57; cursor: pointer;
   letter-spacing: 0.04em;
 }
@@ -118,7 +118,7 @@
 .sb-toggle-btn:hover { color: #1a1410; }
 .sb-reset-btn {
   background: none; border: 1px solid rgba(172,52,56,0.25);
-  font-family: 'Cormorant Garamond', serif; font-size: 11px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 11px;
   letter-spacing: 0.1em; text-transform: uppercase;
   color: #AC3438; cursor: pointer; padding: 5px 14px; border-radius: 999px;
   transition: background 0.15s, color 0.15s;
@@ -136,7 +136,7 @@
 .sb-filters-col { display: flex; flex-direction: column; gap: 24px; }
 .sb-filter-section { display: flex; flex-direction: column; gap: 12px; }
 .sb-filter-title {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 600;
   color: #1a1410; letter-spacing: 0.02em;
 }
 
@@ -146,7 +146,7 @@
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: #fff; border: 1px solid #e8e2db; border-radius: 6px;
   padding: 10px 14px; cursor: pointer; min-width: 80px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   transition: border-color 0.15s, background 0.15s;
 }
 .sb-style-chip:hover { border-color: var(--logo-red); }
@@ -161,7 +161,7 @@
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: none; border: none; cursor: pointer; padding: 4px 6px;
   border-radius: 4px; transition: transform 0.15s;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 .sb-metal-chip:hover { transform: translateY(-1px); }
 .sb-metal-chip.is-active .sb-metal-circle {
@@ -176,7 +176,7 @@
 }
 .sb-metal-karat {
   font-size: 10px; font-weight: 700; color: rgba(0,0,0,0.55);
-  font-family: 'Cormorant Garamond', serif; letter-spacing: 0;
+  font-family: 'Nunito Sans', sans-serif; letter-spacing: 0;
 }
 .sb-metal-name { font-size: 11px; color: #6b5e57; white-space: nowrap; }
 
@@ -228,12 +228,12 @@
 }
 .sb-price-dollar {
   position: absolute; left: 12px;
-  font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif; font-size: 19px; font-weight: 600;
   color: #1a1410; pointer-events: none; line-height: 1;
 }
 .sb-price-input {
   flex: 1; width: 100%; border: 1px solid #e8e2db; border-radius: 4px;
-  padding: 10px 12px 10px 30px; font-family: 'Cormorant Garamond', serif;
+  padding: 10px 12px 10px 30px; font-family: 'Nunito Sans', sans-serif;
   font-size: 15px; font-weight: 500; text-align: center; color: #1a1410;
   outline: none; background: #fff;
   transition: border-color 0.15s;
@@ -244,14 +244,14 @@
 .sb-price-input:focus { border-color: #1a1410; }
 .sb-price-dash { color: #9a8f86; }
 .sb-price-range-hint {
-  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px;
   color: #9a8f86; letter-spacing: 0.02em;
 }
 
 /* More buttons */
 .sb-more-btn {
   background: none; border: none; cursor: pointer;
-  font-family: 'Cormorant Garamond', serif; font-size: 12px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 12px;
   color: #6b5e57; letter-spacing: 0.06em;
   padding: 0; text-align: left;
   transition: color 0.15s;
@@ -264,15 +264,15 @@
   padding: 16px 0; border-bottom: 1px solid #e8e2db; margin-bottom: 24px;
 }
 .sb-toolbar-count {
-  font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px; color: #6b5e57;
 }
 .sb-sort-label {
   display: flex; align-items: center; gap: 8px;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px; color: #6b5e57;
 }
 .sb-sort-select {
   border: 1px solid #e8e2db; border-radius: 4px;
-  padding: 6px 28px 6px 10px; font-family: 'Cormorant Garamond', serif;
+  padding: 6px 28px 6px 10px; font-family: 'Nunito Sans', sans-serif;
   font-size: 13px; color: #1a1410; background: #fff; cursor: pointer;
   outline: none; -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b5e57' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
@@ -289,7 +289,7 @@
 }
 .sb-empty {
   grid-column: 1 / -1; padding: 48px; text-align: center;
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; color: #6b5e57;
 }
 .sb-empty p { margin-bottom: 16px; }
 
@@ -318,7 +318,7 @@
 .sb-card-placeholder { width: 56px; height: 56px; opacity: 0.4; }
 .sb-card-body { padding: 14px 16px; background: #fff; }
 .sb-card-name {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 600;
   color: #1a1410; margin: 0 0 8px; line-height: 1.3;
 }
 .sb-card-sku { font-weight: 400; color: #6b5e57; font-size: 13px; }
@@ -337,7 +337,7 @@
   transform: scale(1.15);
 }
 .sb-card-price {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; color: #1a1410;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; color: #1a1410;
   margin: 0; font-weight: 500;
 }
 
@@ -357,7 +357,7 @@
    ═══════════════════════════════════════════════════════════════════ */
 .sd-back {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px; color: #6b5e57;
   text-decoration: none; margin-bottom: 28px;
   transition: color 0.15s;
 }
@@ -391,7 +391,7 @@
   background: rgba(255,255,255,0.90);
   border: 1px solid #e8e2db; border-radius: 999px;
   padding: 4px 10px;
-  font-family: 'Cormorant Garamond', serif; font-size: 11px; font-weight: 500;
+  font-family: 'Nunito Sans', sans-serif; font-size: 11px; font-weight: 500;
   color: #1a1410;
   backdrop-filter: blur(4px);
   pointer-events: none;
@@ -426,7 +426,7 @@
   gap: 16px; margin-bottom: 20px;
 }
 .sd-name {
-  font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700;
+  font-family: 'Nunito Sans', sans-serif; font-size: 22px; font-weight: 700;
   color: #1a1410; margin: 0 0 6px; line-height: 1.25;
 }
 .sd-sku {
@@ -436,14 +436,14 @@
 }
 .sd-style-row {
   display: flex; align-items: center; gap: 6px;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px; color: #6b5e57;
 }
 .sd-style-label { font-weight: 600; color: #1a1410; }
 .sd-style-value { color: #6b5e57; }
 .sd-share-btn {
   display: inline-flex; align-items: center; gap: 6px;
   background: #fff; border: 1px solid #e8e2db; border-radius: 4px;
-  padding: 8px 14px; cursor: pointer; font-family: 'Cormorant Garamond', serif;
+  padding: 8px 14px; cursor: pointer; font-family: 'Nunito Sans', sans-serif;
   font-size: 13px; color: #1a1410; white-space: nowrap;
   transition: border-color 0.15s, background 0.15s;
   flex-shrink: 0;
@@ -459,18 +459,18 @@
   display: flex; align-items: baseline; gap: 10px;
 }
 .sd-selector-title {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 600;
   color: #1a1410;
 }
 .sd-selector-current {
-  font-family: 'Cormorant Garamond', serif; font-size: 13px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px; color: #6b5e57;
 }
 .sd-option-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .sd-option-chip {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
   background: #fff; border: 1px solid #e8e2db; border-radius: 6px;
   padding: 10px 12px; cursor: pointer; min-width: 68px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   transition: border-color 0.15s;
 }
 .sd-option-chip:hover { border-color: var(--logo-red); }
@@ -486,7 +486,7 @@
 .sd-metal-option {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: none; border: none; cursor: pointer; padding: 4px 6px;
-  border-radius: 4px; font-family: 'Cormorant Garamond', serif;
+  border-radius: 4px; font-family: 'Nunito Sans', sans-serif;
   transition: transform 0.15s;
 }
 .sd-metal-option:hover { transform: translateY(-1px); }
@@ -501,12 +501,12 @@
 }
 .sd-metal-karat {
   font-size: 10px; font-weight: 700; color: rgba(0,0,0,0.5);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 .sd-metal-name { font-size: 11px; color: #6b5e57; white-space: nowrap; }
 .sd-more-btn {
   background: none; border: none; cursor: pointer;
-  font-family: 'Cormorant Garamond', serif; font-size: 12px; color: #6b5e57;
+  font-family: 'Nunito Sans', sans-serif; font-size: 12px; color: #6b5e57;
   letter-spacing: 0.04em; padding: 0; text-align: left;
   transition: color 0.15s;
 }
@@ -518,21 +518,21 @@
   padding: 20px 0 16px; border-bottom: 1px solid #e8e2db;
 }
 .sd-price-label {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; color: #1a1410;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 600; color: #1a1410;
 }
 .sd-price-right { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
 .sd-price {
-  font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: #1a1410;
+  font-family: 'Nunito Sans', sans-serif; font-size: 22px; font-weight: 700; color: #1a1410;
 }
-.sd-price-na { font-family: 'Cormorant Garamond', serif; font-size: 14px; color: #6b5e57; }
-.sd-price-sub { font-family: 'Cormorant Garamond', serif; font-size: 12px; color: #9a8f86; }
+.sd-price-na { font-family: 'Nunito Sans', sans-serif; font-size: 14px; color: #6b5e57; }
+.sd-price-sub { font-family: 'Nunito Sans', sans-serif; font-size: 12px; color: #9a8f86; }
 
 /* CTAs */
 .sd-cta-primary {
   width: 100%; margin-top: 20px;
   background: var(--logo-red); color: #fff;
   border: 1px solid rgba(172, 52, 56, 0.8);
-  padding: 16px; font-family: 'Cormorant Garamond', serif;
+  padding: 16px; font-family: 'Nunito Sans', sans-serif;
   font-size: 14px; font-weight: 600; letter-spacing: 0.08em;
   text-transform: uppercase; cursor: pointer; border-radius: 999px;
   box-shadow:
@@ -554,7 +554,7 @@
   width: 100%; margin-top: 10px;
   background: #fff; color: #1a1410;
   border: 1px solid #e8e2db; padding: 14px;
-  font-family: 'Cormorant Garamond', serif; font-size: 14px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px;
   cursor: pointer; border-radius: 999px;
   box-shadow: 0 0 4px rgba(172,52,56,0.1), 0 0 10px rgba(172,52,56,0.05);
   transition: border-color 0.15s, background 0.15s, box-shadow 0.35s ease;
@@ -571,19 +571,19 @@
 .sd-accordion-head {
   display: flex; justify-content: space-between; align-items: center;
   padding: 16px 18px; background: none; border: none; width: 100%;
-  cursor: pointer; font-family: 'Cormorant Garamond', serif; font-size: 14px;
+  cursor: pointer; font-family: 'Nunito Sans', sans-serif; font-size: 14px;
   font-weight: 600; color: #1a1410; text-align: left;
   transition: background 0.15s;
 }
 .sd-accordion-head:hover { background: #faf6f1; }
 .sd-accordion-body { padding: 0 18px 20px; }
 .sd-desc-text {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; color: #4a3f38;
+  font-family: 'Nunito Sans', sans-serif; font-size: 14px; color: #4a3f38;
   line-height: 1.7; margin: 0 0 16px;
 }
 .sd-specs-table {
   width: 100%; border-collapse: collapse;
-  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 13px;
   border: 1px solid #e8e2db; border-radius: 4px; overflow: hidden;
 }
 .sd-specs-table td {
@@ -593,7 +593,7 @@
 .sd-specs-table td:first-child { font-weight: 600; color: #1a1410; width: 50%; }
 .sd-specs-table td:last-child { color: #6b5e57; text-align: right; }
 .sd-desc-note {
-  font-family: 'Cormorant Garamond', serif; font-size: 12px; color: #9a8f86;
+  font-family: 'Nunito Sans', sans-serif; font-size: 12px; color: #9a8f86;
   line-height: 1.6; margin: 14px 0 0;
 }
 
@@ -644,7 +644,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
 }
@@ -654,14 +654,14 @@
   line-height: 1.2;
 }
 .builder-stepper-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 .builder-stepper-sub {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: 13px;
   color: var(--grey);
@@ -724,7 +724,7 @@
   border-radius: 999px;
 }
 .builder-top-continue-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -753,7 +753,7 @@
 }
 .builder-intro-step {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 36px;
   font-weight: 600;
   color: var(--logo-red);
@@ -761,7 +761,7 @@
   line-height: 1;
 }
 .builder-intro-card h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   margin: 0 0 10px;
   color: var(--cream);
@@ -776,7 +776,7 @@
 .builder-cta-btn { font-size: 13px; padding: 18px 44px; }
 .builder-cta-sub {
   margin-top: 24px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   color: var(--grey);
   font-size: 15px;
@@ -790,7 +790,7 @@
 }
 .builder-paths-eyebrow {
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -820,14 +820,14 @@
 }
 .builder-path-icon svg { width: 40px; height: 40px; }
 .builder-path-card h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 19px;
   font-weight: 500;
   color: #1a1410;
   margin: 0;
 }
 .builder-path-card p {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: var(--grey);
   line-height: 1.65;
@@ -838,7 +838,7 @@
   display: inline-block;
   margin-top: 8px;
   padding: 12px 0;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -885,7 +885,7 @@
   display: inline-block;
   padding: 7px 16px; border-radius: 999px;
   border: 1px solid rgba(172,52,56,0.18);
-  font-family: 'Cormorant Garamond', serif; font-size: 12px;
+  font-family: 'Nunito Sans', sans-serif; font-size: 12px;
   letter-spacing: 0.06em; color: #6b5e57;
   text-decoration: none; background: #fff;
   transition: border-color 0.15s, color 0.15s, background 0.15s;
@@ -930,7 +930,7 @@
 .builder-advisor-text { font-size: 14px; color: #6b5e57; }
 .builder-advisor-btn {
   background: #AC3438; color: #fff; border: none; border-radius: 999px;
-  padding: 9px 22px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
+  padding: 9px 22px; font-size: 12px; font-family: 'Nunito Sans', sans-serif;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
   transition: background 0.18s;
 }
@@ -939,7 +939,7 @@
 /* Step 2: rings */
 .builder-collection-block { margin-bottom: 56px; }
 .builder-collection-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
@@ -992,7 +992,7 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.18em;
   font-weight: 700;
@@ -1009,14 +1009,14 @@
   gap: 4px;
 }
 .builder-ring-sku {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--grey);
 }
 .builder-ring-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 17px;
   font-weight: 600;
   margin: 0;
@@ -1024,7 +1024,7 @@
   line-height: 1.3;
 }
 .builder-ring-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: var(--logo-red);
@@ -1035,7 +1035,7 @@
 .builder-ring-choose {
   display: block;
   margin-top: 8px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1068,7 +1068,7 @@
   gap: 6px;
 }
 .builder-filter-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.2em;
   font-weight: 700;
@@ -1080,7 +1080,7 @@
   background: transparent;
   border: 1px solid rgba(172, 52, 56, 0.2);
   padding: 5px 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--grey);
@@ -1112,7 +1112,7 @@
 .builder-filter-pill.is-active .builder-shape-icon svg * { stroke: #fff8f6; }
 
 .builder-count {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1189,33 +1189,33 @@
   align-items: baseline;
 }
 .builder-diamond-carat {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: var(--cream);
 }
 .builder-diamond-shape {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--grey);
 }
 .builder-diamond-grade {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--grey);
 }
 .builder-diamond-cert {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   letter-spacing: 0.3em;
   color: var(--grey);
   margin-top: 2px;
 }
 .builder-diamond-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 15px;
   font-weight: 700;
   color: var(--logo-red);
@@ -1229,7 +1229,7 @@
 }
 .builder-empty p {
   margin-bottom: 18px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   color: var(--grey);
 }
@@ -1257,7 +1257,7 @@
 }
 .builder-cta-bar.is-active .builder-cta-summary { color: #fff8f6; }
 .builder-cta-summary {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: 16px;
   color: var(--grey);
@@ -1266,7 +1266,7 @@
   background: #fff8f6;
   color: var(--logo-red);
   padding: 11px 24px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1310,7 +1310,7 @@
 }
 .builder-review-img img { width: 100%; height: 100%; object-fit: contain; }
 .builder-review-tagline {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: 14px;
   color: var(--grey);
@@ -1327,33 +1327,33 @@
   gap: 18px;
 }
 .builder-review-line h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 600;
   margin: 0;
   color: var(--cream);
 }
 .builder-review-sku {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.18em;
   color: var(--grey);
 }
 .builder-review-collection {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: 13px;
   color: var(--grey);
 }
 .builder-review-grade {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.06em;
   color: var(--grey);
   margin-top: 6px;
 }
 .builder-review-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 19px;
   font-weight: 600;
   color: var(--logo-red);
@@ -1377,14 +1377,14 @@
   gap: 6px;
 }
 .builder-review-line-subtotal {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: var(--grey);
   letter-spacing: 0.04em;
 }
 .builder-review-diamond-idx {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1395,7 +1395,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--grey);
@@ -1421,7 +1421,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--grey);
@@ -1452,7 +1452,7 @@
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   color: var(--cream);
 }
@@ -1465,7 +1465,7 @@
 }
 .builder-review-balance {
   margin-top: 10px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-style: italic;
   font-size: 13px;
   color: var(--grey);
@@ -1478,7 +1478,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1505,7 +1505,7 @@
   padding: 11px 14px;
   border: 1px solid #d9d0c8;
   background: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   color: #1a1410;
   cursor: pointer;
@@ -1517,7 +1517,7 @@
 }
 .builder-review-ring-size-hint {
   margin-top: 6px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   color: var(--grey);
   line-height: 1.5;
@@ -1536,7 +1536,7 @@
   gap: 6px;
 }
 .builder-review-ring-size-unit-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -1560,7 +1560,7 @@
   background: var(--logo-red);
   color: #fff8f6;
   border: 1px solid rgba(172, 52, 56, 0.8);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1590,7 +1590,7 @@
   background: transparent;
   color: var(--logo-red);
   border: 1px solid rgba(172, 52, 56, 0.7);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   letter-spacing: 0.06em;
   padding: 12px 22px;
@@ -1616,7 +1616,7 @@
 }
 .builder-review-note-label {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1634,7 +1634,7 @@
   width: 100%;
   min-height: 80px;
   padding: 12px 14px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: #1a1410;
   background: #fff;
@@ -1660,7 +1660,7 @@
   margin-top: 10px;
 }
 .builder-review-qty-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1689,7 +1689,7 @@
 .builder-review-qty-val {
   min-width: 40px;
   text-align: center;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #1a1410;
@@ -1713,7 +1713,7 @@
   gap: 12px;
 }
 .builder-review-add-diamond-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6b5e57;
   line-height: 1.5;
@@ -1728,7 +1728,7 @@
 .builder-review-add-diamond-btn {
   flex-shrink: 0;
   padding: 10px 20px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.12em;
@@ -1762,7 +1762,7 @@
   left: 8px;
   background: var(--logo-red);
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -1780,7 +1780,7 @@
   left: 8px;
   background: #8B2A2D;
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -1804,7 +1804,7 @@
   background: transparent;
   border: none;
   color: var(--logo-red);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -1828,7 +1828,7 @@
   gap: 12px;
 }
 .builder-review-add-setting-text {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6b5e57;
   line-height: 1.5;
@@ -1846,7 +1846,7 @@
   background: var(--logo-red);
   border: 1px solid rgba(172, 52, 56, 0.8);
   color: #fff;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1869,7 +1869,7 @@
 }
 .builder-review-secured {
   margin-top: 16px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   color: var(--grey);
   line-height: 1.6;
@@ -1882,7 +1882,7 @@
   margin-bottom: 24px;
 }
 .builder-review-edit-row a {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1942,7 +1942,7 @@
   gap: 16px;
 }
 .dpicker-row-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1967,7 +1967,7 @@
   padding: 6px 10px;
   border: 1px solid #e0d5cb;
   border-radius: 4px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   text-align: center;
 }
@@ -1978,7 +1978,7 @@
   border: 1px solid #e0d5cb;
   border-radius: 999px;
   padding: 5px 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #5a4e47;
   cursor: pointer;
@@ -2001,7 +2001,7 @@
   border: 1px solid rgba(218, 168, 80, 0.4);
   border-radius: 999px;
   padding: 6px 14px 6px 10px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #5a4e47;
   cursor: pointer;
@@ -2050,7 +2050,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #5a4e47;
   cursor: pointer;
@@ -2060,7 +2060,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6a5f57;
 }
@@ -2068,7 +2068,7 @@
   padding: 5px 8px;
   border: 1px solid #e0d5cb;
   border-radius: 4px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #1a1410;
   background: #fff;
@@ -2077,7 +2077,7 @@
 .dpicker-select:focus { outline: none; border-color: #AC3438; }
 
 .dpicker-count {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   letter-spacing: 0.06em;
   color: #6a5f57;
@@ -2178,25 +2178,25 @@
   margin-bottom: 4px;
 }
 .dpicker-card-carat {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 18px;
   color: #1a1410;
   font-weight: 500;
 }
 .dpicker-card-shape-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #6a5f57;
 }
 .dpicker-card-grade {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #5a4e47;
 }
 .dpicker-card-cert {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10.5px;
   color: #8a7f76;
   margin-top: 2px;
@@ -2212,7 +2212,7 @@
   margin-top: 8px;
 }
 .dpicker-card-price {
-  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 18px;
   font-weight: 500;
   color: #AC3438;
@@ -2223,7 +2223,7 @@
   color: #AC3438;
   padding: 6px 14px;
   border-radius: 4px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2251,7 +2251,7 @@
   border: 1px dashed rgba(172, 52, 56, 0.2);
   border-radius: 8px;
   color: #6a5f57;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
 }
 .dpicker-empty-hint {
@@ -2272,7 +2272,7 @@
   border: 1px solid #e0d5cb;
   padding: 8px 18px;
   border-radius: 4px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2289,7 +2289,7 @@
   cursor: default;
 }
 .dpicker-pager-status {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: #6a5f57;
@@ -2315,7 +2315,7 @@
 .builder-review-diamond-media:hover .dpicker-spin { opacity: 0; }
 .builder-review-diamond-caption {
   display: block;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -2351,7 +2351,7 @@
   background: #fbf7f4;
 }
 .be-toolbar-count {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
   color: #2a1d18;
   letter-spacing: 0.04em;
@@ -2364,7 +2364,7 @@
   gap: 10px;
 }
 .be-toolbar-sort label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6a5f57;
   letter-spacing: 0.04em;
@@ -2374,7 +2374,7 @@
   border: 1px solid rgba(172, 52, 56, 0.2);
   border-radius: 4px;
   padding: 7px 30px 7px 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: #2a1d18;
   cursor: pointer;
@@ -2415,7 +2415,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 4px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 17px;
   font-weight: 500;
   color: #2a1d18;
@@ -2426,7 +2426,7 @@
 .be-facet-head::-webkit-details-marker { display: none; }
 .be-facet-head::after {
   content: '+';
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 18px;
   font-weight: 300;
   color: #6a5f57;
@@ -2450,7 +2450,7 @@
   background: transparent;
   border: none;
   padding: 10px 6px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2500,7 +2500,7 @@
 }
 .be-shape-icon svg { width: 100%; height: 100%; }
 .be-shape-label {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.04em;
   color: #5a4e47;
@@ -2518,7 +2518,7 @@
   gap: 4px;
 }
 .be-range label > span {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2528,7 +2528,7 @@
   background: transparent;
   border: 1px solid rgba(172, 52, 56, 0.2);
   padding: 8px 10px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: #2a1d18;
   outline: none;
@@ -2551,7 +2551,7 @@
   background: transparent;
   border: 1px solid rgba(172, 52, 56, 0.2);
   padding: 6px 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11.5px;
   letter-spacing: 0.04em;
   color: #5a4e47;
@@ -2724,7 +2724,7 @@
   border-radius: 999px;
   background: rgba(172, 52, 56, 0.55);
   color: #fff8f6;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -2738,7 +2738,7 @@
   padding: 18px 18px 20px;
 }
 .be-card-headline {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 17px;
   font-weight: 400;
   color: #2a1d18;
@@ -2747,14 +2747,14 @@
   text-transform: capitalize;
 }
 .be-card-grade {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6a5f57;
   margin-bottom: 4px;
   letter-spacing: 0.02em;
 }
 .be-card-cert {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10.5px;
   color: #8a7f76;
   margin-bottom: 12px;
@@ -2774,7 +2774,7 @@
   border-bottom-color: rgba(172,52,56,0.7);
 }
 .be-card-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 500;
   color: var(--logo-red);
@@ -2788,7 +2788,7 @@
   color: var(--logo-red);
   border: 1px solid rgba(172, 52, 56, 0.7);
   border-radius: 999px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -2848,7 +2848,7 @@
   background: #fbf7f4;
   border: 1px dashed rgba(172, 52, 56, 0.2);
   color: #6a5f57;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
 }
 .be-empty-hint {
@@ -2868,7 +2868,7 @@
   background: transparent;
   border: 1px solid rgba(172, 52, 56, 0.25);
   padding: 9px 22px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -2882,7 +2882,7 @@
 }
 .be-pager-btn:disabled { opacity: 0.35; cursor: default; }
 .be-pager-status {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   letter-spacing: 0.08em;
   color: #6a5f57;
@@ -3205,7 +3205,7 @@
   min-width: 0;
 }
 .be-bundle-eyebrow {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.22em;
@@ -3213,7 +3213,7 @@
   color: #9b8b80;
 }
 .be-bundle-name {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 17px;
   font-weight: 500;
   color: #1a1410;
@@ -3224,20 +3224,20 @@
   text-transform: capitalize;
 }
 .be-bundle-meta {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   color: #6a5f57;
   letter-spacing: 0.04em;
 }
 .be-bundle-price {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: #1a1410;
   letter-spacing: 0.02em;
   margin-top: 2px;
 }
 .be-bundle-plus {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 32px;
   font-weight: 400;
   color: #6b5e57;
@@ -3250,7 +3250,7 @@
   gap: 4px;
 }
 .be-bundle-size-select {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   color: #1a1410;
   background: #fff;
@@ -3272,7 +3272,7 @@
   box-shadow: 0 0 0 3px rgba(172, 52, 56, 0.1);
 }
 .be-bundle-size-help {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 11px;
   color: var(--logo-red);
   text-decoration: underline;
@@ -3286,7 +3286,7 @@
   gap: 4px;
 }
 .be-bundle-total-amount {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   font-weight: 600;
   color: var(--logo-red);
@@ -3298,7 +3298,7 @@
   color: #fff8f6;
   border: none;
   cursor: pointer;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.22em;
@@ -3318,7 +3318,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 32px 14px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   color: #b1373b;
 }

@@ -139,7 +139,7 @@ export default function GiftCardBuyFlow() {
   const recipientEmail = form.forSelf ? form.senderEmail : form.recipientEmail;
 
   return (
-    <div style={{ fontFamily: "'Cormorant Garamond', serif", minHeight: '100vh', background: '#faf6f1' }}>
+    <div style={{ fontFamily: "'Nunito Sans', sans-serif", minHeight: '100vh', background: '#faf6f1' }}>
       <style>{`
         .gcb-wrap { max-width: 700px; margin: 0 auto; padding: 88px 24px 80px; }
         .gcb-breadcrumb {
@@ -169,7 +169,7 @@ export default function GiftCardBuyFlow() {
         .gcb-prog-step.active .gcb-prog-label { color: #AC3438; }
         .gcb-prog-step.done .gcb-prog-label { color: #1a1410; }
 
-        .gcb-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 400; color: #1a1410; margin: 0 0 6px; }
+        .gcb-title { font-family: 'Nunito Sans', sans-serif; font-size: 32px; font-weight: 400; color: #1a1410; margin: 0 0 6px; }
         .gcb-subtitle { font-size: 14px; color: #8a7f76; margin: 0 0 32px; }
 
         .gcb-tabs { display: flex; border-bottom: 1px solid #ede8e2; margin-bottom: 28px; }
@@ -187,7 +187,7 @@ export default function GiftCardBuyFlow() {
         }
         .gcb-input, .gcb-textarea, .gcb-select {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 12px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
+          padding: 12px 14px; font-size: 14px; font-family: 'Nunito Sans', sans-serif;
           background: #fff; color: #1a1410; outline: none;
           transition: border-color 0.15s; width: 100%; box-sizing: border-box;
         }
@@ -200,7 +200,7 @@ export default function GiftCardBuyFlow() {
         }
         .gcb-denom-btn {
           border: 1.5px solid #d4c9c0; border-radius: 8px; background: #fff;
-          padding: 16px 8px; cursor: pointer; font-family: 'Cormorant Garamond', serif;
+          padding: 16px 8px; cursor: pointer; font-family: 'Nunito Sans', sans-serif;
           font-size: 22px; color: #1a1410; text-align: center; transition: all 0.15s;
         }
         .gcb-denom-btn:hover { border-color: #AC3438; color: #AC3438; }
@@ -227,8 +227,8 @@ export default function GiftCardBuyFlow() {
         .gcb-review-head {
           background: #1a1410; padding: 20px 24px; display: flex; align-items: center; gap: 16px;
         }
-        .gcb-review-head-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.2em; color: #faf6f1; }
-        .gcb-review-amount { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: #faf6f1; margin-left: auto; }
+        .gcb-review-head-logo { font-family: 'Nunito Sans', sans-serif; font-size: 18px; letter-spacing: 0.2em; color: #faf6f1; }
+        .gcb-review-amount { font-family: 'Nunito Sans', sans-serif; font-size: 28px; color: #faf6f1; margin-left: auto; }
         .gcb-review-body { padding: 20px 24px; }
         .gcb-review-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid #f0ece8; }
         .gcb-review-row:last-child { border-bottom: none; }
@@ -239,20 +239,20 @@ export default function GiftCardBuyFlow() {
         .gcb-order-summary {
           background: #fff; border: 1px solid #ede8e2; border-radius: 10px; padding: 20px 24px; margin-bottom: 24px;
         }
-        .gcb-order-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #1a1410; margin: 0 0 14px; }
+        .gcb-order-title { font-family: 'Nunito Sans', sans-serif; font-size: 18px; color: #1a1410; margin: 0 0 14px; }
         .gcb-order-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f0ece8; font-size: 14px; }
         .gcb-order-line:last-child { border-bottom: none; font-weight: 700; font-size: 15px; }
 
         .gcb-actions { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 32px; }
         .gcb-back-btn {
           background: none; border: none; cursor: pointer; font-size: 13px;
-          color: #8a7f76; font-family: 'Cormorant Garamond', serif; padding: 0;
+          color: #8a7f76; font-family: 'Nunito Sans', sans-serif; padding: 0;
           display: flex; align-items: center; gap: 6px; transition: color 0.15s;
         }
         .gcb-back-btn:hover { color: #1a1410; }
         .gcb-next-btn {
           background: #1a1410; color: #fff; border: none; border-radius: 2px;
-          padding: 14px 40px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
+          padding: 14px 40px; font-size: 12px; font-family: 'Nunito Sans', sans-serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; min-width: 180px;
         }
@@ -260,7 +260,7 @@ export default function GiftCardBuyFlow() {
         .gcb-next-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .gcb-checkout-btn {
           background: #AC3438; color: #fff; border: none; border-radius: 2px;
-          padding: 16px 48px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
+          padding: 16px 48px; font-size: 13px; font-family: 'Nunito Sans', sans-serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: background 0.2s; min-width: 220px;
         }
@@ -269,7 +269,7 @@ export default function GiftCardBuyFlow() {
         .gcb-error { font-size: 13px; color: #AC3438; padding: 10px 14px; background: rgba(172,52,56,0.06); border-left: 3px solid #AC3438; border-radius: 4px; margin-top: 12px; }
         .gcb-addcart-btn {
           background: #fff; color: #1a1410; border: 1.5px solid #1a1410; border-radius: 2px;
-          padding: 16px 32px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
+          padding: 16px 32px; font-size: 12px; font-family: 'Nunito Sans', sans-serif;
           letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
           transition: all 0.2s; min-width: 180px;
         }

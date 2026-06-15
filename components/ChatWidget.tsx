@@ -280,7 +280,7 @@ export default function ChatWidget() {
         #dnh-btn-label {
           position: absolute; bottom: 70px; right: 0;
           background: #1a1410; color: #faf6f1;
-          font-family: 'Cormorant Garamond', serif; font-size: 11px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 11px;
           letter-spacing: 0.1em; text-transform: uppercase;
           padding: 5px 10px; border-radius: 4px; white-space: nowrap;
           opacity: 0; pointer-events: none;
@@ -300,7 +300,7 @@ export default function ChatWidget() {
           background: #faf6f1; border-radius: 16px;
           box-shadow: 0 12px 56px rgba(0,0,0,0.18);
           z-index: 99998; display: flex; flex-direction: column;
-          overflow: hidden; font-family: 'Cormorant Garamond', serif;
+          overflow: hidden; font-family: 'Nunito Sans', sans-serif;
           transform: scale(0.9) translateY(20px); opacity: 0; pointer-events: none;
           transition: transform 0.3s cubic-bezier(0.34,1.3,0.64,1), opacity 0.22s ease;
         }
@@ -313,7 +313,7 @@ export default function ChatWidget() {
         .dnh-hdr-left { display: flex; align-items: center; gap: 10px; }
         .dnh-avatar { width: 34px; height: 34px; border-radius: 50%; background: #AC3438; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; flex-shrink: 0; }
         .dnh-title { display: flex; flex-direction: column; }
-        .dnh-title-name { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #faf6f1; font-weight: 500; letter-spacing: 0.1em; }
+        .dnh-title-name { font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: #faf6f1; font-weight: 500; letter-spacing: 0.1em; }
         .dnh-title-sub { font-size: 10px; color: #8a7f76; letter-spacing: 0.06em; text-transform: uppercase; }
         .dnh-close {
           background: rgba(255,255,255,0.06);
@@ -341,25 +341,25 @@ export default function ChatWidget() {
         @keyframes dnh-dot { 0%,60%,100% { transform: translateY(0); opacity: 0.35; } 30% { transform: translateY(-6px); opacity: 1; } }
 
         .dnh-quick { display: flex; flex-wrap: wrap; gap: 5px; padding: 0 14px 10px; flex-shrink: 0; }
-        .dnh-qbtn { background: none; border: 1px solid #ddd4ca; border-radius: 20px; padding: 5px 11px; font-size: 11.5px; color: #5a4e47; cursor: pointer; font-family: 'Cormorant Garamond', serif; transition: all 0.15s; white-space: nowrap; }
+        .dnh-qbtn { background: none; border: 1px solid #ddd4ca; border-radius: 20px; padding: 5px 11px; font-size: 11.5px; color: #5a4e47; cursor: pointer; font-family: 'Nunito Sans', sans-serif; transition: all 0.15s; white-space: nowrap; }
         .dnh-qbtn:hover { border-color: #AC3438; color: #AC3438; background: rgba(172,52,56,0.04); }
 
         .dnh-foot { padding: 10px 14px; border-top: 1px solid #ece6df; display: flex; gap: 8px; align-items: center; background: #faf6f1; flex-shrink: 0; }
-        #dnh-input { flex: 1; border: 1px solid #d4c9c0; border-radius: 22px; padding: 9px 15px; font-size: 13.5px; font-family: 'Cormorant Garamond', serif; background: #fff; color: #1a1410; outline: none; transition: border-color 0.15s; }
+        #dnh-input { flex: 1; border: 1px solid #d4c9c0; border-radius: 22px; padding: 9px 15px; font-size: 13.5px; font-family: 'Nunito Sans', sans-serif; background: #fff; color: #1a1410; outline: none; transition: border-color 0.15s; }
         #dnh-input:focus { border-color: #AC3438; }
         #dnh-input::placeholder { color: #b4a89d; }
         #dnh-send { width: 38px; height: 38px; border-radius: 50%; background: #AC3438; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s, transform 0.15s; }
         #dnh-send:hover { background: #8B2A2D; transform: scale(1.07); }
         #dnh-send:disabled { background: #ccc4ba; cursor: default; transform: none; }
 
-        .dnh-trigger { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid rgba(172,52,56,0.45); color: #AC3438; padding: 11px 22px; border-radius: 2px; font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; user-select: none; }
+        .dnh-trigger { display: inline-flex; align-items: center; gap: 8px; background: transparent; border: 1px solid rgba(172,52,56,0.45); color: #AC3438; padding: 11px 22px; border-radius: 2px; font-family: 'Nunito Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; user-select: none; }
         .dnh-trigger:hover { background: #AC3438; color: #fff; border-color: #AC3438; }
         .dnh-trigger svg { flex-shrink: 0; }
         .dnh-panel { display: flex; align-items: center; justify-content: space-between; gap: 20px; background: rgba(172,52,56,0.1); border: 1px solid rgba(172,52,56,0.28); border-radius: 6px; padding: 18px 26px; margin: 16px 0; }
         .dnh-panel-copy { flex: 1; }
-        .dnh-panel-copy strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 22px; color: #AC3438; margin-bottom: 4px; font-style: italic; }
-        .dnh-panel-copy span { font-family: 'Cormorant Garamond', serif; font-size: 15px; color: #AC3438; line-height: 1.5; }
-        .dnh-inline-link { display: inline-flex; align-items: center; gap: 6px; color: #AC3438; font-family: 'Cormorant Garamond', serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; border: none; background: none; padding: 0; transition: opacity 0.15s; }
+        .dnh-panel-copy strong { display: block; font-family: 'Nunito Sans', sans-serif; font-size: 22px; color: #AC3438; margin-bottom: 4px; font-style: italic; }
+        .dnh-panel-copy span { font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: #AC3438; line-height: 1.5; }
+        .dnh-inline-link { display: inline-flex; align-items: center; gap: 6px; color: #AC3438; font-family: 'Nunito Sans', sans-serif; font-size: 12px; letter-spacing: 0.07em; text-transform: uppercase; cursor: pointer; border: none; background: none; padding: 0; transition: opacity 0.15s; }
         .dnh-inline-link:hover { opacity: 0.7; }
 
         @media (max-width: 480px) {

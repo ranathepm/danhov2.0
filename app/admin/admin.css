@@ -18,7 +18,7 @@
   min-height: 100vh;
   background: var(--adm-bg);
   color: var(--adm-text);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   line-height: 1.55;
   cursor: auto;                  /* override the public-site custom cursor */
@@ -68,7 +68,7 @@ body:has(.admin-root) {
   border-radius: 4px;
   box-shadow: 0 16px 56px rgba(61,37,32,0.10);
 }
-.adm-login-mark { font-family: 'Cormorant Garamond', serif; font-size: 24px; letter-spacing: 0.4em; color: var(--adm-accent); text-align: center; }
+.adm-login-mark { font-family: 'Nunito Sans', sans-serif; font-size: 24px; letter-spacing: 0.4em; color: var(--adm-accent); text-align: center; }
 .adm-login-sub { text-align: center; margin-top: 6px; color: var(--adm-mute); font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; }
 .adm-login-form { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
 .adm-login-foot { margin-top: 20px; font-size: 12px; color: var(--adm-mute); text-align: center; }
@@ -94,7 +94,7 @@ body:has(.admin-root) {
 }
 .adm-brand { display: flex; flex-direction: column; padding: 4px 10px 24px; border-bottom: 1px solid var(--adm-line); margin-bottom: 12px; text-decoration: none; }
 .adm-brand:hover { text-decoration: none; }
-.adm-brand-mark { font-family: 'Cormorant Garamond', serif; font-size: 18px; letter-spacing: 0.3em; color: var(--adm-accent); }
+.adm-brand-mark { font-family: 'Nunito Sans', sans-serif; font-size: 18px; letter-spacing: 0.3em; color: var(--adm-accent); }
 .adm-brand-sub { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--adm-mute); margin-top: 4px; }
 .adm-nav { display: flex; flex-direction: column; gap: 2px; }
 .adm-navlink {
@@ -144,8 +144,8 @@ body:has(.admin-root) {
 .adm-page { display: flex; flex-direction: column; gap: 24px; }
 .adm-page-head { display: flex; flex-direction: column; gap: 4px; }
 .adm-page-head--with-actions { flex-direction: row; align-items: center; justify-content: space-between; gap: 16px; }
-.adm-h1 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); letter-spacing: 0.01em; }
-.adm-h2 { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; margin: 0; color: var(--adm-text); letter-spacing: 0.02em; }
+.adm-h1 { font-family: 'Nunito Sans', sans-serif; font-size: 26px; font-weight: 600; line-height: 1.1; margin: 0; color: var(--adm-text); letter-spacing: 0.01em; }
+.adm-h2 { font-family: 'Nunito Sans', sans-serif; font-size: 16px; font-weight: 600; margin: 0; color: var(--adm-text); letter-spacing: 0.02em; }
 .adm-page-sub { font-size: 13px; color: var(--adm-mute); margin: 0; }
 .adm-back-link { display: inline-block; font-size: 12px; color: var(--adm-mute) !important; letter-spacing: 0.05em; margin-bottom: 6px; }
 .adm-mono { font-family: monospace; font-size: 12.5px; }
@@ -181,7 +181,7 @@ body:has(.admin-root) {
 }
 .adm-stat-card--link:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(61,37,32,0.06); border-color: var(--adm-accent); text-decoration: none; }
 .adm-stat-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--adm-mute); }
-.adm-stat-value { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; line-height: 1.1; margin-top: 6px; color: var(--adm-text); }
+.adm-stat-value { font-family: 'Nunito Sans', sans-serif; font-size: 30px; font-weight: 600; line-height: 1.1; margin-top: 6px; color: var(--adm-text); }
 .adm-stat-sub { font-size: 12px; color: var(--adm-mute); margin-top: 4px; }
 
 .adm-two-col {
@@ -606,7 +606,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   content: '$';
   position: absolute;
   left: 12px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   color: var(--adm-mute);
   pointer-events: none;
@@ -663,7 +663,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   background: var(--adm-accent);
 }
 .adm-pricing-total span { color: rgba(255,255,255,0.82); font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
-.adm-pricing-total strong { color: #fff; font-size: 20px; font-weight: 700; font-family: 'Cormorant Garamond', serif; }
+.adm-pricing-total strong { color: #fff; font-size: 20px; font-weight: 700; font-family: 'Nunito Sans', sans-serif; }
 
 /* ── Legacy .adm-edit kept for any remaining references ─────────────── */
 .adm-edit { display: flex; flex-direction: column; gap: 16px; padding-bottom: 84px; }
@@ -905,7 +905,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   color: var(--adm-mute);
 }
 .admin-root .adm-page-card-stat strong {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 22px;
   color: var(--adm-accent);
 }
@@ -953,7 +953,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin-bottom: 12px;
 }
 .admin-root .adm-block-type {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.22em;
@@ -1127,7 +1127,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin-bottom: 8px;
 }
 .admin-root .adm-kpi-value {
-  font-family: 'Cormorant Garamond', 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', 'Nunito Sans', sans-serif;
   font-size: 28px;
   font-weight: 500;
   color: var(--adm-text);
@@ -1270,7 +1270,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .admin-root .adm-btn-full { width: 100%; justify-content: center; }
 
 .admin-root .adm-h2 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -1278,7 +1278,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin: 0;
 }
 .admin-root .adm-h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--adm-text);
@@ -1348,7 +1348,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   border-radius: 4px;
 }
 .admin-root .adm-ai-drop-mark {
-  font-family: 'Cormorant Garamond', 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', 'Nunito Sans', sans-serif;
   font-size: 48px;
   color: var(--adm-accent);
   line-height: 1;
@@ -1457,7 +1457,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   margin-bottom: 12px;
 }
 .adm-commission-mode {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 13px;
   font-weight: 600;
   color: #AC3438;
@@ -1503,7 +1503,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
 }
 .adm-commission-table td {
   padding: 5px 10px 5px 0;
@@ -1529,7 +1529,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 .adm-stat-card { border-left: 3px solid var(--adm-line); }
 .adm-stat-card--link:hover { border-left-color: var(--adm-accent); }
 .adm-stat-value {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   font-size: 36px;
   font-weight: 600;
   line-height: 1;
@@ -1616,7 +1616,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Nunito Sans', sans-serif;
   text-decoration: none !important;
   transition: opacity 0.14s;
   line-height: 1.6;

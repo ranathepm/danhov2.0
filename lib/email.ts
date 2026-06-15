@@ -68,7 +68,7 @@ function shell(title: string, body: string): string {
     <tr><td align="center" style="padding:40px 20px;">
       <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid rgba(172,52,56,0.10);">
         <tr><td style="padding:36px 44px 24px;text-align:center;border-bottom:1px solid rgba(172,52,56,0.08);">
-          <div style="font-family:Georgia,'Cormorant Garamond',serif;font-size:24px;letter-spacing:0.4em;color:#AC3438;">DANHOV</div>
+          <div style="font-family:Georgia,'Nunito Sans', sans-serif;font-size:24px;letter-spacing:0.4em;color:#AC3438;">DANHOV</div>
           <div style="margin-top:6px;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#7a5c58;">Atelier · Los Angeles · Est. 1984</div>
         </td></tr>
         <tr><td style="padding:32px 44px;font-size:15px;line-height:1.7;color:#3d2520;">${body}</td></tr>

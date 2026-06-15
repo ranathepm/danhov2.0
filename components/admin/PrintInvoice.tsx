@@ -82,7 +82,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           .adm-main, body, html { background: #fff !important; padding: 0 !important; margin: 0 !important; }
         }
         .invoice {
-          font-family: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+          font-family: 'Nunito Sans', 'Garamond', Georgia, serif;
           color: #1a1410;
           max-width: 760px;
           margin: 24px auto;
@@ -99,22 +99,22 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           padding-bottom: 24px; border-bottom: 2px solid #AC3438;
         }
         .invoice-brand-mark {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 42px; font-weight: 500; letter-spacing: 0.18em;
           color: #AC3438; line-height: 1;
         }
         .invoice-brand-sub {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 10px; letter-spacing: 0.32em;
           color: #6a5f57; margin-top: 6px; text-transform: uppercase;
         }
         .invoice-meta {
           text-align: right;
-          font-family: 'Cormorant Garamond', serif; font-size: 11px; line-height: 1.7;
+          font-family: 'Nunito Sans', sans-serif; font-size: 11px; line-height: 1.7;
           color: #6a5f57;
         }
         .invoice-meta .invoice-ref {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 22px; color: #1a1410; letter-spacing: 0.1em;
           font-style: italic; margin-bottom: 6px;
         }
@@ -123,26 +123,26 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           margin: 28px 0 18px;
         }
         .invoice-party h4 {
-          font-family: 'Cormorant Garamond', serif; font-size: 10px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 10px;
           letter-spacing: 0.24em; text-transform: uppercase; color: #6a5f57;
           margin-bottom: 8px;
         }
-        .invoice-party-body { font-family: 'Cormorant Garamond', serif; font-size: 12px; line-height: 1.7; color: #1a1410; }
+        .invoice-party-body { font-family: 'Nunito Sans', sans-serif; font-size: 12px; line-height: 1.7; color: #1a1410; }
         .invoice-section { margin-top: 24px; }
         .invoice-section-title {
-          font-family: 'Cormorant Garamond', serif; font-size: 10px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 10px;
           letter-spacing: 0.24em; text-transform: uppercase; color: #6a5f57;
           padding-bottom: 6px; margin-bottom: 10px; border-bottom: 1px solid #ece6df;
         }
         .invoice-spec {
           display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px;
-          font-family: 'Cormorant Garamond', serif; font-size: 12px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 12px;
           color: #1a1410; line-height: 1.7;
         }
         .invoice-spec span.k { color: #6a5f57; }
         .invoice-totals { display: flex; justify-content: flex-end; margin-top: 18px; }
         .invoice-totals-box {
-          min-width: 280px; font-family: 'Cormorant Garamond', serif; font-size: 12px; color: #1a1410;
+          min-width: 280px; font-family: 'Nunito Sans', sans-serif; font-size: 12px; color: #1a1410;
         }
         .invoice-totals-row {
           display: flex; justify-content: space-between;
@@ -151,22 +151,22 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         .invoice-totals-row.grand {
           border-top: 2px solid #AC3438;
           margin-top: 8px; padding-top: 12px;
-          font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic;
+          font-family: 'Nunito Sans', sans-serif; font-size: 18px; font-style: italic;
           color: #AC3438;
         }
         .invoice-balance {
           background: #faf6f1; padding: 14px 18px; border-left: 3px solid #AC3438;
           margin: 20px 0 0;
-          font-family: 'Cormorant Garamond', serif; font-size: 12px; line-height: 1.6; color: #1a1410;
+          font-family: 'Nunito Sans', sans-serif; font-size: 12px; line-height: 1.6; color: #1a1410;
         }
         .invoice-balance b { color: #AC3438; }
         .invoice-footer {
           margin-top: 36px; padding-top: 18px; border-top: 1px solid #ece6df;
-          font-family: 'Cormorant Garamond', serif; font-size: 10px; line-height: 1.7;
+          font-family: 'Nunito Sans', sans-serif; font-size: 10px; line-height: 1.7;
           color: #6a5f57; text-align: center;
         }
         .invoice-footer em {
-          font-family: 'Cormorant Garamond', serif; font-size: 14px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 14px;
           font-style: italic; color: #AC3438; display: block; margin-bottom: 6px;
         }
         .no-print {
@@ -180,7 +180,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           onClick={() => window.print()}
           style={{
             background: '#AC3438', color: '#fff', border: 'none',
-            padding: '10px 24px', fontFamily: "'Cormorant Garamond', serif",
+            padding: '10px 24px', fontFamily: "'Nunito Sans', sans-serif",
             fontSize: 12, letterSpacing: '0.12em', textTransform: 'uppercase',
             cursor: 'pointer', borderRadius: 4,
           }}
@@ -229,10 +229,10 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
 
         <div className="invoice-section">
           <div className="invoice-section-title">Order Details</div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontStyle: 'italic', color: '#1a1410', marginBottom: 4 }}>
+          <div style={{ fontFamily: "'Nunito Sans', sans-serif", fontSize: 22, fontStyle: 'italic', color: '#1a1410', marginBottom: 4 }}>
             {stripMetalSuffix(product.name)}
           </div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 11, letterSpacing: '0.1em', color: '#6a5f57', textTransform: 'uppercase', marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Nunito Sans', sans-serif", fontSize: 11, letterSpacing: '0.1em', color: '#6a5f57', textTransform: 'uppercase', marginBottom: 16 }}>
             {[product.collection, `Model ${product.sku}`].filter(Boolean).join(' · ')}
           </div>
 

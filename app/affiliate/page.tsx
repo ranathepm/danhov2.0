@@ -57,7 +57,7 @@ export default function AffiliatePage() {
   return (
     <main className="aff-page">
       <style>{`
-        .aff-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; }
+        .aff-page { font-family: 'Nunito Sans', sans-serif; color: #1a1410; background: #faf6f1; }
 
         /* Hero */
         .aff-hero {
@@ -75,7 +75,7 @@ export default function AffiliatePage() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 18px;
         }
         .aff-hero h1 {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(34px, 5.5vw, 60px); font-weight: 400;
           color: #faf6f1; margin: 0 auto 22px; max-width: 680px; line-height: 1.15;
         }
@@ -99,7 +99,7 @@ export default function AffiliatePage() {
           color: #AC3438; margin-bottom: 12px; display: block; text-align: center;
         }
         .aff-section-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(26px, 4vw, 38px); font-weight: 400;
           text-align: center; color: #1a1410; margin: 0 0 52px;
         }
@@ -110,12 +110,12 @@ export default function AffiliatePage() {
         }
         .aff-step { text-align: center; }
         .aff-step-num {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 52px; color: rgba(172,52,56,0.15); line-height: 1;
           display: block; margin-bottom: 14px;
         }
         .aff-step-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 19px; color: #1a1410; margin-bottom: 8px;
         }
         .aff-step-body { font-size: 13.5px; color: #6b5e57; line-height: 1.65; }
@@ -143,12 +143,12 @@ export default function AffiliatePage() {
           padding: 4px 14px; border-radius: 999px; white-space: nowrap;
         }
         .aff-tier-name {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 22px; color: #1a1410; margin-bottom: 4px;
         }
         .aff-tier-threshold { font-size: 12px; color: #9c8f86; margin-bottom: 20px; }
         .aff-tier-rate {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 52px; color: #AC3438; line-height: 1;
           margin-bottom: 4px;
         }
@@ -176,7 +176,7 @@ export default function AffiliatePage() {
         .aff-form-group select,
         .aff-form-group textarea {
           border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 11px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
+          padding: 11px 14px; font-size: 14px; font-family: 'Nunito Sans', sans-serif;
           background: #fff; color: #1a1410; outline: none; transition: border-color 0.15s;
         }
         .aff-form-group input:focus,
@@ -185,7 +185,7 @@ export default function AffiliatePage() {
         .aff-form-group textarea { resize: vertical; min-height: 90px; }
         .aff-submit {
           background: #1a1410; color: #faf6f1; border: none; border-radius: 999px;
-          padding: 14px 44px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
+          padding: 14px 44px; font-size: 13px; font-family: 'Nunito Sans', sans-serif;
           letter-spacing: 0.12em; text-transform: uppercase;
           cursor: pointer; align-self: center; transition: background 0.2s;
         }
@@ -202,7 +202,7 @@ export default function AffiliatePage() {
         }
         .aff-success-icon { font-size: 32px; color: #AC3438; margin-bottom: 16px; }
         .aff-success-title {
-          font-family: 'Cormorant Garamond', serif; font-size: 28px;
+          font-family: 'Nunito Sans', sans-serif; font-size: 28px;
           color: #1a1410; margin: 0 0 12px;
         }
         .aff-success-body { font-size: 15px; color: #6b5e57; line-height: 1.7; margin: 0; }

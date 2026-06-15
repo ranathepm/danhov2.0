@@ -854,7 +854,7 @@ export default function ProductEditor({
               <div className="adm-multiplier-block" style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
                   <span className="adm-field-label" style={{ margin: 0 }}>Total stone count:</span>
-                  <strong style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15 }}>{totalStoneCount}</strong>
+                  <strong style={{ fontFamily: "'Nunito Sans', sans-serif", fontSize: 15 }}>{totalStoneCount}</strong>
                 </div>
                 <span className="adm-field-label">Setting Multiplier (×)</span>
                 <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
@@ -1013,7 +1013,7 @@ export default function ProductEditor({
                 borderRadius: 6,
                 marginBottom: 16,
                 fontSize: 12,
-                fontFamily: "'Cormorant Garamond', serif",
+                fontFamily: "'Nunito Sans', sans-serif",
                 color: '#6b5b52',
                 display: 'flex',
                 gap: 12,
@@ -1055,7 +1055,7 @@ export default function ProductEditor({
                     </div>
                     <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
                       <span>Casting labor (${perG.toFixed(0)}/g × alloy weight — varies per metal)</span>
-                      <strong style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410' }}>
+                      <strong style={{ fontFamily: "'Nunito Sans', sans-serif", color: '#1a1410' }}>
                         {defWeight > 0
                           ? `${defLabel}: ${defWeight.toFixed(2)}g × $${perG} = $${Math.round(defCasting)}`
                           : '—'}
@@ -1079,7 +1079,7 @@ export default function ProductEditor({
                       padding: '8px 14px',
                       background: '#f5eeeb',
                       borderBottom: '1px solid var(--border)',
-                      fontFamily: "'Cormorant Garamond', serif",
+                      fontFamily: "'Nunito Sans', sans-serif",
                       fontSize: 11,
                       color: '#7a6860',
                       textTransform: 'uppercase' as const,
@@ -1115,7 +1115,7 @@ export default function ProductEditor({
                           padding: '10px 14px',
                           borderBottom: idx < metalsToShow.length - 1 ? '1px solid var(--border)' : 'none',
                           alignItems: 'center',
-                          fontFamily: "'Cormorant Garamond', serif",
+                          fontFamily: "'Nunito Sans', sans-serif",
                           fontSize: 15,
                           background: isDefault ? '#fffaf8' : 'transparent',
                         }}>
@@ -1149,7 +1149,7 @@ export default function ProductEditor({
                   background: '#fdf9f7',
                   border: '1px solid #e8ddd8',
                   borderRadius: 6,
-                  fontFamily: "'Cormorant Garamond', serif",
+                  fontFamily: "'Nunito Sans', sans-serif",
                 }}>
                   <span className="adm-field-label" style={{ display: 'block', marginBottom: 8 }}>
                     Website Markup Multiplier
@@ -1202,7 +1202,7 @@ export default function ProductEditor({
                     background: '#fff8f6',
                     border: '1px solid #AC3438',
                     borderRadius: 6,
-                    fontFamily: "'Cormorant Garamond', serif",
+                    fontFamily: "'Nunito Sans', sans-serif",
                   }}>
                     <div style={{ fontSize: 11, color: '#9e8880', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: 12 }}>
                       Total Product Price — {label} (default metal)

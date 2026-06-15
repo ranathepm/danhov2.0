@@ -94,7 +94,7 @@ const SECTIONS = [
 
 export default function SustainabilityPage() {
   return (
-    <main style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410', background: '#faf6f1' }}>
+    <main style={{ fontFamily: "'Nunito Sans', sans-serif", color: '#1a1410', background: '#faf6f1' }}>
       <style>{`
         /* ── Breadcrumb ── */
         .sr-crumb {
@@ -124,7 +124,7 @@ export default function SustainabilityPage() {
           color: #AC3438; display: block;
         }
         .sr-hero h1 {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(34px, 4vw, 54px); font-weight: 400;
           color: #1a1410; margin: 0; line-height: 1.1;
         }
@@ -170,7 +170,7 @@ export default function SustainabilityPage() {
           text-transform: uppercase; color: #AC3438; margin-bottom: 16px;
         }
         .sr-journey h2 {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(26px, 3.5vw, 38px); font-weight: 400;
           color: #1a1410; margin: 0 0 24px;
         }
@@ -183,7 +183,7 @@ export default function SustainabilityPage() {
         }
         .sr-stat { text-align: center; }
         .sr-stat-num {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 44px; color: #AC3438; line-height: 1; display: block;
         }
         .sr-stat-label {
@@ -197,7 +197,7 @@ export default function SustainabilityPage() {
         }
         .sr-pillars-inner { max-width: 1100px; margin: 0 auto; }
         .sr-pillars h2 {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(26px, 3.5vw, 38px); font-weight: 400;
           text-align: center; color: #1a1410; margin: 0 0 56px;
         }
@@ -218,7 +218,7 @@ export default function SustainabilityPage() {
           flex-shrink: 0; align-self: center;
         }
         .sr-pillar-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 20px; color: #1a1410; text-align: center;
         }
         .sr-pillar-bullets {
@@ -246,12 +246,12 @@ export default function SustainabilityPage() {
           justify-content: center; gap: 20px;
         }
         .sr-section-num {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: 80px; color: rgba(172,52,56,0.1); line-height: 1;
           display: block; margin-bottom: -8px;
         }
         .sr-section-title {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(22px, 2.5vw, 32px); color: #1a1410; font-weight: 400;
           margin: 0;
         }
@@ -287,7 +287,7 @@ export default function SustainabilityPage() {
           color: rgba(250,246,241,0.8); margin-bottom: 18px; position: relative; z-index: 1;
         }
         .sr-cta h2 {
-          font-family: 'Cormorant Garamond', serif;
+          font-family: 'Nunito Sans', sans-serif;
           font-size: clamp(28px, 4vw, 48px); font-weight: 400;
           color: #faf6f1; margin: 0 0 16px; max-width: 640px; margin-inline: auto;
           position: relative; z-index: 1;
