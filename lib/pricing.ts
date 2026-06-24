@@ -282,6 +282,7 @@ export type PricingInputs = {
   base_labor_usd:          number | null;        // setting labour
   diamond_labor_usd?:      number | null;        // centre-diamond setting labour
   casting_labor_per_gram?: number | null;        // per-gram casting/finishing cost
+  custom_labor_usd?:       number | null;        // jewellery labor (hand-set by admin)
   stones_value_usd:        number | null;        // override; null → auto from stone_groups
   stone_groups?:           StoneGroup[] | null;  // used when stones_value_usd is null
   commission_rate?:        number | null;        // kept for backward compat; no longer used
@@ -359,7 +360,7 @@ export function computePrice(
   const metalCost    = metalWeight * costPerG;
   const castingLabor = metalWeight * (p.casting_labor_per_gram ?? 0);
   const rhodium      = 0; // color is not a cost factor — matches admin pricing policy
-  const labor        = (p.base_labor_usd ?? 0) + (p.diamond_labor_usd ?? 0);
+  const labor        = (p.base_labor_usd ?? 0) + (p.diamond_labor_usd ?? 0) + (p.custom_labor_usd ?? 0);
 
   // Stone cost: use override if set, else auto-compute from stone_groups
   let stones = p.stones_value_usd ?? null;

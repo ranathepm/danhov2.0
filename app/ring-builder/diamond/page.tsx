@@ -51,7 +51,6 @@ async function PrefetchedPicker({ searchParams }: { searchParams: Search }) {
           clarity: ['VS1', 'VS2', 'SI1'],
           cut: ['EX', 'ID'],
           availability: 'AVAILABLE',
-          has_image: true,
         },
         { limit: 24, offset: 0, order: { type: 'price', direction: 'ASC' } }
       ),

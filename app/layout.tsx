@@ -1,6 +1,14 @@
 import type { Metadata, Viewport } from 'next';
 import { Suspense } from 'react';
 import { headers } from 'next/headers';
+import { Cormorant_Garamond } from 'next/font/google';
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+});
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import Cursor from '@/components/Cursor';
@@ -103,14 +111,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const isAdmin = path.startsWith('/admin');
 
   return (
-    <html lang="en">
+    <html lang="en" className={cormorant.className}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-          rel="stylesheet"
-        />
         {!isAdmin && (
           <script
             type="application/ld+json"

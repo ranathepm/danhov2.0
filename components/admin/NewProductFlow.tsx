@@ -29,6 +29,8 @@ const BLANK = {
   commission_rate: 0,
   casting_labor_per_gram: 10,
   accounting_cost_usd: null,
+  custom_labor_usd: null,
+  labor_extras: null,
   is_active: true,
   sub_categories: [] as string[],
 };

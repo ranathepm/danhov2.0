@@ -12,7 +12,7 @@ const ALLOWED_FIELDS = [
   'casting_labor_per_gram',
   'stones_value_usd', 'stone_count_input', 'stone_size_mm', 'stone_groups',
   'setting_multiplier', 'centre_diamond_group', 'centre_multiplier', 'commission_rate',
-  'accounting_cost_usd', 'is_active', 'sub_categories',
+  'accounting_cost_usd', 'custom_labor_usd', 'labor_extras', 'is_active', 'sub_categories',
 ] as const;
 
 function pickAllowed(input: Record<string, unknown>) {

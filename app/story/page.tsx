@@ -78,7 +78,7 @@ export default function StoryPage() {
         <section className="prose-cta">
           <p>Begin your own DANHOV piece.</p>
           <div className="prose-cta-actions">
-            <Link href="/engagement-rings" className="btn-primary">Explore Engagement</Link>
+            <Link href="/engagement-rings" className="btn-primary">Explore Engagement Rings</Link>
             <Link href="/#appointment" className="btn-solid">Book a Consultation</Link>
           </div>
         </section>

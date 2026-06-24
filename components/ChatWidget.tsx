@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import VoiceModal from '@/components/VoiceModal';
-import VisionModal from '@/components/VisionModal';
-import DesignWithAIModal from '@/components/DesignWithAIModal';
+import dynamic from 'next/dynamic';
+
+const VoiceModal = dynamic(() => import('@/components/VoiceModal'), { ssr: false });
+const VisionModal = dynamic(() => import('@/components/VisionModal'), { ssr: false });
+const DesignWithAIModal = dynamic(() => import('@/components/DesignWithAIModal'), { ssr: false });
 
 type Msg = { role: 'user' | 'assistant' | 'system'; content: string };
 
@@ -209,9 +211,15 @@ export default function ChatWidget() {
     if (msgsRef.current) msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
   }, [msgs, loading]);
 
-  // Wire up [data-dnh] triggers across the page
+  // Wire up [data-dnh] and [data-dnh-design] triggers across the page
   useEffect(() => {
     function handler(e: MouseEvent) {
+      const designEl = (e.target as HTMLElement)?.closest('[data-dnh-design]') as HTMLElement | null;
+      if (designEl) {
+        e.preventDefault();
+        setDesignOpen(true);
+        return;
+      }
       const el = (e.target as HTMLElement)?.closest('[data-dnh]') as HTMLElement | null;
       if (el) {
         e.preventDefault();

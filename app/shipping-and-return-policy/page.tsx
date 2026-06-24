@@ -4,7 +4,7 @@ import PolicyPage from '@/components/PolicyPage';
 export const metadata: Metadata = {
   title: 'Shipping & Returns',
   description:
-    'DANHOV shipping and return policy — complimentary insured US shipping, 30-day returns on non-customised pieces, and one complimentary resizing within 60 days.',
+    'DANHOV shipping and return policy — complimentary insured US shipping, 30-day returns on non-customized pieces, and one complimentary resizing within 60 days.',
   alternates: { canonical: '/shipping-and-return-policy' },
 };
 

@@ -43,7 +43,7 @@ export default function GiftCardsPage() {
           display: inline-block; padding: 16px 44px;
           background: #AC3438; color: #fff;
           font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
-          text-decoration: none; border-radius: 999px;
+          text-decoration: none; border-radius: 4px;
           transition: background 0.2s;
         }
         .gc-hero-cta:hover { background: #8f2b2e; }
@@ -100,6 +100,7 @@ export default function GiftCardsPage() {
         .gc-service-card {
           border: 1px solid #ede8e2; border-radius: 10px; padding: 32px 28px;
           display: flex; flex-direction: column; gap: 16px; background: #faf6f1;
+          align-items: center; text-align: center;
           transition: box-shadow 0.2s, border-color 0.2s;
         }
         .gc-service-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); border-color: #d4c9c0; }
@@ -118,7 +119,7 @@ export default function GiftCardsPage() {
         }
         .gc-service-desc { font-size: 13.5px; color: #6b5e57; line-height: 1.65; flex: 1; }
         .gc-service-link {
-          display: inline-block; padding: 11px 28px; border-radius: 999px;
+          display: inline-block; padding: 11px 28px; border-radius: 4px;
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
           text-decoration: none; align-self: flex-start; transition: all 0.2s;
           background: #AC3438; color: #fff; border: 1px solid #AC3438;
@@ -134,7 +135,7 @@ export default function GiftCardsPage() {
         .gc-step { text-align: center; }
         .gc-step-num {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 48px; color: rgba(172,52,56,0.15); line-height: 1;
+          font-size: 48px; color: #AC3438; line-height: 1;
           display: block; margin-bottom: 12px;
         }
         .gc-step-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: #1a1410; margin-bottom: 8px; }

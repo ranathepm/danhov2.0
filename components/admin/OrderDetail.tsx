@@ -434,7 +434,7 @@ export default function OrderDetail({
                               <tr><td>Stone</td><td><strong>{d.carat.toFixed(2)} ct {d.shape}</strong></td></tr>
                             )}
                             {d.color && (
-                              <tr><td>Grade</td><td>{d.color} colour · {d.clarity} clarity · {d.cut} cut</td></tr>
+                              <tr><td>Grade</td><td>{d.color} color · {d.clarity} clarity · {d.cut} cut</td></tr>
                             )}
                             {d.lab && (
                               <tr>
@@ -742,7 +742,7 @@ export default function OrderDetail({
                   Order: <span className="adm-mono">{initialOrder.nivoda_order_id}</span>
                 </div>
               ) : (
-                <div className="adm-page-sub" style={{ marginBottom: 6, color: '#b8761e' }}>
+                <div className="adm-page-sub" style={{ marginBottom: 6, color: '#AC3438' }}>
                   Order not yet placed on Nivoda
                 </div>
               )}

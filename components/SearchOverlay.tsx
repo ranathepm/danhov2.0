@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 type Result = {
   sku: string;
@@ -165,8 +166,7 @@ export default function SearchOverlay({
                       >
                         <div className="search-result-img">
                           {r.image ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img src={r.image} alt={r.name} />
+                            <Image src={r.image} alt={r.name} width={56} height={56} style={{ objectFit: 'cover' }} />
                           ) : (
                             <div className="search-result-img-fallback" aria-hidden="true">
                               ◯
@@ -176,7 +176,7 @@ export default function SearchOverlay({
                         <div className="search-result-meta">
                           <div className="search-result-name">{r.name}</div>
                           <div className="search-result-sub">
-                            {r.collection ?? r.category} · Style {r.sku}
+                            {r.collection ?? r.category}
                           </div>
                         </div>
                         {(r.price_computed ?? r.price_display) && (

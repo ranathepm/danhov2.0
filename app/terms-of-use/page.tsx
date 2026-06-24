@@ -18,14 +18,14 @@ export default function TermsPage() {
         {
           heading: 'Orders & pricing',
           body: [
-            'Each piece is handcrafted to order. Prices shown are computed from the current metal market, the piece specification, and craftsmanship; a locked quote is honoured for its stated duration. We reserve the right to confirm availability and final pricing before production begins.',
+            'Each piece is handcrafted to order. Prices shown are computed from the current metal market, the piece specification, and craftsmanship; a locked quote is honored for its stated duration. We reserve the right to confirm availability and final pricing before production begins.',
             'Every piece is handcrafted to order. Payment is collected at checkout to begin production.',
           ],
         },
         {
-          heading: 'Custom & personalised pieces',
+          heading: 'Custom & personalized pieces',
           body: [
-            'Customised, engraved, or made-to-order personalised pieces are produced specifically for you and are handled case-by-case for changes or returns. Please review your specification carefully before confirming.',
+            'Customized, engraved, or made-to-order personalized pieces are produced specifically for you and are handled case-by-case for changes or returns. Please review your specification carefully before confirming.',
           ],
         },
         {

@@ -5,8 +5,6 @@ import Link from 'next/link';
 export const dynamic = 'force-dynamic';
 
 type Stats = {
-  products_total: number;
-  products_active: number;
   orders_total: number;
   orders_pending: number;
   orders_deposit_paid: number;
@@ -21,8 +19,6 @@ async function loadStats(): Promise<{ stats: Stats; recentOrders: any[]; upcomin
   const now = new Date().toISOString();
 
   const [
-    productsAll,
-    productsActive,
     ordersAll,
     ordersPending,
     ordersDeposit,
@@ -33,8 +29,6 @@ async function loadStats(): Promise<{ stats: Stats; recentOrders: any[]; upcomin
     recentOrders,
     upcomingConsultations,
   ] = await Promise.all([
-    sb.from('products').select('sku', { count: 'exact', head: true }),
-    sb.from('products').select('sku', { count: 'exact', head: true }).eq('is_active', true),
     sb.from('orders').select('id', { count: 'exact', head: true }),
     sb.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
     sb.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'deposit_paid'),
@@ -58,8 +52,6 @@ async function loadStats(): Promise<{ stats: Stats; recentOrders: any[]; upcomin
 
   return {
     stats: {
-      products_total: productsAll.count ?? 0,
-      products_active: productsActive.count ?? 0,
       orders_total: ordersAll.count ?? 0,
       orders_pending: ordersPending.count ?? 0,
       orders_deposit_paid: ordersDeposit.count ?? 0,
@@ -91,7 +83,6 @@ export default async function AdminDashboard() {
       </header>
 
       <section className="adm-stat-grid">
-        <StatCard label="Products" value={stats.products_total} sub={`${stats.products_active} active`} href="/admin/products" />
         <StatCard label="Orders" value={stats.orders_total} sub={`${stats.orders_pending} pending · ${stats.orders_deposit_paid} deposit-paid`} href="/admin/orders" />
         <StatCard label="Customers" value={stats.customers_total} sub="lifetime" href="/admin/customers" />
         <StatCard label="Consultations" value={stats.consultations_upcoming} sub={`upcoming · ${stats.consultations_total} total`} href="/admin/consultations" />

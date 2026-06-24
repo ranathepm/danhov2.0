@@ -680,7 +680,6 @@ function SettingGroupCard({ group, diamondId, diamondsParam }: { group: ProductG
         <Link href={canonicalHref} className="sb-card-name-link">
           <h3 className="sb-card-name">
             {stripMetalSuffix(p.name)}
-            {baseSku && <span className="sb-card-sku"> ({baseSku})</span>}
           </h3>
         </Link>
 

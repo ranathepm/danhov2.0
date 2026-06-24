@@ -62,8 +62,106 @@ export default async function HomePage() {
 
       </section>
 
-      {/* ── SIGNATURE RING ───────────────────────────────────────── */}
-      <SignatureSection />
+      {/* ── BRAND VIDEO ──────────────────────────────────────────── */}
+      <section style={{
+        background: '#0a0806',
+        padding: '72px 0 0',
+        position: 'relative',
+      }}>
+        {/* top accent line */}
+        <div style={{
+          width: 40, height: 1,
+          background: '#AC3438',
+          margin: '0 auto 40px',
+        }} />
+
+        {/* eyebrow */}
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '0.62rem',
+          fontWeight: 700,
+          letterSpacing: '0.55em',
+          textTransform: 'uppercase',
+          color: '#AC3438',
+          textAlign: 'center',
+          margin: '0 0 56px',
+        }}>
+          Handcrafted in Los Angeles · Est. 1984
+        </p>
+
+        {/* video wrapper — natural 16:9, no cropping */}
+        <div style={{ position: 'relative', lineHeight: 0 }}>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+            src="/danhov-brand-video.mp4"
+          />
+
+          {/* bottom gradient + wordmark overlay */}
+          <div style={{
+            position: 'absolute',
+            bottom: 0, left: 0, right: 0,
+            height: '38%',
+            background: 'linear-gradient(to top, rgba(10,8,6,0.92) 0%, rgba(10,8,6,0.5) 55%, transparent 100%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: '0 0 40px',
+            pointerEvents: 'none',
+          }}>
+            <span style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: 'clamp(2.2rem, 5vw, 4.5rem)',
+              fontWeight: 300,
+              letterSpacing: '0.45em',
+              textTransform: 'uppercase',
+              color: '#f2ece4',
+              display: 'block',
+              lineHeight: 1,
+            }}>
+              DANHOV
+            </span>
+            <span style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: '0.6rem',
+              letterSpacing: '0.5em',
+              textTransform: 'uppercase',
+              color: '#AC3438',
+              marginTop: 10,
+              fontWeight: 600,
+            }}>
+              The Art of the Ring
+            </span>
+          </div>
+        </div>
+
+        {/* bottom bar */}
+        <div style={{
+          background: '#0a0806',
+          padding: '32px 48px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 32,
+        }}>
+          <div style={{ width: 40, height: 1, background: 'rgba(172,52,56,0.3)' }} />
+          <span style={{
+            fontFamily: "'Cormorant Garamond', serif",
+            fontSize: '0.6rem',
+            letterSpacing: '0.45em',
+            textTransform: 'uppercase',
+            color: '#4a4240',
+            fontWeight: 500,
+          }}>
+            Every piece handcrafted to order
+          </span>
+          <div style={{ width: 40, height: 1, background: 'rgba(172,52,56,0.3)' }} />
+        </div>
+      </section>
 
       {/* ── DAILY SIGNPOST (Babig's Wisdom) ──────────────────────── */}
       <DailySignpostSection />
@@ -120,6 +218,9 @@ export default async function HomePage() {
 
       {/* ── ENGAGEMENT RINGS — collection cards with Life Path ───── */}
       <CategoryCardsSection />
+
+      {/* ── SIGNATURE RING — editorial dark strip ────────────────── */}
+      <SignatureSection />
 
       {/* ── CO-CREATE ────────────────────────────────────────────── */}
       <CoCreateSection />

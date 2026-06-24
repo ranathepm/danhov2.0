@@ -7,12 +7,12 @@
   --adm-bg:        #f9f4ef;
   --adm-surface:   #ffffff;
   --adm-line:      rgba(61, 37, 32, 0.08);
-  --adm-text:      #2a1d18;
-  --adm-mute:      #7a5c58;
+  --adm-text:      #1a1410;
+  --adm-mute:      #1a1410;
   --adm-accent:    #AC3438;
   --adm-accent-dk: #8B2A2D;
   --adm-ok:        #2c8054;
-  --adm-warn:      #b8761e;
+  --adm-warn:      #AC3438;
   --adm-danger:    #b13a2b;
 
   min-height: 100vh;
@@ -25,7 +25,7 @@
 }
 .admin-root *, .admin-root *::before, .admin-root *::after { box-sizing: border-box; }
 .admin-root a { color: var(--adm-accent); text-decoration: none; }
-.admin-root a:hover { text-decoration: underline; }
+.admin-root a:hover { text-decoration: none; }
 .admin-root .cursor, .admin-root .cursor-ring { display: none !important; }
 
 /* Hide ALL of the public site chrome whenever the admin shell is mounted.
@@ -92,10 +92,10 @@ body:has(.admin-root) {
   padding: 20px 14px;
   position: sticky; top: 0; max-height: 100vh; overflow-y: auto;
 }
-.adm-brand { display: flex; flex-direction: column; padding: 4px 10px 24px; border-bottom: 1px solid var(--adm-line); margin-bottom: 12px; text-decoration: none; }
-.adm-brand:hover { text-decoration: none; }
-.adm-brand-mark { font-family: 'Nunito Sans', sans-serif; font-size: 18px; letter-spacing: 0.3em; color: var(--adm-accent); }
-.adm-brand-sub { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--adm-mute); margin-top: 4px; }
+.adm-brand { display: flex; flex-direction: column; align-items: center; padding: 16px 14px 20px; border-bottom: 1px solid var(--adm-line); margin-bottom: 12px; text-decoration: none; }
+.adm-brand:hover { text-decoration: none; opacity: 0.85; }
+.adm-brand img { display: block; }
+.adm-brand-sub { font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--adm-mute); margin-top: 6px; text-align: center; }
 .adm-nav { display: flex; flex-direction: column; gap: 2px; }
 .adm-navlink {
   display: flex; align-items: center; gap: 12px;
@@ -1445,7 +1445,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 }
 .adm-drop--compact span {
   font-size: 12px;
-  color: var(--adm-text-muted, #6a5f57);
+  color: #1a1410;
 }
 
 /* ── Commission bundle card (ring-builder orders) ───────────────── */
@@ -1481,7 +1481,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 }
 .adm-commission-row--warn .adm-commission-warn {
   font-size: 12px;
-  color: #b8761e;
+  color: #AC3438;
   font-style: italic;
 }
 .adm-commission-row--note {
@@ -1510,7 +1510,7 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
   vertical-align: top;
 }
 .adm-commission-table td:first-child {
-  color: #7a6f68;
+  color: #1a1410;
   width: 36%;
   white-space: nowrap;
 }
@@ -1656,4 +1656,123 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 @keyframes adm-shimmer {
   from { background-position: 200% 0; }
   to   { background-position: -200% 0; }
+}
+
+/* ── Pagination ─────────────────────────────────────────────────── */
+.adm-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  padding: 14px 0;
+  border-top: 1px solid var(--adm-line);
+  font-size: 13px;
+}
+.adm-pagination__info {
+  color: var(--adm-mute);
+  min-width: 160px;
+}
+.adm-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.adm-pagination__perpage {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--adm-mute);
+  margin-left: auto;
+}
+.adm-page-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid var(--adm-line);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--adm-text);
+  background: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.adm-page-btn:hover {
+  border-color: var(--adm-accent);
+  color: var(--adm-accent);
+  background: rgba(172,52,56,0.04);
+}
+.adm-page-btn--active {
+  background: var(--adm-accent);
+  border-color: var(--adm-accent);
+  color: #fff;
+  font-weight: 600;
+  pointer-events: none;
+}
+.adm-page-btn--disabled {
+  opacity: 0.35;
+  pointer-events: none;
+  cursor: default;
+}
+.adm-page-btn--ellipsis {
+  border: none;
+  background: none;
+  pointer-events: none;
+  min-width: 20px;
+  padding: 0;
+  color: var(--adm-mute);
+}
+.adm-pagination__jump {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.adm-pagination__label {
+  color: var(--adm-mute);
+  white-space: nowrap;
+  font-size: 13px;
+}
+.adm-pagination__select {
+  height: 34px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--adm-line);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--adm-text);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23888' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 8px center;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.adm-pagination__select:hover,
+.adm-pagination__select:focus {
+  border-color: var(--adm-accent);
+  outline: none;
+}
+
+/* ── Custom Labour block ─────────────────────────────────────────── */
+.adm-custom-labour {
+  margin: 16px 0;
+  padding: 14px 16px;
+  background: #faf6f3;
+  border: 1px solid var(--adm-line);
+  border-radius: 8px;
+}
+.adm-chip--clear {
+  border-color: #d0c4be;
+  color: #1a1410;
+}
+.adm-chip--clear:hover {
+  border-color: var(--adm-accent);
+  color: var(--adm-accent);
+  background: rgba(172,52,56,0.04);
 }

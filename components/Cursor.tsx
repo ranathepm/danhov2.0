@@ -10,26 +10,31 @@ export default function Cursor() {
     if (!wrap) return;
 
     function onMove(e: MouseEvent) {
-      wrap!.style.transform = `translate(${e.clientX - 12}px, ${e.clientY - 16}px)`;
+      wrap!.style.transform = `translate(${e.clientX - 10}px, ${e.clientY - 10}px)`;
     }
 
-    function onEnter() { wrap!.classList.add('cursor--hover'); }
-    function onLeave() { wrap!.classList.remove('cursor--hover'); }
+    function onOver(e: MouseEvent) {
+      const target = e.target as Element;
+      if (target.closest('a, button, [data-dnh]')) {
+        wrap!.classList.add('cursor--hover');
+      }
+    }
+
+    function onOut(e: MouseEvent) {
+      const target = e.relatedTarget as Element | null;
+      if (!target || !target.closest('a, button, [data-dnh]')) {
+        wrap!.classList.remove('cursor--hover');
+      }
+    }
 
     window.addEventListener('mousemove', onMove, { passive: true });
-
-    const targets = document.querySelectorAll('a, button, [data-dnh]');
-    targets.forEach((t) => {
-      t.addEventListener('mouseenter', onEnter);
-      t.addEventListener('mouseleave', onLeave);
-    });
+    document.addEventListener('mouseover', onOver, { passive: true });
+    document.addEventListener('mouseout', onOut, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', onMove);
-      targets.forEach((t) => {
-        t.removeEventListener('mouseenter', onEnter);
-        t.removeEventListener('mouseleave', onLeave);
-      });
+      document.removeEventListener('mouseover', onOver);
+      document.removeEventListener('mouseout', onOut);
     };
   }, []);
 
@@ -37,17 +42,14 @@ export default function Cursor() {
     <div className="cursor-wrap" ref={wrapRef} aria-hidden="true">
       <svg
         className="cursor-icon"
-        width="24"
-        height="32"
-        viewBox="0 0 24 32"
+        width="20"
+        height="20"
+        viewBox="0 0 20 20"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* round ring band */}
-        <circle cx="12" cy="22" r="8.5" stroke="#AC3438" strokeWidth="1.4" />
-
-        {/* stone — sits right on top of the ring */}
-        <circle cx="12" cy="10" r="3.5" fill="#AC3438" />
+        <circle cx="10" cy="10" r="3.5" fill="#AC3438" />
+        <circle cx="10" cy="10" r="8.5" stroke="#AC3438" strokeWidth="0.8" fill="none" opacity="0.45" />
       </svg>
     </div>
   );

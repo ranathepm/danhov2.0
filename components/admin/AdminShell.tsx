@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { createClient as createBrowserClient } from '@/lib/supabase/client';
 import type { AdminUser } from '@/lib/admin-auth';
@@ -42,7 +43,14 @@ export default function AdminShell({
       {/* Sidebar */}
       <aside className="adm-sidebar">
         <Link href="/admin" className="adm-brand">
-          <span className="adm-brand-mark">DANHOV</span>
+          <Image
+            src="/danhov-logo-transparent.png"
+            alt="Danhov"
+            width={150}
+            height={23}
+            style={{ objectFit: 'contain' }}
+            priority
+          />
           <span className="adm-brand-sub">Admin Atelier</span>
         </Link>
         <nav className="adm-nav" aria-label="Admin navigation">

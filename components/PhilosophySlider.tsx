@@ -55,27 +55,27 @@ export default function PhilosophySlider() {
 
   useEffect(() => {
     clear();
-    // tiny delay so browser paints the "out" position before transitioning in
-    timerRef.current = setTimeout(() => setPhase('visible'), 30);
+    // delay so browser paints the "out" position before transitioning in
+    timerRef.current = setTimeout(() => setPhase('visible'), 80);
     return clear;
   }, [index]);
 
   useEffect(() => {
     if (phase !== 'visible') return;
     clear();
-    // stay for 2.8s then start exit
-    timerRef.current = setTimeout(() => setPhase('out'), 2800);
+    // stay for 4.8s then start exit
+    timerRef.current = setTimeout(() => setPhase('out'), 4800);
     return clear;
   }, [phase]);
 
   useEffect(() => {
     if (phase !== 'out') return;
     clear();
-    // after exit transition (0.65s), advance to next slide
+    // after exit transition (0.9s), advance to next slide
     timerRef.current = setTimeout(() => {
       setPhase('in');
       setIndex((i) => (i + 1) % SLIDES.length);
-    }, 650);
+    }, 900);
     return clear;
   }, [phase]);
 
@@ -94,7 +94,7 @@ export default function PhilosophySlider() {
   const opacity = phase === 'visible' ? 1 : 0;
   const transition = phase === 'in'
     ? 'none'
-    : 'transform 0.65s cubic-bezier(0.22,1,0.36,1), opacity 0.55s ease';
+    : 'transform 0.9s cubic-bezier(0.16,1,0.3,1), opacity 0.7s ease';
 
   return (
     <section className="phil-section">

@@ -2,72 +2,98 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { requireAdmin } from '@/lib/admin-auth';
 import { createServiceClient } from '@/lib/supabase/server';
-import { stripMetalSuffix } from '@/lib/product-display';
-import { computeListingPriceMap } from '@/lib/pricing';
-
-/** Strip metal suffix and re-attach -PL to show the platinum-default SKU. */
-function toPlSku(sku: string): string {
-  const base = sku.replace(/-?(PL|PLAT|14Y|14W|14R|18Y|18W|18R)$/i, '');
-  return base === sku ? sku : `${base}-PL`;
-}
+import PaginationControls from '@/components/admin/PaginationControls';
 
 export const dynamic = 'force-dynamic';
 
-type Search = { q?: string; category?: string; only?: string };
+const DEFAULT_PER_PAGE = 25;
 
-export default async function AdminProductsPage({
-  searchParams,
-}: {
-  searchParams: Search;
-}) {
+type Search = { q?: string; category?: string; page?: string; per_page?: string };
+
+type ProductRow = {
+  sku: string;
+  name: string;
+  category: string;
+  collection: string;
+  metals: string[];
+  images: string[];
+  is_active: boolean;
+  updated_at: string | null;
+};
+
+function timeAgo(iso: string | null): string {
+  if (!iso) return '—';
+  const secs = Math.floor((Date.now() - new Date(iso).getTime()) / 1000);
+  if (secs < 60) return `${secs}s ago`;
+  const mins = Math.floor(secs / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  return `${days}d ago`;
+}
+
+export default async function AdminProductsPage({ searchParams }: { searchParams: Search }) {
   await requireAdmin();
   const sb = createServiceClient();
+
+  const perPage = Number(searchParams.per_page) || DEFAULT_PER_PAGE;
+  const currentPage = Math.max(1, Number(searchParams.page) || 1);
+  const offset = (currentPage - 1) * perPage;
+
   let query = sb
     .from('products')
-    .select(
-      'sku, slug, name, collection, category, categories, metals, default_metal, images, price_display, is_active, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, stones_value_usd, stone_groups'
-    )
-    .order('category')
-    .order('collection')
-    .order('sku');
+    .select('sku, name, category, collection, metals, images, is_active, updated_at', { count: 'exact' })
+    .order('name');
+
   if (searchParams.category) query = query.eq('category', searchParams.category);
-  if (searchParams.only === 'inactive') query = query.eq('is_active', false);
   if (searchParams.q) {
     const q = searchParams.q.trim();
     query = query.or(`sku.ilike.%${q}%,name.ilike.%${q}%,collection.ilike.%${q}%`);
   }
 
-  type ProductRow = {
-    sku: string;
-    slug: string;
-    name: string;
-    collection: string | null;
-    category: string;
-    categories: string[] | null;
-    metals: string[] | null;
-    default_metal: string | null;
-    images: string[] | null;
-    price_display: string | null;
-    is_active: boolean;
-    gold_weight_g: number | null;
-    markup_multiplier: number | null;
-    base_labor_usd: number | null;
-    diamond_labor_usd: number | null;
-    casting_labor_per_gram: number | null;
-    stones_value_usd: number | null;
-    stone_groups: unknown;
-  };
-  const { data: products } = await query.limit(500);
-  const list: ProductRow[] = (products as ProductRow[]) ?? [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const priceMap = await computeListingPriceMap(list as any[]);
+  const { data: products, count } = await query.range(offset, offset + perPage - 1);
+  const list = (products ?? []) as ProductRow[];
+  const totalCount = count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalCount / perPage));
+
+  function buildHref(overrides: Record<string, string | undefined>) {
+    const merged: Record<string, string> = {};
+    if (searchParams.q) merged.q = searchParams.q;
+    if (searchParams.category) merged.category = searchParams.category;
+    merged.page = String(currentPage);
+    merged.per_page = String(perPage);
+    Object.entries(overrides).forEach(([k, v]) => {
+      if (v !== undefined) merged[k] = v;
+      else delete merged[k];
+    });
+    const p = new URLSearchParams(merged);
+    const str = p.toString();
+    return `/admin/products${str ? `?${str}` : ''}`;
+  }
+
+  // Build base path (without page/per_page) for PaginationControls
+  const baseParams = new URLSearchParams();
+  if (searchParams.q) baseParams.set('q', searchParams.q);
+  if (searchParams.category) baseParams.set('category', searchParams.category);
+  const basePath = `/admin/products${baseParams.toString() ? `?${baseParams.toString()}` : ''}`;
+
+  const categories = [
+    { key: '',           label: 'All'           },
+    { key: 'engagement', label: 'Engagement'    },
+    { key: 'wedding',    label: 'Wedding Bands' },
+    { key: 'fine',       label: 'Fine Jewelry'  },
+    { key: 'mens',       label: "Men's"         },
+  ];
 
   return (
     <div className="adm-page">
       <header className="adm-page-head adm-page-head--with-actions">
         <div>
           <h1 className="adm-h1">Products</h1>
-          <p className="adm-page-sub">{list.length} pieces shown</p>
+          <p className="adm-page-sub">
+            {totalCount} products · showing {offset + 1}–{Math.min(offset + perPage, totalCount)}
+          </p>
         </div>
         <Link href="/admin/products/new" className="adm-btn adm-btn-primary">
           + New product
@@ -76,53 +102,21 @@ export default async function AdminProductsPage({
 
       {/* Category filter pills */}
       <div className="adm-filter-pills">
-        {[
-          { key: '',           label: 'All'            },
-          { key: 'engagement', label: 'Engagement'     },
-          { key: 'wedding',    label: 'Wedding bands'  },
-          { key: 'fine',       label: 'Fine jewelry'   },
-          { key: 'mens',       label: "Men's"          },
-        ].map(({ key, label }) => {
-          const p = new URLSearchParams();
-          if (key) p.set('category', key);
-          if (searchParams.q) p.set('q', searchParams.q);
-          if (searchParams.only) p.set('only', searchParams.only);
-          const href = `/admin/products${p.toString() ? `?${p.toString()}` : ''}`;
+        {categories.map(({ key, label }) => {
           const active = (!searchParams.category && key === '') || searchParams.category === key;
           return (
-            <a key={key} href={href} className={`adm-filter-pill${active ? ' is-active' : ''}`}>
+            <a key={key} href={buildHref({ category: key || undefined, page: '1' })}
+              className={`adm-filter-pill${active ? ' is-active' : ''}`}>
               {label}
             </a>
           );
         })}
-        <span style={{ marginLeft: 'auto', display: 'flex', gap: 4 }}>
-          {[
-            { key: '',         label: 'Active & inactive' },
-            { key: 'inactive', label: 'Inactive only'     },
-          ].map(({ key, label }) => {
-            const p = new URLSearchParams();
-            if (searchParams.category) p.set('category', searchParams.category);
-            if (searchParams.q) p.set('q', searchParams.q);
-            if (key) p.set('only', key);
-            const href = `/admin/products${p.toString() ? `?${p.toString()}` : ''}`;
-            const active = (!searchParams.only && key === '') || searchParams.only === key;
-            return (
-              <a key={key} href={href} className={`adm-filter-pill${active ? ' is-active' : ''}`}>
-                {label}
-              </a>
-            );
-          })}
-        </span>
       </div>
 
       {/* Search toolbar */}
       <form className="adm-toolbar" method="get" action="/admin/products">
-        {searchParams.category && (
-          <input type="hidden" name="category" value={searchParams.category} />
-        )}
-        {searchParams.only && (
-          <input type="hidden" name="only" value={searchParams.only} />
-        )}
+        {searchParams.category && <input type="hidden" name="category" value={searchParams.category} />}
+        <input type="hidden" name="per_page" value={String(perPage)} />
         <input
           name="q"
           defaultValue={searchParams.q ?? ''}
@@ -130,11 +124,12 @@ export default async function AdminProductsPage({
           className="adm-input adm-toolbar-search"
         />
         <button type="submit" className="adm-btn adm-btn-primary">Search</button>
-        {(searchParams.q || searchParams.category || searchParams.only) && (
+        {(searchParams.q || searchParams.category) && (
           <Link href="/admin/products" className="adm-link">Reset</Link>
         )}
       </form>
 
+      {/* Products table */}
       <div className="adm-card adm-card--flush">
         <table className="adm-table adm-table--products">
           <thead>
@@ -144,44 +139,41 @@ export default async function AdminProductsPage({
               <th>Name</th>
               <th>Collection</th>
               <th>Category</th>
-              <th>Images</th>
-              <th>Price</th>
+              <th>Metals</th>
               <th>Status</th>
+              <th>Last edited</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {list.map((p) => {
-              const hero = (p.images as string[])?.[0] ?? null;
+              const hero = p.images?.[0] ?? null;
               return (
                 <tr key={p.sku}>
                   <td className="adm-cell-thumb">
                     {hero ? (
-                      <Image src={hero} alt={p.name} width={80} height={80} />
+                      <Image src={hero} alt={p.name} width={80} height={80} style={{ objectFit: 'cover' }} />
                     ) : (
                       <span className="adm-thumb-empty">—</span>
                     )}
                   </td>
-                  <td className="adm-mono">{toPlSku(p.sku)}</td>
-                  <td className="adm-cell-name">{stripMetalSuffix(p.name)}</td>
+                  <td className="adm-mono">{p.sku}</td>
+                  <td className="adm-cell-name">{p.name}</td>
                   <td>{p.collection || '—'}</td>
                   <td className="adm-cap">{p.category}</td>
-                  <td>{(p.images as string[])?.length ?? 0}</td>
-                  <td>
-                    {priceMap[p.sku] != null
-                      ? <><strong>${priceMap[p.sku].toLocaleString('en-US')}</strong>{p.price_display && p.price_display !== '$' + priceMap[p.sku].toLocaleString('en-US') ? <span style={{color:'#9c8f86',fontSize:11,marginLeft:4}}>({p.price_display})</span> : null}</>
-                      : (p.price_display || '—')}
+                  <td style={{ fontSize: 11, color: 'var(--adm-mute)' }}>
+                    {p.metals?.length ?? 0} options
                   </td>
                   <td>
                     <span className={`adm-pill adm-pill--${p.is_active ? 'active' : 'inactive'}`}>
                       {p.is_active ? 'active' : 'inactive'}
                     </span>
                   </td>
+                  <td style={{ fontSize: 11, color: 'var(--adm-mute)', whiteSpace: 'nowrap' }}>
+                    {timeAgo(p.updated_at)}
+                  </td>
                   <td className="adm-cell-actions">
-                    <Link
-                      href={`/admin/products/${encodeURIComponent(p.sku)}`}
-                      className="adm-link"
-                    >
+                    <Link href={`/admin/products/${encodeURIComponent(p.sku)}`} className="adm-link">
                       Edit →
                     </Link>
                   </td>
@@ -192,6 +184,13 @@ export default async function AdminProductsPage({
         </table>
         {list.length === 0 && <div className="adm-empty">No products match.</div>}
       </div>
+
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        perPage={perPage}
+        basePath={basePath}
+      />
     </div>
   );
 }

@@ -449,7 +449,7 @@ export default function BuilderReview({ mode, setting, diamonds, settingPrice, m
                     </h3>
                     <span className="builder-review-sku">{certLabel}</span>
                     <div className="builder-review-grade">
-                      {diamond.color} colour · {diamond.clarity} clarity · {diamond.cut} cut
+                      {diamond.color} color · {diamond.clarity} clarity · {diamond.cut} cut
                       {diamond.hold_id && <> · reserved for you for 24h</>}
                     </div>
                   </div>

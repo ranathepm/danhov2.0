@@ -9,6 +9,15 @@ import WishlistHeart from '@/components/WishlistHeart';
 import { stripMetalSuffix } from '@/lib/product-display';
 
 
+function safeUrl(url: string): string {
+  if (!url || url.includes('%')) return url;
+  try {
+    const u = new URL(url);
+    u.pathname = u.pathname.split('/').map(seg => encodeURIComponent(seg)).join('/');
+    return u.toString();
+  } catch { return url; }
+}
+
 type Collection = {
   label: string;
   value: string; // slug used for filter matching
@@ -624,13 +633,13 @@ function VanCleefCard({
       >
         {currentImg && !imgFailed ? (
           <Image
-            src={currentImg}
+            src={safeUrl(currentImg)}
             alt={product.name}
             width={600}
             height={600}
             className="vc-card-img"
             loading="lazy"
-            unoptimized={currentImg.includes('.supabase.co') || currentImg.endsWith('.gif')}
+            unoptimized={currentImg.includes('.supabase.co') || currentImg.includes('danhov.com') || currentImg.endsWith('.gif')}
             onError={() => setImgFailed(true)}
           />
         ) : (

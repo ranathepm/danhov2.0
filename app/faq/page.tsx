@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const FAQ_ITEMS: { q: string; a: string }[] = [
   {
     q: 'Which metals does DANHOV work in?',
-    a: 'DANHOV specialises exclusively in 14-karat (58.5%) and 18-karat (75%) gold, available in three colours: yellow, white, and rose. We do not work in platinum, silver, or palladium. White-gold pieces are rhodium-plated for brightness; the first re-plating is complimentary.',
+    a: 'DANHOV specializes exclusively in 14-karat (58.5%) and 18-karat (75%) gold, available in three colors: yellow, white, and rose. We do not work in platinum, silver, or palladium. White-gold pieces are rhodium-plated for brightness; the first re-plating is complimentary.',
   },
   {
     q: 'How is the price calculated?',
@@ -24,7 +24,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
     a: 'Every piece is made to order in our Los Angeles atelier — typically 4 to 6 weeks from confirmed order. Rush orders are considered case-by-case.',
   },
   {
-    q: 'Can I customise the ring?',
+    q: 'Can I customize the ring?',
     a: 'Yes. We accommodate any size (including half- and quarter-sizes), any metal choice (14k or 18k in yellow / white / rose), stone selection (natural or lab-grown diamonds; other gemstones available), and complimentary engraving inside the band up to 25 characters.',
   },
   {
@@ -37,7 +37,7 @@ const FAQ_ITEMS: { q: string; a: string }[] = [
   },
   {
     q: 'What about returns?',
-    a: 'Non-customised pieces carry a 30-day return policy with full refund to the original payment method. Customised or personalised pieces are evaluated case-by-case — please reach out directly. One complimentary resizing is included within 60 days of delivery.',
+    a: 'Non-customized pieces carry a 30-day return policy with full refund to the original payment method. Customized or personalized pieces are evaluated case-by-case — please reach out directly. One complimentary resizing is included within 60 days of delivery.',
   },
   {
     q: 'Where is DANHOV located?',

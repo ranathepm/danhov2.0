@@ -73,18 +73,27 @@ export default async function ProductPage({ params }: { params: Params }) {
   // Compute live prices per metal variant so the detail page can update
   // the displayed price when the customer switches metal swatches.
   let pricemap: Record<string, number> = {};
-  // All products are available in every metal — prices are derived from the
-  // platinum spec weight automatically. Always price all metals.
   const hasPricingData = (product.gold_weight_g ?? 0) > 0;
+
+  const primaryCategory = product.categories[0] ?? product.category;
+  const catLink = CATEGORY_HREF[primaryCategory] ?? CATEGORY_HREF.engagement;
+  const occasion = occasionForCategory(product.category);
+
+  const [pricingBreakdowns, narrative] = await Promise.all([
+    hasPricingData
+      ? priceAllOptions(product, [...ALL_METALS]).catch(() => null)
+      : Promise.resolve(null),
+    getOrGenerateNarrative(product, occasion),
+  ]);
+
   if (hasPricingData) {
-    try {
-      const breakdowns = await priceAllOptions(product, [...ALL_METALS]);
-      for (const b of breakdowns) {
+    if (pricingBreakdowns) {
+      for (const b of pricingBreakdowns) {
         if (b.total_usd > 0 && b.metal_cost_usd > 0) {
           pricemap[b.metal_used] = b.total_usd;
         }
       }
-    } catch {
+    } else {
       // GoldAPI unreachable — use static spots so markup is still applied.
       for (const k of ALL_METALS) {
         const b = computePrice(product, STATIC_SPOTS, k);
@@ -92,12 +101,6 @@ export default async function ProductPage({ params }: { params: Params }) {
       }
     }
   }
-
-  const primaryCategory = product.categories[0] ?? product.category;
-  const catLink = CATEGORY_HREF[primaryCategory] ?? CATEGORY_HREF.engagement;
-
-  const occasion = occasionForCategory(product.category);
-  const narrative = await getOrGenerateNarrative(product, occasion);
   const displayName = stripMetalSuffix(product.name);
 
   // Approximate price for the Product JSON-LD (display string parses, else 0)

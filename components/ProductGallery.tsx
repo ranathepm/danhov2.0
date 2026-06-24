@@ -6,7 +6,7 @@ import Image from 'next/image';
 // Bypass Next.js image optimization for Supabase storage URLs — admin uploads
 // use unoptimized thumbnails and the website should match that behavior.
 function shouldSkipOptimization(url: string): boolean {
-  return url.includes('.supabase.co') || url.endsWith('.gif');
+  return url.includes('.supabase.co') || url.includes('danhov.com') || url.endsWith('.gif');
 }
 
 function SafeImage({

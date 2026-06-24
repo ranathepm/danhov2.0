@@ -72,97 +72,97 @@ export default function TrackOrderPage() {
       <style>{`
         .track-page { font-family: 'Cormorant Garamond', serif; color: #1a1410; background: #faf6f1; min-height: 100vh; }
 
-        /* Hero */
-        .track-hero {
-          background: linear-gradient(160deg, #1a1410 0%, #2c1f18 60%, #3d2a20 100%);
-          padding: 90px 24px 72px; text-align: center; position: relative; overflow: hidden;
-        }
-        .track-hero::before {
-          content: '';
-          position: absolute; inset: 0;
-          background: radial-gradient(ellipse 50% 40% at 50% 65%, rgba(172,52,56,0.08) 0%, transparent 70%);
-          pointer-events: none;
+        /* Page header — matches /faq, /story style */
+        .track-page-header {
+          padding: 108px 24px 56px;
+          background: #faf6f1;
+          text-align: center;
+          border-bottom: 1px solid #ede8e2;
         }
         .track-eyebrow {
           display: block; font-size: 11px; letter-spacing: 0.22em;
-          text-transform: uppercase; color: #AC3438; margin-bottom: 16px;
+          text-transform: uppercase; color: #AC3438; margin-bottom: 14px;
         }
-        .track-hero h1 {
+        .track-page-header h1 {
           font-family: 'Cormorant Garamond', serif;
-          font-size: clamp(30px, 5vw, 52px); font-weight: 400;
-          color: #faf6f1; margin: 0 auto 16px; max-width: 600px; line-height: 1.15;
+          font-size: clamp(28px, 4.5vw, 48px); font-weight: 400;
+          color: #1a1410; margin: 0 auto 12px; line-height: 1.15;
         }
-        .track-hero-sub {
-          font-size: 14px; color: #c4b8ad; max-width: 420px; margin: 0 auto; line-height: 1.6;
+        .track-page-header h1 em { font-style: italic; }
+        .track-header-sub {
+          font-size: 14px; color: #6b5e57; max-width: 380px; margin: 0 auto; line-height: 1.65;
         }
 
-        /* Form card */
-        .track-form-wrap {
-          max-width: 520px; margin: -32px auto 0;
-          padding: 0 24px 64px; position: relative; z-index: 2;
+        /* Form section */
+        .track-form-section {
+          padding: 56px 24px 72px;
+          background: #fff;
         }
-        .track-form-card {
-          background: #fff; border-radius: 12px;
-          box-shadow: 0 12px 48px rgba(26,20,16,0.14), 0 2px 8px rgba(0,0,0,0.06);
-          padding: 40px 36px;
-        }
-        .track-form-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 22px; color: #1a1410; margin-bottom: 28px; text-align: center;
-        }
-        .track-form { display: flex; flex-direction: column; gap: 16px; }
-        .track-form-group { display: flex; flex-direction: column; gap: 6px; }
+        .track-form-inner { max-width: 480px; margin: 0 auto; }
+
+        .track-form { display: flex; flex-direction: column; gap: 18px; }
+        .track-form-group { display: flex; flex-direction: column; gap: 7px; }
         .track-form-group label {
-          font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #8a7f76;
+          font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6b5e57; font-weight: 400;
         }
         .track-form-group input {
-          border: 1px solid #d4c9c0; border-radius: 6px;
-          padding: 12px 14px; font-size: 14px; font-family: 'Cormorant Garamond', serif;
+          border: 1px solid #d4c9c0; border-radius: 4px;
+          padding: 13px 16px; font-size: 15px; font-family: 'Cormorant Garamond', serif;
           color: #1a1410; outline: none; transition: border-color 0.15s;
+          background: #faf6f1;
         }
-        .track-form-group input:focus { border-color: #AC3438; }
+        .track-form-group input:focus { border-color: #AC3438; background: #fff; }
         .track-form-group input::placeholder { color: #b4a89d; }
         .track-submit {
-          background: #1a1410; color: #faf6f1; border: none; border-radius: 999px;
-          padding: 13px; font-size: 13px; font-family: 'Cormorant Garamond', serif;
-          letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
-          transition: background 0.2s; margin-top: 4px;
+          background: #AC3438; color: #faf6f1; border: none; border-radius: 4px;
+          padding: 15px; font-size: 12px; font-family: 'Cormorant Garamond', serif;
+          letter-spacing: 0.18em; text-transform: uppercase; cursor: pointer;
+          transition: background 0.2s; margin-top: 4px; width: 100%;
         }
         .track-submit:hover:not(:disabled) { background: #8B2A2D; }
         .track-submit:disabled { background: #ccc4ba; cursor: default; }
         .track-error {
-          background: rgba(172,52,56,0.08); border: 1px solid rgba(172,52,56,0.2);
-          border-radius: 6px; padding: 12px 14px; font-size: 13.5px; color: #AC3438;
-          line-height: 1.5; margin-top: 4px;
+          background: rgba(172,52,56,0.06); border: 1px solid rgba(172,52,56,0.2);
+          border-radius: 4px; padding: 12px 16px; font-size: 13.5px; color: #AC3438;
+          line-height: 1.55;
         }
         .track-hint {
-          font-size: 12px; color: #9c8f86; text-align: center; margin-top: 16px; line-height: 1.5;
+          font-size: 12.5px; color: #9c8f86; text-align: center; margin-top: 20px; line-height: 1.6;
         }
         .track-hint a { color: #AC3438; text-decoration: none; }
 
+        /* Divider */
+        .track-divider {
+          max-width: 480px; margin: 0 auto 28px; display: flex; align-items: center; gap: 16px;
+        }
+        .track-divider-line { flex: 1; height: 1px; background: #ede8e2; }
+        .track-divider-text { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #b4a89d; }
+
         /* Result */
-        .track-result { max-width: 640px; margin: 0 auto; padding: 0 24px 80px; }
+        .track-result-section { padding: 56px 24px 72px; background: #faf6f1; }
+        .track-result { max-width: 600px; margin: 0 auto; }
         .track-result-card {
-          background: #fff; border-radius: 12px;
-          box-shadow: 0 8px 32px rgba(26,20,16,0.1);
+          background: #fff; border-radius: 8px;
+          border: 1px solid #ede8e2;
+          box-shadow: 0 4px 20px rgba(26,20,16,0.07);
           overflow: hidden;
         }
         .track-result-header {
           background: linear-gradient(135deg, #1a1410 0%, #2c1f18 100%);
           padding: 28px 32px;
         }
-        .track-result-order-id { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8a7f76; margin-bottom: 4px; }
+        .track-result-order-id { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(250,246,241,0.45); margin-bottom: 6px; }
         .track-result-product {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 22px; color: #faf6f1; margin-bottom: 2px;
+          font-size: 24px; color: #faf6f1; margin-bottom: 4px; font-weight: 400;
         }
-        .track-result-date { font-size: 12px; color: #8a7f76; }
+        .track-result-date { font-size: 12px; color: rgba(250,246,241,0.5); }
 
         /* Progress bar */
         .track-progress { padding: 32px 32px 0; }
         .track-progress-label {
           font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
-          color: #8a7f76; margin-bottom: 20px; display: block;
+          color: #9c8f86; margin-bottom: 24px; display: block;
         }
         .track-steps { display: flex; align-items: flex-start; gap: 0; margin-bottom: 12px; }
         .track-step { flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; }
@@ -174,7 +174,7 @@ export default function TrackOrderPage() {
         .track-step.done:not(:last-child)::after { background: #AC3438; }
         .track-step-dot {
           width: 28px; height: 28px; border-radius: 50%;
-          border: 2px solid #ede8e2; background: #fff;
+          border: 2px solid #ede8e2; background: #faf6f1;
           display: flex; align-items: center; justify-content: center;
           position: relative; z-index: 1; transition: all 0.2s;
           font-size: 11px; color: #ccc4ba;
@@ -192,43 +192,41 @@ export default function TrackOrderPage() {
         .track-step.done .track-step-label,
         .track-step.current .track-step-label { color: #1a1410; }
 
-        /* Status */
+        /* Status detail */
         .track-status-body { padding: 24px 32px 32px; }
         .track-status-label {
           font-family: 'Cormorant Garamond', serif;
-          font-size: 20px; color: #1a1410; margin-bottom: 6px;
+          font-size: 21px; color: #1a1410; margin-bottom: 8px; font-weight: 400;
         }
         .track-status-desc { font-size: 14px; color: #6b5e57; line-height: 1.65; margin-bottom: 20px; }
-        .track-status-meta { font-size: 12px; color: #9c8f86; border-top: 1px solid #ede8e2; padding-top: 16px; }
-        .track-status-meta p { margin-bottom: 4px; }
+        .track-status-meta { font-size: 12.5px; color: #9c8f86; border-top: 1px solid #ede8e2; padding-top: 16px; display: flex; flex-direction: column; gap: 4px; }
 
         /* Cancelled state */
         .track-cancelled .track-result-header { background: linear-gradient(135deg, #3d1515 0%, #2c1010 100%); }
         .track-status-label.cancelled { color: #AC3438; }
 
         @media (max-width: 480px) {
-          .track-form-card { padding: 28px 20px; }
-          .track-progress, .track-status-body { padding-left: 20px; padding-right: 20px; }
-          .track-result-header { padding: 24px 20px; }
+          .track-page-header { padding: 96px 20px 44px; }
+          .track-form-section { padding: 44px 20px 56px; }
+          .track-status-body, .track-progress { padding-left: 20px; padding-right: 20px; }
+          .track-result-header { padding: 22px 20px; }
           .track-step-label { font-size: 9px; }
         }
       `}</style>
 
-      {/* Hero */}
-      <section className="track-hero">
+      {/* Page header */}
+      <header className="track-page-header">
         <span className="track-eyebrow">Order Tracking</span>
-        <h1>Track Your Order</h1>
-        <p className="track-hero-sub">
-          Follow your piece from the atelier bench to your door.
-          Enter your email and order number from your confirmation.
+        <h1>Track Your <em>Order</em></h1>
+        <p className="track-header-sub">
+          Follow your piece from the atelier to your door. Enter the email and order number from your confirmation.
         </p>
-      </section>
+      </header>
 
       {/* Form */}
       {!order && (
-        <div className="track-form-wrap">
-          <div className="track-form-card">
-            <p className="track-form-title">Look Up Your Order</p>
+        <section className="track-form-section">
+          <div className="track-form-inner">
             <form className="track-form" onSubmit={handleSubmit}>
               <div className="track-form-group">
                 <label htmlFor="track-email">Email Address</label>
@@ -249,7 +247,7 @@ export default function TrackOrderPage() {
                   required
                   value={orderId}
                   onChange={(e) => setOrderId(e.target.value)}
-                  placeholder="From your confirmation email"
+                  placeholder="Found in your confirmation email"
                 />
               </div>
               {error && <p className="track-error">{error}</p>}
@@ -258,82 +256,84 @@ export default function TrackOrderPage() {
               </button>
             </form>
             <p className="track-hint">
-              Order number is in your confirmation email from{' '}
-              <a href="mailto:care@danhov.com">care@danhov.com</a>.{' '}
-              Need help?{' '}
+              Your order number is in the confirmation email sent from{' '}
+              <a href="mailto:care@danhov.com">care@danhov.com</a>.
+              Can&apos;t find it?{' '}
               <a href="mailto:care@danhov.com">Contact us</a>.
             </p>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Result */}
       {order && (
-        <div className="track-result" style={{ paddingTop: 48 }}>
-          <div className={`track-result-card${isCancelled ? ' track-cancelled' : ''}`}>
-            {/* Header */}
-            <div className="track-result-header">
-              <p className="track-result-order-id">Order #{order.id.slice(0, 8).toUpperCase()}</p>
-              <p className="track-result-product">{order.productName ?? 'DANHOV Order'}</p>
-              <p className="track-result-date">Placed {formatDate(order.createdAt)}</p>
-            </div>
+        <section className="track-result-section">
+          <div className="track-result">
+            <div className={`track-result-card${isCancelled ? ' track-cancelled' : ''}`}>
+              {/* Header */}
+              <div className="track-result-header">
+                <p className="track-result-order-id">Order #{order.id.slice(0, 8).toUpperCase()}</p>
+                <p className="track-result-product">{order.productName ?? 'DANHOV Order'}</p>
+                <p className="track-result-date">Placed {formatDate(order.createdAt)}</p>
+              </div>
 
-            {/* Progress steps */}
-            {!isCancelled && (
-              <div className="track-progress">
-                <span className="track-progress-label">Order Progress</span>
-                <div className="track-steps">
-                  {STATUS_STEPS.map((step, i) => {
-                    const isDone = i < stepIdx;
-                    const isCurrent = i === stepIdx;
-                    return (
-                      <div
-                        key={step.key}
-                        className={`track-step${isDone ? ' done' : ''}${isCurrent ? ' current' : ''}`}
-                      >
-                        <div className="track-step-dot">
-                          {isDone ? '✓' : i + 1}
+              {/* Progress steps */}
+              {!isCancelled && (
+                <div className="track-progress">
+                  <span className="track-progress-label">Order Progress</span>
+                  <div className="track-steps">
+                    {STATUS_STEPS.map((step, i) => {
+                      const isDone = i < stepIdx;
+                      const isCurrent = i === stepIdx;
+                      return (
+                        <div
+                          key={step.key}
+                          className={`track-step${isDone ? ' done' : ''}${isCurrent ? ' current' : ''}`}
+                        >
+                          <div className="track-step-dot">
+                            {isDone ? '✓' : i + 1}
+                          </div>
+                          <span className="track-step-label">{step.label}</span>
                         </div>
-                        <span className="track-step-label">{step.label}</span>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Status detail */}
+              <div className="track-status-body">
+                <p className={`track-status-label${isCancelled ? ' cancelled' : ''}`}>{order.statusLabel}</p>
+                <p className="track-status-desc">{order.statusDescription}</p>
+                <div className="track-status-meta">
+                  {order.shippingName && <span>Shipping to: {order.shippingName}</span>}
+                  {order.total && <span>Order total: ${order.total.toLocaleString('en-US', { minimumFractionDigits: 0 })}</span>}
+                  <span>Last updated: {formatDate(order.updatedAt)}</span>
                 </div>
               </div>
-            )}
-
-            {/* Status detail */}
-            <div className="track-status-body">
-              <p className={`track-status-label${isCancelled ? ' cancelled' : ''}`}>{order.statusLabel}</p>
-              <p className="track-status-desc">{order.statusDescription}</p>
-              <div className="track-status-meta">
-                {order.shippingName && <p>Shipping to: {order.shippingName}</p>}
-                {order.total && <p>Order total: ${order.total.toLocaleString('en-US', { minimumFractionDigits: 0 })}</p>}
-                <p>Last updated: {formatDate(order.updatedAt)}</p>
-              </div>
             </div>
-          </div>
 
-          <div style={{ textAlign: 'center', marginTop: 28 }}>
-            <button
-              onClick={() => { setOrder(null); setEmail(''); setOrderId(''); }}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: '#AC3438', fontSize: 13, letterSpacing: '0.1em',
-                textTransform: 'uppercase', textDecoration: 'underline',
-                fontFamily: "'Cormorant Garamond', serif",
-              }}
-            >
-              Track another order
-            </button>
-          </div>
+            <div style={{ textAlign: 'center', marginTop: 32 }}>
+              <button
+                onClick={() => { setOrder(null); setEmail(''); setOrderId(''); }}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  color: '#AC3438', fontSize: 12, letterSpacing: '0.14em',
+                  textTransform: 'uppercase', textDecoration: 'underline',
+                  fontFamily: "'Cormorant Garamond', serif",
+                }}
+              >
+                Track another order
+              </button>
+            </div>
 
-          <p style={{ textAlign: 'center', fontSize: 13, color: '#9c8f86', marginTop: 24, lineHeight: 1.6 }}>
-            Questions? Our team is at{' '}
-            <a href="mailto:care@danhov.com" style={{ color: '#AC3438', textDecoration: 'none' }}>care@danhov.com</a>{' '}
-            or <a href="tel:+18883264687" style={{ color: '#AC3438', textDecoration: 'none' }}>(888) 326-4687</a>.
-          </p>
-        </div>
+            <p style={{ textAlign: 'center', fontSize: 13, color: '#9c8f86', marginTop: 20, lineHeight: 1.65 }}>
+              Questions? Reach us at{' '}
+              <a href="mailto:care@danhov.com" style={{ color: '#AC3438', textDecoration: 'none' }}>care@danhov.com</a>{' '}
+              or <a href="tel:+18883264687" style={{ color: '#AC3438', textDecoration: 'none' }}>(888) 326-4687</a>.
+            </p>
+          </div>
+        </section>
       )}
     </main>
   );

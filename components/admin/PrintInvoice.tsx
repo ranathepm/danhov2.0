@@ -106,12 +106,12 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         .invoice-brand-sub {
           font-family: 'Cormorant Garamond', serif;
           font-size: 10px; letter-spacing: 0.32em;
-          color: #6a5f57; margin-top: 6px; text-transform: uppercase;
+          color: #1a1410; margin-top: 6px; text-transform: uppercase;
         }
         .invoice-meta {
           text-align: right;
           font-family: 'Cormorant Garamond', serif; font-size: 11px; line-height: 1.7;
-          color: #6a5f57;
+          color: #1a1410;
         }
         .invoice-meta .invoice-ref {
           font-family: 'Cormorant Garamond', serif;
@@ -124,14 +124,14 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         }
         .invoice-party h4 {
           font-family: 'Cormorant Garamond', serif; font-size: 10px;
-          letter-spacing: 0.24em; text-transform: uppercase; color: #6a5f57;
+          letter-spacing: 0.24em; text-transform: uppercase; color: #1a1410;
           margin-bottom: 8px;
         }
         .invoice-party-body { font-family: 'Cormorant Garamond', serif; font-size: 12px; line-height: 1.7; color: #1a1410; }
         .invoice-section { margin-top: 24px; }
         .invoice-section-title {
           font-family: 'Cormorant Garamond', serif; font-size: 10px;
-          letter-spacing: 0.24em; text-transform: uppercase; color: #6a5f57;
+          letter-spacing: 0.24em; text-transform: uppercase; color: #1a1410;
           padding-bottom: 6px; margin-bottom: 10px; border-bottom: 1px solid #ece6df;
         }
         .invoice-spec {
@@ -139,7 +139,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           font-family: 'Cormorant Garamond', serif; font-size: 12px;
           color: #1a1410; line-height: 1.7;
         }
-        .invoice-spec span.k { color: #6a5f57; }
+        .invoice-spec span.k { color: #1a1410; }
         .invoice-totals { display: flex; justify-content: flex-end; margin-top: 18px; }
         .invoice-totals-box {
           min-width: 280px; font-family: 'Cormorant Garamond', serif; font-size: 12px; color: #1a1410;
@@ -163,7 +163,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
         .invoice-footer {
           margin-top: 36px; padding-top: 18px; border-top: 1px solid #ece6df;
           font-family: 'Cormorant Garamond', serif; font-size: 10px; line-height: 1.7;
-          color: #6a5f57; text-align: center;
+          color: #1a1410; text-align: center;
         }
         .invoice-footer em {
           font-family: 'Cormorant Garamond', serif; font-size: 14px;
@@ -232,7 +232,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
           <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontStyle: 'italic', color: '#1a1410', marginBottom: 4 }}>
             {stripMetalSuffix(product.name)}
           </div>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 11, letterSpacing: '0.1em', color: '#6a5f57', textTransform: 'uppercase', marginBottom: 16 }}>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 11, letterSpacing: '0.1em', color: '#1a1410', textTransform: 'uppercase', marginBottom: 16 }}>
             {[product.collection, `Model ${product.sku}`].filter(Boolean).join(' · ')}
           </div>
 
@@ -328,7 +328,7 @@ export default function PrintInvoice({ order, product, spec, centerDiamond }: Pr
 
         <div className="invoice-footer">
           <em>Presence is a present.</em>
-          Every DANHOV piece is handcrafted to order in Los Angeles · Lifetime craftsmanship warranty · 30-day return on non-customised pieces · One complimentary resizing within 60 days of delivery · Recycled gold · Conflict-free stones.
+          Every DANHOV piece is handcrafted to order in Los Angeles · Lifetime craftsmanship warranty · 30-day return on non-customized pieces · One complimentary resizing within 60 days of delivery · Recycled gold · Conflict-free stones.
         </div>
       </div>
     </>

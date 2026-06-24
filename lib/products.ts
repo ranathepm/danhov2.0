@@ -125,13 +125,14 @@ export type ProductWithPricing = Product & {
   base_labor_usd:          number | null;
   diamond_labor_usd:       number | null;
   casting_labor_per_gram:  number | null;
+  custom_labor_usd:        number | null;
   stones_value_usd:        number | null;
   stone_groups:            import('@/lib/stone-math').StoneGroup[] | null;
   commission_rate:         number | null;
 };
 
 const PRICING_COLS =
-  'sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, stones_value_usd, stone_groups, commission_rate';
+  'sku, slug, name, collection, category, categories, metals, default_metal, images, metal_images, price_display, sub_categories, is_active, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, custom_labor_usd, stones_value_usd, stone_groups, commission_rate';
 
 /** Like fetchProductsByCategory but includes all pricing-engine fields. */
 export async function fetchProductsWithPricingByCategory(category: string): Promise<ProductWithPricing[]> {
@@ -164,7 +165,7 @@ export async function fetchProductWithPricingBySlug(
   const { data, error } = await supabaseAnon
     .from('products')
     .select(
-      'sku, slug, name, collection, category, categories, metals, images, metal_images, price_display, sub_categories, is_active, default_metal, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, stones_value_usd, stone_groups, commission_rate'
+      'sku, slug, name, collection, category, categories, metals, images, metal_images, price_display, sub_categories, is_active, default_metal, gold_weight_g, markup_multiplier, base_labor_usd, diamond_labor_usd, casting_labor_per_gram, custom_labor_usd, stones_value_usd, stone_groups, commission_rate'
     )
     .eq('slug', slug)
     .eq('is_active', true)

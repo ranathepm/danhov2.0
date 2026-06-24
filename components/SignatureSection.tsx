@@ -1,59 +1,41 @@
 import Link from 'next/link';
-import { supabaseAnon } from '@/lib/supabase/anon';
-import { stripMetalSuffix } from '@/lib/product-display';
 import SignatureImageClient from './SignatureImageClient';
 
-async function getSwirlRing(): Promise<{ slug: string | null; images: string[]; name: string | null }> {
-  try {
-    const { data } = await supabaseAnon
-      .from('products')
-      .select('slug, name, images')
-      .ilike('sku', 'ae520uq-18w')
-      .eq('is_active', true)
-      .maybeSingle();
-    if (data && Array.isArray(data.images) && data.images.length > 0) {
-      return { slug: data.slug ?? null, images: data.images as string[], name: data.name ?? null };
-    }
-    const { data: fallback } = await supabaseAnon
-      .from('products')
-      .select('slug, name, images')
-      .or('name.ilike.%swirl%,name.ilike.%love ring%')
-      .eq('is_active', true)
-      .limit(1)
-      .maybeSingle();
-    return {
-      slug: fallback?.slug ?? null,
-      images: Array.isArray(fallback?.images) ? (fallback.images as string[]) : [],
-      name: fallback?.name ?? null,
-    };
-  } catch {
-    return { slug: null, images: [], name: null };
-  }
-}
+const BASE = 'https://wirbqklbygxuafelsqql.supabase.co/storage/v1/object/public/product-images/products/AE505UQ/platinum/Danhov%20Abbraccio%20Swirl%20Diamond%20Engagement%20Ring%20AE505UQ_';
 
-export default async function SignatureSection() {
-  const { slug, images, name } = await getSwirlRing();
-  const href = slug ? `/product/${slug}` : '/engagement-rings';
-  const displayTitle = name ? stripMetalSuffix(name) : 'The Swirl Love Ring';
+const IMAGES = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `${BASE}${n}.jpg`);
 
+const HREF  = '/product/danhov-abbraccio-swirl-diamond-engagement-ring';
+const TITLE = 'Abbraccio Swirl Diamond Engagement Ring';
+
+export default function SignatureSection() {
   return (
-    <section className="sig-section">
-      <div className="sig-inner">
-        <SignatureImageClient images={images} href={href} alt={displayTitle} />
+    <section className="sig2-section">
+      <div className="sig2-image-panel">
+        <SignatureImageClient images={IMAGES} href={HREF} alt={TITLE} />
+      </div>
 
-        <div className="sig-text">
-          <span className="sig-eyebrow">The Signature</span>
-          <h2 className="sig-title">{displayTitle}</h2>
-          <div className="sig-rule" />
-          <p className="sig-body">
-            &ldquo;In silence, the universe revealed its shape. A spiral with no beginning,
-            no end. Two becoming one without losing themselves.
-            The ring was not designed &mdash; it was received.&rdquo;
-          </p>
-          <Link href={href} className="sig-cta">
-            See the Ring
-          </Link>
+      <div className="sig2-text-panel">
+        <span className="sig2-eyebrow">The Signature Piece</span>
+        <h2 className="sig2-title">{TITLE}</h2>
+        <div className="sig2-rule" />
+        <blockquote className="sig2-quote">
+          &ldquo;In silence, the universe revealed its shape — a spiral with no beginning,
+          no end. Two becoming one without losing themselves.
+          The ring was not designed. It was received.&rdquo;
+        </blockquote>
+        <p className="sig2-attribution">— Jack Hovsepian, Founder · Los Angeles, 1984</p>
+        <div className="sig2-awards">
+          <span>★ Industry Award Winner</span>
+          <span className="sig2-awards-sep">·</span>
+          <span>Handcrafted to Order</span>
         </div>
+        <Link href={HREF} className="sig2-cta">
+          Discover the Ring
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
       </div>
     </section>
   );

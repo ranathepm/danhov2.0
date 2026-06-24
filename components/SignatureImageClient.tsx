@@ -11,12 +11,12 @@ type Props = {
 };
 
 export default function SignatureImageClient({ images, href, alt }: Props) {
-  const [activeIdx, setActiveIdx] = useState(0);
+  const defaultIdx = images.length >= 2 ? 1 : 0;
+  const [activeIdx, setActiveIdx] = useState(defaultIdx);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   function startCycle() {
     if (images.length <= 1) return;
-    setActiveIdx(1);
     intervalRef.current = setInterval(() => {
       setActiveIdx((i) => (i + 1) % images.length);
     }, 1100);
@@ -27,7 +27,7 @@ export default function SignatureImageClient({ images, href, alt }: Props) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    setActiveIdx(0);
+    setActiveIdx(defaultIdx);
   }
 
   useEffect(() => () => {
@@ -50,7 +50,7 @@ export default function SignatureImageClient({ images, href, alt }: Props) {
   return (
     <Link
       href={href}
-      className="sig-img-wrap"
+      style={{ display: 'block', width: '100%', height: '100%', position: 'relative' }}
       aria-label={`View ${alt}`}
       onMouseEnter={startCycle}
       onMouseLeave={stopCycle}
@@ -61,18 +61,16 @@ export default function SignatureImageClient({ images, href, alt }: Props) {
           src={src}
           alt={`${alt} — image ${i + 1}`}
           fill
-          sizes="(max-width: 880px) 100vw, 50vw"
+          sizes="(max-width: 900px) 100vw, 55vw"
           style={{
-            objectFit: 'contain',
-            padding: '32px',
-            mixBlendMode: 'multiply',
+            objectFit: 'cover',
             opacity: i === activeIdx ? 1 : 0,
-            transition: 'opacity 0.45s ease',
+            transition: 'opacity 0.55s ease',
             position: 'absolute',
             inset: 0,
           }}
           priority={i === 0}
-          unoptimized={src.includes('.supabase.co') || src.endsWith('.gif')}
+          unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}
         />
       ))}
     </Link>

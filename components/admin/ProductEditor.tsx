@@ -17,6 +17,8 @@ import DiamondShapeIcon from '@/components/admin/DiamondShapeIcon';
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
+type LaborExtras = { three_d_run: number; rhodium: number; laser_engraving: number };
+
 type Product = {
   sku: string;
   slug: string;
@@ -45,6 +47,8 @@ type Product = {
   commission_rate: number | null;
   casting_labor_per_gram: number | null;
   accounting_cost_usd: number | null;
+  custom_labor_usd: number | null;
+  labor_extras: LaborExtras | null;
   is_active: boolean;
   sub_categories: string[] | null;
 };
@@ -92,6 +96,7 @@ const SETTING_MULTIPLIER_PRESETS  = [4, 6, 8, 10];
 const CENTRE_MULTIPLIER_PRESETS   = [25, 50, 75, 100];
 const CASTING_LABOR_PRESETS       = [5, 10, 15, 20];
 const MARKUP_MULTIPLIER_PRESETS   = [2, 3, 4, 5];
+const CUSTOM_LABOR_PRESETS        = [50, 100, 200, 300, 500, 1000];
 
 type Tab = 'identity' | 'images' | 'pricing';
 
@@ -181,6 +186,7 @@ export default function ProductEditor({
     centre_multiplier:      product.centre_multiplier ?? 50,
     commission_rate:        0,
     casting_labor_per_gram: product.casting_labor_per_gram ?? 10,
+    custom_labor_usd: product.custom_labor_usd ?? null,
     // Snap to 4 for any legacy/unexpected value — only exact preset values are kept
     markup_multiplier: [2, 3, 4, 5].includes(product.markup_multiplier ?? 0)
       ? product.markup_multiplier
@@ -223,9 +229,18 @@ export default function ProductEditor({
     [totalStoneCount, form.setting_multiplier],
   );
 
-  const centreCount  = form.centre_diamond_group?.count ?? 0;
-  const centreLabour = centreCount * (form.centre_multiplier ?? 50);
-  const totalLabour  = settingLabour + centreLabour;
+  const centreCount   = form.centre_diamond_group?.count ?? 0;
+  const centreLabour  = centreCount * (form.centre_multiplier ?? 50);
+  const customLabour  = form.custom_labor_usd ?? 0;
+
+  const [laborExtras, setLaborExtras] = useState<LaborExtras>({
+    three_d_run:     (product.labor_extras?.three_d_run     ?? 30),
+    rhodium:         (product.labor_extras?.rhodium         ?? 30),
+    laser_engraving: (product.labor_extras?.laser_engraving ?? 20),
+  });
+
+  const extrasTotal  = laborExtras.three_d_run + laborExtras.rhodium + laborExtras.laser_engraving;
+  const totalLabour  = settingLabour + centreLabour + customLabour + extrasTotal;
 
   const [saving,   setSaving]   = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -295,6 +310,8 @@ export default function ProductEditor({
         commission_rate:        0,
         markup_multiplier:      form.markup_multiplier ?? 4,
         casting_labor_per_gram: form.casting_labor_per_gram ?? 10,
+        custom_labor_usd:       form.custom_labor_usd ?? null,
+        labor_extras:           laborExtras,
         // Always available in all metals; platinum is the pricing base
         metals:               METAL_OPTIONS,
         default_metal:        'platinum',
@@ -534,7 +551,7 @@ export default function ProductEditor({
                   onChange={(e) => isNew ? handleSkuChange(e.target.value) : undefined}
                 />
                 {isNew && (
-                  <span style={{ fontSize: 11, color: '#9e8880', marginTop: 4, display: 'block' }}>
+                  <span style={{ fontSize: 11, color: '#1a1410', marginTop: 4, display: 'block' }}>
                     First 2 letters auto-fill collection + category (e.g. AE → Abbraccio · Engagement). Always end with <strong>-PL</strong>.
                   </span>
                 )}
@@ -558,7 +575,7 @@ export default function ProductEditor({
             </div>
 
             {isNew && (
-              <div style={{ background: '#faf6f1', border: '1px solid #e8ddd8', borderRadius: 8, padding: '10px 14px', marginBottom: 8, fontSize: 12, color: '#7a6860' }}>
+              <div style={{ background: '#faf6f1', border: '1px solid #e8ddd8', borderRadius: 8, padding: '10px 14px', marginBottom: 8, fontSize: 12, color: '#1a1410' }}>
                 <strong style={{ color: '#1a1410' }}>SKU code reference</strong>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2px 24px', marginTop: 6 }}>
                   {Object.entries(SKU_COLLECTION).map(([code, name]) => (
@@ -776,9 +793,6 @@ export default function ProductEditor({
             <section className="adm-card">
               <header className="adm-card-head">
                 <h2 className="adm-h2">Stone of the Ring</h2>
-                <button type="button" className="adm-btn adm-btn--sm" onClick={addStoneGroup}>
-                  + Add Group
-                </button>
               </header>
 
               <div className="adm-stone-groups">
@@ -849,6 +863,15 @@ export default function ProductEditor({
                   </div>
                 ))}
               </div>
+
+              <button
+                type="button"
+                className="adm-btn adm-btn--sm"
+                style={{ marginTop: 12 }}
+                onClick={addStoneGroup}
+              >
+                + Add Group
+              </button>
 
               {/* Setting multiplier */}
               <div className="adm-multiplier-block" style={{ marginTop: 20, borderTop: '1px solid var(--border)', paddingTop: 16 }}>
@@ -975,7 +998,7 @@ export default function ProductEditor({
               </div>
             </section>
 
-            {/* ── Labor Summary (read-only) ────────────────────────────── */}
+            {/* ── Labor Summary ────────────────────────────────────────── */}
             <section className="adm-card">
               <header className="adm-card-head">
                 <h2 className="adm-h2">Labor</h2>
@@ -992,9 +1015,88 @@ export default function ProductEditor({
                   <span className="adm-labour-formula">{centreCount} stone × ${form.centre_multiplier ?? 50} each</span>
                 </div>
               </div>
+
+              {/* Custom labor input */}
+              <div className="adm-custom-labour">
+                <span className="adm-field-label">Jewellery Labor</span>
+                <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
+                  {CUSTOM_LABOR_PRESETS.map((v) => (
+                    <button
+                      key={v}
+                      type="button"
+                      className={`adm-chip${(form.custom_labor_usd ?? 0) === v ? ' is-active' : ''}`}
+                      onClick={() => set('custom_labor_usd', (form.custom_labor_usd ?? 0) === v ? null : v)}
+                    >
+                      ${v.toLocaleString('en-US')}
+                    </button>
+                  ))}
+                  {(form.custom_labor_usd ?? 0) > 0 && (
+                    <button
+                      type="button"
+                      className="adm-chip adm-chip--clear"
+                      onClick={() => set('custom_labor_usd', null)}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="adm-dollar-wrap">
+                  <input
+                    type="number"
+                    step="10"
+                    min="0"
+                    placeholder="0"
+                    className="adm-input"
+                    value={form.custom_labor_usd ?? ''}
+                    onChange={(e) => set('custom_labor_usd', e.target.value === '' ? null : Number(e.target.value))}
+                  />
+                </div>
+              </div>
+
+              {/* Extra labor line items */}
+              <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, marginTop: 4, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {(
+                  [
+                    { key: 'three_d_run',     label: '3D Run',         defaultVal: 30 },
+                    { key: 'rhodium',         label: 'Rhodium',        defaultVal: 30 },
+                    { key: 'laser_engraving', label: 'Laser Engraving', defaultVal: 20 },
+                  ] as { key: keyof LaborExtras; label: string; defaultVal: number }[]
+                ).map(({ key, label, defaultVal }) => (
+                  <div key={key} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <span className="adm-field-label" style={{ margin: 0, minWidth: 140 }}>{label}</span>
+                    <div className="adm-dollar-wrap" style={{ maxWidth: 120 }}>
+                      <input
+                        type="number"
+                        step="1"
+                        min="0"
+                        placeholder={String(defaultVal)}
+                        className="adm-input"
+                        value={laborExtras[key] ?? ''}
+                        onChange={(e) =>
+                          setLaborExtras((prev) => ({
+                            ...prev,
+                            [key]: e.target.value === '' ? 0 : Number(e.target.value),
+                          }))
+                        }
+                      />
+                    </div>
+                    <span style={{ fontSize: 12, color: 'var(--adm-mute)' }}>
+                      ${laborExtras[key].toLocaleString('en-US')}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
               <div className="adm-labour-total">
                 <span className="adm-field-label">Total Labor</span>
-                <strong>${totalLabour.toLocaleString('en-US')}</strong>
+                <strong>
+                  ${totalLabour.toLocaleString('en-US')}
+                  {customLabour > 0 && (
+                    <span style={{ fontWeight: 400, fontSize: 12, color: '#1a1410', marginLeft: 8 }}>
+                      (incl. ${customLabour.toLocaleString('en-US')} custom)
+                    </span>
+                  )}
+                </strong>
               </div>
             </section>
 
@@ -1014,7 +1116,7 @@ export default function ProductEditor({
                 marginBottom: 16,
                 fontSize: 12,
                 fontFamily: "'Cormorant Garamond', serif",
-                color: '#6b5b52',
+                color: '#1a1410',
                 display: 'flex',
                 gap: 12,
                 flexWrap: 'wrap' as const,
@@ -1026,12 +1128,12 @@ export default function ProductEditor({
                     <span><strong style={{ color: '#1a1410' }}>${livePrices.gold_per_gram_24k.toFixed(2)}/g</strong> 24k Gold</span>
                     <span><strong style={{ color: '#1a1410' }}>${livePrices.platinum_per_gram_spot.toFixed(2)}/g</strong> Pt spot</span>
                     <span><strong style={{ color: '#1a1410' }}>${livePrices.iridium_per_gram_spot?.toFixed(2) ?? '—'}/g</strong> Ir (manual)</span>
-                    <span style={{ marginLeft: 'auto', color: '#9e8880' }}>
+                    <span style={{ marginLeft: 'auto', color: '#1a1410' }}>
                       Updated {new Date(livePrices.fetched_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
                   </>
                 ) : (
-                  <span style={{ color: '#9e8880' }}>Fetching live metal prices…</span>
+                  <span style={{ color: '#1a1410' }}>Fetching live metal prices…</span>
                 )}
               </div>
 
@@ -1053,7 +1155,7 @@ export default function ProductEditor({
                       <span>Labor (setting + centre diamond)</span>
                       <strong>${totalLabour.toLocaleString('en-US')}</strong>
                     </div>
-                    <div className="adm-pricing-row" style={{ color: '#9e8880', fontSize: 12 }}>
+                    <div className="adm-pricing-row" style={{ color: '#1a1410', fontSize: 12 }}>
                       <span>Casting labor (${perG.toFixed(0)}/g × alloy weight — varies per metal)</span>
                       <strong style={{ fontFamily: "'Cormorant Garamond', serif", color: '#1a1410' }}>
                         {defWeight > 0
@@ -1081,7 +1183,7 @@ export default function ProductEditor({
                       borderBottom: '1px solid var(--border)',
                       fontFamily: "'Cormorant Garamond', serif",
                       fontSize: 11,
-                      color: '#7a6860',
+                      color: '#1a1410',
                       textTransform: 'uppercase' as const,
                       letterSpacing: '0.07em',
                       fontWeight: 600,
@@ -1122,10 +1224,10 @@ export default function ProductEditor({
                           <span style={{ color: '#1a1410', fontWeight: isDefault ? 600 : 400 }}>
                             {label}{isDefault ? ' ★' : ''}
                           </span>
-                          <span style={{ color: '#7a6860', fontSize: 14, textAlign: 'right' }}>
+                          <span style={{ color: '#1a1410', fontSize: 14, textAlign: 'right' }}>
                             {metalWeight.toFixed(2)}g{livePrices ? ` @ $${costPerG.toFixed(2)}/g` : ''}{pricingMetal !== metal ? ' *' : ''}
                           </span>
-                          <span style={{ color: '#7a6860', fontSize: 14, textAlign: 'right' }}>
+                          <span style={{ color: '#1a1410', fontSize: 14, textAlign: 'right' }}>
                             {livePrices ? `$${Math.round(materialCost).toLocaleString()} + $${Math.round(castingLabor).toLocaleString()}` : '—'}
                           </span>
                           <span style={{ color: '#1a1410', fontSize: 15, textAlign: 'right', fontWeight: 500 }}>
@@ -1173,7 +1275,7 @@ export default function ProductEditor({
                       value={form.markup_multiplier ?? ''}
                       onChange={(e) => set('markup_multiplier', e.target.value === '' ? null : Number(e.target.value))}
                     />
-                    <span style={{ fontSize: 12, color: '#9e8880' }}>
+                    <span style={{ fontSize: 12, color: '#1a1410' }}>
                       cost × multiplier = website price shown to customers
                     </span>
                   </div>
@@ -1204,22 +1306,22 @@ export default function ProductEditor({
                     borderRadius: 6,
                     fontFamily: "'Cormorant Garamond', serif",
                   }}>
-                    <div style={{ fontSize: 11, color: '#9e8880', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: 12 }}>
+                    <div style={{ fontSize: 11, color: '#1a1410', textTransform: 'uppercase' as const, letterSpacing: '0.07em', marginBottom: 12 }}>
                       Total Product Price — {label} (default metal)
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' as const }}>
                       <div>
-                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 3 }}>Product Cost</div>
+                        <div style={{ fontSize: 11, color: '#1a1410', marginBottom: 3 }}>Product Cost</div>
                         <div style={{ fontSize: 22, fontWeight: 600, color: '#1a1410' }}>
                           ${costTotal.toLocaleString('en-US')}
                         </div>
                       </div>
-                      <div style={{ fontSize: 20, color: '#c8b8b0', fontWeight: 300, padding: '0 4px' }}>×{markup}</div>
+                      <div style={{ fontSize: 20, color: '#1a1410', fontWeight: 300, padding: '0 4px' }}>×{markup}</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <div style={{ width: 1, height: 36, background: '#e8ddd8' }} />
                       </div>
                       <div>
-                        <div style={{ fontSize: 11, color: '#9e8880', marginBottom: 3 }}>Website Price (shown to customers)</div>
+                        <div style={{ fontSize: 11, color: '#1a1410', marginBottom: 3 }}>Website Price (shown to customers)</div>
                         <div style={{ fontSize: 28, fontWeight: 700, color: '#AC3438', letterSpacing: '-0.5px' }}>
                           ${websitePrice.toLocaleString('en-US')}
                         </div>
@@ -1376,7 +1478,7 @@ function StoneGroupReadout({
             override={group.carat_each_override ?? null}
             onCommit={(v) => onUpdate({ carat_each_override: v })}
           />
-          <span style={{ fontSize: 12, color: '#7a6860', whiteSpace: 'nowrap' as const }}>ct each</span>
+          <span style={{ fontSize: 12, color: '#1a1410', whiteSpace: 'nowrap' as const }}>ct each</span>
         </label>
         <span className="adm-stone-readout-sep">·</span>
         <span style={{ fontSize: 12 }}><strong>{fmtCt(totalCt)} ct</strong> total</span>

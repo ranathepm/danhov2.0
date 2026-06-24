@@ -486,7 +486,7 @@ export default function LifePathClient() {
           display: inline-block; padding: 16px 56px; background: #AC3438; color: #faf6f1;
           font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
           border: none; cursor: pointer; font-family: 'Cormorant Garamond', serif;
-          border-radius: 999px; transition: background 0.2s;
+          border-radius: 4px; transition: background 0.2s;
         }
         .lp-landing-btn:hover { background: #8f2b2e; }
 
@@ -545,7 +545,7 @@ export default function LifePathClient() {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
           font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
-          border-radius: 999px; transition: background 0.2s;
+          border-radius: 4px; transition: background 0.2s;
         }
         .lp-reveal-btn:hover { background: #8B2A2D; }
 
@@ -634,7 +634,7 @@ export default function LifePathClient() {
           display: block; width: 100%; padding: 16px; background: #AC3438; color: #faf6f1;
           font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-decoration: none; text-align: center;
-          border: none; border-radius: 999px; transition: background 0.2s; cursor: pointer;
+          border: none; border-radius: 4px; transition: background 0.2s; cursor: pointer;
         }
         .lp-cta-primary:hover { background: #8f2b2e; }
         .lp-cta-secondary {
@@ -642,7 +642,7 @@ export default function LifePathClient() {
           font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; text-align: center;
           border: 1px solid rgba(172,52,56,0.25); cursor: pointer;
-          border-radius: 999px; transition: border-color 0.2s, color 0.2s;
+          border-radius: 4px; transition: border-color 0.2s, color 0.2s;
         }
         .lp-cta-secondary:hover { border-color: #AC3438; color: #AC3438; }
 
@@ -770,7 +770,7 @@ export default function LifePathClient() {
           width: 100%; margin-top: 24px; padding: 16px; background: #AC3438; color: #faf6f1;
           font-family: 'Cormorant Garamond', serif; font-size: 11px; letter-spacing: 0.2em;
           text-transform: uppercase; border: none; cursor: pointer;
-          border-radius: 999px; transition: background 0.2s;
+          border-radius: 4px; transition: background 0.2s;
         }
         .lp-submit-btn:hover:not(:disabled) { background: #8f2b2e; }
         .lp-submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -836,12 +836,12 @@ export default function LifePathClient() {
           <Link href="/engagement-rings" className="lp-landing-nav">← Back to Rings</Link>
           <div className="lp-landing-bg" aria-hidden="true">
             <svg viewBox="0 0 600 600" fill="none">
-              <circle cx="300" cy="300" r="280" stroke="#AC3438" strokeWidth="0.8"/>
-              <circle cx="300" cy="300" r="220" stroke="#AC3438" strokeWidth="0.5" opacity="0.6"/>
-              <circle cx="300" cy="300" r="165" stroke="#AC3438" strokeWidth="0.5" opacity="0.5"/>
-              <circle cx="300" cy="300" r="115" stroke="#AC3438" strokeWidth="0.4" opacity="0.4"/>
-              <circle cx="300" cy="300" r="72"  stroke="#AC3438" strokeWidth="0.4" opacity="0.3"/>
-              <circle cx="300" cy="300" r="38"  stroke="#AC3438" strokeWidth="0.3" opacity="0.2"/>
+              <circle cx="300" cy="300" r="280" stroke="#AC3438" strokeWidth="2.5"/>
+              <circle cx="300" cy="300" r="220" stroke="#AC3438" strokeWidth="1.2" opacity="0.6"/>
+              <circle cx="300" cy="300" r="165" stroke="#AC3438" strokeWidth="0.8" opacity="0.5"/>
+              <circle cx="300" cy="300" r="115" stroke="#AC3438" strokeWidth="0.6" opacity="0.4"/>
+              <circle cx="300" cy="300" r="72"  stroke="#AC3438" strokeWidth="0.5" opacity="0.3"/>
+              <circle cx="300" cy="300" r="38"  stroke="#AC3438" strokeWidth="0.4" opacity="0.2"/>
               <line x1="300" y1="20"  x2="300" y2="580" stroke="#AC3438" strokeWidth="0.3" opacity="0.4"/>
               <line x1="20"  y1="300" x2="580" y2="300" stroke="#AC3438" strokeWidth="0.3" opacity="0.4"/>
               <line x1="95"  y1="95"  x2="505" y2="505" stroke="#AC3438" strokeWidth="0.25" opacity="0.3"/>
@@ -870,7 +870,7 @@ export default function LifePathClient() {
           <div className="lp-input-inner">
             <span className="lp-input-eyebrow">Your Birth Date</span>
             <h2 className="lp-input-title">When did you arrive?</h2>
-            <p className="lp-input-sub">Enter your date of birth to reveal your life path number, zodiac sign, and five bespoke jewellery designs made for your number.</p>
+            <p className="lp-input-sub">Enter your date of birth to reveal your life path number, zodiac sign, and five bespoke jewelry designs made for your number.</p>
 
             <div className="lp-date-row">
               <div className="lp-date-field">
@@ -886,7 +886,8 @@ export default function LifePathClient() {
               <div className="lp-date-field">
                 <label className="lp-date-label" htmlFor="lp-year">Year</label>
                 <input id="lp-year" type="number" className="lp-date-input" placeholder="YYYY"
-                  min={1900} max={2025} value={year} onChange={e => setYear(e.target.value)} />
+                  min={1900} max={2025} value={year} onChange={e => setYear(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleReveal()} />
               </div>
             </div>
 
@@ -895,8 +896,9 @@ export default function LifePathClient() {
               <input id="lp-input-email" type="email" className="lp-email-input"
                 placeholder="you@example.com" value={inputEmail}
                 onChange={e => setInputEmail(e.target.value)}
-                autoComplete="email" />
-              <span className="lp-email-hint">Optional. We&apos;ll send your five jewellery designs and never share your address.</span>
+                autoComplete="email"
+                onKeyDown={e => e.key === 'Enter' && handleReveal()} />
+              <span className="lp-email-hint">Optional. We&apos;ll send your five jewelry designs and never share your address.</span>
             </div>
 
             {inputError && <p className="lp-error">{inputError}</p>}

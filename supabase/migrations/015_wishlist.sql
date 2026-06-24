@@ -13,11 +13,14 @@ create table if not exists wishlists (
 alter table wishlists enable row level security;
 
 -- Users can only see and manage their own wishlist rows
-create policy if not exists "wishlist: owner select"
+drop policy if exists "wishlist: owner select" on wishlists;
+create policy "wishlist: owner select"
   on wishlists for select using (auth.uid() = user_id);
 
-create policy if not exists "wishlist: owner insert"
+drop policy if exists "wishlist: owner insert" on wishlists;
+create policy "wishlist: owner insert"
   on wishlists for insert with check (auth.uid() = user_id);
 
-create policy if not exists "wishlist: owner delete"
+drop policy if exists "wishlist: owner delete" on wishlists;
+create policy "wishlist: owner delete"
   on wishlists for delete using (auth.uid() = user_id);

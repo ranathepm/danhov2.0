@@ -442,11 +442,6 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
         clarity: clarities,
         cut: cuts,
         availability: 'AVAILABLE' as const,
-        // Only surface stones that actually have media — Nivoda returns
-        // many diamonds with image:null/video:null which would render as
-        // blank cards. has_image mirrors Brilliant Earth (every tile has
-        // a photo + a 360° spin video).
-        has_image: true,
       },
       limit: PAGE_SIZE,
       offset,
@@ -740,7 +735,7 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               else if (isInCart) btnText = '✓ Already in Cart';
               else if (isHolding) btnText = 'Reserving…';
               else if (isSelected) btnText = '✓ Selected';
-              else btnText = 'Select this diamond';
+              else btnText = 'Select';
 
               return (
                 <div
@@ -826,7 +821,7 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
               <div className="be-empty">
                 <p>No diamonds match this combination right now.</p>
                 <p className="be-empty-hint">
-                  Try widening the carat range or relaxing colour / clarity.
+                  Try widening the carat range or relaxing color / clarity.
                 </p>
               </div>
             )}

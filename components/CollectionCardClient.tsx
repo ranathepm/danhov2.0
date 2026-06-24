@@ -12,23 +12,22 @@ type Props = {
   body: string;
   linkLabel: string;
   customSvg?: React.ReactNode;
+  featured?: boolean; // true for Wedding/Fine/Mens — taller cards
 };
 
 export default function CollectionCardClient({
   href,
   images,
   label,
-  meaning,
-  body,
-  linkLabel,
   customSvg,
+  featured = false,
 }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   function startCycle() {
     if (images.length <= 1) return;
-    setActiveIdx(1); // advance immediately so the first switch is instant
+    setActiveIdx(1);
     intervalRef.current = setInterval(() => {
       setActiveIdx((i) => (i + 1) % images.length);
     }, 1100);
@@ -49,10 +48,11 @@ export default function CollectionCardClient({
   return (
     <Link
       href={href}
-      className="cat-card"
+      className={`cat-card${featured ? ' cat-card--featured' : ''}`}
       onMouseEnter={startCycle}
       onMouseLeave={stopCycle}
     >
+      {/* Photo layer */}
       <div className="cat-photo">
         {customSvg ? (
           <div className="cat-photo-placeholder">{customSvg}</div>
@@ -63,33 +63,37 @@ export default function CollectionCardClient({
               src={src}
               alt={`${label} by DANHOV`}
               fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              sizes={featured
+                ? '(max-width: 768px) 100vw, 33vw'
+                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
               style={{
-                objectFit: 'contain',
-                padding: '12px',
-                mixBlendMode: 'multiply',
+                objectFit: 'cover',
                 opacity: i === activeIdx ? 1 : 0,
-                transition: 'opacity 0.45s ease',
-                zIndex: i === activeIdx ? 1 : 0,
+                transition: 'opacity 0.5s ease',
               }}
               priority={i === 0}
-              unoptimized={src.includes('.supabase.co') || src.endsWith('.gif')}
+              unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}
             />
           ))
         ) : (
           <div className="cat-photo-placeholder">
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" aria-hidden>
               <circle cx="40" cy="40" r="30" stroke="#AC3438" strokeWidth="5" fill="none" />
               <circle cx="40" cy="26" r="5" fill="rgba(172,52,56,0.12)" stroke="#AC3438" strokeWidth="0.5" />
             </svg>
           </div>
         )}
       </div>
-      <div className="cat-info">
-        <span className="cat-eyebrow">{label}</span>
-        <p className="cat-meaning">{meaning}</p>
-        <p className="cat-body">{body}</p>
-        <span className="cat-link">{linkLabel} &rarr;</span>
+
+      {/* Gradient overlay — always present, name + explore */}
+      <div className="cat-overlay">
+        <span className="cat-name">{label}</span>
+        <span className="cat-explore">
+          Explore
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </span>
       </div>
     </Link>
   );
