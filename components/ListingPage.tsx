@@ -579,6 +579,7 @@ function VanCleefCard({
   const [selectedMetal, setSelectedMetal] = useState(defaultMetal);
   const [cyclingIdx, setCyclingIdx] = useState(0);
   const [imgFailed, setImgFailed] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Images for selected metal — try the exact metal, then closest family, then default
@@ -591,7 +592,7 @@ function VanCleefCard({
   };
 
   const displayImages = getImagesForMetal(selectedMetal);
-  const currentImg = displayImages[cyclingIdx] ?? displayImages[0] ?? null;
+  const currentImg = imgSrc ?? (displayImages[cyclingIdx] ?? displayImages[0] ?? null);
   const isAwardWinner = product.collection?.toLowerCase().includes('award');
 
   function startCycling() {
@@ -613,6 +614,7 @@ function VanCleefCard({
     setSelectedMetal(m);
     setCyclingIdx(0);
     setImgFailed(false);
+    setImgSrc(null);
   }
 
   useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
@@ -640,7 +642,14 @@ function VanCleefCard({
             className="vc-card-img"
             loading="lazy"
             unoptimized={currentImg.includes('.supabase.co') || currentImg.includes('danhov.com') || currentImg.endsWith('.gif')}
-            onError={() => setImgFailed(true)}
+            onError={() => {
+              const fallback = product.images?.[0];
+              if (fallback && safeUrl(fallback) !== safeUrl(currentImg ?? '')) {
+                setImgSrc(fallback);
+              } else {
+                setImgFailed(true);
+              }
+            }}
           />
         ) : (
           <div className="vc-card-placeholder">{placeholder}</div>

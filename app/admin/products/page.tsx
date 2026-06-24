@@ -152,7 +152,7 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                 <tr key={p.sku}>
                   <td className="adm-cell-thumb">
                     {hero ? (
-                      <Image src={hero} alt={p.name} width={80} height={80} style={{ objectFit: 'cover' }} />
+                      <Image src={hero} alt={p.name} width={80} height={80} style={{ objectFit: 'cover' }} unoptimized={hero.includes('.supabase.co') || hero.includes('danhov.com')} />
                     ) : (
                       <span className="adm-thumb-empty">—</span>
                     )}
