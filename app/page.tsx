@@ -100,7 +100,7 @@ export default async function HomePage() {
           fontWeight: 700,
           letterSpacing: '0.55em',
           textTransform: 'uppercase',
-          color: '#AC3438',
+          color: '#f2ece4',
           textAlign: 'center',
           margin: '0 0 56px',
         }}>
@@ -148,7 +148,7 @@ export default async function HomePage() {
               fontSize: '0.6rem',
               letterSpacing: '0.5em',
               textTransform: 'uppercase',
-              color: '#AC3438',
+              color: '#f2ece4',
               marginTop: 10,
               fontWeight: 600,
             }}>
