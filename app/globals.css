@@ -7559,23 +7559,18 @@ aside {
   line-height: 1.7;
 }
 
-/* ── Featured: Wedding full-width hero, Fine + Mens side-by-side ── */
+/* ── Featured: Wedding | Fine | Mens — editorial 3-panel grid ── */
 .cat-featured-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px;
-  margin-bottom: 2px;
+  display: grid;
+  grid-template-columns: 5fr 2fr 2fr;
+  gap: 12px;
+  height: 65vh;
+  min-height: 380px;
+  padding: 0 48px;
 }
-.cat-featured-strip .cat-card:first-child {
-  flex: 0 0 100%;
-  height: 56vh;
-  min-height: 360px;
-  aspect-ratio: unset;
-}
-.cat-featured-strip .cat-card:not(:first-child) {
-  flex: 1 1 calc(50% - 1px);
-  height: 44vh;
-  min-height: 260px;
+.cat-featured-strip .cat-card {
+  height: 100%;
+  min-height: 0;
   aspect-ratio: unset;
 }
 
@@ -7601,53 +7596,12 @@ aside {
   white-space: nowrap;
 }
 
-/* ── Engagement collections: horizontal filmstrip ─────────────── */
-.cat-scroll-wrap {
-  position: relative;
-}
-/* Right-fade gradient signals more content */
-.cat-scroll-wrap::after {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 100px;
-  background: linear-gradient(to right, transparent, #0f0d0c 88%);
-  pointer-events: none;
-  z-index: 2;
-}
-.cat-scroll-row {
-  display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  padding: 0 48px 0 48px;
-}
-.cat-scroll-row::-webkit-scrollbar { display: none; }
-.cat-scroll-row .cat-card {
-  flex: 0 0 220px;
-  height: 330px;
-  aspect-ratio: unset;
-  scroll-snap-align: start;
-}
-
-.cat-scroll-hint {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  padding: 14px 140px 0 0;
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.54rem;
-  letter-spacing: 0.38em;
-  text-transform: uppercase;
-  color: #3a3230;
-}
-.cat-scroll-hint svg {
-  opacity: 0.4;
+/* ── Engagement collections: responsive CSS grid ───────────────── */
+.cat-collections-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px 20px;
+  padding: 0 48px;
 }
 
 /* ── Card base (shared) ────────────────────────────────────────── */
@@ -7721,20 +7675,24 @@ aside {
   line-height: 1.2;
   display: block;
 }
-/* Wedding: massive, full viewport width */
+/* Wedding: dominant left panel */
 .cat-featured-strip .cat-card:first-child .cat-name {
-  font-size: clamp(2.6rem, 5vw, 5.5rem);
+  font-size: clamp(2.2rem, 4vw, 4.8rem);
   font-weight: 300;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.14em;
 }
-/* Fine + Mens: medium, half-width panels */
+/* Fine + Mens: proportional for narrower panels */
 .cat-featured-strip .cat-card:not(:first-child) .cat-name {
-  font-size: clamp(1.5rem, 2.8vw, 2.8rem);
+  font-size: clamp(1.1rem, 1.8vw, 2rem);
   font-weight: 300;
   letter-spacing: 0.1em;
 }
 /* Featured cards: more padding, bottom-aligned */
 .cat-featured-strip .cat-overlay {
+  padding: 28px 24px;
+  gap: 10px;
+}
+.cat-featured-strip .cat-card:first-child .cat-overlay {
   padding: 36px 40px;
   gap: 12px;
 }
@@ -7784,32 +7742,98 @@ aside {
   color: #fff;
 }
 
+/* ── Editorial card (engagement grid) ──────────────────────────── */
+.cat-editorial-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.cat-editorial-photo {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #1a1410;
+}
+.cat-editorial-photo img {
+  transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+}
+.cat-editorial-card:hover .cat-editorial-photo img {
+  transform: scale(1.06);
+}
+.cat-editorial-photo-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #1a1410;
+}
+.cat-editorial-text {
+  padding: 14px 0 0;
+  border-top: 1px solid rgba(172, 52, 56, 0);
+  transition: border-color 0.3s ease;
+}
+.cat-editorial-card:hover .cat-editorial-text {
+  border-top-color: rgba(172, 52, 56, 0.3);
+}
+.cat-editorial-name {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.88rem, 1.1vw, 1.05rem);
+  font-weight: 400;
+  letter-spacing: 0.07em;
+  color: #c8bfb7;
+  line-height: 1.2;
+  margin-bottom: 6px;
+  transition: color 0.25s ease;
+}
+.cat-editorial-card:hover .cat-editorial-name {
+  color: #f2ece4;
+}
+.cat-editorial-meaning {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #AC3438;
+  opacity: 0.75;
+  transition: opacity 0.25s ease;
+}
+.cat-editorial-card:hover .cat-editorial-meaning {
+  opacity: 1;
+}
+
 /* legacy */
 .col-section-cta { display: flex; justify-content: center; margin-top: 52px; }
 
 /* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .cat-featured-strip {
+    grid-template-columns: 1fr 1fr;
+    height: auto;
+    padding: 0 24px;
+  }
   .cat-featured-strip .cat-card:first-child {
+    grid-column: 1 / -1;
     height: 50vw;
     min-height: 240px;
   }
   .cat-featured-strip .cat-card:not(:first-child) {
-    flex: 1 1 calc(50% - 1px);
     height: 52vw;
     min-height: 200px;
   }
-  .cat-scroll-row .cat-card { flex: 0 0 180px; height: 270px; }
-  .cat-scroll-row           { padding: 0 24px; }
-  .cat-divider              { padding: 40px 24px 32px; }
-  .cat-scroll-hint          { padding-right: 24px; }
-  .cat-view-all             { padding: 0 24px; }
-  .cat-scroll-wrap::after   { width: 60px; }
+  .cat-collections-grid { grid-template-columns: repeat(3, 1fr); gap: 28px 16px; padding: 0 24px; }
+  .cat-divider          { padding: 40px 24px 32px; }
+  .cat-view-all         { padding: 0 24px; }
 }
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .cat-featured-strip .cat-card:first-child  { height: 70vw; }
   .cat-featured-strip .cat-card:not(:first-child) { height: 56vw; }
-  .cat-scroll-row .cat-card { flex: 0 0 160px; height: 240px; }
-  .categories-section       { padding: 64px 0 56px; }
+  .cat-collections-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
+  .categories-section   { padding: 64px 0 56px; }
 }
 
 /* ============================================================

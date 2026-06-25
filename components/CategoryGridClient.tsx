@@ -126,40 +126,30 @@ export default function CategoryGridClient({
         </div>
       )}
 
-      {/* ── Engagement collections: horizontal scroll filmstrip ── */}
+      {/* ── Engagement collections: responsive editorial grid ── */}
       {collections.length > 0 && (
-        <div className="cat-scroll-wrap">
-          <div className="cat-scroll-row">
-            {collections.map((col) => {
-              const fallbackSvg = col.isLifePath && col.images.length === 0
-                ? LIFE_PATH_SVG
-                : col.images.length === 0
-                ? (FALLBACK_SVGS[col.value] ?? undefined)
-                : undefined;
+        <div className="cat-collections-grid">
+          {collections.map((col) => {
+            const fallbackSvg = col.isLifePath && col.images.length === 0
+              ? LIFE_PATH_SVG
+              : col.images.length === 0
+              ? (FALLBACK_SVGS[col.value] ?? undefined)
+              : undefined;
 
-              return (
-                <CollectionCardClient
-                  key={col.value}
-                  href={col.href}
-                  images={col.images}
-                  label={col.label}
-                  meaning={col.meaning}
-                  body={col.body}
-                  linkLabel={col.linkLabel}
-                  customSvg={fallbackSvg}
-                />
-              );
-            })}
-          </div>
-          <p className="cat-scroll-hint">
-            <svg width="20" height="1" viewBox="0 0 20 1" fill="none" aria-hidden>
-              <line x1="0" y1="0.5" x2="20" y2="0.5" stroke="#AC3438" strokeWidth="0.8"/>
-            </svg>
-            Scroll to explore all {collections.length} collections
-            <svg width="20" height="1" viewBox="0 0 20 1" fill="none" aria-hidden>
-              <line x1="0" y1="0.5" x2="20" y2="0.5" stroke="#AC3438" strokeWidth="0.8"/>
-            </svg>
-          </p>
+            return (
+              <CollectionCardClient
+                key={col.value}
+                href={col.href}
+                images={col.images}
+                label={col.label}
+                meaning={col.meaning}
+                body={col.body}
+                linkLabel={col.linkLabel}
+                customSvg={fallbackSvg}
+                editorial
+              />
+            );
+          })}
         </div>
       )}
 

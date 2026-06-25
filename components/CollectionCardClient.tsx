@@ -12,15 +12,18 @@ type Props = {
   body: string;
   linkLabel: string;
   customSvg?: React.ReactNode;
-  featured?: boolean; // true for Wedding/Fine/Mens — taller cards
+  featured?: boolean; // true for Wedding/Fine/Mens — tall overlay cards
+  editorial?: boolean; // true for engagement grid — image + text below
 };
 
 export default function CollectionCardClient({
   href,
   images,
   label,
+  meaning,
   customSvg,
   featured = false,
+  editorial = false,
 }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -44,6 +47,50 @@ export default function CollectionCardClient({
   useEffect(() => () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
   }, []);
+
+  if (editorial) {
+    return (
+      <Link
+        href={href}
+        className="cat-editorial-card"
+        onMouseEnter={startCycle}
+        onMouseLeave={stopCycle}
+      >
+        <div className="cat-editorial-photo">
+          {customSvg ? (
+            <div className="cat-editorial-photo-placeholder">{customSvg}</div>
+          ) : images.length > 0 ? (
+            images.map((src, i) => (
+              <Image
+                key={src}
+                src={src}
+                alt={`${label} by DANHOV`}
+                fill
+                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                style={{
+                  objectFit: 'cover',
+                  opacity: i === activeIdx ? 1 : 0,
+                  transition: 'opacity 0.5s ease',
+                }}
+                priority={i === 0}
+                unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}
+              />
+            ))
+          ) : (
+            <div className="cat-editorial-photo-placeholder">
+              <svg width="60" height="60" viewBox="0 0 80 80" fill="none" aria-hidden>
+                <circle cx="40" cy="40" r="28" stroke="#AC3438" strokeWidth="1.5" fill="none" opacity="0.5" />
+              </svg>
+            </div>
+          )}
+        </div>
+        <div className="cat-editorial-text">
+          <span className="cat-editorial-name">{label}</span>
+          <span className="cat-editorial-meaning">{meaning}</span>
+        </div>
+      </Link>
+    );
+  }
 
   return (
     <Link
