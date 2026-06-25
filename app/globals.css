@@ -7787,7 +7787,7 @@ aside {
   display: block;
   overflow: hidden;
   text-decoration: none;
-  background: #1a1410;
+  background: #faf5f0;
   color: inherit;
   cursor: pointer;
   aspect-ratio: 2 / 3;
@@ -7799,12 +7799,13 @@ aside {
   position: absolute;
   inset: 0;
   overflow: hidden;
+  background: #faf5f0;
 }
 .cat-photo img {
   transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
 .cat-card:hover .cat-photo img {
-  transform: scale(1.06);
+  transform: scale(1.04);
 }
 .cat-photo-placeholder {
   display: flex;

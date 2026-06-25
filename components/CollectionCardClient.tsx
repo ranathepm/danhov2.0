@@ -114,7 +114,9 @@ export default function CollectionCardClient({
                 ? '(max-width: 768px) 100vw, 33vw'
                 : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
               style={{
-                objectFit: 'cover',
+                objectFit: featured ? 'contain' : 'cover',
+                objectPosition: 'center',
+                padding: featured ? '12px' : '0',
                 opacity: i === activeIdx ? 1 : 0,
                 transition: 'opacity 0.5s ease',
               }}

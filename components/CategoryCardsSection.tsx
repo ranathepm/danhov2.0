@@ -111,6 +111,14 @@ const COLLECTION_IMAGES: Record<string, string> = {
   unito:      `${WY}/img_collection_unito.jpg`,
 };
 
+// Engagement rings hero images — Abbraccio Swirl + classic solitaires
+const ENGAGEMENT_PINNED = [
+  `${SB}/AE505UQ/platinum/Danhov%20Abbraccio%20Swirl%20Diamond%20Engagement%20Ring%20AE505UQ_1.jpg`,
+  `${WY}/Untitled2-111822.png`,
+  `${WY}/img_collection_classico.jpg`,
+  `${WY}/img_collection_carezza.jpg`,
+];
+
 // Full-size product images (100–260 KB each, sourced from danhov.com catalog)
 const WEDDING_PINNED = [
   `${PRD}/t/b/tb509va_wg_1.jpg`,
@@ -191,13 +199,13 @@ export default async function CategoryCardsSection() {
 
   const categoryCards: EngagementCard[] = [
     {
-      label: 'Wedding Bands',
-      value: 'wedding',
-      meaning: 'The Unbroken Circle',
-      body: 'Two people. One unbroken form. Handcrafted bands made with the same intention as the moment they mark.',
-      href: '/wedding-bands',
-      images: WEDDING_PINNED,
-      linkLabel: 'Browse Wedding Bands',
+      label: 'Engagement Rings',
+      value: 'engagement-hero',
+      meaning: 'The Beginning',
+      body: 'Four decades. Twelve collections. One certainty — the ring you need already exists in a form only silence can reveal.',
+      href: '/engagement-rings',
+      images: ENGAGEMENT_PINNED,
+      linkLabel: 'Explore Engagement Rings',
       isLifePath: false,
     },
     {

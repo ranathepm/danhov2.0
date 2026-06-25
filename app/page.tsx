@@ -60,22 +60,6 @@ export default async function HomePage() {
             <div className="origin-founder-line" />
           </div>
 
-          {/* ── Abbraccio ring — breathes subtly in the first screen ── */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <div className="hero-ring-wrap" id="heroRingWrap" style={{ opacity: 0 }}>
-            <img
-              src="https://wirbqklbygxuafelsqql.supabase.co/storage/v1/object/public/product-images/products/AE505UQ/platinum/Danhov%20Abbraccio%20Swirl%20Diamond%20Engagement%20Ring%20AE505UQ_1.jpg"
-              alt="Abbraccio Swirl Diamond Engagement Ring — DANHOV Los Angeles"
-              className="hero-ring-img"
-              width={200}
-              height={200}
-            />
-          </div>
-
-          {/* ── Trust line — clarity for first-time visitors ── */}
-          <p className="hero-trust-line" id="heroTrustLine" style={{ opacity: 0 }}>
-            Award-winning engagement rings handcrafted in Los Angeles since 1984.
-          </p>
         </div>
 
       </section>
@@ -83,30 +67,9 @@ export default async function HomePage() {
       {/* ── BRAND VIDEO ──────────────────────────────────────────── */}
       <section style={{
         background: '#0a0806',
-        padding: '72px 0 0',
+        padding: '0',
         position: 'relative',
       }}>
-        {/* top accent line */}
-        <div style={{
-          width: 40, height: 1,
-          background: '#AC3438',
-          margin: '0 auto 40px',
-        }} />
-
-        {/* eyebrow */}
-        <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: '0.62rem',
-          fontWeight: 700,
-          letterSpacing: '0.55em',
-          textTransform: 'uppercase',
-          color: '#f2ece4',
-          textAlign: 'center',
-          margin: '0 0 56px',
-        }}>
-          Handcrafted in Los Angeles · Est. 1984
-        </p>
-
         {/* video wrapper — natural 16:9, no cropping */}
         <div style={{ position: 'relative', lineHeight: 0 }}>
           <video
@@ -148,7 +111,7 @@ export default async function HomePage() {
               fontSize: '0.6rem',
               letterSpacing: '0.5em',
               textTransform: 'uppercase',
-              color: '#f2ece4',
+              color: '#AC3438',
               marginTop: 10,
               fontWeight: 600,
             }}>

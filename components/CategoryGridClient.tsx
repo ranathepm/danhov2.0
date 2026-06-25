@@ -84,7 +84,7 @@ const FALLBACK_SVGS: Record<string, React.ReactNode> = {
   mens: MENS_SVG,
 };
 
-const FEATURED_VALUES = new Set(['wedding', 'fine', 'mens']);
+const FEATURED_VALUES = new Set(['engagement-hero', 'fine', 'mens']);
 
 // ── Grid renderer ─────────────────────────────────────────────────────────
 
