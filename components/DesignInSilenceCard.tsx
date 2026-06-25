@@ -30,10 +30,10 @@ export default function DesignInSilenceCard() {
               <path d="M12 3l1.5 4.5h4.5l-3.5 2.5 1.5 4.5L12 12l-4 2.5 1.5-4.5L6 7.5h4.5z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
-        <span className="invmore-label">AI Ring Creator</span>
+        <span className="invmore-label">Guided Ring Creator</span>
         <h3 className="invmore-name">Design in <em>Silence</em></h3>
         <p className="invmore-body">
-          &ldquo;You can see your own design in silence. We can make it.&rdquo;
+          Describe the ring you see within. Our guided creator shapes your vision — Jack&apos;s workshop brings it to life.
         </p>
         <span className="invmore-link">Begin &rarr;</span>
       </button>
@@ -68,12 +68,12 @@ export default function DesignInSilenceCard() {
               {/* Panel 1 — Create Your Own */}
               <div className="dis-panel">
                 <div className="dis-panel-icon">✦</div>
-                <span className="dis-panel-label">AI Ring Creator</span>
+                <span className="dis-panel-label">Guided Creator</span>
                 <h3 className="dis-panel-title">
                   Create<br />Your Own
                 </h3>
                 <p className="dis-panel-body">
-                  Your imagination, set in gold. Tell our AI designer exactly what you envision — from a feeling, a word, a sketch — and we will craft it into form.
+                  Describe the ring you see within — a feeling, a word, a shape. Our guided creator helps you find the form. Jack&apos;s Los Angeles workshop brings it into gold.
                 </p>
                 <Link
                   href="/ring-builder"

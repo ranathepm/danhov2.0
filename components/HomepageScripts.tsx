@@ -13,7 +13,9 @@ const HERO_SEQUENCE: { id: string; delay: number }[] = [
   { id: 'chLine4', delay: 1800 },
   { id: 'chLine5', delay: 2150 },
   { id: 'heroFounder', delay: 2500 },
-  { id: 'heroScroll', delay: 2800 },
+  { id: 'heroRingWrap', delay: 2900 },
+  { id: 'heroTrustLine', delay: 3300 },
+  { id: 'heroScroll', delay: 3600 },
 ];
 
 const DAILY_MESSAGES = [

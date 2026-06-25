@@ -24,9 +24,9 @@ export default function InvitationsMoreSection() {
             </svg>
           </div>
           <span className="invmore-label">Virtual Consultation</span>
-          <h3 className="invmore-name">Speak with <em>us</em></h3>
+          <h3 className="invmore-name">Speak <em>With Us</em></h3>
           <p className="invmore-body">
-            &ldquo;Connect in a sacred space. Receive guidance from a spiritual jewelry expert.&rdquo;
+            A private consultation for those who want guidance, intention, and a ring made for one love story.
           </p>
           <span className="invmore-link">Book Now &rarr;</span>
         </button>

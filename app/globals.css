@@ -7184,6 +7184,183 @@ aside {
 .hero-scroll span { color: rgba(26,20,16,0.45); }
 .scroll-line { background: rgba(26,20,16,0.2); }
 
+/* ── Hero ring image ───────────────────────────────────────── */
+.hero-ring-wrap {
+  margin-top: 44px;
+  transition: opacity 0.9s ease !important;
+}
+.hero-ring-img {
+  width: clamp(140px, 16vw, 210px);
+  height: clamp(140px, 16vw, 210px);
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 50%;
+  filter: drop-shadow(0 6px 28px rgba(172, 52, 56, 0.13));
+  animation: hero-ring-breathe 5s ease-in-out infinite;
+}
+@keyframes hero-ring-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.022); }
+}
+
+/* ── Hero trust line ───────────────────────────────────────── */
+.hero-trust-line {
+  margin-top: 22px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(10px, 1.05vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #7a6259;
+  text-align: center;
+  padding: 0 24px;
+  transition: opacity 0.9s ease !important;
+}
+
+/* ── Heritage trust badges ─────────────────────────────────── */
+.heritage-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px 48px;
+  margin-top: 48px;
+  padding-top: 36px;
+  border-top: 1px solid rgba(172, 52, 56, 0.1);
+}
+.heritage-trust-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #4a3e3b;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.heritage-trust-check {
+  color: #AC3438;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+/* ── Couple proof / testimonials ───────────────────────────── */
+.proof-section {
+  background: #faf6f1;
+  padding: 88px 48px;
+  border-top: 1px solid rgba(172, 52, 56, 0.07);
+}
+.proof-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+.proof-eyebrow {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--logo-red);
+  margin-bottom: 16px;
+}
+.proof-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  font-weight: 300;
+  color: #1a1410;
+  margin: 0 0 56px;
+  letter-spacing: 0.02em;
+}
+.proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-bottom: 52px;
+}
+.proof-card {
+  background: #fff;
+  padding: 36px 32px 32px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.proof-stars {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: #AC3438;
+}
+.proof-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+  font-weight: 400;
+  font-style: italic;
+  color: #2a1a14;
+  line-height: 1.65;
+  margin: 0;
+  flex: 1;
+}
+.proof-attribution {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.proof-couple {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #1a1410;
+}
+.proof-location {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.62rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #9a7e78;
+}
+.proof-press-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.proof-press-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #AC3438;
+}
+.proof-press-item {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #4a3e3b;
+}
+.proof-press-sep {
+  color: rgba(172, 52, 56, 0.3);
+  font-size: 0.7rem;
+}
+
+@media (max-width: 768px) {
+  .proof-grid { grid-template-columns: 1fr; gap: 2px; }
+  .proof-section { padding: 64px 24px; }
+  .heritage-trust { gap: 12px 28px; }
+}
+@media (max-width: 480px) {
+  .hero-ring-img { width: 120px; height: 120px; }
+}
+
 /* ── Section header eyebrow + title scoped overrides ─────────────── */
 /* These target only the new sections without touching original site CSS */
 .categories-header .section-eyebrow,

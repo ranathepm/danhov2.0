@@ -9,6 +9,7 @@ import CoCreateSection from '@/components/CoCreateSection';
 import DailySignpostSection from '@/components/DailySignpostSection';
 import InvitationsMoreSection from '@/components/InvitationsMoreSection';
 import HeritageSection from '@/components/HeritageSection';
+import TrustProofSection from '@/components/TrustProofSection';
 import {
   buildLocalBusiness,
   buildWebSite,
@@ -58,6 +59,23 @@ export default async function HomePage() {
             </span>
             <div className="origin-founder-line" />
           </div>
+
+          {/* ── Abbraccio ring — breathes subtly in the first screen ── */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <div className="hero-ring-wrap" id="heroRingWrap" style={{ opacity: 0 }}>
+            <img
+              src="https://wirbqklbygxuafelsqql.supabase.co/storage/v1/object/public/product-images/products/AE505UQ/platinum/Danhov%20Abbraccio%20Swirl%20Diamond%20Engagement%20Ring%20AE505UQ_1.jpg"
+              alt="Abbraccio Swirl Diamond Engagement Ring — DANHOV Los Angeles"
+              className="hero-ring-img"
+              width={200}
+              height={200}
+            />
+          </div>
+
+          {/* ── Trust line — clarity for first-time visitors ── */}
+          <p className="hero-trust-line" id="heroTrustLine" style={{ opacity: 0 }}>
+            Award-winning engagement rings handcrafted in Los Angeles since 1984.
+          </p>
         </div>
 
       </section>
@@ -163,8 +181,11 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── DAILY SIGNPOST (Babig's Wisdom) ──────────────────────── */}
+      {/* ── DAILY SIGNPOST ───────────────────────────────────────── */}
       <DailySignpostSection />
+
+      {/* ── DESIGN IN SILENCE — 4-step process ───────────────────── */}
+      <CoCreateSection />
 
       {/* ── INVITATION MOMENT ────────────────────────────────────── */}
       <InvitationMoment />
@@ -222,13 +243,13 @@ export default async function HomePage() {
       {/* ── SIGNATURE RING — editorial dark strip ────────────────── */}
       <SignatureSection />
 
-      {/* ── CO-CREATE ────────────────────────────────────────────── */}
-      <CoCreateSection />
+      {/* ── COUPLE PROOF — real testimonials ─────────────────────── */}
+      <TrustProofSection />
 
-      {/* ── INVITATIONS MORE ─────────────────────────────────────── */}
+      {/* ── WHAT WE OFFER ────────────────────────────────────────── */}
       <InvitationsMoreSection />
 
-      {/* ── HERITAGE ─────────────────────────────────────────────── */}
+      {/* ── CRAFT & TRUST ────────────────────────────────────────── */}
       <HeritageSection />
     </>
   );

@@ -12,7 +12,7 @@ export default function CoCreateSection() {
     <section className="cocreate-section">
       <div className="cocreate-inner">
         <div className="cocreate-header">
-          <span className="section-eyebrow">A Different Way to Buy a Ring</span>
+          <span className="section-eyebrow">Design in Silence</span>
           <h2 className="section-title">
             Don&apos;t pick a ring.<br /><em>Receive one.</em>
           </h2>
@@ -21,8 +21,8 @@ export default function CoCreateSection() {
             <strong>DANHOV offers a process.</strong>
           </p>
           <p className="cocreate-statement">
-            You close your eyes. You see what wants to be made. We help you bring it
-            into form &mdash; with intention, in silence, in 18 karat gold.
+            Describe the ring you see within. Our guided creator helps shape your
+            vision &mdash; and Jack&apos;s Los Angeles workshop brings it into gold and platinum.
           </p>
         </div>
 
@@ -38,7 +38,7 @@ export default function CoCreateSection() {
 
         <div className="cocreate-cta-wrap">
           <Link href="/ring-builder" className="btn-solid" style={{ marginLeft: 0, padding: '18px 52px' }}>
-            Build with Intention
+            Design in Silence
           </Link>
         </div>
       </div>

@@ -1,8 +1,15 @@
+const TRUST_ITEMS = [
+  'Lifetime Craftsmanship Warranty',
+  'Insured Delivery',
+  'Private Appointments Available',
+  'Handcrafted in Los Angeles',
+];
+
 export default function HeritageSection() {
   return (
     <section className="heritage-section">
       <div className="heritage-inner">
-        <span className="heritage-eyebrow">DANHOV — Los Angeles</span>
+        <span className="heritage-eyebrow">Craft &amp; Trust — DANHOV Los Angeles</span>
         <h2 className="heritage-title">
           For four decades, every piece has come from{' '}
           <em>one workshop.</em>
@@ -21,6 +28,15 @@ export default function HeritageSection() {
             <span className="heritage-stat-num">LA</span>
             <span className="heritage-stat-label">Handcrafted</span>
           </div>
+        </div>
+
+        <div className="heritage-trust">
+          {TRUST_ITEMS.map((item) => (
+            <span key={item} className="heritage-trust-item">
+              <span className="heritage-trust-check" aria-hidden="true">✓</span>
+              {item}
+            </span>
+          ))}
         </div>
       </div>
     </section>
