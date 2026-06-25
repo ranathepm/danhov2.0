@@ -15,6 +15,23 @@ import {
 } from '@/lib/stone-math';
 import DiamondShapeIcon from '@/components/admin/DiamondShapeIcon';
 
+// ── AdminThumb — graceful broken-image handling ──────────────────────────────
+function AdminThumb({ src, size = 88 }: { src: string; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) {
+    return (
+      <div style={{ width: size, height: size, background: '#1e1a18', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#666', flexShrink: 0 }}>
+        missing
+      </div>
+    );
+  }
+  return (
+    <Image src={src} alt="" width={size} height={size} unoptimized
+      style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+      onError={() => setFailed(true)} />
+  );
+}
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 type LaborExtras = { three_d_run: number; rhodium: number; laser_engraving: number };
@@ -715,8 +732,7 @@ export default function ProductEditor({
                 <div className="adm-thumb-strip">
                   {(form.images ?? []).map((src, i) => (
                     <div key={src + i} className="adm-thumb-item">
-                      <Image src={src} alt="" width={88} height={88} unoptimized
-                        style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+                      <AdminThumb src={src} />
                       {i === 0 && <span className="adm-gallery-tag">Hero</span>}
                       <div className="adm-thumb-actions">
                         <button type="button" className="adm-icon-btn" onClick={() => moveImage(i, -1)} disabled={i === 0} title="Move left">←</button>
@@ -1560,8 +1576,7 @@ function MetalGallerySlot({
         <div className="adm-thumb-strip">
           {images.map((src, i) => (
             <div key={src + i} className="adm-thumb-item">
-              <Image src={src} alt="" width={88} height={88} unoptimized
-                style={{ objectFit: 'cover', width: '100%', height: '100%' }} />
+              <AdminThumb src={src} />
               {i === 0 && <span className="adm-gallery-tag">Hero</span>}
               <div className="adm-thumb-actions">
                 <button type="button" className="adm-icon-btn" onClick={() => onMove(i, -1)} disabled={i === 0} title="Move left">←</button>
