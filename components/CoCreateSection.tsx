@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
 const STEPS = [
-  { num: '1', title: 'Be Still',    body: '"Close your eyes. Stop trying to design. Just listen."' },
-  { num: '2', title: 'See It',      body: '"A form, a shape, a feeling, a stone — whatever comes."' },
-  { num: '3', title: 'Describe It', body: '"Tell us what you saw. Jack reviews every one."' },
-  { num: '4', title: 'We Make It',  body: '"Handcrafted in Los Angeles. Yours alone."' },
+  { num: 'I',   title: 'Be Still',    body: '"Close your eyes. Stop trying to design. Just listen."' },
+  { num: 'II',  title: 'See It',      body: '"A form, a shape, a feeling, a stone — whatever comes."' },
+  { num: 'III', title: 'Describe It', body: '"Tell us what you saw. Jack reviews every one."' },
+  { num: 'IV',  title: 'We Make It',  body: '"Handcrafted in Los Angeles. Yours alone."' },
 ];
 
 export default function CoCreateSection() {

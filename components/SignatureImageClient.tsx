@@ -38,7 +38,7 @@ export default function SignatureImageClient({ images, href, alt }: Props) {
     return (
       <Link href={href} className="sig-img-wrap" aria-label={`View ${alt}`}>
         <svg width="240" height="240" viewBox="0 0 240 240" fill="none" className="sig-ring-svg">
-          <circle cx="120" cy="130" r="78" stroke="#8b2a2a" strokeWidth="1" opacity="0.3" fill="none" />
+          <circle cx="120" cy="130" r="78" stroke="#AC3438" strokeWidth="1" opacity="0.3" fill="none" />
           <circle cx="120" cy="120" r="68" stroke="#AC3438" strokeWidth="14" fill="none" />
           <path d="M52 120 Q120 60 188 120" stroke="#8B2A2D" strokeWidth="0.5" fill="none" opacity="0.4" />
           <circle cx="120" cy="84" r="9" fill="#fffaf3" stroke="#AC3438" strokeWidth="0.5" />
@@ -63,11 +63,12 @@ export default function SignatureImageClient({ images, href, alt }: Props) {
           fill
           sizes="(max-width: 900px) 100vw, 55vw"
           style={{
-            objectFit: 'cover',
+            objectFit: 'contain',
             opacity: i === activeIdx ? 1 : 0,
             transition: 'opacity 0.55s ease',
             position: 'absolute',
             inset: 0,
+            mixBlendMode: 'multiply',
           }}
           priority={i === 0}
           unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import type { Product } from '@/lib/products';
 import { collectionToSlug } from '@/lib/products';
@@ -40,6 +39,12 @@ type Props = {
   aiPrompt: string;
   products: Product[];
   initialCollection?: string;
+  /** Override the URL each card links to. Defaults to /product/[slug] */
+  cardHref?: (slug: string) => string;
+  /** Show wishlist heart on cards. Default: true */
+  showWishlist?: boolean;
+  /** Show the Life Path teaser card at the end. Default: true for engagement */
+  showLifePathTeaser?: boolean;
 };
 
 const METAL_FILTERS: MetalFilter[] = [
@@ -177,7 +182,11 @@ export default function ListingPage({
   aiPrompt,
   products,
   initialCollection,
+  cardHref,
+  showWishlist = true,
+  showLifePathTeaser,
 }: Props) {
+  const resolvedShowLifePathTeaser = showLifePathTeaser ?? (category === 'engagement');
   const [collectionFilter, setCollectionFilter] = useState<string>(initialCollection ?? 'all');
   const [metalFilter, setMetalFilter] = useState<MetalFilter['value']>('all');
   const [sortKey, setSortKey] = useState<SortKey>('featured');
@@ -477,7 +486,7 @@ export default function ListingPage({
               let editorialSlot = 0;
               const items = filtered.flatMap((p, idx) => {
                 const nodes: React.ReactNode[] = [
-                  <VanCleefCard key={p.sku} product={p} placeholder={PLACEHOLDER_SVG} />,
+                  <VanCleefCard key={p.sku} product={p} placeholder={PLACEHOLDER_SVG} cardHref={cardHref} showWishlist={showWishlist} />,
                 ];
                 // Van Cleef rhythm: after the 6th card insert a wide
                 // editorial spread (spans 2 of 3 columns); the next card
@@ -496,8 +505,7 @@ export default function ListingPage({
                 }
                 return nodes;
               });
-              // Life Path teaser card — last card on engagement rings listing
-              if (category === 'engagement') {
+              if (resolvedShowLifePathTeaser) {
                 items.push(<LifePathTeaser key="life-path-teaser" />);
               }
               return items;
@@ -558,10 +566,15 @@ const METAL_TONES: Record<string, { bg: string; border?: string }> = { // eslint
 function VanCleefCard({
   product,
   placeholder,
+  cardHref,
+  showWishlist = true,
 }: {
   product: Product;
   placeholder: React.ReactNode;
+  cardHref?: (slug: string) => string;
+  showWishlist?: boolean;
 }) {
+  const productUrl = cardHref ? cardHref(product.slug) : `/product/${product.slug}`;
   const metals = product.metals ?? [];
   const metalImages = product.metal_images ?? {};
 
@@ -577,12 +590,11 @@ function VanCleefCard({
       : showMetals[0] ?? '';
 
   const [selectedMetal, setSelectedMetal] = useState(defaultMetal);
-  const [cyclingIdx, setCyclingIdx] = useState(0);
-  const [imgFailed, setImgFailed] = useState(false);
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
+  // Default to index 1 (_2.jpg = laying-down flatlay)
+  const [cyclingIdx, setCyclingIdx] = useState(1);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Images for selected metal — try the exact metal, then closest family, then default
+  // Images for selected metal — try exact metal, then closest family, then product default
   const getImagesForMetal = (m: string) => {
     if (m && metalImages[m]?.length) return metalImages[m];
     for (const fallback of (METAL_FALLBACK[m] ?? [])) {
@@ -591,8 +603,8 @@ function VanCleefCard({
     return product.images ?? [];
   };
 
-  const displayImages = getImagesForMetal(selectedMetal);
-  const currentImg = imgSrc ?? (displayImages[cyclingIdx] ?? displayImages[0] ?? null);
+  // Cap at 5 images per card — enough angles, avoids excessive DOM nodes
+  const displayImages = getImagesForMetal(selectedMetal).slice(0, 5);
   const isAwardWinner = product.collection?.toLowerCase().includes('award');
 
   function startCycling() {
@@ -600,21 +612,20 @@ function VanCleefCard({
     if (displayImages.length > 1) {
       intervalRef.current = setInterval(() => {
         setCyclingIdx((i) => (i + 1) % displayImages.length);
-      }, 600);
+      }, 700);
     }
   }
 
   function stopCycling() {
     if (intervalRef.current) { clearInterval(intervalRef.current); intervalRef.current = null; }
-    setCyclingIdx(0);
+    setCyclingIdx(displayImages.length > 1 ? 1 : 0);
   }
 
   function selectMetal(e: React.MouseEvent, m: string) {
     e.preventDefault();
     setSelectedMetal(m);
-    setCyclingIdx(0);
-    setImgFailed(false);
-    setImgSrc(null);
+    const imgs = getImagesForMetal(m).slice(0, 5);
+    setCyclingIdx(imgs.length > 1 ? 1 : 0);
   }
 
   useEffect(() => () => { if (intervalRef.current) clearInterval(intervalRef.current); }, []);
@@ -624,40 +635,34 @@ function VanCleefCard({
       {isAwardWinner && (
         <div className="vc-card-most-loved">MOST LOVED</div>
       )}
-      <WishlistHeart slug={product.slug} />
+      {showWishlist && <WishlistHeart slug={product.slug} />}
 
       <Link
-        href={`/product/${product.slug}`}
+        href={productUrl}
         className="vc-card-media"
         aria-label={product.name}
         onMouseEnter={startCycling}
         onMouseLeave={stopCycling}
       >
-        {currentImg && !imgFailed ? (
-          <Image
-            src={safeUrl(currentImg)}
-            alt={product.name}
-            width={600}
-            height={600}
-            className="vc-card-img"
-            loading="lazy"
-            unoptimized={currentImg.includes('.supabase.co') || currentImg.includes('danhov.com') || currentImg.endsWith('.gif')}
-            onError={() => {
-              const fallback = product.images?.[0];
-              if (fallback && safeUrl(fallback) !== safeUrl(currentImg ?? '')) {
-                setImgSrc(fallback);
-              } else {
-                setImgFailed(true);
-              }
-            }}
-          />
+        {displayImages.length > 0 ? (
+          displayImages.map((src, i) => (
+            <div key={src} className={`img-slide${i === cyclingIdx ? ' img-slide--active' : ''}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={safeUrl(src)}
+                alt={product.name}
+                style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+                loading={i <= 1 ? 'eager' : 'lazy'}
+              />
+            </div>
+          ))
         ) : (
           <div className="vc-card-placeholder">{placeholder}</div>
         )}
       </Link>
 
       <div className="vc-card-meta">
-        <Link href={`/product/${product.slug}`} className="vc-card-name-link" prefetch={false}>
+        <Link href={productUrl} className="vc-card-name-link" prefetch={false}>
           <h3 className="vc-card-name">{stripMetalSuffix(product.name)}</h3>
         </Link>
         {(product.price_computed != null || product.price_display) && (

@@ -19,7 +19,7 @@ export default function InvitationsMoreSection() {
           data-dnh="I'd like to book a virtual appointment with DANHOV to discuss a ring."
         >
           <div className="invmore-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M15 10l4.553-2.276A1 1 0 0121 8.723v6.554a1 1 0 01-1.447.894L15 14M4 8h11a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
@@ -34,7 +34,7 @@ export default function InvitationsMoreSection() {
         {/* The Signposts → Philosophy page */}
         <Link href="/philosophy" className="invmore-card">
           <div className="invmore-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <circle cx="12" cy="12" r="8" />
               <circle cx="12" cy="12" r="3" />
               <line x1="12" y1="4" x2="12" y2="9" strokeLinecap="round" />

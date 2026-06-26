@@ -1034,38 +1034,36 @@ export default function ProductEditor({
 
               {/* Custom labor input */}
               <div className="adm-custom-labour">
-                <span className="adm-field-label">Jewellery Labor</span>
-                <div className="adm-chips" style={{ marginTop: 6, marginBottom: 8 }}>
+                <div className="adm-custom-labour-head">
+                  <span className="adm-field-label" style={{ margin: 0 }}>Jewellery Labor</span>
+                  {(form.custom_labor_usd ?? 0) > 0 && (
+                    <button type="button" className="adm-labour-clear" onClick={() => set('custom_labor_usd', null)}>
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="adm-dollar-wrap" style={{ marginTop: 10, marginBottom: 12 }}>
+                  <input
+                    type="number"
+                    step="10"
+                    min="0"
+                    placeholder="Enter any amount…"
+                    className="adm-input"
+                    value={form.custom_labor_usd ?? ''}
+                    onChange={(e) => set('custom_labor_usd', e.target.value === '' ? null : Number(e.target.value))}
+                  />
+                </div>
+                <div className="adm-labour-quick">
                   {CUSTOM_LABOR_PRESETS.map((v) => (
                     <button
                       key={v}
                       type="button"
-                      className={`adm-chip${(form.custom_labor_usd ?? 0) === v ? ' is-active' : ''}`}
+                      className={`adm-labour-preset${(form.custom_labor_usd ?? 0) === v ? ' is-active' : ''}`}
                       onClick={() => set('custom_labor_usd', (form.custom_labor_usd ?? 0) === v ? null : v)}
                     >
                       ${v.toLocaleString('en-US')}
                     </button>
                   ))}
-                  {(form.custom_labor_usd ?? 0) > 0 && (
-                    <button
-                      type="button"
-                      className="adm-chip adm-chip--clear"
-                      onClick={() => set('custom_labor_usd', null)}
-                    >
-                      Clear
-                    </button>
-                  )}
-                </div>
-                <div className="adm-dollar-wrap">
-                  <input
-                    type="number"
-                    step="10"
-                    min="0"
-                    placeholder="0"
-                    className="adm-input"
-                    value={form.custom_labor_usd ?? ''}
-                    onChange={(e) => set('custom_labor_usd', e.target.value === '' ? null : Number(e.target.value))}
-                  />
                 </div>
               </div>
 

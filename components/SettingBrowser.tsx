@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Product } from '@/lib/products';
 import { stripMetalSuffix } from '@/lib/product-display';
 
@@ -294,6 +294,26 @@ function CollectionStyleIcon({ collection }: { collection: string }) {
   );
 }
 
+// ─── Best image helper ─────────────────────────────────────────────────────
+
+function metalPriorityKey(k: string): number {
+  if (k.includes('plat'))   return 0;
+  if (k.includes('white'))  return 1;
+  if (k.includes('yellow')) return 2;
+  return 3;
+}
+
+function getBestImage(p: Product): string | null {
+  const mi = p.metal_images;
+  if (mi) {
+    const sorted = Object.keys(mi).sort((a, b) => metalPriorityKey(a) - metalPriorityKey(b));
+    for (const k of sorted) {
+      if (mi[k]?.[0]) return mi[k][0];
+    }
+  }
+  return p.images?.[0] ?? null;
+}
+
 // ─── Props ─────────────────────────────────────────────────────────────────
 
 interface Props {
@@ -305,7 +325,12 @@ interface Props {
 
 // ─── Main component ────────────────────────────────────────────────────────
 
+const PER_PAGE_OPTIONS = [12, 24, 48];
+const DEFAULT_PER_PAGE = 24;
+
 export default function SettingBrowser({ products, priceMap, diamondId, diamondsParam }: Props) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const allCollections = useMemo(() => {
     const seen = new Set<string>();
     const out: string[] = [];
@@ -316,6 +341,28 @@ export default function SettingBrowser({ products, priceMap, diamondId, diamonds
       }
     }
     return out.sort();
+  }, [products]);
+
+  // One representative photo per collection (best metal, first angle)
+  const collectionImageMap = useMemo(() => {
+    const metalPriority = (k: string) =>
+      k.includes('plat') ? 0 : k.includes('white') ? 1 : k.includes('yellow') ? 2 : 3;
+
+    const map: Record<string, string> = {};
+    for (const p of products) {
+      const col = p.collection;
+      if (!col || map[col]) continue;
+
+      const mi = p.metal_images;
+      if (mi) {
+        const sorted = Object.keys(mi).sort((a, b) => metalPriority(a) - metalPriority(b));
+        for (const k of sorted) {
+          if (mi[k]?.[0]) { map[col] = mi[k][0]; break; }
+        }
+      }
+      if (!map[col] && p.images?.[0]) map[col] = p.images[0];
+    }
+    return map;
   }, [products]);
 
   const allMetals = useMemo(() => {
@@ -414,6 +461,44 @@ export default function SettingBrowser({ products, priceMap, diamondId, diamonds
     return result;
   }, [groups, activeStyles, activeMetals, priceFiltered, priceMin, priceMax, sort]);
 
+  // Pagination — read from URL, reset to 1 when filters change
+  const currentPage = Math.max(1, Number(searchParams.get('page')) || 1);
+  const perPage = PER_PAGE_OPTIONS.includes(Number(searchParams.get('per_page')))
+    ? Number(searchParams.get('per_page'))
+    : DEFAULT_PER_PAGE;
+  const totalPages = Math.max(1, Math.ceil(filteredGroups.length / perPage));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageGroups = filteredGroups.slice((safePage - 1) * perPage, safePage * perPage);
+
+  function navigatePage(page: number, pp: number = perPage) {
+    const dSuffix = diamondsParam
+      ? `diamonds=${encodeURIComponent(diamondsParam)}`
+      : diamondId
+      ? `diamond=${encodeURIComponent(diamondId)}`
+      : '';
+    const params = new URLSearchParams(dSuffix ? `?${dSuffix}` : '');
+    params.set('page', String(page));
+    params.set('per_page', String(pp));
+    router.push(`/ring-builder/setting?${params.toString()}`, { scroll: false });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    if (currentPage !== 1) navigatePage(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStyles.size, activeMetals.size, priceFiltered, sort]);
+
+  // Pagination page numbers with ellipsis (same logic as admin)
+  const pageNums: (number | '…')[] = [];
+  for (let n = 1; n <= totalPages; n++) {
+    if (n === 1 || n === totalPages || Math.abs(n - safePage) <= 2) {
+      pageNums.push(n);
+    } else if (pageNums[pageNums.length - 1] !== '…') {
+      pageNums.push('…');
+    }
+  }
+
   const visibleStyles = showMoreStyles ? allCollections : allCollections.slice(0, 5);
   const visibleMetals = showMoreMetals ? allMetals : allMetals.slice(0, 5);
 
@@ -452,7 +537,14 @@ export default function SettingBrowser({ products, priceMap, diamondId, diamonds
                     onClick={() => setActiveStyles((s) => toggleSet(s, col))}
                     aria-pressed={activeStyles.has(col)}
                   >
-                    <span className="sb-style-icon"><CollectionStyleIcon collection={col} /></span>
+                    <span className="sb-style-icon">
+                      {collectionImageMap[col] ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={collectionImageMap[col]} alt={col} className="sb-style-img" />
+                      ) : (
+                        <CollectionStyleIcon collection={col} />
+                      )}
+                    </span>
                     <span className="sb-style-label">{col}</span>
                   </button>
                 ))}
@@ -607,11 +699,69 @@ export default function SettingBrowser({ products, priceMap, diamondId, diamonds
             <button className="sb-reset-btn" onClick={resetAll}>Clear all filters</button>
           </div>
         ) : (
-          filteredGroups.map((g) => (
+          pageGroups.map((g) => (
             <SettingGroupCard key={g.key} group={g} diamondId={diamondId} diamondsParam={diamondsParam} />
           ))
         )}
       </div>
+
+      {/* ── Pagination ────────────────────────────────────────────────── */}
+      {totalPages > 1 && (
+        <div className="sb-pagination">
+          <button
+            className="sb-page-btn"
+            onClick={() => navigatePage(safePage - 1)}
+            disabled={safePage <= 1}
+          >← Prev</button>
+
+          <div className="sb-pagination__pages">
+            {pageNums.map((n, i) =>
+              n === '…' ? (
+                <span key={`e-${i}`} className="sb-page-btn sb-page-btn--ellipsis">…</span>
+              ) : (
+                <button
+                  key={n}
+                  className={`sb-page-btn${n === safePage ? ' sb-page-btn--active' : ''}`}
+                  onClick={() => navigatePage(n)}
+                  disabled={n === safePage}
+                >{n}</button>
+              )
+            )}
+          </div>
+
+          <button
+            className="sb-page-btn"
+            onClick={() => navigatePage(safePage + 1)}
+            disabled={safePage >= totalPages}
+          >Next →</button>
+
+          <div className="sb-pagination__jump">
+            <label className="sb-pagination__label">Go to page</label>
+            <select
+              className="sb-pagination__select"
+              value={safePage}
+              onChange={(e) => navigatePage(Number(e.target.value))}
+            >
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(n => (
+                <option key={n} value={n}>Page {n}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="sb-pagination__jump">
+            <label className="sb-pagination__label">Show</label>
+            <select
+              className="sb-pagination__select"
+              value={perPage}
+              onChange={(e) => navigatePage(1, Number(e.target.value))}
+            >
+              {PER_PAGE_OPTIONS.map(n => (
+                <option key={n} value={n}>{n} per page</option>
+              ))}
+            </select>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -639,7 +789,7 @@ function SettingGroupCard({ group, diamondId, diamondsParam }: { group: ProductG
     setTimeout(() => { if (el) el.style.transition = ''; }, 450);
   }
 
-  const heroImage = p.images?.[0] ?? null;
+  const heroImage = getBestImage(p);
   const dSuffix = diamondsParam
     ? `?diamonds=${encodeURIComponent(diamondsParam)}`
     : diamondId
@@ -658,12 +808,11 @@ function SettingGroupCard({ group, diamondId, diamondsParam }: { group: ProductG
       <Link href={canonicalHref} className="sb-card-img-link" tabIndex={-1} aria-hidden="true">
         <div className="sb-card-img">
           {heroImage ? (
-            <Image
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
               src={heroImage}
               alt={p.name}
-              fill
-              sizes="(max-width: 768px) 50vw, 25vw"
-              style={{ objectFit: 'contain' }}
+              style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }}
               loading="lazy"
             />
           ) : (

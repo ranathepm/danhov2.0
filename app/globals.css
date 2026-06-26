@@ -15,8 +15,8 @@ a { text-decoration: none; color: inherit; }
   --gold: #9b6b4a;
   --gold-light: #c4916e;
   --gold-dim: #c9a898;
-  --crimson: #b5606a;
-  --crimson-bright: #b5606a;
+  --crimson: #AC3438;
+  --crimson-bright: #AC3438;
   --logo-red: #AC3438;
   --logo-red-dark: #8B2A2D;
   --blush: #e8b4bc;
@@ -534,7 +534,6 @@ p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption, td, th {
   font-size: 13px; font-weight: 600;
   letter-spacing: 0.18em; text-transform: uppercase;
   text-decoration: none;
-  margin-left: 16px;
   position: relative;
   transition: color 0.3s ease, background 0.3s ease, border-color 0.35s ease;
 }
@@ -1059,7 +1058,7 @@ footer {
 }
 .footer-col-title {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -1070,7 +1069,7 @@ footer {
 .footer-links li { margin-bottom: 8px; }
 .footer-links a {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
+  font-size: 12px;
   color: #AC3438;
   text-decoration: none;
   letter-spacing: 0.02em;
@@ -3973,6 +3972,18 @@ footer {
   text-decoration: none;
   cursor: pointer;
 }
+/* Universal crossfade slide — used by all card image stacks */
+.img-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.75s ease-in-out;
+  pointer-events: none;
+}
+.img-slide--active {
+  opacity: 1;
+}
+
 .vc-card-img {
   position: absolute;
   inset: 0;
@@ -5671,29 +5682,30 @@ footer {
   gap: 10px;
   background: var(--logo-red);
   color: #fff8f6;
-  border: none;
+  border: 1px solid rgba(172, 52, 56, 0.7);
   cursor: pointer;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  padding: 14px 24px;
-  border-radius: 999px;
-  transition: background 0.3s, transform 0.15s;
+  padding: 14px 36px;
+  border-radius: 4px;
+  transition: background 0.3s, transform 0.15s, border-color 0.35s;
   width: 100%;
 }
-.atb-btn:hover { background: var(--logo-red-dark); }
+.atb-btn:hover { background: var(--logo-red-dark); border-color: rgba(200, 70, 74, 0.95); }
 .atb-btn:active { transform: scale(0.985); }
 .atb-btn--secondary {
   background: transparent;
-  border: 1px solid var(--logo-red);
+  border: 1px solid rgba(172, 52, 56, 0.7);
   color: var(--logo-red);
-  border-radius: 999px;
+  border-radius: 4px;
 }
 .atb-btn--secondary:hover {
-  background: var(--logo-red);
-  color: #fff;
+  background: rgba(172, 52, 56, 0.92);
+  color: #fff8f6;
+  border-color: rgba(200, 70, 74, 0.95);
 }
 .atb-view-cart {
   align-self: flex-start;
@@ -5754,9 +5766,9 @@ footer {
   gap: 18px;
 }
 .route-loader-ring {
-  width: 56px;
-  height: 56px;
-  animation: route-loader-breathe 2s ease-in-out infinite;
+  width: 180px;
+  height: 180px;
+  animation: route-loader-spin 18s linear infinite;
 }
 .route-loader-text {
   font-family: 'Cormorant Garamond', serif;
@@ -5768,6 +5780,10 @@ footer {
 @keyframes route-loader-slide {
   from { transform: translateX(-100%); }
   to { transform: translateX(380%); }
+}
+@keyframes route-loader-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 @keyframes route-loader-breathe {
   0%, 100% {
@@ -5795,12 +5811,6 @@ footer {
   margin-top: 2px;
 }
 .atb-trust span:nth-child(2) { opacity: 0.4; }
-
-.atb-btn {
-  /* Bigger, more confident CTA */
-  font-size: 14px;
-  padding: 22px 32px;
-}
 
 
 /* ── Listing grid responsive — 4 col → 3 → 2 → 1 ──────────────────── */
@@ -7147,12 +7157,12 @@ aside {
   letter-spacing: 0.55em;
 }
 .ch-realized {
-  color: #8b2a2a;
+  color: var(--logo-red-dark);
   text-shadow: none;
   font-size: clamp(40px, 6vw, 72px);
 }
 .ch-oneness {
-  color: #8b2a2a;
+  color: var(--logo-red-dark);
   text-shadow: none;
   font-size: clamp(52px, 8.5vw, 118px);
 }
@@ -7165,7 +7175,7 @@ aside {
   font-weight: 400;
 }
 .ch-messaged {
-  color: #8b2a2a;
+  color: var(--logo-red-dark);
   text-shadow: none;
   font-size: clamp(22px, 3.2vw, 44px);
 }
@@ -7365,7 +7375,7 @@ aside {
 /* These target only the new sections without touching original site CSS */
 .categories-header .section-eyebrow,
 .invmore-header .section-eyebrow,
-.findform-section-header .section-eyebrow {
+.findform-header .section-eyebrow {
   color: var(--logo-red);
   font-size: 0.72rem;
   font-weight: 500;
@@ -7380,7 +7390,7 @@ aside {
 }
 .categories-header .section-title,
 .invmore-header .section-title,
-.findform-section-header .section-title {
+.findform-header .section-title {
   color: #2a1a14;
   font-size: clamp(32px, 5vw, 64px);
   font-weight: 300;
@@ -7388,7 +7398,7 @@ aside {
 }
 .categories-header .section-title em,
 .invmore-header .section-title em,
-.findform-section-header .section-title em {
+.findform-header .section-title em {
   color: var(--logo-red);
   font-style: normal;
   font-weight: 300;
@@ -7408,7 +7418,7 @@ aside {
   display: grid;
   grid-template-columns: 55% 45%;
   min-height: 88vh;
-  background: #0f0d0c;
+  background: #faf6f1;
   overflow: hidden;
 }
 .sig2-image-panel {
@@ -7422,18 +7432,18 @@ aside {
   height: 100%;
 }
 .sig2-image-panel img {
-  object-fit: cover !important;
+  object-fit: contain !important;
   width: 100% !important;
   height: 100% !important;
   padding: 0 !important;
-  mix-blend-mode: normal !important;
+  mix-blend-mode: multiply !important;
 }
 .sig2-text-panel {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 80px 64px;
-  background: #0f0d0c;
+  background: #faf6f1;
 }
 .sig2-eyebrow {
   font-family: 'Cormorant Garamond', serif;
@@ -7450,7 +7460,7 @@ aside {
   font-size: clamp(2rem, 3.2vw, 3.4rem);
   font-weight: 300;
   line-height: 1.15;
-  color: #f2ece4;
+  color: #1a1410;
   margin: 0 0 28px;
 }
 .sig2-rule {
@@ -7464,7 +7474,7 @@ aside {
   font-size: clamp(1.15rem, 1.8vw, 1.5rem);
   font-style: italic;
   font-weight: 300;
-  color: #c8bfb5;
+  color: #4a3e3b;
   line-height: 1.85;
   margin: 0 0 20px;
   border: none;
@@ -7495,19 +7505,20 @@ aside {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  color: #f2ece4;
+  color: #fff;
+  background: #AC3438;
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.72rem;
   letter-spacing: 0.35em;
   text-transform: uppercase;
   font-weight: 600;
   text-decoration: none;
-  border-bottom: 1px solid rgba(242, 236, 228, 0.3);
-  padding-bottom: 4px;
-  transition: color 0.3s, border-color 0.3s;
+  border: 1px solid #AC3438;
+  padding: 14px 32px;
+  transition: background 0.3s, border-color 0.3s;
   width: fit-content;
 }
-.sig2-cta:hover { color: #AC3438; border-color: #AC3438; }
+.sig2-cta:hover { background: #8B2A2D; border-color: #8B2A2D; color: #fff; }
 
 @media (max-width: 900px) {
   .sig2-section { grid-template-columns: 1fr; min-height: auto; }
@@ -7594,7 +7605,7 @@ aside {
   max-width: 1200px;
   margin: 0 auto;
 }
-.findform-section-header {
+.findform-header {
   text-align: center;
   margin-bottom: 56px;
 }
@@ -7614,7 +7625,7 @@ aside {
 .findform-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap: 16px;
   margin-bottom: 52px;
 }
 .findform-card {
@@ -7622,70 +7633,53 @@ aside {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 32px 16px 24px;
+  padding: 24px 12px 20px;
   background: white;
   border: 1px solid rgba(172,52,56,0.12);
   text-decoration: none;
-  transition: all 0.4s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
 }
 .findform-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   border-color: #AC3438;
-  box-shadow: 0 16px 32px rgba(42,26,20,0.08);
+  box-shadow: 0 12px 28px rgba(42,26,20,0.08);
 }
-.findform-card-svg {
+.findform-card-img {
   width: 64px;
   height: 64px;
   margin-bottom: 14px;
+  position: relative;
+}
+.findform-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.findform-card:hover .findform-card-img img {
+  transform: scale(1.08);
 }
 .findform-card-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 500;
-  letter-spacing: 0.3em;
+  letter-spacing: 0.28em;
   text-transform: uppercase;
   color: #2a1a14;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .findform-card-meaning {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.82rem;
-  color: #6e6357;
+  font-size: 0.8rem;
+  color: #7a6258;
   line-height: 1.4;
 }
-.findform-cta-wrap {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.findform-cta-note {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 0.95rem;
-  color: #111111;
-}
-
-@media (max-width: 900px)  { .findform-grid { grid-template-columns: repeat(4, 1fr); } }
-@media (max-width: 700px)  { .findform-grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 500px) {
-  .findform-section { padding: 64px 20px; }
-  .findform-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .findform-card { padding: 20px 10px; }
-  .findform-card-svg { width: 48px; height: 48px; }
-}
-
-/* Shape card — selected/navigating state */
 .findform-card--active {
-  transform: translateY(-6px) scale(0.96);
+  transform: translateY(-4px) scale(0.97);
   border-color: #AC3438;
-  box-shadow: 0 16px 32px rgba(42,26,20,0.1);
-  opacity: 0.75;
+  opacity: 0.7;
   pointer-events: none;
-}
-.findform-card-svg {
-  position: relative;
 }
 .findform-card-spinner {
   position: absolute;
@@ -7697,15 +7691,33 @@ aside {
 }
 .findform-card-spinner::after {
   content: '';
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(172,52,56,0.25);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(172,52,56,0.2);
   border-top-color: #AC3438;
   border-radius: 50%;
   animation: ff-spin 0.7s linear infinite;
 }
-@keyframes ff-spin {
-  to { transform: rotate(360deg); }
+@keyframes ff-spin { to { transform: rotate(360deg); } }
+
+.findform-cta-wrap {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.findform-cta-note {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  color: #7a6258;
+}
+
+@media (max-width: 900px) { .findform-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 650px) { .findform-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 500px) {
+  .findform-section { padding: 64px 20px; }
+  .findform-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
 
 /* ============================================================
@@ -7713,72 +7725,153 @@ aside {
    ============================================================ */
 /* ── Categories section wrapper ───────────────────────────── */
 .categories-section {
-  background: #0f0d0c;
+  background: #faf6f1;
   padding: 96px 0 80px;
 }
 .categories-inner {
   max-width: 100%;
 }
+
+/* ── Header: title only, stacked ───────────────────────────────── */
 .categories-header {
-  text-align: center;
-  margin-bottom: 64px;
-  padding: 0 48px;
+  margin-bottom: 48px;
+  padding: 0 clamp(24px, 5vw, 64px);
 }
-.categories-header .section-eyebrow { color: #AC3438; }
-.categories-header .section-title   { color: #f2ece4; }
+.categories-header .section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 68px);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: #1a1410;
+  line-height: 1.04;
+}
+.categories-header .section-title em {
+  font-style: italic;
+}
 .categories-intro {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: #9a918a;
-  letter-spacing: 0.03em;
-  max-width: 480px;
-  margin: 0 auto;
-  line-height: 1.7;
+  letter-spacing: 0.04em;
+  line-height: 1.65;
+  text-align: center;
+  padding: 0 clamp(24px, 5vw, 64px);
+  margin-top: 20px;
 }
 
-/* ── Featured: Wedding | Fine | Mens — editorial 3-panel grid ── */
-.cat-featured-strip {
-  display: grid;
-  grid-template-columns: 5fr 2fr 2fr;
-  gap: 12px;
-  height: 65vh;
-  min-height: 380px;
-  padding: 0 48px;
+/* ── Horizontal scroll rail ────────────────────────────────────── */
+.cat-rail {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 0 clamp(24px, 5vw, 64px) 28px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.cat-featured-strip .cat-card {
-  height: 100%;
-  min-height: 0;
-  aspect-ratio: unset;
-}
+.cat-rail::-webkit-scrollbar { display: none; }
 
-/* ── Section divider between featured + engagement ────────────── */
-.cat-divider {
+.cat-rail-card {
+  flex: 0 0 clamp(220px, 24vw, 300px);
+  scroll-snap-align: start;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.cat-rail-vitrine {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: #ffffff;
+  overflow: hidden;
+}
+.cat-rail-vitrine .img-slide img {
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cat-rail-card:hover .cat-rail-vitrine .img-slide img {
+  transform: scale(1.04);
+}
+.cat-rail-placeholder {
   display: flex;
   align-items: center;
-  gap: 28px;
-  padding: 52px 48px 44px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
 }
-.cat-divider-rule {
-  flex: 1;
-  height: 1px;
-  background: rgba(172, 52, 56, 0.18);
+.cat-rail-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 18px 18px;
+  background: linear-gradient(to top, rgba(26,20,16,0.72) 0%, transparent 100%);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
 }
-.cat-divider-label {
+.cat-rail-card:hover .cat-rail-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+.cat-rail-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.57rem;
-  font-weight: 700;
-  letter-spacing: 0.55em;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-weight: 400;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+.cat-rail-meaning {
+  font-size: 10px;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #AC3438;
-  white-space: nowrap;
+  color: rgba(255,255,255,0.7);
+  margin-top: 5px;
+}
+.cat-rail-badge {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.45);
+  padding: 3px 8px;
 }
 
-/* ── Engagement collections: responsive CSS grid ───────────────── */
-.cat-collections-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 40px 20px;
-  padding: 0 48px;
+/* ── Scroll progress cue ───────────────────────────────────────── */
+.cat-rail-cue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 clamp(24px, 5vw, 64px);
+  color: #9a8f88;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.cat-rail-bar-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 10px clamp(24px, 5vw, 64px) 0;
+}
+.cat-rail-bar-track {
+  width: 200px;
+  height: 1px;
+  background: rgba(172, 52, 56, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.cat-rail-bar-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: #AC3438;
+  transition: width 0.1s linear;
 }
 
 /* ── Card base (shared) ────────────────────────────────────────── */
@@ -7801,6 +7894,7 @@ aside {
   overflow: hidden;
   background: #faf5f0;
 }
+.cat-featured-strip .cat-photo { background: #ffffff; }
 .cat-photo img {
   transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
 }
@@ -7822,8 +7916,8 @@ aside {
   inset: 0;
   background: linear-gradient(
     to top,
-    rgba(8, 5, 4, 0.88) 0%,
-    rgba(8, 5, 4, 0.35) 36%,
+    rgba(8, 5, 4, 0.55) 0%,
+    rgba(8, 5, 4, 0.18) 36%,
     transparent 62%
   );
   display: flex;
@@ -7836,9 +7930,9 @@ aside {
 .cat-card:hover .cat-overlay {
   background: linear-gradient(
     to top,
-    rgba(8, 5, 4, 0.94) 0%,
-    rgba(8, 5, 4, 0.5) 42%,
-    rgba(8, 5, 4, 0.06) 72%,
+    rgba(8, 5, 4, 0.65) 0%,
+    rgba(8, 5, 4, 0.30) 42%,
+    rgba(8, 5, 4, 0.04) 72%,
     transparent 100%
   );
 }
@@ -7903,21 +7997,23 @@ aside {
 }
 .cat-view-all-btn {
   display: inline-block;
-  padding: 16px 52px;
-  border: 1px solid rgba(242, 236, 228, 0.2);
-  color: #f2ece4;
+  padding: 14px 36px;
+  border: 1px solid rgba(172,52,56,0.7);
+  background: var(--logo-red);
+  color: #fff8f6;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.68rem;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.35em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: border-color 0.3s, background 0.3s, color 0.3s;
+  border-radius: 4px;
+  transition: background 0.3s ease, border-color 0.35s ease;
 }
 .cat-view-all-btn:hover {
-  border-color: #AC3438;
-  background: #AC3438;
-  color: #fff;
+  background: var(--logo-red-dark);
+  border-color: rgba(200,70,74,0.95);
+  color: #fff8f6;
 }
 
 /* ── Editorial card (engagement grid) ──────────────────────────── */
@@ -7931,7 +8027,7 @@ aside {
   position: relative;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: #1a1410;
+  background: #faf5f0;
 }
 .cat-editorial-photo img {
   transition: transform 0.85s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
@@ -7961,13 +8057,13 @@ aside {
   font-size: clamp(0.88rem, 1.1vw, 1.05rem);
   font-weight: 400;
   letter-spacing: 0.07em;
-  color: #c8bfb7;
+  color: #AC3438;
   line-height: 1.2;
   margin-bottom: 6px;
   transition: color 0.25s ease;
 }
 .cat-editorial-card:hover .cat-editorial-name {
-  color: #f2ece4;
+  color: #8B2A2D;
 }
 .cat-editorial-meaning {
   display: block;
@@ -7976,42 +8072,29 @@ aside {
   font-weight: 700;
   letter-spacing: 0.42em;
   text-transform: uppercase;
-  color: #AC3438;
-  opacity: 0.75;
+  color: #1a1410;
+  opacity: 1;
   transition: opacity 0.25s ease;
 }
 .cat-editorial-card:hover .cat-editorial-meaning {
-  opacity: 1;
+  opacity: 0.75;
 }
 
 /* legacy */
 .col-section-cta { display: flex; justify-content: center; margin-top: 52px; }
 
 /* ── Responsive ──────────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .cat-featured-strip {
-    grid-template-columns: 1fr 1fr;
-    height: auto;
-    padding: 0 24px;
+@media (max-width: 768px) {
+  .categories-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 36px;
   }
-  .cat-featured-strip .cat-card:first-child {
-    grid-column: 1 / -1;
-    height: 50vw;
-    min-height: 240px;
-  }
-  .cat-featured-strip .cat-card:not(:first-child) {
-    height: 52vw;
-    min-height: 200px;
-  }
-  .cat-collections-grid { grid-template-columns: repeat(3, 1fr); gap: 28px 16px; padding: 0 24px; }
-  .cat-divider          { padding: 40px 24px 32px; }
-  .cat-view-all         { padding: 0 24px; }
-}
-@media (max-width: 640px) {
-  .cat-featured-strip .cat-card:first-child  { height: 70vw; }
-  .cat-featured-strip .cat-card:not(:first-child) { height: 56vw; }
-  .cat-collections-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 12px; }
-  .categories-section   { padding: 64px 0 56px; }
+  .categories-intro { max-width: 100%; }
+  .cat-rail-card { flex: 0 0 clamp(180px, 56vw, 240px); }
+  .cat-view-all  { padding: 0 24px; }
+  .categories-section { padding: 64px 0 56px; }
 }
 
 /* ============================================================
@@ -8152,48 +8235,33 @@ aside {
 }
 .signpost-cta {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 14px 32px;
-  border-radius: 999px;
-  transition: background 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+  padding: 14px 36px;
+  border-radius: 4px;
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.35s ease;
 }
 .signpost-cta--primary {
-  background: #AC3438;
-  color: #fff;
-  border: 1px solid #AC3438;
-  box-shadow:
-    0 0 0 1px rgba(172,52,56,0.2),
-    0 0 12px rgba(172,52,56,0.3),
-    0 0 24px rgba(172,52,56,0.15),
-    0 2px 8px rgba(172,52,56,0.2);
+  background: var(--logo-red);
+  color: #fff8f6;
+  border: 1px solid rgba(172,52,56,0.7);
 }
 .signpost-cta--primary:hover {
-  background: #8B2A2D;
-  border-color: #8B2A2D;
-  box-shadow:
-    0 0 0 1px rgba(172,52,56,0.3),
-    0 0 18px rgba(172,52,56,0.45),
-    0 0 36px rgba(172,52,56,0.2),
-    0 2px 10px rgba(172,52,56,0.3);
+  background: var(--logo-red-dark);
+  border-color: rgba(200,70,74,0.95);
 }
 .signpost-cta--secondary {
   background: transparent;
-  color: #1a1410;
-  border: 1px solid rgba(26,20,16,0.3);
-  box-shadow:
-    0 0 0 1px rgba(172,52,56,0.06),
-    0 0 10px rgba(172,52,56,0.07);
+  color: var(--logo-red);
+  border: 1px solid rgba(172,52,56,0.7);
 }
 .signpost-cta--secondary:hover {
-  border-color: rgba(172,52,56,0.5);
-  color: #1a1410;
-  box-shadow:
-    0 0 0 1px rgba(172,52,56,0.15),
-    0 0 14px rgba(172,52,56,0.12);
+  color: #fff8f6;
+  background: rgba(172,52,56,0.92);
+  border-color: rgba(200,70,74,0.95);
 }
 
 @media (max-width: 600px) {
@@ -8316,16 +8384,19 @@ aside {
   cursor: pointer;
   font: inherit;
   text-align: center;
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
+  outline: 1.5px solid transparent;
+  transition: box-shadow 0.3s ease, transform 0.3s ease, border-color 0.25s ease, outline-color 0.25s ease;
 }
 .invmore-card:hover {
   box-shadow: 0 16px 32px rgba(42,26,20,0.06);
   transform: translateY(-4px);
+  border-color: rgba(172,52,56,0.45);
+  outline-color: #AC3438;
 }
 .invmore-card--btn { background: white; }
 .invmore-icon {
-  width: 48px;
-  height: 48px;
+  width: 80px;
+  height: 80px;
   border: 1px solid rgba(172,52,56,0.4);
   border-radius: 50%;
   display: flex;
@@ -8355,7 +8426,7 @@ aside {
   line-height: 1.15;
   margin: 0 0 12px;
 }
-.invmore-name em { font-style: normal; color: #8b2a2a; }
+.invmore-name em { font-style: normal; color: var(--logo-red-dark); }
 .invmore-body {
   font-family: 'Cormorant Garamond', serif;
   font-size: 0.9rem;
@@ -8371,7 +8442,7 @@ aside {
   font-weight: 500;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #8b2a2a;
+  color: var(--logo-red-dark);
   margin-top: 16px;
 }
 

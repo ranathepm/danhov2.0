@@ -5,6 +5,22 @@
   padding: 110px 32px 140px;
 }
 
+/* Setting listing page — stepper sits above full-width ListingPage */
+.rb-setting-page {
+  /* no width constraint so ListingPage hero fills the viewport */
+}
+.rb-setting-stepper {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 96px 32px 0;
+  box-sizing: border-box;
+}
+/* ListingPage page-hero already adds 81px for the navbar;
+   since the stepper above already provides that clearance, reset it */
+.rb-setting-page .page-hero {
+  padding-top: 0;
+}
+
 /* ═══════════════════════════════════════════════════════════════════
    NIVODA-STYLE 3-STEP STEPPER
    ═══════════════════════════════════════════════════════════════════ */
@@ -145,15 +161,18 @@
 .sb-style-chip {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   background: #fff; border: 1px solid #e8e2db; border-radius: 6px;
-  padding: 10px 14px; cursor: pointer; min-width: 80px;
+  padding: 10px 8px; cursor: pointer;
+  width: 88px; flex-shrink: 0;
   font-family: 'Cormorant Garamond', serif;
   transition: border-color 0.15s, background 0.15s;
 }
 .sb-style-chip:hover { border-color: var(--logo-red); }
 .sb-style-chip.is-active { border-color: var(--logo-red); background: var(--logo-red); color: #fff; }
-.sb-style-icon { width: 48px; height: 24px; display: flex; align-items: center; }
+.sb-style-icon { width: 64px; height: 64px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 4px; }
 .sb-style-icon svg { width: 100%; height: 100%; }
-.sb-style-label { font-size: 11px; letter-spacing: 0.04em; white-space: nowrap; }
+.sb-style-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.sb-style-chip.is-active .sb-style-img { filter: brightness(0) invert(1); opacity: 0.9; }
+.sb-style-label { font-size: 11px; letter-spacing: 0.04em; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Metal chips */
 .sb-metal-chips { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -1247,20 +1266,20 @@
 .builder-cta-next {
   background: #fff8f6;
   color: var(--logo-red);
-  padding: 11px 24px;
+  padding: 14px 36px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 2px;
-  border: 1px solid #fff8f6;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 248, 246, 0.7);
   transition: background 0.18s;
 }
 .builder-cta-next:hover {
-  background: var(--cream);
-  color: #fff8f6;
+  background: rgba(255, 248, 246, 0.85);
+  color: var(--logo-red);
 }
 
 /* Step 4 review */
@@ -1541,21 +1560,22 @@
 .builder-commission-btn {
   background: var(--logo-red);
   color: #fff8f6;
-  border: 1px solid rgba(172, 52, 56, 0.8);
+  border: 1px solid rgba(172, 52, 56, 0.7);
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  padding: 12px 22px;
+  padding: 14px 36px;
   cursor: pointer;
   white-space: nowrap;
   flex: 1;
   border-radius: 4px;
-  transition: background 0.18s;
+  transition: background 0.3s, border-color 0.35s;
 }
 .builder-commission-btn:hover {
   background: var(--logo-red-dark);
+  border-color: rgba(200, 70, 74, 0.95);
 }
 .builder-commission-btn:disabled { opacity: 0.6; cursor: default; }
 .builder-addtocart-btn {
@@ -1564,17 +1584,19 @@
   border: 1px solid rgba(172, 52, 56, 0.7);
   font-family: 'Cormorant Garamond', serif;
   font-size: 13px;
-  letter-spacing: 0.06em;
-  padding: 12px 22px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  padding: 14px 36px;
   cursor: pointer;
   white-space: nowrap;
   flex: 1;
   border-radius: 4px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.3s, color 0.3s, border-color 0.35s;
 }
 .builder-addtocart-btn:hover {
-  background: var(--logo-red);
-  color: #fff;
+  background: rgba(172, 52, 56, 0.92);
+  color: #fff8f6;
+  border-color: rgba(200, 70, 74, 0.95);
 }
 .builder-review-diamond-img--hero {
   flex: 1;
@@ -1695,31 +1717,24 @@
 }
 .builder-review-add-diamond-btn {
   flex-shrink: 0;
-  padding: 10px 20px;
+  padding: 14px 36px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   background: var(--logo-red);
-  color: #fff;
-  border: 1px solid rgba(172, 52, 56, 0.8);
+  color: #fff8f6;
+  border: 1px solid rgba(172, 52, 56, 0.7);
   cursor: pointer;
-  border-radius: 999px;
-  box-shadow:
-    0 0 6px rgba(172, 52, 56, 0.55),
-    0 0 14px rgba(172, 52, 56, 0.32),
-    0 0 30px rgba(172, 52, 56, 0.16);
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.35s ease;
+  border-radius: 4px;
+  transition: background 0.3s, border-color 0.35s;
   white-space: nowrap;
 }
 .builder-review-add-diamond-btn:hover {
-  background: #8B2A2D;
-  border-color: #8B2A2D;
-  box-shadow:
-    0 0 10px rgba(172, 52, 56, 0.8),
-    0 0 22px rgba(172, 52, 56, 0.45);
+  background: var(--logo-red-dark);
+  border-color: rgba(200, 70, 74, 0.95);
 }
 
 /* ── "Already in cart" badge on diamond grid ── */
@@ -1810,30 +1825,24 @@
 }
 .builder-review-add-setting-btn {
   flex-shrink: 0;
-  padding: 10px 22px;
+  padding: 14px 36px;
   background: var(--logo-red);
-  border: 1px solid rgba(172, 52, 56, 0.8);
-  color: #fff;
+  border: 1px solid rgba(172, 52, 56, 0.7);
+  color: #fff8f6;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  border-radius: 999px;
-  box-shadow:
-    0 0 6px rgba(172, 52, 56, 0.55),
-    0 0 14px rgba(172, 52, 56, 0.32),
-    0 0 30px rgba(172, 52, 56, 0.16);
-  transition: background 0.15s, box-shadow 0.35s ease;
+  border-radius: 4px;
+  transition: background 0.3s, border-color 0.35s;
   white-space: nowrap;
 }
 .builder-review-add-setting-btn:hover {
-  background: #8B2A2D;
-  border-color: #8B2A2D;
-  box-shadow:
-    0 0 10px rgba(172, 52, 56, 0.8),
-    0 0 22px rgba(172, 52, 56, 0.45);
+  background: var(--logo-red-dark);
+  border-color: rgba(200, 70, 74, 0.95);
 }
 .builder-review-secured {
   margin-top: 16px;
@@ -2467,6 +2476,7 @@
   justify-content: center;
 }
 .be-shape-icon svg { width: 100%; height: 100%; }
+.be-shape-icon img { width: 100%; height: 100%; object-fit: contain; }
 .be-shape-label {
   font-family: 'Cormorant Garamond', serif;
   font-size: 10px;
@@ -2748,14 +2758,15 @@
 }
 .be-card-cta {
   width: 100%;
-  padding: 10px 14px;
+  padding: 12px 14px;
   background: transparent;
   color: var(--logo-red);
   border: 1px solid rgba(172, 52, 56, 0.7);
   border-radius: 4px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 0.14em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
   transition: all 0.2s;
@@ -2827,19 +2838,22 @@
 }
 .be-pager-btn {
   background: transparent;
-  border: 1px solid rgba(172, 52, 56, 0.25);
-  padding: 9px 22px;
+  border: 1px solid rgba(172, 52, 56, 0.7);
+  border-radius: 4px;
+  padding: 14px 36px;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #5a4e47;
+  color: var(--logo-red);
   cursor: pointer;
   transition: all 0.2s;
 }
 .be-pager-btn:hover:not(:disabled) {
-  border-color: var(--logo-red);
-  color: var(--logo-red);
+  background: rgba(172, 52, 56, 0.92);
+  color: #fff8f6;
+  border-color: rgba(200, 70, 74, 0.95);
 }
 .be-pager-btn:disabled { opacity: 0.35; cursor: default; }
 .be-pager-status {
@@ -3335,7 +3349,7 @@
   font-weight: 700;
   letter-spacing: 0.55em;
   text-transform: uppercase;
-  color: #AC3438;
+  color: rgba(255,255,255,0.65);
   margin-bottom: 20px;
 }
 .builder-ai-title {
@@ -3370,16 +3384,19 @@
   cursor: pointer;
   transition: background 0.3s;
 }
-.builder-ai-btn:hover { background: #8b2a2a; }
+.builder-ai-btn:hover { background: var(--logo-red-dark); }
 .builder-ai-visual {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .builder-ai-orb {
-  width: 280px;
-  height: 280px;
+  width: 460px;
+  height: 460px;
   animation: orb-spin 18s linear infinite;
+}
+@media (max-width: 900px) {
+  .builder-ai-orb { width: 300px; height: 300px; }
 }
 .builder-ai-orb svg { width: 100%; height: 100%; }
 @keyframes orb-spin {
@@ -3390,4 +3407,29 @@
   .builder-ai-section { padding: 64px 24px; }
   .builder-ai-inner { grid-template-columns: 1fr; gap: 40px; }
   .builder-ai-visual { display: none; }
+}
+
+/* ── Setting browser pagination ─────────────────────────────────── */
+.sb-pagination {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+  padding: 32px 0 16px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.sb-page-btn {
+  background: #fff; border: 1px solid #e8e2db; border-radius: 4px;
+  padding: 6px 12px; font-size: 13px; cursor: pointer;
+  font-family: 'Cormorant Garamond', serif;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+.sb-page-btn:hover:not(:disabled) { border-color: var(--logo-red); color: var(--logo-red); }
+.sb-page-btn:disabled { opacity: 0.4; cursor: default; }
+.sb-page-btn--active { background: var(--logo-red); color: #fff; border-color: var(--logo-red); }
+.sb-page-btn--ellipsis { border: none; background: none; cursor: default; }
+.sb-pagination__pages { display: flex; gap: 4px; }
+.sb-pagination__jump { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
+.sb-pagination__label { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9a8f88; }
+.sb-pagination__select {
+  border: 1px solid #e8e2db; border-radius: 4px; background: #fff;
+  font-family: 'Cormorant Garamond', serif; font-size: 13px;
+  padding: 5px 8px; cursor: pointer;
 }

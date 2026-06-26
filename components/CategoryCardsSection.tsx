@@ -91,92 +91,176 @@ const COLLECTIONS = [
   },
 ];
 
-// ── Pinned images (full-size, high-resolution) ────────────────────────────
+// ── CDN pinned image helpers ───────────────────────────────────────────────
 
-const WY  = 'https://www.danhov.com/media/wysiwyg/new-home';
-const PRD = 'https://www.danhov.com/media/catalog/product';
-const SB  = 'https://wirbqklbygxuafelsqql.supabase.co/storage/v1/object/public/product-images/products';
+const CDN = 'https://www.danhov.com/media/catalog/product/cache/637ba258c3859c45128cee99e1ea5a62';
 
-const COLLECTION_IMAGES: Record<string, string> = {
-  abbraccio: `${WY}/Untitled2-111822.png`,
-  voltaggio:  `${WY}/IMG_20221123_124430.jpg`,
-  classico:   `${WY}/img_collection_classico.jpg`,
-  norme:      `${SB}/SORE569UH/14k_white/Norme%20de%20Danhov%20Engagement%20Ring%20for%20Women%20SORE569UH_1.jpg`,
-  carezza:    `${WY}/img_collection_carezza.jpg`,
-  'per-lei':  `${WY}/img_collection_per-lei.jpg`,
-  petalo:     `${WY}/img_collection_petalo.jpg`,
-  solo:       `${WY}/img_collection_solo-filo.jpg`,
-  eleganza:   `${WY}/Untitled3-11182022.png`,
-  couture:    `${WY}/img_collection_couture.jpg`,
-  unito:      `${WY}/img_collection_unito.jpg`,
+const PINNED_SKUS: Record<string, string> = {
+  abbraccio: 'AE520UQ-18W',
+  couture:   'CE500VQ-18W',
+  voltaggio: 'VE508VH',
+  classico:  'WE534UH-14W',
 };
 
-// Engagement rings hero images — Abbraccio Swirl + classic solitaires
-const ENGAGEMENT_PINNED = [
-  `${SB}/AE505UQ/platinum/Danhov%20Abbraccio%20Swirl%20Diamond%20Engagement%20Ring%20AE505UQ_1.jpg`,
-  `${WY}/Untitled2-111822.png`,
-  `${WY}/img_collection_classico.jpg`,
-  `${WY}/img_collection_carezza.jpg`,
-];
+const CDN_FALLBACKS: Record<string, string> = {
+  abbraccio: `${CDN}/a/e/ae520uq_r1_1_wg_1.jpg`,
+  couture:   `${CDN}/r/1/r1_wg.jpg`,
+  voltaggio: `${CDN}/t/e/tension_rush_2_v122_v2_wg_1.jpg`,
+  classico:  `${CDN}/r/i/ring_2__25.png`,
+};
 
-// Full-size product images (100–260 KB each, sourced from danhov.com catalog)
-const WEDDING_PINNED = [
-  `${PRD}/t/b/tb509va_wg_1.jpg`,
-  `${PRD}/b/_/b_1_11_2_1.jpg`,
-  `${PRD}/t/b/tb521va_rg_1.jpg`,
-];
+// Metal sort order: platinum first, then white, yellow, rose
+function metalPriority(key: string): number {
+  if (key.includes('plat'))   return 0;
+  if (key.includes('white'))  return 1;
+  if (key.includes('yellow')) return 2;
+  return 3;
+}
 
-const FINE_PINNED = [
-  `${PRD}/2/8/28646453_wg_1_1_1.jpg`,
-  `${PRD}/3/6/36667168_3_rg_1.jpg`,
-  `${PRD}/2/6/26544947_wg_1.jpg`,
-];
+// Pick the best metal and use ALL its angles for the cycling pool (same color, different views)
+function buildImagesForProduct(
+  images: string[] | null,
+  metalImages: Record<string, string[]> | null,
+  cap = 8,
+  exclude: string[] = []
+): string[] {
+  const metalMap = metalImages ?? {};
+  const sortedKeys = Object.keys(metalMap)
+    .filter(k => (metalMap[k]?.length ?? 0) > 0)
+    .sort((a, b) => metalPriority(a) - metalPriority(b));
 
-const MENS_PINNED = [
-  `${PRD}/2/_/2_2_1.jpg`,
-  `${PRD}/2/_/2_12_2_1.jpg`,
-  `${PRD}/r/_/r_2_25_2_1.jpg`,
-  `${PRD}/r/_/r_2_27_1.jpg`,
-];
+  // Use all angles from the highest-priority metal that has images
+  for (const key of sortedKeys) {
+    const imgs = (metalMap[key] ?? []).filter(img => img && !exclude.includes(img));
+    if (imgs.length > 0) {
+      return [...new Set(imgs)].slice(0, cap);
+    }
+  }
 
-// Fetch Supabase product images for hover cycling (pinned danhov.com image is always first)
+  // Fallback: regular images
+  const fallback = (images ?? []).filter(img => !exclude.includes(img));
+  return [...new Set(fallback)].slice(0, cap);
+}
+
 async function getCollectionImages(): Promise<Record<string, string[]>> {
   try {
     const { data: all } = await supabaseAnon
       .from('products')
-      .select('collection, images')
+      .select('sku, collection, images, metal_images')
       .filter('categories', 'cs', JSON.stringify(['engagement']))
       .eq('is_active', true)
       .not('collection', 'is', null);
 
     const rows = all ?? [];
-    const bestByCol: Record<string, string[]> = {};
+
+    // Build per-collection index: best product (most combined images)
+    const bestByCol: Record<string, { imgs: string[]; sku: string }> = {};
     for (const p of rows) {
       const col = (p.collection as string | null)?.toLowerCase().trim();
       if (!col) continue;
-      if (!Array.isArray(p.images) || p.images.length === 0) continue;
-      const imgs = (p.images as string[]).slice(0, 6);
-      if (!bestByCol[col] || imgs.length > bestByCol[col].length) {
-        bestByCol[col] = imgs;
+      const imgs = buildImagesForProduct(
+        p.images as string[] | null,
+        p.metal_images as Record<string, string[]> | null,
+      );
+      if (imgs.length === 0) continue;
+      if (!bestByCol[col] || imgs.length > bestByCol[col].imgs.length) {
+        bestByCol[col] = { imgs, sku: p.sku as string };
       }
     }
-    return bestByCol;
+
+    const map: Record<string, string[]> = {};
+
+    // Pinned collections: prefer exact pinned SKU if it has ≥ 2 combined images
+    for (const [colKey, pinnedSku] of Object.entries(PINNED_SKUS)) {
+      const pinned = rows.find(p => (p.sku as string).toLowerCase() === pinnedSku.toLowerCase());
+      const pinnedImgs = pinned
+        ? buildImagesForProduct(
+            pinned.images as string[] | null,
+            pinned.metal_images as Record<string, string[]> | null,
+          )
+        : null;
+
+      if (pinnedImgs && pinnedImgs.length >= 2) {
+        map[colKey] = pinnedImgs;
+      } else if (bestByCol[colKey]) {
+        map[colKey] = bestByCol[colKey].imgs;
+      } else if (CDN_FALLBACKS[colKey]) {
+        map[colKey] = [CDN_FALLBACKS[colKey]];
+      }
+    }
+
+    // Non-pinned collections: use the best product
+    const pinnedKeys = new Set(Object.keys(PINNED_SKUS));
+    for (const [col, entry] of Object.entries(bestByCol)) {
+      if (!pinnedKeys.has(col) && !map[col]) {
+        map[col] = entry.imgs;
+      }
+    }
+
+    return map;
   } catch {
-    return {};
+    return Object.fromEntries(
+      Object.entries(CDN_FALLBACKS).map(([k, v]) => [k, [v]])
+    );
+  }
+}
+
+// ── Category card preview images (Engagement / Fine / Men's) ──────────────
+
+/**
+ * Picks the product with the most combined images (metal variants + regular)
+ * from the given category. The first image of each metal variant appears as
+ * a cycling frame so the card animates through gold colours on hover.
+ */
+async function fetchCategoryPreviewImages(
+  category: string,
+  exclude: string[] = []
+): Promise<string[]> {
+  try {
+    const { data } = await supabaseAnon
+      .from('products')
+      .select('images, metal_images')
+      .filter('categories', 'cs', JSON.stringify([category]))
+      .eq('is_active', true);
+
+    if (!data || data.length === 0) return [];
+
+    let bestImages: string[] = [];
+
+    for (const p of data) {
+      const combined = buildImagesForProduct(
+        p.images as string[] | null,
+        p.metal_images as Record<string, string[]> | null,
+        6,
+        exclude,
+      );
+      if (combined.length > bestImages.length) bestImages = combined;
+    }
+
+    return bestImages.slice(0, 6);
+  } catch {
+    return [];
   }
 }
 
 // ── Main component ─────────────────────────────────────────────────────────
 
 export default async function CategoryCardsSection() {
-  // Supabase images supplement pinned danhov.com images for hover cycling.
-  // Supabase images used for hover cycling; pinned danhov.com images are always shown first.
-  const imageMap = await getCollectionImages();
-
-  function mergeImages(pinnedFirst: string[], supabaseExtra: string[]): string[] {
-    const deduped = supabaseExtra.filter(img => !pinnedFirst.includes(img));
-    return [...pinnedFirst, ...deduped].slice(0, 8);
-  }
+  // Run all fetches in parallel; exclude already-used primary images across cards
+  const [imageMap, engagementHeroImgs, mensData] = await Promise.all([
+    getCollectionImages(),
+    fetchCategoryPreviewImages('engagement'),
+    supabaseAnon
+      .from('products')
+      .select('images, metal_images')
+      .eq('sku', 'RK500P')
+      .single(),
+  ]);
+  const fineImgs = await fetchCategoryPreviewImages('fine', [engagementHeroImgs[0]].filter(Boolean));
+  const mensImgs = buildImagesForProduct(
+    mensData.data?.images as string[] | null,
+    mensData.data?.metal_images as Record<string, string[]> | null,
+  );
 
   const engagementCards: EngagementCard[] = COLLECTIONS.map((col) => {
     if (col.isLifePath) {
@@ -186,12 +270,10 @@ export default async function CategoryCardsSection() {
         linkLabel: 'Find Your Path', isLifePath: true,
       };
     }
-    const pinned = COLLECTION_IMAGES[col.value];
-    const supabase = imageMap[col.value] ?? imageMap[col.label.toLowerCase()] ?? [];
     return {
       label: col.label, value: col.value, meaning: col.meaning,
       body: col.body, href: col.href,
-      images: pinned ? mergeImages([pinned], supabase) : supabase,
+      images: imageMap[col.value] ?? imageMap[col.label.toLowerCase()] ?? [],
       linkLabel: `Explore ${col.label}`,
       isLifePath: false,
     };
@@ -204,7 +286,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Beginning',
       body: 'Four decades. Twelve collections. One certainty — the ring you need already exists in a form only silence can reveal.',
       href: '/engagement-rings',
-      images: ENGAGEMENT_PINNED,
+      images: engagementHeroImgs,
       linkLabel: 'Explore Engagement Rings',
       isLifePath: false,
     },
@@ -214,7 +296,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Daily Beautiful',
       body: 'Designed to be worn every day. Small enough to forget. Beautiful enough to remember forever.',
       href: '/fine-jewelry',
-      images: FINE_PINNED,
+      images: fineImgs,
       linkLabel: 'Browse Fine Jewelry',
       isLifePath: false,
     },
@@ -224,7 +306,7 @@ export default async function CategoryCardsSection() {
       meaning: 'The Worn Statement',
       body: 'A ring that carries a name. A band that asks nothing — and says everything.',
       href: '/mens',
-      images: MENS_PINNED,
+      images: mensImgs,
       linkLabel: "Browse Men's Jewelry",
       isLifePath: false,
     },
@@ -234,12 +316,7 @@ export default async function CategoryCardsSection() {
     <section id="engagement-rings" className="categories-section">
       <div className="categories-inner">
         <div className="categories-header">
-          <span className="section-eyebrow">The Collections</span>
-          <h2 className="section-title">Each name is a signpost</h2>
-          <p className="categories-intro">
-            For four decades, DANHOV&apos;s collections have carried Italian names.
-            Each name was given for a reason. Each piece was made for a meaning.
-          </p>
+          <h2 className="section-title">The <em>Collections</em></h2>
         </div>
 
         <CategoryGridClient

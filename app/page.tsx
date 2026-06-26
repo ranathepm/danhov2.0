@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import HomepageScripts from '@/components/HomepageScripts';
 import ScrollToHash from '@/components/ScrollToHash';
-import SignatureSection from '@/components/SignatureSection';
-import InvitationMoment from '@/components/InvitationMoment';
+import AIDesignSection from '@/components/AIDesignSection';
 import FindFormSection from '@/components/FindFormSection';
 import CategoryCardsSection from '@/components/CategoryCardsSection';
 import CoCreateSection from '@/components/CoCreateSection';
@@ -48,7 +47,7 @@ export default async function HomePage() {
             <div className="ch-line ch-realized" id="chLine2">I realized</div>
             <div className="ch-line ch-oneness" id="chLine3">the oneness of the universe.</div>
             <div className="hero-rule" id="chDiv" />
-            <div className="ch-line ch-ring" id="chLine4">The Swirl Love Ring</div>
+            <div className="ch-line ch-ring" id="chLine4">The Swirl Self Love Ring</div>
             <div className="ch-line ch-messaged" id="chLine5">was messaged.</div>
           </div>
 
@@ -81,67 +80,90 @@ export default async function HomePage() {
             src="/danhov-brand-video.mp4"
           />
 
-          {/* bottom gradient + wordmark overlay */}
+          {/* bottom gradient + logo overlay — compact at very bottom */}
           <div style={{
             position: 'absolute',
             bottom: 0, left: 0, right: 0,
-            height: '38%',
-            background: 'linear-gradient(to top, rgba(10,8,6,0.92) 0%, rgba(10,8,6,0.5) 55%, transparent 100%)',
+            height: '20%',
+            background: 'linear-gradient(to top, rgba(10,8,6,0.88) 0%, rgba(10,8,6,0.4) 65%, transparent 100%)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'flex-end',
-            padding: '0 0 40px',
+            padding: '0 0 20px',
             pointerEvents: 'none',
+            gap: 0,
           }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/danhov-logo-transparent.png"
+              alt="DANHOV"
+              style={{
+                height: 'clamp(28px, 3.5vw, 52px)',
+                width: 'auto',
+                display: 'block',
+                filter: 'brightness(0) invert(1)',
+              }}
+            />
             <span style={{
               fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 'clamp(2.2rem, 5vw, 4.5rem)',
-              fontWeight: 300,
-              letterSpacing: '0.45em',
-              textTransform: 'uppercase',
-              color: '#f2ece4',
-              display: 'block',
-              lineHeight: 1,
-            }}>
-              DANHOV
-            </span>
-            <span style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: '0.6rem',
+              fontSize: '0.58rem',
               letterSpacing: '0.5em',
               textTransform: 'uppercase',
-              color: '#AC3438',
-              marginTop: 10,
+              color: '#f2ece4',
               fontWeight: 600,
+              marginTop: 18,
             }}>
-              The Art of the Ring
+              The Art of Seeing
             </span>
           </div>
         </div>
 
-        {/* bottom bar */}
-        <div style={{
-          background: '#0a0806',
-          padding: '32px 48px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 32,
+      </section>
+
+      {/* ── SELF-LOVE MANIFESTO ──────────────────────────────────── */}
+      <section style={{
+        background: '#0a0806',
+        padding: 'clamp(48px, 6vw, 80px) clamp(24px, 8vw, 120px)',
+        textAlign: 'center',
+        borderTop: '1px solid rgba(242,236,228,0.07)',
+      }}>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '0.58rem',
+          letterSpacing: '0.55em',
+          textTransform: 'uppercase',
+          color: '#AC3438',
+          marginBottom: 28,
+          fontWeight: 600,
         }}>
-          <div style={{ width: 40, height: 1, background: 'rgba(172,52,56,0.3)' }} />
-          <span style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: '0.6rem',
-            letterSpacing: '0.45em',
-            textTransform: 'uppercase',
-            color: '#4a4240',
-            fontWeight: 500,
-          }}>
-            Every piece handcrafted to order
-          </span>
-          <div style={{ width: 40, height: 1, background: 'rgba(172,52,56,0.3)' }} />
-        </div>
+          A Message from Jack
+        </p>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: 'clamp(1.05rem, 2.2vw, 1.55rem)',
+          fontStyle: 'italic',
+          fontWeight: 300,
+          color: '#f2ece4',
+          maxWidth: 720,
+          margin: '0 auto 28px',
+          lineHeight: 1.75,
+        }}>
+          &ldquo;In the silence, I understood — the whole universe is one, and you are the center of it.
+          To love yourself is to love the universe itself. This ring was not designed.
+          It was received. A swirl for the self. A circle with no beginning and no end,
+          because love — real love — starts within.&rdquo;
+        </p>
+        <p style={{
+          fontFamily: "'Cormorant Garamond', serif",
+          fontSize: '0.58rem',
+          letterSpacing: '0.42em',
+          textTransform: 'uppercase',
+          color: 'rgba(242,236,228,0.38)',
+          fontWeight: 500,
+        }}>
+          — Jack Hovsepian &nbsp;·&nbsp; Founder, DANHOV &nbsp;·&nbsp; Est. 1984
+        </p>
       </section>
 
       {/* ── DAILY SIGNPOST ───────────────────────────────────────── */}
@@ -150,8 +172,8 @@ export default async function HomePage() {
       {/* ── DESIGN IN SILENCE — 4-step process ───────────────────── */}
       <CoCreateSection />
 
-      {/* ── INVITATION MOMENT ────────────────────────────────────── */}
-      <InvitationMoment />
+      {/* ── AI DESIGN SECTION ────────────────────────────────────── */}
+      <AIDesignSection />
 
       {/* ── FIND YOUR FORM (DIAMOND SHAPES) ──────────────────────── */}
       <FindFormSection />
@@ -170,7 +192,7 @@ export default async function HomePage() {
               <span className="featured-logo">
                 <svg height="42" viewBox="0 0 138 42" xmlns="http://www.w3.org/2000/svg">
                   <text y="14" fontFamily="'Cormorant Garamond',serif" fontSize="9" fontWeight="500" fill="#111111" letterSpacing="3.5">HARPER&apos;S</text>
-                  <text y="38" fontFamily="'Cormorant Garamond',serif" fontSize="22" fontWeight="700" fill="#C8102E" letterSpacing="1">BAZAAR</text>
+                  <text y="38" fontFamily="'Cormorant Garamond',serif" fontSize="22" fontWeight="700" fill="#AC3438" letterSpacing="1">BAZAAR</text>
                 </svg>
               </span>
               <span className="featured-logo">
@@ -202,9 +224,6 @@ export default async function HomePage() {
 
       {/* ── ENGAGEMENT RINGS — collection cards with Life Path ───── */}
       <CategoryCardsSection />
-
-      {/* ── SIGNATURE RING — editorial dark strip ────────────────── */}
-      <SignatureSection />
 
       {/* ── COUPLE PROOF — real testimonials ─────────────────────── */}
       <TrustProofSection />

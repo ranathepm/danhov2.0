@@ -1,8 +1,8 @@
 'use client';
 
+/* eslint-disable @next/next/no-img-element */
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 
 type Props = {
   href: string;
@@ -25,15 +25,27 @@ export default function CollectionCardClient({
   featured = false,
   editorial = false,
 }: Props) {
-  const [activeIdx, setActiveIdx] = useState(0);
+  const defaultIdx = editorial && images.length > 1 ? 1 : 0;
+  const [activeIdx, setActiveIdx] = useState(defaultIdx);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   function startCycle() {
     if (images.length <= 1) return;
-    setActiveIdx(1);
-    intervalRef.current = setInterval(() => {
-      setActiveIdx((i) => (i + 1) % images.length);
-    }, 1100);
+    if (editorial) {
+      const startFrom = images.length > 2 ? 2 : 0;
+      setActiveIdx(startFrom);
+      intervalRef.current = setInterval(() => {
+        setActiveIdx((i) => {
+          const next = i + 1;
+          return next >= images.length ? 0 : next;
+        });
+      }, 1500);
+    } else {
+      setActiveIdx(1);
+      intervalRef.current = setInterval(() => {
+        setActiveIdx((i) => (i + 1) % images.length);
+      }, 1500);
+    }
   }
 
   function stopCycle() {
@@ -41,7 +53,7 @@ export default function CollectionCardClient({
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    setActiveIdx(0);
+    setActiveIdx(editorial && images.length > 1 ? 1 : 0);
   }
 
   useEffect(() => () => {
@@ -61,20 +73,14 @@ export default function CollectionCardClient({
             <div className="cat-editorial-photo-placeholder">{customSvg}</div>
           ) : images.length > 0 ? (
             images.map((src, i) => (
-              <Image
-                key={src}
-                src={src}
-                alt={`${label} by DANHOV`}
-                fill
-                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                style={{
-                  objectFit: 'cover',
-                  opacity: i === activeIdx ? 1 : 0,
-                  transition: 'opacity 0.5s ease',
-                }}
-                priority={i === 0}
-                unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}
-              />
+              <div key={src} className={`img-slide${i === activeIdx ? ' img-slide--active' : ''}`}>
+                <img
+                  src={src}
+                  alt={`${label} by DANHOV`}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'center', display: 'block' }}
+                  loading="eager"
+                />
+              </div>
             ))
           ) : (
             <div className="cat-editorial-photo-placeholder">
@@ -105,24 +111,21 @@ export default function CollectionCardClient({
           <div className="cat-photo-placeholder">{customSvg}</div>
         ) : images.length > 0 ? (
           images.map((src, i) => (
-            <Image
-              key={src}
-              src={src}
-              alt={`${label} by DANHOV`}
-              fill
-              sizes={featured
-                ? '(max-width: 768px) 100vw, 33vw'
-                : '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw'}
-              style={{
-                objectFit: featured ? 'contain' : 'cover',
-                objectPosition: 'center',
-                padding: featured ? '12px' : '0',
-                opacity: i === activeIdx ? 1 : 0,
-                transition: 'opacity 0.5s ease',
-              }}
-              priority={i === 0}
-              unoptimized={src.includes('.supabase.co') || src.includes('danhov.com') || src.endsWith('.gif')}
-            />
+            <div key={src} className={`img-slide${i === activeIdx ? ' img-slide--active' : ''}`}>
+              <img
+                src={src}
+                alt={`${label} by DANHOV`}
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: featured ? 'contain' : 'cover',
+                  objectPosition: 'center',
+                  padding: featured ? '4px' : '0',
+                  display: 'block',
+                  boxSizing: 'border-box',
+                }}
+                loading="eager"
+              />
+            </div>
           ))
         ) : (
           <div className="cat-photo-placeholder">

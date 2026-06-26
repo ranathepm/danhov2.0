@@ -1762,17 +1762,56 @@ a.adm-btn.adm-btn-primary:hover { background: var(--adm-accent-dk); color: #fff;
 /* ── Custom Labour block ─────────────────────────────────────────── */
 .adm-custom-labour {
   margin: 16px 0;
-  padding: 14px 16px;
-  background: #faf6f3;
+  padding: 16px 18px;
+  background: var(--adm-surface);
+  border: 1px solid rgba(172,52,56,0.18);
+  border-radius: 10px;
+}
+.adm-custom-labour-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.adm-labour-clear {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--adm-mute);
+  background: none;
   border: 1px solid var(--adm-line);
-  border-radius: 8px;
+  border-radius: 999px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: all 0.15s;
 }
-.adm-chip--clear {
-  border-color: #d0c4be;
-  color: #1a1410;
-}
-.adm-chip--clear:hover {
+.adm-labour-clear:hover {
   border-color: var(--adm-accent);
   color: var(--adm-accent);
-  background: rgba(172,52,56,0.04);
+}
+.adm-labour-quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.adm-labour-preset {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--adm-mute);
+  background: transparent;
+  border: 1px solid var(--adm-line);
+  border-radius: 999px;
+  padding: 4px 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.adm-labour-preset:hover {
+  border-color: var(--adm-accent);
+  color: var(--adm-accent);
+}
+.adm-labour-preset.is-active {
+  background: var(--adm-accent);
+  border-color: var(--adm-accent);
+  color: #fff;
 }

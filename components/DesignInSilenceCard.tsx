@@ -26,7 +26,7 @@ export default function DesignInSilenceCard() {
         onClick={() => setOpen(true)}
       >
         <div className="invmore-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
               <path d="M12 3l1.5 4.5h4.5l-3.5 2.5 1.5 4.5L12 12l-4 2.5 1.5-4.5L6 7.5h4.5z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>

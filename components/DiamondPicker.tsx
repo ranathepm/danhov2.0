@@ -175,6 +175,19 @@ const SHAPES: { value: Shape; label: string }[] = [
   { value: 'MARQUISE', label: 'Marquise' },
   { value: 'ASSCHER', label: 'Asscher' },
 ];
+
+const SHAPE_IMAGES: Record<Shape, string> = {
+  ROUND:    '/diamond-shapes/round.jpg',
+  OVAL:     '/diamond-shapes/oval.jpg',
+  CUSHION:  '/diamond-shapes/cushion.jpg',
+  PRINCESS: '/diamond-shapes/princess.jpg',
+  EMERALD:  '/diamond-shapes/emerald.jpg',
+  PEAR:     '/diamond-shapes/pear.jpg',
+  RADIANT:  '/diamond-shapes/radiant.jpg',
+  HEART:    '/diamond-shapes/heart.png',
+  MARQUISE: '/diamond-shapes/marquise.jpg',
+  ASSCHER:  '/diamond-shapes/asscher.jpg',
+};
 const COLORS: Color[] = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'];
 const CLARITIES: Clarity[] = ['FL', 'IF', 'VVS1', 'VVS2', 'VS1', 'VS2', 'SI1', 'SI2'];
 const CUTS: { value: Cut; label: string }[] = [
@@ -609,7 +622,10 @@ export default function DiamondPicker({ settingSlug, metal, onSelected, initialO
                     onClick={() => setShape(s.value)}
                     aria-label={s.label}
                   >
-                    <span className="be-shape-icon"><ShapeIcon shape={s.value} /></span>
+                    <span className="be-shape-icon">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={SHAPE_IMAGES[s.value]} alt="" aria-hidden="true" />
+                    </span>
                     <span className="be-shape-label">{s.label}</span>
                   </button>
                 ))}

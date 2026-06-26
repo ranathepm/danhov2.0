@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 290" fill="none">
+  <!-- Heart diamond — outer silhouette -->
+  <path d="M150 270 C90 225 20 185 10 135 C2 100 10 68 35 52 C58 37 88 40 108 55 C123 65 137 78 150 95 C163 78 177 65 192 55 C212 40 242 37 265 52 C290 68 298 100 290 135 C280 185 210 225 150 270Z"
+    fill="rgba(200,225,240,0.22)" stroke="#8fa8bb" stroke-width="1.8"/>
+
+  <!-- Cleft notch at top -->
+  <path d="M125 62 Q150 38 175 62" stroke="#8fa8bb" stroke-width="1.2" fill="none"/>
+
+  <!-- Table facet (center polygon) -->
+  <path d="M150 100 L105 130 L110 185 L150 220 L190 185 L195 130 Z"
+    fill="rgba(200,225,240,0.18)" stroke="#8fa8bb" stroke-width="0.9"/>
+
+  <!-- Upper kite facets — left -->
+  <line x1="108" y1="55" x2="105" y2="130" stroke="#8fa8bb" stroke-width="0.8" opacity="0.7"/>
+  <line x1="35" y1="52" x2="105" y2="130" stroke="#8fa8bb" stroke-width="0.8" opacity="0.6"/>
+  <line x1="150" y1="100" x2="35" y2="52" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+  <line x1="150" y1="100" x2="10" y2="135" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+  <line x1="10" y1="135" x2="110" y2="185" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+
+  <!-- Upper kite facets — right -->
+  <line x1="192" y1="55" x2="195" y2="130" stroke="#8fa8bb" stroke-width="0.8" opacity="0.7"/>
+  <line x1="265" y1="52" x2="195" y2="130" stroke="#8fa8bb" stroke-width="0.8" opacity="0.6"/>
+  <line x1="150" y1="100" x2="265" y2="52" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+  <line x1="150" y1="100" x2="290" y2="135" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+  <line x1="290" y1="135" x2="190" y2="185" stroke="#8fa8bb" stroke-width="0.7" opacity="0.5"/>
+
+  <!-- Lower pavilion to culet -->
+  <line x1="110" y1="185" x2="150" y2="270" stroke="#8fa8bb" stroke-width="0.8" opacity="0.6"/>
+  <line x1="190" y1="185" x2="150" y2="270" stroke="#8fa8bb" stroke-width="0.8" opacity="0.6"/>
+  <line x1="150" y1="220" x2="150" y2="270" stroke="#8fa8bb" stroke-width="0.8" opacity="0.7"/>
+
+  <!-- Center vertical axis -->
+  <line x1="150" y1="38" x2="150" y2="100" stroke="#8fa8bb" stroke-width="0.9" opacity="0.5"/>
+</svg>
