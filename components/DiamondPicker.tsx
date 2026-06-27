@@ -17,6 +17,20 @@ import { useRouter, useSearchParams } from 'next/navigation';
 // We measure the card and scale the iframe down to match.
 const LOUPE360_NATIVE = 500;
 
+// Photographic shape images — used as card placeholder when Nivoda has no image
+const SHAPE_PHOTO: Record<string, string> = {
+  ROUND:    '/diamond-shapes/round.jpg',
+  OVAL:     '/diamond-shapes/oval.jpg',
+  CUSHION:  '/diamond-shapes/cushion.jpg',
+  PRINCESS: '/diamond-shapes/princess.jpg',
+  EMERALD:  '/diamond-shapes/emerald.jpg',
+  PEAR:     '/diamond-shapes/pear.jpg',
+  RADIANT:  '/diamond-shapes/radiant.jpg',
+  HEART:    '/diamond-shapes/heart.png',
+  MARQUISE: '/diamond-shapes/marquise.jpg',
+  ASSCHER:  '/diamond-shapes/asscher.jpg',
+};
+
 export function DiamondCardMedia({
   image,
   video,
@@ -75,7 +89,16 @@ export function DiamondCardMedia({
   const onLeave = () => setHovering(false);
 
   if (!hasImage && !hasSpin) {
-    return <DiamondGlyph shape={shape} carat={carat} />;
+    return (
+      <div className="be-card-shape-placeholder">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={SHAPE_PHOTO[shape] ?? SHAPE_PHOTO['ROUND']}
+          alt=""
+          aria-hidden="true"
+        />
+      </div>
+    );
   }
 
   return (
