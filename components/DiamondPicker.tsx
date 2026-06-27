@@ -253,7 +253,7 @@ function DiamondGlyph({ shape, carat }: { shape: Shape; carat: number }) {
   // the silhouette icon centred in the media area.
   if (shape !== 'ROUND' && shape !== 'OVAL' && shape !== 'CUSHION' && shape !== 'PRINCESS') {
     return (
-      <svg viewBox="0 0 100 100" aria-hidden="true" width="80%" height="80%">
+      <svg viewBox="0 0 100 100" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
         <defs>
           <radialGradient id="bg" cx="50%" cy="40%" r="60%">
             <stop offset="0%" stopColor="#ffe1d6" />
@@ -269,7 +269,7 @@ function DiamondGlyph({ shape, carat }: { shape: Shape; carat: number }) {
   }
 
   return (
-    <svg viewBox="0 0 100 100" aria-hidden="true" width="90%" height="90%">
+    <svg viewBox="0 0 100 100" aria-hidden="true" style={{ width: '100%', height: '100%' }}>
       <defs>
         {/* Soft pink sparkle wash behind the stone */}
         <radialGradient id="dg-bg" cx="50%" cy="40%" r="60%">
