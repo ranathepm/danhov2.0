@@ -7633,7 +7633,7 @@ aside {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 24px 12px 20px;
+  padding: 14px 8px 16px;
   background: white;
   border: 1px solid rgba(172,52,56,0.12);
   text-decoration: none;
@@ -7646,15 +7646,16 @@ aside {
   box-shadow: 0 12px 28px rgba(42,26,20,0.08);
 }
 .findform-card-img {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 14px;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 10px;
   position: relative;
 }
 .findform-card-img img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  mix-blend-mode: multiply;
   transition: transform 0.3s ease;
 }
 .findform-card:hover .findform-card-img img {
